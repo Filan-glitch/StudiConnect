@@ -1,4 +1,4 @@
-# hrw_studiconnect
+# StudiConnect
 
 Eine App, um Lerngruppen zu finden.
 
