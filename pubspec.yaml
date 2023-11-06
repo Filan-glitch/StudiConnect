@@ -19,6 +19,9 @@ dependencies:
   flutter_redux: ^0.10.0
   http: ^1.1.0
   redux: ^5.0.0
+  flutter_svg: ^2.0.9
+  meta: ^1.9.1
+  redux_thunk: ^0.4.0
 
 dev_dependencies:
   flutter_test:
@@ -27,3 +30,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/icons/google_logo.svg
