@@ -1,5 +1,6 @@
 enum ActionTypes {
- basicEvent,
+  startTask,
+  stopTask,
 }
 
 class Action {

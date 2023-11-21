@@ -51,8 +51,7 @@ class MyApp extends StatelessWidget {
               GlobalWidgetsLocalizations.delegate,
             ],
             navigatorKey: navigatorKey,
-            initialRoute: '/welcome'
-                '',
+            initialRoute: '/welcome',
             routes: {
               '/welcome': (context) => const WelcomePage(),
               '/login': (context) => const LoginPage(),
