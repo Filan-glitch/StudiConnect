@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
+import '/pages/further_registration_page.dart';
 import '/pages/home_page.dart';
 import '/models/redux/store.dart';
 import '/themes/light_theme.dart';
 import '/themes/dark_theme.dart';
-import '/pages/register_page.dart';
+import '/pages/registration_page.dart';
 import '/pages/login_help_page.dart';
 import '/pages/welcome_page.dart';
 import '/firebase_options.dart';
@@ -58,7 +59,7 @@ class MyApp extends StatelessWidget {
               '/register': (context) => const RegisterPage(),
               '/login-help': (context) => const LoginHelpPage(),
               '/home': (context) => const HomePage(),
-
+              '/further-registration': (context) => const FurtherRegistrationPage(),
             }
         )
     );

@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:studiconnect/pages/search_page.dart';
 
 import '/pages/profile_page.dart';
+import 'home_page.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class SearchPage extends StatefulWidget {
+  const SearchPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<SearchPage> createState() => _SearchPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: const Center(
-        child: Text('This is the chats page'),
+        child: Text('This is the search page'),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
@@ -32,20 +32,20 @@ class _HomePageState extends State<HomePage> {
             label: 'Profil'
           ),
         ],
-        currentIndex: 0,
+        currentIndex: 1,
         selectedItemColor: Theme.of(context).primaryColor,
         unselectedItemColor: Colors.grey,
         showUnselectedLabels: true,
         onTap: (index) {
           switch (index) {
             case 0:
-              break;
-            case 1:
               Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => const SearchPage()),
+                  MaterialPageRoute(builder: (context) => const HomePage()),
                       (route) => false
               );
+              break;
+            case 1:
               break;
             case 2:
               Navigator.pushAndRemoveUntil(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '/widgets/page_wrapper.dart';
 
-import 'settings_page.dart';
+import '/pages/search_page.dart';
 import 'home_page.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -8,26 +9,27 @@ const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PageWrapper(
+      body: Scaffold(
       body: const Center(
         child: Text('This is the profile page'),
       ),
       bottomNavigationBar: BottomNavigationBar(
           items: const [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
+              icon: Icon(Icons.chat),
+              label: 'Chat',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.search),
+              label: 'Suche',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.account_circle_sharp),
               label: 'Profil',
             ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.settings),
-                label: 'Einstellungen'
-            ),
           ],
-          currentIndex: 1,
+          currentIndex: 2,
           selectedItemColor: Theme.of(context).primaryColor,
           unselectedItemColor: Colors.grey,
           showUnselectedLabels: true,
@@ -41,17 +43,19 @@ const ProfilePage({super.key});
                 );
                 break;
               case 1:
-                break;
-              case 2:
                 Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => const SettingsPage()),
+                    MaterialPageRoute(builder: (context) => const SearchPage()),
                         (route) => false
                 );
+                break;
+              case 2:
                 break;
             }
           }
       ),
+    ),
+
     );
   }
 }

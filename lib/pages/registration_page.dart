@@ -18,7 +18,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordRepeatController = TextEditingController();
-  final TextEditingController _usernameController = TextEditingController();
 
   bool _isObscure = true;
   bool _isObscureRepeat = true;
@@ -30,7 +29,6 @@ class _RegisterPageState extends State<RegisterPage> {
     _emailController.dispose();
     _passwordController.dispose();
     _passwordRepeatController.dispose();
-    _usernameController.dispose();
     super.dispose();
   }
 
@@ -52,14 +50,6 @@ class _RegisterPageState extends State<RegisterPage> {
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
-
-    // send id token to backend
-    //     http.post(Uri.parse("http://10.0.2.2:8080/api/login"),
-    //         body: """mutation login {
-    //     login(token: "${googleAuth?.idToken}") {
-    //         sessionID
-    //     }
-    // }""");
 
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);
@@ -96,17 +86,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Email',
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: TextField(
-                    controller: _usernameController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Benutzername',
+                      constraints: BoxConstraints(
+                        maxHeight: 50,
+                      ),
                     ),
                   ),
                 ),
@@ -128,6 +110,9 @@ class _RegisterPageState extends State<RegisterPage> {
                             _isObscure = !_isObscure;
                           });
                         },
+                      ),
+                      constraints: const BoxConstraints(
+                        maxHeight: 50,
                       ),
                     ),
                   ),
@@ -151,6 +136,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           });
                         },
                       ),
+                      constraints: const BoxConstraints(
+                        maxHeight: 50,
+                      ),
                     ),
                   ),
                 ),
@@ -160,9 +148,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     setState(() {
                       _emailButtonLoading = true;
                     });
+                    registerWithEmail();
                     setState(() {
                       _emailButtonLoading = false;
                     });
+                    Navigator.pushNamed(context, "/further-registration");
                   },
                   text: "Mit Email registrieren",
                   isLoading: _emailButtonLoading,
