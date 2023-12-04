@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
-import '/widgets/page_wrapper.dart';
 
-import '/pages/search_page.dart';
-import 'groups_page.dart';
+import '../widgets/page_wrapper.dart';
 
-class ProfilePage extends StatelessWidget {
-const ProfilePage({super.key});
+class GroupsPage extends StatefulWidget {
+  const GroupsPage({super.key});
 
+  @override
+  State<GroupsPage> createState() => _GroupsPageState();
+}
+
+class _GroupsPageState extends State<GroupsPage> {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
       body: const Scaffold(
         body: Center(
-        child: Text('This is the profile page'),
+          child: Text('This is the chats page'),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -26,41 +29,41 @@ const ProfilePage({super.key});
               label: 'Suche',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle_sharp),
-              label: 'Profil',
+                icon: Icon(Icons.account_circle_sharp),
+                label: 'Profil'
             ),
           ],
-          currentIndex: 2,
+          currentIndex: 0,
           selectedItemColor: Theme.of(context).primaryColor,
           unselectedItemColor: Colors.grey,
           showUnselectedLabels: true,
           onTap: (index) {
             switch (index) {
               case 0:
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => const GroupsPage()),
-                        (route) => false
-                );
                 break;
               case 1:
-                Navigator.pushAndRemoveUntil(
+                Navigator.pushNamedAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => const SearchPage()),
-                        (route) => false
+                    '/search',
+                    (route) => false
                 );
                 break;
               case 2:
+                Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    '/profile',
+                    (route) => false
+                );
                 break;
             }
           }
       ),
       menuActions: [
         ListTile(
-          leading: const Icon(Icons.edit),
-          title: const Text('Profil bearbeiten'),
+          leading: const Icon(Icons.create_outlined),
+          title: const Text('Gruppe erstellen'),
           onTap: () {
-            Navigator.pushNamed(context, '/edit-profile');
+            Navigator.pushNamed(context, '/create-group');
           },
         ),
         ListTile(
@@ -72,8 +75,7 @@ const ProfilePage({super.key});
           },
         ),
       ],
-      title: 'Profil',
-
+      title: 'Hallo,\nMax Mustermann!',
     );
   }
 }

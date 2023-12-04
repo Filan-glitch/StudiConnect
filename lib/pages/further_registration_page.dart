@@ -93,7 +93,11 @@ class _FurtherRegistrationPageState extends State<FurtherRegistrationPage> {
                       textStyle: MaterialStateProperty.all<TextStyle>(TextStyle(color: Colors.white, fontSize: 18, fontFamily: GoogleFonts.kalam().fontFamily)),
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, '/home');
+                      Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          '/groups',
+                          (route) => false
+                      );
                     },
                     child: const Text('Speichern'),
                   ),

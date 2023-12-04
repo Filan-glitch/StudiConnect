@@ -4,8 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
+import '/pages/create_group_page.dart';
+import '/pages/search_page.dart';
+import '/pages/settings_page.dart';
+import '/pages/edit_profile_page.dart';
+import '/pages/profile_page.dart';
 import '/pages/further_registration_page.dart';
-import '/pages/home_page.dart';
+import '/pages/groups_page.dart';
 import '/models/redux/store.dart';
 import '/themes/light_theme.dart';
 import '/themes/dark_theme.dart';
@@ -28,7 +33,6 @@ Future<void> main() async {
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -58,8 +62,13 @@ class MyApp extends StatelessWidget {
               '/login': (context) => const LoginPage(),
               '/register': (context) => const RegisterPage(),
               '/login-help': (context) => const LoginHelpPage(),
-              '/home': (context) => const HomePage(),
+              '/groups': (context) => const GroupsPage(),
               '/further-registration': (context) => const FurtherRegistrationPage(),
+              '/profile': (context) => const ProfilePage(),
+              '/edit-profile': (context) => const EditProfilePage(),
+              '/settings': (context) => const SettingsPage(),
+              '/search': (context) => const SearchPage(),
+              '/create-group': (context) => const CreateGroupPage(),
             }
         )
     );
