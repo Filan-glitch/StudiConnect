@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:studiconnect/services/authentication.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -16,32 +17,6 @@ class WelcomePage extends StatefulWidget {
 class _WelcomePageState extends State<WelcomePage> {
   bool _googleButtonLoading = false;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  Future<UserCredential> signInWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-    await googleUser?.authentication;
-
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-
-    // send id token to backend
-    //     http.post(Uri.parse("http://10.0.2.2:8080/api/login"),
-    //         body: """mutation login {
-    //     login(token: "${googleAuth?.idToken}") {
-    //         sessionID
-    //     }
-    // }""");
-
-    // Once signed in, return the UserCredential
-    return await _auth.signInWithCredential(credential);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +90,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 setState(() {
                   _googleButtonLoading = true;
                 });
-                signInWithGoogle();
+                Authentication.signInWithGoogle();
                 setState(() {
                   _googleButtonLoading = false;
                 });
