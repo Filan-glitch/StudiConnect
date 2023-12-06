@@ -1,21 +1,33 @@
 import 'package:flutter/material.dart';
 
+import '../models/group.dart';
+import '../widgets/group_list_item.dart';
 import '../widgets/page_wrapper.dart';
 
-class GroupsPage extends StatefulWidget {
-  const GroupsPage({super.key});
+class GroupsPage extends StatelessWidget {
+  final List<Widget> children = [
+    GroupListItem(
+      group: const Group(
+        id: '1',
+        name: 'Gruppe 1',
+        description: 'Beschreibung 1',
+        photoUrl: 'https://picsum.photos/200',
+      ),
+      onTap: () {  },
+    ),
+  ];
 
-  @override
-  State<GroupsPage> createState() => _GroupsPageState();
-}
+  GroupsPage({super.key});
 
-class _GroupsPageState extends State<GroupsPage> {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
-      body: const Scaffold(
+      body: Scaffold(
         body: Center(
-          child: Text('This is the chats page'),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: children,
+          )
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -60,7 +72,7 @@ class _GroupsPageState extends State<GroupsPage> {
       ),
       menuActions: [
         ListTile(
-          leading: const Icon(Icons.create_outlined),
+          leading: const Icon(Icons.add),
           title: const Text('Gruppe erstellen'),
           onTap: () {
             Navigator.pushNamed(context, '/create-group');
@@ -75,7 +87,7 @@ class _GroupsPageState extends State<GroupsPage> {
           },
         ),
       ],
-      title: 'Hallo,\nMax Mustermann!',
+      title: 'Gruppen',
     );
   }
 }

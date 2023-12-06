@@ -1,9 +1,47 @@
+import 'package:auth_buttons/auth_buttons.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
-class WelcomePage extends StatelessWidget {
+class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
+
+  @override
+  State<WelcomePage> createState() => _WelcomePageState();
+}
+
+
+class _WelcomePageState extends State<WelcomePage> {
+  bool _googleButtonLoading = false;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+    await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // send id token to backend
+    //     http.post(Uri.parse("http://10.0.2.2:8080/api/login"),
+    //         body: """mutation login {
+    //     login(token: "${googleAuth?.idToken}") {
+    //         sessionID
+    //     }
+    // }""");
+
+    // Once signed in, return the UserCredential
+    return await _auth.signInWithCredential(credential);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,28 +98,59 @@ class WelcomePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 5),
-            ElevatedButton(
-              style: ButtonStyle(
-                minimumSize: MaterialStateProperty.all<Size>(Size(MediaQuery.of(context).size.width - 20, 40)),
-                textStyle: MaterialStateProperty.all<TextStyle>(TextStyle(color: Colors.white, fontSize: 18, fontFamily: GoogleFonts.kalam().fontFamily)),
-              ),
+            EmailAuthButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/register');
+                Navigator.pushNamed(context, "/register");
               },
-              child: const Text('Registrieren'),
+              text: "Konto erstellen",
+              style: AuthButtonStyle(
+                textStyle: TextStyle(
+                  fontFamily: GoogleFonts.kalam().fontFamily,
+                ),
+              ),
             ),
             const SizedBox(height: 5),
-            ElevatedButton(
-              style: ButtonStyle(
-                //Button should be 5px smaller on each side than the maximum screen size in width and it should be dynamic to all screen sizes
-                minimumSize: MaterialStateProperty.all<Size>(Size(MediaQuery.of(context).size.width - 20, 40)),
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.grey),
-                textStyle: MaterialStateProperty.all<TextStyle>(TextStyle(color: Colors.white, fontSize: 18, fontFamily: GoogleFonts.kalam().fontFamily)),
-              ),
+            GoogleAuthButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/login');
+                setState(() {
+                  _googleButtonLoading = true;
+                });
+                signInWithGoogle();
+                setState(() {
+                  _googleButtonLoading = false;
+                });
               },
-              child: const Text('Anmelden'),
+              isLoading: _googleButtonLoading,
+              text: "Mit Google anmelden",
+              style: AuthButtonStyle(
+                textStyle: TextStyle(
+                  fontFamily: GoogleFonts.kalam().fontFamily,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            const SizedBox(height: 5),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  style: Theme.of(context).textTheme.bodyLarge,
+                  children: <TextSpan>[
+                    const TextSpan(
+                      text: 'Du hast bereits ein Konto? ',
+                    ),
+                    TextSpan(
+                        text: 'Login!',
+                        style: const TextStyle(color: Colors.blue),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.pushNamed(context, "/login");
+                          }
+                    ),
+                  ],
+                ),
+              ),
             ),
             const SizedBox(height: 100),
           ],

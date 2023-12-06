@@ -1,9 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:auth_buttons/auth_buttons.dart' show AuthButtonStyle, EmailAuthButton, GoogleAuthButton;
+import 'package:auth_buttons/auth_buttons.dart' show AuthButtonStyle, EmailAuthButton;
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 import '/models/redux/app_state.dart';
 
@@ -22,7 +21,6 @@ class _RegisterPageState extends State<RegisterPage> {
   bool _isObscure = true;
   bool _isObscureRepeat = true;
   bool _emailButtonLoading = false;
-  bool _googleButtonLoading = false;
 
   @override
   void dispose() {
@@ -35,24 +33,6 @@ class _RegisterPageState extends State<RegisterPage> {
   //Valid Password: Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character
   bool _validatePassword() {
     return _passwordController.text != _passwordRepeatController.text && RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$').hasMatch(_passwordController.text);
-  }
-
-  Future<UserCredential> registerWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-    await googleUser?.authentication;
-
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
   Future<UserCredential> registerWithEmail() async {
@@ -154,30 +134,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     });
                     Navigator.pushNamed(context, "/further-registration");
                   },
-                  text: "Mit Email registrieren",
+                  text: "Konto erstellen",
                   isLoading: _emailButtonLoading,
                   style: AuthButtonStyle(
                     textStyle: TextStyle(
                       fontFamily: GoogleFonts.kalam().fontFamily,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 5),
-                GoogleAuthButton(
-                  onPressed: () {
-                    setState(() {
-                      _googleButtonLoading = true;
-                    });
-                    setState(() {
-                      _googleButtonLoading = false;
-                    });
-                  },
-                  text: "Mit Google registrieren",
-                  isLoading: _googleButtonLoading,
-                  style: AuthButtonStyle(
-                    textStyle: TextStyle(
-                      fontFamily: GoogleFonts.kalam().fontFamily,
-                      color: Colors.black,
                     ),
                   ),
                 ),

@@ -37,17 +37,17 @@ const ProfilePage({super.key});
           onTap: (index) {
             switch (index) {
               case 0:
-                Navigator.pushAndRemoveUntil(
+                Navigator.pushNamedAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => const GroupsPage()),
-                        (route) => false
+                    '/groups',
+                    (route) => false
                 );
                 break;
               case 1:
-                Navigator.pushAndRemoveUntil(
+                Navigator.pushNamedAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => const SearchPage()),
-                        (route) => false
+                    '/search',
+                    (route) => false
                 );
                 break;
               case 2:

@@ -16,34 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool _googleButtonLoading = false;
   bool _emailButtonLoading = false;
-
-  Future<UserCredential> signInWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-    await googleUser?.authentication;
-
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-
-    // send id token to backend
-    //     http.post(Uri.parse("http://10.0.2.2:8080/api/login"),
-    //         body: """mutation login {
-    //     login(token: "${googleAuth?.idToken}") {
-    //         sessionID
-    //     }
-    // }""");
-
-    // Once signed in, return the UserCredential
-    return await _auth.signInWithCredential(credential);
-  }
 
   Future<UserCredential> signInWithEmail() async {
     return await _auth.signInAnonymously();
@@ -99,23 +72,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 5),
-            RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: 'Passwort vergessen?',
-                    style: const TextStyle(color: Colors.blue),
-                    recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                        Navigator.pushNamed(
-                          context,
-                          '/login-help');
-                    },
-                  ),
-                ],
-              )
-            ),
             const SizedBox(height: 30),
             EmailAuthButton(
               onPressed: () {
@@ -136,25 +92,23 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             const SizedBox(height: 5),
-            GoogleAuthButton(
-              onPressed: () {
-                setState(() {
-                  _googleButtonLoading = true;
-                });
-                signInWithGoogle();
-                setState(() {
-                  _googleButtonLoading = false;
-                });
-              },
-              isLoading: _googleButtonLoading,
-              text: "Mit Google anmelden",
-              style: AuthButtonStyle(
-                textStyle: TextStyle(
-                  fontFamily: GoogleFonts.kalam().fontFamily,
-                  color: Colors.black,
-                ),
-              ),
+            RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Passwort vergessen?',
+                      style: const TextStyle(color: Colors.blue),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.pushNamed(
+                              context,
+                              '/login-help');
+                        },
+                    ),
+                  ],
+                )
             ),
+            const SizedBox(height: 100),
           ],
         ),
       )
