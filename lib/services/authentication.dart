@@ -1,26 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:studiconnect/models/redux/store.dart';
 
 class Authentication {
-  static Future<FirebaseApp> initializeFirebase() async {
-    FirebaseApp firebaseApp = await Firebase.initializeApp();
 
-    User? user = FirebaseAuth.instance.currentUser;
-    if(user != null) {
-      //store.dispatch(UpdateUser(user));
-    } else {
-      //print('User is not signed in!');
-    }
+  static Future<UserCredential?> signInWithEmailAndPassword(String email, String password) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    UserCredential? userCredential;
 
-    return firebaseApp;
+    userCredential = await auth.signInWithEmailAndPassword(email: email, password: password);
+
+    return userCredential;
   }
 
-
-  static Future<User?> signInWithGoogle() async {
+  static Future<UserCredential?> signInWithGoogle() async {
     FirebaseAuth auth = FirebaseAuth.instance;
-    User? user;
+    UserCredential? userCredential;
 
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
@@ -34,15 +28,14 @@ class Authentication {
         idToken: googleSignInAuthentication.idToken,
       );
 
-      final UserCredential userCredential = await auth.signInWithCredential(credential);
-      user = userCredential.user;
+      userCredential = await auth.signInWithCredential(credential);
     }
 
-    return user;
+    return userCredential;
   }
 
   static Future<void> signOut() async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
-    await googleSignIn.signOut();
+    await FirebaseAuth.instance.signOut();
+    await GoogleSignIn().signOut();
   }
 }

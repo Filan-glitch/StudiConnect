@@ -90,7 +90,20 @@ class _WelcomePageState extends State<WelcomePage> {
                 setState(() {
                   _googleButtonLoading = true;
                 });
-                Authentication.signInWithGoogle();
+                Authentication.signInWithGoogle().then((UserCredential? userCredential) {
+                  if(userCredential != null) {
+
+                    //TODO: API call to obtain user data
+
+                    Navigator.pushNamedAndRemoveUntil(context, "/groups", (route) => false);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Es ist ein Fehler aufgetreten."),
+                      ),
+                    );
+                  }
+                });
                 setState(() {
                   _googleButtonLoading = false;
                 });
