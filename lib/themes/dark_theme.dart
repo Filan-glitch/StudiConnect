@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 ThemeData darkTheme = ThemeData(
   useMaterial3: true,
-  fontFamily: GoogleFonts.kalam().fontFamily,
+  fontFamily: GoogleFonts.roboto().fontFamily,
   colorScheme: const ColorScheme.dark(
     primary: Color.fromARGB(255, 114, 243, 33),
     secondary: Color.fromARGB(255, 255, 205, 68),
@@ -12,7 +12,7 @@ ThemeData darkTheme = ThemeData(
     backgroundColor: Color.fromARGB(255, 114, 243, 33),
   ),
   scaffoldBackgroundColor: const Color.fromARGB(255, 0, 0, 0),
-  textTheme: GoogleFonts.kalamTextTheme().apply(
+  textTheme: GoogleFonts.robotoTextTheme().apply(
     bodyColor: Colors.white,
     displayColor: Colors.white,
   ),

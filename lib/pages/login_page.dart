@@ -87,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
               text: "Mit E-Mail anmelden",
               style: AuthButtonStyle(
                 textStyle: TextStyle(
-                  fontFamily: GoogleFonts.kalam().fontFamily,
+                  fontFamily: GoogleFonts.roboto().fontFamily,
                 ),
               ),
             ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
+import '/pages/group_info_page.dart';
 import '/pages/create_group_page.dart';
 import '/pages/search_page.dart';
 import '/pages/settings_page.dart';
@@ -69,6 +70,7 @@ class MyApp extends StatelessWidget {
               '/settings': (context) => const SettingsPage(),
               '/search': (context) => const SearchPage(),
               '/create-group': (context) => const CreateGroupPage(),
+              GroupInfoPage.routeName : (context) => const GroupInfoPage(),
             }
         )
     );

@@ -138,7 +138,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   isLoading: _emailButtonLoading,
                   style: AuthButtonStyle(
                     textStyle: TextStyle(
-                      fontFamily: GoogleFonts.kalam().fontFamily,
+                      fontFamily: GoogleFonts.roboto().fontFamily,
                     ),
                   ),
                 ),

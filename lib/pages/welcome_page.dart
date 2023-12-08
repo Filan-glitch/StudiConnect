@@ -80,7 +80,7 @@ class _WelcomePageState extends State<WelcomePage> {
               text: "Konto erstellen",
               style: AuthButtonStyle(
                 textStyle: TextStyle(
-                  fontFamily: GoogleFonts.kalam().fontFamily,
+                  fontFamily: GoogleFonts.roboto().fontFamily,
                 ),
               ),
             ),
@@ -112,7 +112,7 @@ class _WelcomePageState extends State<WelcomePage> {
               text: "Mit Google anmelden",
               style: AuthButtonStyle(
                 textStyle: TextStyle(
-                  fontFamily: GoogleFonts.kalam().fontFamily,
+                  fontFamily: GoogleFonts.roboto().fontFamily,
                   color: Colors.black,
                 ),
               ),
