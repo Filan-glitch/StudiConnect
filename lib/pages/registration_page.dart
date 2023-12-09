@@ -128,7 +128,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     setState(() {
                       _emailButtonLoading = true;
                     });
-                    registerWithEmail();
+                    //registerWithEmail();
                     setState(() {
                       _emailButtonLoading = false;
                     });

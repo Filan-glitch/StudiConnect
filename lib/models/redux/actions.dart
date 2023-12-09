@@ -1,6 +1,8 @@
 enum ActionTypes {
   startTask,
   stopTask,
+  setUser,
+  updateUser,
 }
 
 class Action {
