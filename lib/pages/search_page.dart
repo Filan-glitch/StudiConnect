@@ -18,46 +18,6 @@ class _SearchPageState extends State<SearchPage> {
           child: Text('This is the search page'),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.chat),
-              label: 'Gruppen',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: 'Suche',
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.account_circle_sharp),
-                label: 'Profil'
-            ),
-          ],
-          currentIndex: 1,
-          selectedItemColor: Theme.of(context).primaryColor,
-          unselectedItemColor: Colors.grey,
-          showUnselectedLabels: true,
-          onTap: (index) {
-            switch (index) {
-              case 0:
-                Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    '/groups',
-                    (route) => false
-                );
-                break;
-              case 1:
-                break;
-              case 2:
-                Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    '/profile',
-                    (route) => false
-                );
-                break;
-            }
-          }
-      ),
       menuActions: [
         ListTile(
           leading: const Icon(Icons.settings),
@@ -68,7 +28,6 @@ class _SearchPageState extends State<SearchPage> {
         ),
       ],
       title: 'Suche',
-
     );
   }
 }
