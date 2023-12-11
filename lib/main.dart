@@ -29,11 +29,11 @@ Future<void> main() async {
 
   await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
 
-
   runApp(const MyApp());
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -57,22 +57,21 @@ class MyApp extends StatelessWidget {
               GlobalWidgetsLocalizations.delegate,
             ],
             navigatorKey: navigatorKey,
-            initialRoute: '/welcome',
+            initialRoute: '/search',
             routes: {
               '/welcome': (context) => const WelcomePage(),
               '/login': (context) => const LoginPage(),
               '/register': (context) => const RegisterPage(),
               '/login-help': (context) => const LoginHelpPage(),
               '/groups': (context) => GroupsPage(),
-              '/further-registration': (context) => const FurtherRegistrationPage(),
+              '/further-registration': (context) =>
+                  const FurtherRegistrationPage(),
               '/profile': (context) => const ProfilePage(),
               '/edit-profile': (context) => const EditProfilePage(),
               '/settings': (context) => const SettingsPage(),
               '/search': (context) => const SearchPage(),
               '/create-group': (context) => const CreateGroupPage(),
-              GroupInfoPage.routeName : (context) => const GroupInfoPage(),
-            }
-        )
-    );
+              GroupInfoPage.routeName: (context) => const GroupInfoPage(),
+            }));
   }
 }

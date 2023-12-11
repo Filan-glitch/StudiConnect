@@ -9,11 +9,10 @@ class GroupsPage extends StatelessWidget {
     GroupListItem(
       group: const Group(
         id: '1',
-        name: 'Gruppe 1',
+        title: 'Gruppe 1',
         description: 'Beschreibung 1',
-        photoUrl: 'https://picsum.photos/200',
       ),
-      onTap: () {  },
+      onTap: () {},
     ),
   ];
 
@@ -24,11 +23,10 @@ class GroupsPage extends StatelessWidget {
     return PageWrapper(
       body: Scaffold(
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: children,
-          )
-        ),
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: children,
+        )),
       ),
       bottomNavigationBar: BottomNavigationBar(
           items: const [
@@ -41,9 +39,7 @@ class GroupsPage extends StatelessWidget {
               label: 'Suche',
             ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.account_circle_sharp),
-                label: 'Profil'
-            ),
+                icon: Icon(Icons.account_circle_sharp), label: 'Profil'),
           ],
           currentIndex: 0,
           selectedItemColor: Theme.of(context).primaryColor,
@@ -55,21 +51,14 @@ class GroupsPage extends StatelessWidget {
                 break;
               case 1:
                 Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    '/search',
-                    (route) => false
-                );
+                    context, '/search', (route) => false);
                 break;
               case 2:
                 Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    '/profile',
-                    (route) => false
-                );
+                    context, '/profile', (route) => false);
                 break;
             }
-          }
-      ),
+          }),
       menuActions: [
         ListTile(
           leading: const Icon(Icons.add),
