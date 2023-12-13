@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
 
 import '../models/group.dart';
+import '../models/user.dart';
 import '../widgets/group_list_item.dart';
 import '../widgets/page_wrapper.dart';
 
 class GroupsPage extends StatelessWidget {
   final List<Widget> children = [
-    GroupListItem(
-      group: const Group(
+    const GroupListItem(
+      group: Group(
         id: '1',
-        name: 'Gruppe 1',
+        title: 'Gruppe 1',
         description: 'Beschreibung 1',
         photoUrl: 'https://picsum.photos/200',
-      ),
-      onTap: () {},
+        module: 'Modul 1',
+        creator: User(),
+        members: <User>[],
+        createdAt: "01.01.1970",
+        lat: 0.0000,
+        long: 0.0000,
+      )
     ),
   ];
 

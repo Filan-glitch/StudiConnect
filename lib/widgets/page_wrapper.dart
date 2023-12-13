@@ -28,6 +28,13 @@ class PageWrapper extends StatelessWidget {
     if (simpleDesign) {
       mainContent = Scaffold(
         appBar: AppBar(
+          actions: [
+            if (menuActions.isNotEmpty)
+              IconButton(
+                icon: const Icon(Icons.more_vert),
+                onPressed: () => _showActionMenu(context),
+              ),
+          ],
           title: Text(title),
         ),
         body: Padding(

@@ -95,7 +95,7 @@ class _FurtherRegistrationPageState extends State<FurtherRegistrationPage> {
                     onPressed: () {
                       Navigator.pushNamedAndRemoveUntil(
                           context,
-                          '/groups',
+                          '/home',
                           (route) => false
                       );
                     },
