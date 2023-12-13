@@ -5,7 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
 import '/pages/group_info_page.dart';
-import '/pages/create_group_page.dart';
+import 'pages/edit_group_page.dart';
 import '/pages/search_page.dart';
 import '/pages/settings_page.dart';
 import '/pages/edit_profile_page.dart';
@@ -29,11 +29,11 @@ Future<void> main() async {
 
   await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
 
-
   runApp(const MyApp());
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
             title: 'StudiConnect',
             theme: lightTheme,
             darkTheme: darkTheme,
-            themeMode: ThemeMode.system,
+            themeMode: ThemeMode.light,
             supportedLocales: const [
               Locale('en', 'US'),
               Locale('de', 'DE'),
@@ -57,22 +57,21 @@ class MyApp extends StatelessWidget {
               GlobalWidgetsLocalizations.delegate,
             ],
             navigatorKey: navigatorKey,
-            initialRoute: '/welcome',
+            initialRoute: '/create-group',
             routes: {
               '/welcome': (context) => const WelcomePage(),
               '/login': (context) => const LoginPage(),
               '/register': (context) => const RegisterPage(),
               '/login-help': (context) => const LoginHelpPage(),
               '/groups': (context) => GroupsPage(),
-              '/further-registration': (context) => const FurtherRegistrationPage(),
+              '/further-registration': (context) =>
+                  const FurtherRegistrationPage(),
               '/profile': (context) => const ProfilePage(),
               '/edit-profile': (context) => const EditProfilePage(),
               '/settings': (context) => const SettingsPage(),
               '/search': (context) => const SearchPage(),
-              '/create-group': (context) => const CreateGroupPage(),
-              GroupInfoPage.routeName : (context) => const GroupInfoPage(),
-            }
-        )
-    );
+              '/create-group': (context) => const EditGroupPage(),
+              GroupInfoPage.routeName: (context) => const GroupInfoPage(),
+            }));
   }
 }

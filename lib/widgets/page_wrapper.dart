@@ -12,6 +12,7 @@ class PageWrapper extends StatelessWidget {
     this.bottomNavigationBar,
     this.menuActions = const [],
     this.simpleDesign = false,
+    this.padding = EdgeInsets.zero,
     super.key,
   });
 
@@ -20,6 +21,7 @@ class PageWrapper extends StatelessWidget {
   final String title;
   final List<Widget> menuActions;
   final bool simpleDesign;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +29,15 @@ class PageWrapper extends StatelessWidget {
 
     if (simpleDesign) {
       mainContent = Scaffold(
-        appBar: AppBar(
-          title: Text(title),
-        ),
-        body: Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewPadding.bottom,
+          appBar: AppBar(
+            title: Text(title),
           ),
-          child: body,
-        )
-      );
+          body: Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewPadding.bottom,
+            ),
+            child: body,
+          ));
     } else {
       mainContent = Scaffold(
         bottomNavigationBar: bottomNavigationBar,
@@ -105,7 +106,10 @@ class PageWrapper extends StatelessWidget {
                             topRight: Radius.circular(30.0),
                           ),
                         ),
-                        child: body,
+                        child: Padding(
+                          padding: padding,
+                          child: body,
+                        ),
                       ),
                     ),
                   ],
@@ -116,16 +120,15 @@ class PageWrapper extends StatelessWidget {
     }
 
     return StoreConnector<AppState, AppState>(
-      converter: (store) => store.state,
-      builder: (BuildContext context, state) {
-        return Stack(
-          children: [
-            mainContent,
-            if (state.loading) const LoadingPage(),
-          ],
-        );
-      }
-    );
+        converter: (store) => store.state,
+        builder: (BuildContext context, state) {
+          return Stack(
+            children: [
+              mainContent,
+              if (state.loading) const LoadingPage(),
+            ],
+          );
+        });
   }
 
   void _showActionMenu(BuildContext context) {
