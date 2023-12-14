@@ -9,9 +9,8 @@ class GroupsPage extends StatelessWidget {
     GroupListItem(
       group: const Group(
         id: '1',
-        name: 'Gruppe 1',
+        title: 'Gruppe 1',
         description: 'Beschreibung 1',
-        photoUrl: 'https://picsum.photos/200',
       ),
       onTap: () {},
     ),
