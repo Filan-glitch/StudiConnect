@@ -6,12 +6,9 @@ import 'package:flutter_redux/flutter_redux.dart';
 
 import '/pages/group_info_page.dart';
 import '/pages/create_group_page.dart';
-import '/pages/search_page.dart';
 import '/pages/settings_page.dart';
 import '/pages/edit_profile_page.dart';
-import '/pages/profile_page.dart';
 import '/pages/further_registration_page.dart';
-import '/pages/groups_page.dart';
 import '/models/redux/store.dart';
 import '/themes/light_theme.dart';
 import '/themes/dark_theme.dart';
@@ -20,6 +17,7 @@ import '/pages/login_help_page.dart';
 import '/pages/welcome_page.dart';
 import '/firebase_options.dart';
 import '/pages/login_page.dart';
+import 'pages/home_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,38 +38,37 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreProvider(
-        store: store,
-        child: MaterialApp(
-            title: 'StudiConnect',
-            theme: lightTheme,
-            darkTheme: darkTheme,
-            themeMode: ThemeMode.system,
-            supportedLocales: const [
-              Locale('en', 'US'),
-              Locale('de', 'DE'),
-            ],
-            localizationsDelegates: const [
-              // ... app-specific localization delegate[s] here
-              GlobalCupertinoLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-            ],
-            navigatorKey: navigatorKey,
-            initialRoute: '/search',
-            routes: {
-              '/welcome': (context) => const WelcomePage(),
-              '/login': (context) => const LoginPage(),
-              '/register': (context) => const RegisterPage(),
-              '/login-help': (context) => const LoginHelpPage(),
-              '/groups': (context) => GroupsPage(),
-              '/further-registration': (context) =>
-                  const FurtherRegistrationPage(),
-              '/profile': (context) => const ProfilePage(),
-              '/edit-profile': (context) => const EditProfilePage(),
-              '/settings': (context) => const SettingsPage(),
-              '/search': (context) => const SearchPage(),
-              '/create-group': (context) => const CreateGroupPage(),
-              GroupInfoPage.routeName: (context) => const GroupInfoPage(),
-            }));
+      store: store,
+      child: MaterialApp(
+        title: 'StudiConnect',
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        themeMode: ThemeMode.system,
+        supportedLocales: const [
+          Locale('en', 'US'),
+          Locale('de', 'DE'),
+        ],
+        localizationsDelegates: const [
+          // ... app-specific localization delegate[s] here
+          GlobalCupertinoLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        navigatorKey: navigatorKey,
+        initialRoute: '/home',
+        routes: {
+          '/home': (context) => const HomePage(),
+          '/welcome': (context) => const WelcomePage(),
+          '/login': (context) => const LoginPage(),
+          '/register': (context) => const RegisterPage(),
+          '/login-help': (context) => const LoginHelpPage(),
+          '/further-registration': (context) => const FurtherRegistrationPage(),
+          '/edit-profile': (context) => const EditProfilePage(),
+          '/settings': (context) => const SettingsPage(),
+          '/create-group': (context) => const CreateGroupPage(),
+          GroupInfoPage.routeName: (context) => const GroupInfoPage(),
+        },
+      ),
+    );
   }
 }
