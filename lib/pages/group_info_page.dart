@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/group.dart';
+//import '../models/group.dart';
 
 class GroupInfoPage extends StatelessWidget {
   static const routeName = '/group-info';
@@ -9,7 +9,7 @@ class GroupInfoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as Group;
+    //final args = ModalRoute.of(context)!.settings.arguments as Group;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Group Info'),
