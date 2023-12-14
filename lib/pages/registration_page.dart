@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:auth_buttons/auth_buttons.dart' show AuthButtonStyle, EmailAuthButton;
+import 'package:auth_buttons/auth_buttons.dart'
+    show AuthButtonStyle, EmailAuthButton;
 import 'package:google_fonts/google_fonts.dart';
 
 import '/models/redux/app_state.dart';
@@ -16,7 +17,8 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _passwordRepeatController = TextEditingController();
+  final TextEditingController _passwordRepeatController =
+      TextEditingController();
 
   bool _isObscure = true;
   bool _isObscureRepeat = true;
@@ -32,92 +34,99 @@ class _RegisterPageState extends State<RegisterPage> {
 
   //Valid Password: Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character
   bool _validatePassword() {
-    return _passwordController.text != _passwordRepeatController.text && RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$').hasMatch(_passwordController.text);
+    return _passwordController.text != _passwordRepeatController.text &&
+        RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')
+            .hasMatch(_passwordController.text);
   }
 
   Future<UserCredential> registerWithEmail() async {
-    return await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _emailController.text, password: _passwordController.text);
+    return await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text, password: _passwordController.text);
   }
-
 
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
-      converter: (store) => store.state,
-      builder: (BuildContext context, AppState state) {
-        return Scaffold(
-          appBar: AppBar(),
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const Text(
-                  'Werde Mitglied!',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
+        converter: (store) => store.state,
+        builder: (BuildContext context, AppState state) {
+          return Scaffold(
+            appBar: AppBar(),
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const Text(
+                    'Werde Mitglied!',
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 30),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: TextField(
-                    controller: _emailController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Email',
-                      constraints: BoxConstraints(
-                        maxHeight: 50,
+                  const SizedBox(height: 30),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: TextField(
+                      controller: _emailController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Email',
+                        constraints: BoxConstraints(
+                          maxHeight: 50,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: TextField(
-                    controller: _passwordController,
-                    obscureText: _isObscure,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      labelText: 'Passwort',
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _isObscure ? Icons.visibility : Icons.visibility_off,
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: TextField(
+                      controller: _passwordController,
+                      obscureText: _isObscure,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        labelText: 'Passwort',
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _isObscure
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _isObscure = !_isObscure;
+                            });
+                          },
                         ),
-                        onPressed: () {
-                          setState(() {
-                            _isObscure = !_isObscure;
-                          });
-                        },
-                      ),
-                      constraints: const BoxConstraints(
-                        maxHeight: 50,
+                        constraints: const BoxConstraints(
+                          maxHeight: 50,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: TextField(
-                    controller: _passwordRepeatController,
-                    obscureText: _isObscureRepeat,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      labelText: 'Passwort wiederholen',
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _isObscureRepeat ? Icons.visibility : Icons.visibility_off,
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: TextField(
+                      controller: _passwordRepeatController,
+                      obscureText: _isObscureRepeat,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        labelText: 'Passwort wiederholen',
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _isObscureRepeat
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _isObscureRepeat = !_isObscureRepeat;
+                            });
+                          },
                         ),
-                        onPressed: () {
-                          setState(() {
-                            _isObscureRepeat = !_isObscureRepeat;
-                          });
-                        },
-                      ),
-                      constraints: const BoxConstraints(
-                        maxHeight: 50,
+                        constraints: const BoxConstraints(
+                          maxHeight: 50,
+                        ),
                       ),
                     ),
                   ),
@@ -141,13 +150,11 @@ class _RegisterPageState extends State<RegisterPage> {
                       fontFamily: GoogleFonts.roboto().fontFamily,
                     ),
                   ),
-                ),
-                const SizedBox(height: 30),
-              ],
+                  const SizedBox(height: 30),
+                ],
+              ),
             ),
-          ),
-        );
-      }
-    );
+          );
+        });
   }
 }
