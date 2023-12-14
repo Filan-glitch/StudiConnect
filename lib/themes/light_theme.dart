@@ -9,7 +9,7 @@ ThemeData lightTheme = ThemeData(
     secondary: Color.fromARGB(255, 255, 205, 68),
   ),
   appBarTheme: const AppBarTheme(
-    backgroundColor: Color.fromARGB(255, 114, 243, 33),
+    backgroundColor: Color(0xff584cd7),
   ),
   scaffoldBackgroundColor: const Color.fromARGB(255, 255, 255, 255),
   textTheme: GoogleFonts.robotoTextTheme().apply(
@@ -20,7 +20,7 @@ ThemeData lightTheme = ThemeData(
     style: ButtonStyle(
       alignment: Alignment.center,
       backgroundColor: MaterialStateProperty.all<Color>(
-        const Color.fromARGB(255, 114, 243, 33),
+        const Color(0xff584cd7),
       ),
       foregroundColor: MaterialStateProperty.all<Color>(
         const Color.fromARGB(255, 255, 255, 255),

@@ -13,6 +13,7 @@ class PageWrapper extends StatelessWidget {
     this.menuActions = const [],
     this.headerControls = const [],
     this.simpleDesign = false,
+    this.padding = EdgeInsets.zero,
     super.key,
   });
 
@@ -22,6 +23,7 @@ class PageWrapper extends StatelessWidget {
   final String title;
   final List<Widget> menuActions;
   final bool simpleDesign;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +120,10 @@ class PageWrapper extends StatelessWidget {
                             topRight: Radius.circular(30.0),
                           ),
                         ),
-                        child: body,
+                        child: Padding(
+                          padding: padding,
+                          child: body,
+                        ),
                       ),
                     ),
                   ],
