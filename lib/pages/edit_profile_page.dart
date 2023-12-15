@@ -27,112 +27,139 @@ class _EditProfilePage extends State<EditProfilePage> {
       builder: (context, state) {
         return PageWrapper(
           title: "Profil bearbeiten",
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: "Name",
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: "Name",
+                        ),
+                        initialValue: state.user?.name,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Bitte gib einen Namen ein";
+                          }
+                          return null;
+                        },
+                        onChanged: (value) => name = value,
                       ),
-
-                      initialValue: state.user?.name,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Bitte gib einen Namen ein";
-                        }
-                        return null;
-                      },
-                      onChanged: (value) => name = value,
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: "Studiengang",
+                      TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: "Studiengang",
+                        ),
+                        initialValue: state.user?.course,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Bitte gib einen Studiengang ein";
+                          }
+                          return null;
+                        },
+                        onChanged: (value) => course = value,
                       ),
-                      initialValue: state.user?.course,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Bitte gib einen Studiengang ein";
-                        }
-                        return null;
-                      },
-                      onChanged: (value) => course = value,
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: "Universität",
+                      TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: "Universität",
+                        ),
+                        initialValue: state.user?.university,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Bitte gib eine Universität ein";
+                          }
+                          return null;
+                        },
+                        onChanged: (value) => university = value,
                       ),
-                      initialValue: state.user?.university,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Bitte gib eine Universität ein";
-                        }
-                        return null;
-                      },
-                      onChanged: (value) => university = value,
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: "Über mich",
+                      TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: "Über mich",
+                        ),
+                        initialValue: state.user?.bio,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Bitte gib etwas über dich ein";
+                          }
+                          return null;
+                        },
+                        onChanged: (value) => bio = value,
                       ),
-                      initialValue: state.user?.bio,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Bitte gib etwas über dich ein";
-                        }
-                        return null;
-                      },
-                      onChanged: (value) => bio = value,
-                    ),
-                  ],
+                    ]
+                        .map((e) => Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 5.0,
+                              ),
+                              child: e,
+                            ))
+                        .toList(),
+                  ),
                 ),
-              ),
-              Column(
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          store.dispatch(
-                            redux.Action(
-                              redux.ActionTypes.updateUser,
-                              payload: {
-                                "name": name,
-                                "course": course,
-                                "university": university,
-                                "bio": bio,
-                              },
-                            ),
-                          );
-                          Navigator.pop(context);
-                        }
-                      },
-                      child: const Text("Profil speichern"),
-                    ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 30.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            store.dispatch(
+                              redux.Action(
+                                redux.ActionTypes.updateUser,
+                                payload: {
+                                  "name": name,
+                                  "course": course,
+                                  "university": university,
+                                  "bio": bio,
+                                },
+                              ),
+                            );
+                            Navigator.pop(context);
+                          }
+                        },
+                        icon: const Icon(Icons.done),
+                        label: const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5.0),
+                          child: Text("Profil\nspeichern"),
+                        ),
+                      ),
+                      ElevatedButton.icon(
+                        onPressed: () {},
+                        icon: const Icon(Icons.lock),
+                        label: const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5.0),
+                          child: Text("Passwort\nändern"),
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 40.0, bottom: 20.0),
+                  child: SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        side: const BorderSide(
+                          color: Colors.red,
+                          width: 2.0,
+                        ),
+                      ),
                       onPressed: () {},
-                      child: const Text("Passwort ändern"),
+                      child: const Text(
+                        "Konto löschen",
+                        style: TextStyle(
+                          color: Colors.red,
+                        ),
+                      ),
                     ),
                   ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: const Text("Konto löschen"),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
-          simpleDesign: true,
         );
       },
     );

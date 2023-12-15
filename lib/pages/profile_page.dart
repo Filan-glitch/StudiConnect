@@ -40,7 +40,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ],
                       ),
                       child: Image.network(
-                        "https://www.pngtem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png",
+                        "https://www.pngitem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png",
                         fit: BoxFit.cover,
                         errorBuilder: (BuildContext context, Object exception,
                             StackTrace? stackTrace) {
