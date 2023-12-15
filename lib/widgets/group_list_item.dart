@@ -12,11 +12,8 @@ class GroupListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onTap,
-      leading: CircleAvatar(
-        backgroundImage: NetworkImage(group.photoUrl),
-      ),
-      title: Text(group.name),
-      subtitle: Text(group.description),
+      title: Text(group.title ?? ''),
+      subtitle: Text(group.description ?? ''),
     );
   }
 }

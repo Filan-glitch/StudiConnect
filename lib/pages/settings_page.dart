@@ -4,7 +4,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:yaml/yaml.dart';
 
 import '../models/constants.dart';
-import '../models/redux/store.dart';
 import '../widgets/page_wrapper.dart';
 
 class SettingsPage extends StatelessWidget {
