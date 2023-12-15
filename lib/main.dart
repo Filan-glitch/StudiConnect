@@ -5,7 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
 import '/pages/group_info_page.dart';
-import '/pages/create_group_page.dart';
+import '/pages/edit_group_page.dart';
 import '/pages/settings_page.dart';
 import '/pages/edit_profile_page.dart';
 import '/pages/further_registration_page.dart';
@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
           '/further-registration': (context) => const FurtherRegistrationPage(),
           '/edit-profile': (context) => const EditProfilePage(),
           '/settings': (context) => const SettingsPage(),
-          '/create-group': (context) => const CreateGroupPage(),
+          '/create-group': (context) => const EditGroupPage(),
           GroupInfoPage.routeName: (context) => const GroupInfoPage(),
         },
       ),

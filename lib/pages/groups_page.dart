@@ -9,9 +9,8 @@ class GroupsPage extends StatelessWidget {
     GroupListItem(
       group: const Group(
         id: '1',
-        name: 'Gruppe 1',
+        title: 'Gruppe 1',
         description: 'Beschreibung 1',
-        photoUrl: 'https://picsum.photos/200',
       ),
       onTap: () {},
     ),
@@ -22,18 +21,18 @@ class GroupsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
-      body: Scaffold(
-        body: Center(
-            child: Column(
+      body: Center(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: children,
-        )),
+        ),
       ),
       menuActions: [
         ListTile(
           leading: const Icon(Icons.add),
           title: const Text('Gruppe erstellen'),
           onTap: () {
+            Navigator.pop(context);
             Navigator.pushNamed(context, '/create-group');
           },
         ),

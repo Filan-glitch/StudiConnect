@@ -32,12 +32,12 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
-  //Valid Password: Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character
+  /*Valid Password: Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character
   bool _validatePassword() {
     return _passwordController.text != _passwordRepeatController.text &&
         RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')
             .hasMatch(_passwordController.text);
-  }
+  }*/
 
   Future<UserCredential> registerWithEmail() async {
     return await FirebaseAuth.instance.createUserWithEmailAndPassword(
