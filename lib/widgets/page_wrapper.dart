@@ -13,7 +13,11 @@ class PageWrapper extends StatelessWidget {
     this.menuActions = const [],
     this.headerControls = const [],
     this.simpleDesign = false,
-    this.padding = EdgeInsets.zero,
+    this.padding = const EdgeInsets.only(
+      left: 20.0,
+      right: 20.0,
+      top: 20.0,
+    ),
     super.key,
   });
 
