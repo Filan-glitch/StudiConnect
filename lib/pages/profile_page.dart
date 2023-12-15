@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import '/widgets/page_wrapper.dart';
 
-import '/pages/search_page.dart';
-import 'groups_page.dart';
-
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 

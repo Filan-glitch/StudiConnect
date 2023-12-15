@@ -133,37 +133,35 @@ class _SearchPageState extends State<SearchPage> {
           right: 20.0,
           top: 20.0,
         ),
-        child: Expanded(
-          child: ListView.builder(
-            itemCount: searchResultsMock.length,
-            padding: EdgeInsets.zero,
-            itemBuilder: (context, index) {
-              Group group = searchResultsMock[index];
-              return Container(
-                margin: const EdgeInsets.only(bottom: 20.0),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20.0,
-                  vertical: 10.0,
-                ),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      group.title!,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Text('Erstellt an ${group.createdAt}'),
-                    Text('Erstellt von ${group.creator!.username}'),
-                    Text('Mitglieder: ${group.members!.length}'),
-                  ],
-                ),
-              );
-            },
-          ),
+        child: ListView.builder(
+          itemCount: searchResultsMock.length,
+          padding: EdgeInsets.zero,
+          itemBuilder: (context, index) {
+            Group group = searchResultsMock[index];
+            return Container(
+              margin: const EdgeInsets.only(bottom: 20.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20.0,
+                vertical: 10.0,
+              ),
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    group.title!,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text('Erstellt an ${group.createdAt}'),
+                  Text('Erstellt von ${group.creator!.username}'),
+                  Text('Mitglieder: ${group.members!.length}'),
+                ],
+              ),
+            );
+          },
         ),
       ),
       menuActions: [

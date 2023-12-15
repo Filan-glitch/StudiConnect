@@ -61,6 +61,16 @@ class PageWrapper extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          if (Navigator.canPop(context))
+                            IconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              icon: const Icon(
+                                Icons.arrow_back_ios,
+                                color: Colors.white,
+                              ),
+                            ),
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.symmetric(

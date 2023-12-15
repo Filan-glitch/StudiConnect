@@ -15,9 +15,9 @@ class EditGroupPage extends StatefulWidget {
 }
 
 class _EditGroupPageState extends State<EditGroupPage> {
-  TextEditingController _groupTitleController = TextEditingController();
-  TextEditingController _groupModuleController = TextEditingController();
-  TextEditingController _groupDescriptionController = TextEditingController();
+  final TextEditingController _groupTitleController = TextEditingController();
+  final TextEditingController _groupModuleController = TextEditingController();
+  final TextEditingController _groupDescriptionController = TextEditingController();
 
   LatLng? _selectedLocation;
 
@@ -57,7 +57,7 @@ class _EditGroupPageState extends State<EditGroupPage> {
             Padding(
               padding:
                   const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 30.0),
-              child: Container(
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: TextButton(
                     style: ButtonStyle(
@@ -140,7 +140,7 @@ class _EditGroupPageState extends State<EditGroupPage> {
             // save button
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20, bottom: 30.0),
-              child: Container(
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: ElevatedButton(
                   onPressed: () {
