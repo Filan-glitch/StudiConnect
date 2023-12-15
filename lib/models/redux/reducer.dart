@@ -14,11 +14,14 @@ AppState appReducer(AppState state, dynamic action) {
       state.user = User.fromApi(action.payload);
     case ActionTypes.updateUser:
       state.user?.update(
-        name: action.payload['name'],
-        course: action.payload['course'],
+        username: action.payload['username'],
         university: action.payload['university'],
+        major: action.payload['major'],
+        lat: action.payload['lat'],
+        lon: action.payload['lon'],
         bio: action.payload['bio'],
-        contact: action.payload['contact'],
+        mobile: action.payload['mobile'],
+        discord: action.payload['discord'],
       );
   }
 

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import '../constants.dart';
 import '../models/redux/app_state.dart';
 import '/widgets/page_wrapper.dart';
 
+// TODO: show profile of other user
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -40,10 +42,13 @@ class _ProfilePageState extends State<ProfilePage> {
                         ],
                       ),
                       child: Image.network(
-                        "https://www.pngitem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png",
+                        "$BACKEND_URL/api/users/${state.user?.id}/image",
                         fit: BoxFit.cover,
-                        errorBuilder: (BuildContext context, Object exception,
-                            StackTrace? stackTrace) {
+                        errorBuilder: (
+                          BuildContext context,
+                          Object exception,
+                          StackTrace? stackTrace,
+                        ) {
                           return Container(
                             color: Colors.white,
                             child: Icon(
@@ -59,7 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 Center(
                   child: Text(
-                    state.user?.name ?? 'ERROR',
+                    state.user?.username ?? 'ERROR',
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -80,7 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                         Text(
-                          state.user?.course ?? 'ERROR',
+                          state.user?.major ?? 'ERROR',
                           style: const TextStyle(
                             fontSize: 15,
                           ),
@@ -109,7 +114,19 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                         Text(
-                          state.user?.contact ?? state.user?.email ?? 'ERROR',
+                          state.user?.email ?? '',
+                          style: const TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
+                        Text(
+                          state.user?.mobile ?? '',
+                          style: const TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
+                        Text(
+                          state.user?.discord ?? '',
                           style: const TextStyle(
                             fontSize: 15,
                           ),
