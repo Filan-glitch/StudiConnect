@@ -130,24 +130,24 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 30),
-                EmailAuthButton(
-                  onPressed: () {
-                    setState(() {
-                      _emailButtonLoading = true;
-                    });
-                    //registerWithEmail();
-                    setState(() {
-                      _emailButtonLoading = false;
-                    });
-                    Navigator.pushNamed(context, "/further-registration");
-                  },
-                  text: "Konto erstellen",
-                  isLoading: _emailButtonLoading,
-                  style: AuthButtonStyle(
-                    textStyle: TextStyle(
-                      fontFamily: GoogleFonts.roboto().fontFamily,
+                  const SizedBox(height: 30),
+                  EmailAuthButton(
+                    onPressed: () {
+                      setState(() {
+                        _emailButtonLoading = true;
+                      });
+                      //registerWithEmail();
+                      setState(() {
+                        _emailButtonLoading = false;
+                      });
+                      Navigator.pushNamed(context, "/further-registration");
+                    },
+                    text: "Konto erstellen",
+                    isLoading: _emailButtonLoading,
+                    style: AuthButtonStyle(
+                      textStyle: TextStyle(
+                        fontFamily: GoogleFonts.roboto().fontFamily,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 30),

@@ -11,15 +11,23 @@ class PageWrapper extends StatelessWidget {
     required this.body,
     this.bottomNavigationBar,
     this.menuActions = const [],
+    this.headerControls = const [],
     this.simpleDesign = false,
+    this.padding = const EdgeInsets.only(
+      left: 20.0,
+      right: 20.0,
+      top: 20.0,
+    ),
     super.key,
   });
 
   final Widget body;
   final Widget? bottomNavigationBar;
+  final List<Widget> headerControls;
   final String title;
   final List<Widget> menuActions;
   final bool simpleDesign;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +35,15 @@ class PageWrapper extends StatelessWidget {
 
     if (simpleDesign) {
       mainContent = Scaffold(
-        appBar: AppBar(
-          title: Text(title),
-        ),
-        body: Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewPadding.bottom,
+          appBar: AppBar(
+            title: Text(title),
           ),
-          child: body,
-        )
-      );
+          body: Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewPadding.bottom,
+            ),
+            child: body,
+          ));
     } else {
       mainContent = Scaffold(
         bottomNavigationBar: bottomNavigationBar,
@@ -58,6 +65,16 @@ class PageWrapper extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          if (Navigator.canPop(context))
+                            IconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              icon: const Icon(
+                                Icons.arrow_back_ios,
+                                color: Colors.white,
+                              ),
+                            ),
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
@@ -92,6 +109,18 @@ class PageWrapper extends StatelessWidget {
                         ],
                       ),
                     ),
+                    if (headerControls.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0,
+                          vertical: 10.0,
+                        ),
+                        child: Column(
+                          children: [
+                            ...headerControls,
+                          ],
+                        ),
+                      ),
                     Expanded(
                       child: Container(
                         width: MediaQuery.of(context).size.width,
@@ -105,7 +134,10 @@ class PageWrapper extends StatelessWidget {
                             topRight: Radius.circular(30.0),
                           ),
                         ),
-                        child: body,
+                        child: Padding(
+                          padding: padding,
+                          child: body,
+                        ),
                       ),
                     ),
                   ],
@@ -116,16 +148,15 @@ class PageWrapper extends StatelessWidget {
     }
 
     return StoreConnector<AppState, AppState>(
-      converter: (store) => store.state,
-      builder: (BuildContext context, state) {
-        return Stack(
-          children: [
-            mainContent,
-            if (state.loading) const LoadingPage(),
-          ],
-        );
-      }
-    );
+        converter: (store) => store.state,
+        builder: (BuildContext context, state) {
+          return Stack(
+            children: [
+              mainContent,
+              if (state.loading) const LoadingPage(),
+            ],
+          );
+        });
   }
 
   void _showActionMenu(BuildContext context) {
