@@ -45,4 +45,5 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/icons/google_logo.svg
+    - assets/icons/icon.png
+    - pubspec.yaml
