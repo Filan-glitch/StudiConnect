@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import '../models/redux/app_state.dart';
@@ -40,17 +42,13 @@ class _ProfilePageState extends State<ProfilePage> {
                         ],
                       ),
                       child: Image.network(
-                        "https://www.pngitem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png",
+                        "https://studiconnect.janbellenberg.de/api/user/${state.user?.uid}/image.png",
                         fit: BoxFit.cover,
                         errorBuilder: (BuildContext context, Object exception,
                             StackTrace? stackTrace) {
-                          return Container(
-                            color: Colors.white,
-                            child: Icon(
-                              Icons.person,
-                              size: 80.0,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
+                          return const Icon(
+                            Icons.person,
+                            size: 80.0,
                           );
                         },
                       ),

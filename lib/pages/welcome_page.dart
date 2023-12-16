@@ -4,6 +4,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:studiconnect/services/authentication.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../models/constants.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -49,7 +52,12 @@ class _WelcomePageState extends State<WelcomePage> {
                       style: const TextStyle(color: Colors.blue),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-
+                          launchUrl(
+                            Uri.parse(
+                              termsURL,
+                            ),
+                            mode: LaunchMode.inAppWebView,
+                          );
                         }
                     ),
                     const TextSpan(
@@ -60,7 +68,12 @@ class _WelcomePageState extends State<WelcomePage> {
                       style: const TextStyle(color: Colors.blue),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-
+                          launchUrl(
+                              Uri.parse(
+                                privacyURL,
+                              ),
+                              mode: LaunchMode.inAppWebView,
+                          );
                         }
                     ),
                     const TextSpan(
@@ -79,6 +92,7 @@ class _WelcomePageState extends State<WelcomePage> {
               style: AuthButtonStyle(
                 textStyle: TextStyle(
                   fontFamily: GoogleFonts.roboto().fontFamily,
+                  color: Theme.of(context).textTheme.labelSmall?.color
                 ),
               ),
             ),
@@ -111,7 +125,7 @@ class _WelcomePageState extends State<WelcomePage> {
               style: AuthButtonStyle(
                 textStyle: TextStyle(
                   fontFamily: GoogleFonts.roboto().fontFamily,
-                  color: Colors.black,
+                  color: Theme.of(context).textTheme.labelSmall?.color
                 ),
               ),
             ),

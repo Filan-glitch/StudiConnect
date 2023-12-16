@@ -26,6 +26,7 @@ class _EditProfilePage extends State<EditProfilePage> {
       converter: (store) => store.state,
       builder: (context, state) {
         return PageWrapper(
+          simpleDesign: true,
           title: "Profil bearbeiten",
           body: SingleChildScrollView(
             child: Column(
@@ -141,7 +142,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
+                        backgroundColor: Theme.of(context).colorScheme.background,
                         side: const BorderSide(
                           color: Colors.red,
                           width: 2.0,

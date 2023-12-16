@@ -30,6 +30,7 @@ class _EditGroupPageState extends State<EditGroupPage> {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
+      simpleDesign: true,
       padding: const EdgeInsets.only(top: 20.0),
       title: widget.groupID == null ? "Gruppe erstellen" : "Gruppe bearbeiten",
       body: SingleChildScrollView(
@@ -90,10 +91,10 @@ class _EditGroupPageState extends State<EditGroupPage> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                            Text(
                               "Treffpunkt auswählen",
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Theme.of(context).textTheme.labelSmall?.color,
                                 fontSize: 16.0,
                               ),
                             ),
@@ -108,8 +109,8 @@ class _EditGroupPageState extends State<EditGroupPage> {
                                     geo.Placemark location = snapshot.data![0];
                                     return Text(
                                       '${location.street} ${location.locality}',
-                                      style: const TextStyle(
-                                        color: Colors.black,
+                                      style: TextStyle(
+                                        color: Theme.of(context).textTheme.bodySmall?.color,
                                         fontSize: 16.0,
                                       ),
                                     );

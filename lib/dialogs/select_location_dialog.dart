@@ -141,10 +141,10 @@ class _SelectLocationDialogState extends State<SelectLocationDialog> {
           onPressed: () {
             widget.onLocationSelected(_selectedLocation!);
           },
-          child: const Text(
+          child: Text(
             "Position verwenden",
             style: TextStyle(
-              color: Colors.black,
+              color: Theme.of(context).textTheme.labelSmall?.color,
               fontSize: 16.0,
             ),
           ),
