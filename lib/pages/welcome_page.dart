@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:studiconnect/services/authentication.dart';
+import 'package:studiconnect/services/firebase/authentication.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -11,7 +11,6 @@ class WelcomePage extends StatefulWidget {
   @override
   State<WelcomePage> createState() => _WelcomePageState();
 }
-
 
 class _WelcomePageState extends State<WelcomePage> {
   bool _googleButtonLoading = false;
@@ -45,26 +44,19 @@ class _WelcomePageState extends State<WelcomePage> {
                       text: 'Mit deiner Anmeldung stimmst du unseren ',
                     ),
                     TextSpan(
-                      text: 'AGBs',
-                      style: const TextStyle(color: Colors.blue),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-
-                        }
-                    ),
+                        text: 'AGBs',
+                        style: const TextStyle(color: Colors.blue),
+                        recognizer: TapGestureRecognizer()..onTap = () {}),
                     const TextSpan(
                       text: ' zu. In unserer ',
                     ),
                     TextSpan(
-                      text: 'Datenschutzerklärung',
-                      style: const TextStyle(color: Colors.blue),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-
-                        }
-                    ),
+                        text: 'Datenschutzerklärung',
+                        style: const TextStyle(color: Colors.blue),
+                        recognizer: TapGestureRecognizer()..onTap = () {}),
                     const TextSpan(
-                      text: ' findest du weitere Informationen zur Verarbeitung deiner Daten.',
+                      text:
+                          ' findest du weitere Informationen zur Verarbeitung deiner Daten.',
                     ),
                   ],
                 ),
@@ -88,12 +80,13 @@ class _WelcomePageState extends State<WelcomePage> {
                 setState(() {
                   _googleButtonLoading = true;
                 });
-                Authentication.signInWithGoogle().then((UserCredential? userCredential) {
-                  if(userCredential != null) {
-
+                Authentication.signInWithGoogle()
+                    .then((UserCredential? userCredential) {
+                  if (userCredential != null) {
                     //TODO: API call to obtain user data
 
-                    Navigator.pushNamedAndRemoveUntil(context, "/groups", (route) => false);
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, "/groups", (route) => false);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -132,8 +125,7 @@ class _WelcomePageState extends State<WelcomePage> {
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             Navigator.pushNamed(context, "/login");
-                          }
-                    ),
+                          }),
                   ],
                 ),
               ),
