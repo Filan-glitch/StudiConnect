@@ -2,10 +2,16 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:graphql/client.dart';
-import 'package:studiconnect/services/http_error.dart';
 
 import '../../constants.dart';
 import '/models/redux/store.dart';
+import 'errors/api_exception.dart';
+import 'errors/input_error.dart';
+import 'errors/internal_server_error.dart';
+import 'errors/not_found_exception.dart';
+import 'errors/connection_error.dart';
+import 'errors/forbidden_error.dart';
+import 'errors/unauthorized_error.dart';
 
 /// Implementations for GraphQL API queries & mutations.
 class GraphQL {
@@ -43,7 +49,7 @@ class GraphQL {
     } catch (e) {
       if (kDebugMode) log(e.toString());
 
-      throw ApiException.unknown;
+      throw ApiException();
     }
 
     if (result.hasException) {
@@ -71,7 +77,7 @@ class GraphQL {
     } catch (e) {
       if (kDebugMode) log(e.toString());
 
-      throw ApiException.unknown;
+      throw ApiException();
     }
 
     if (result.hasException) {
@@ -98,17 +104,41 @@ class GraphQL {
 
     if (kDebugMode) log(customMessage ?? "no msg");
 
-    // TODO: get exceptions with custom messages from the server
     if (statusCode < 100) {
+      throw ConnectionException(code: statusCode);
     } else if (statusCode == 401) {
+      throw UnauthorizedException(
+        code: statusCode,
+        message: customMessage ?? UnauthorizedException.defaultMessage,
+      );
     } else if (statusCode == 403) {
+      throw ForbiddenException(
+        code: statusCode,
+        message: customMessage ?? ForbiddenException.defaultMessage,
+      );
     } else if (statusCode == 404) {
+      throw NotFoundException(
+        code: statusCode,
+        message: customMessage ?? NotFoundException.defaultMessage,
+      );
     } else if (statusCode == 502 || statusCode == 504) {
+      throw ConnectionException(code: statusCode);
     } else if (statusCode >= 500) {
-    } else if (statusCode >= 400) {}
+      throw InternalServerException(
+        code: statusCode,
+        message: customMessage ?? InternalServerException.defaultMessage,
+      );
+    } else if (statusCode >= 400) {
+      throw InputException(
+        code: statusCode,
+        message: customMessage ?? InputException.defaultMessage,
+      );
+    }
 
-    if (exception is NetworkException || exception is ServerException) {}
+    if (exception is NetworkException || exception is ServerException) {
+      throw ConnectionException(code: statusCode);
+    }
 
-    return ApiException.unknown;
+    return ApiException();
   }
 }

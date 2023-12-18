@@ -80,8 +80,8 @@ class _WelcomePageState extends State<WelcomePage> {
                 setState(() {
                   _googleButtonLoading = true;
                 });
-                Authentication.signInWithGoogle()
-                    .then((UserCredential? userCredential) {
+                // TODO: call controller
+                signInWithGoogle().then((String? userCredential) {
                   if (userCredential != null) {
                     //TODO: API call to obtain user data
 
