@@ -1,3 +1,5 @@
+import 'group.dart';
+
 class User {
   String? id;
   String? email;
@@ -9,6 +11,7 @@ class User {
   String? bio;
   String? mobile;
   String? discord;
+  List<Group>? groups;
 
   User({
     this.id,
@@ -21,6 +24,7 @@ class User {
     this.bio,
     this.mobile,
     this.discord,
+    this.groups,
   });
 
   update({
@@ -34,6 +38,7 @@ class User {
     String? bio,
     String? mobile,
     String? discord,
+    List<Group>? groups,
   }) {
     this.id = id ?? this.id;
     this.email = email ?? this.email;
@@ -45,6 +50,7 @@ class User {
     this.bio = bio ?? this.bio;
     this.mobile = mobile ?? this.mobile;
     this.discord = discord ?? this.discord;
+    this.groups = groups ?? this.groups;
   }
 
   User.fromApi(Map<String, dynamic> json)
@@ -57,5 +63,8 @@ class User {
         lon = json['lon'],
         bio = json['bio'],
         mobile = json['mobile'],
-        discord = json['discord'];
+        discord = json['discord'],
+        groups = (json['groups'] as List<dynamic>)
+            .map((group) => Group.fromApi(group))
+            .toList();
 }

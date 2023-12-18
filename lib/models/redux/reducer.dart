@@ -23,6 +23,10 @@ AppState appReducer(AppState state, dynamic action) {
         mobile: action.payload['mobile'],
         discord: action.payload['discord'],
       );
+    case ActionTypes.updateSessionID:
+      state.sessionID = action.payload;
+    case ActionTypes.updateSearchResults:
+      state.searchResults = action.payload;
   }
 
   return state;

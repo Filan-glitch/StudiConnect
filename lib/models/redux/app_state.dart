@@ -1,9 +1,13 @@
-import 'package:studiconnect/models/user.dart';
+import 'package:studiconnect/models/group.dart';
+
+import '../user.dart';
 
 class AppState {
-  String? sessionID;
   int runningTasks = 0;
+  bool get loading => runningTasks > 0;
+
+  String? sessionID;
   User? user;
 
-  bool get loading => runningTasks > 0;
+  List<Group> searchResults = [];
 }

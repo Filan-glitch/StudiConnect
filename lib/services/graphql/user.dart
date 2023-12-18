@@ -17,6 +17,11 @@ Future<Map<String, dynamic>?> loadMyUserInfo(String id) async {
           bio
           mobile
           discord
+          groups {
+            id
+            title
+            description
+          }
         }
       }
 """),

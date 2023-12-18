@@ -52,6 +52,35 @@ Future<Map<String, dynamic>?> createGroup(
   );
 }
 
+Future<Map<String, dynamic>?> updateGroup(
+  String id,
+  String title,
+  String description,
+  String module,
+  double lat,
+  double lon,
+) async {
+  return GraphQL.mutate(
+    MutationOptions(
+      document: gql("""
+      mutation UpdateGroup(\$id: String!, \$title: String!, \$description: String!, \$module: String!, \$lat: Float!, \$lon: Float!) {
+        updateGroup(id: \$id, title: \$title, description: \$description, module: \$module, lat: \$lat, lon: \$lon) {
+          id
+        }
+      }
+"""),
+      variables: <String, dynamic>{
+        'id': id,
+        'title': title,
+        'description': description,
+        'module': module,
+        'lat': lat,
+        'lon': lon,
+      },
+    ),
+  );
+}
+
 Future<Map<String, dynamic>?> deleteGroup(
   String id,
 ) async {
