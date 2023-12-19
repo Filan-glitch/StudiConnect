@@ -1,81 +1,70 @@
-import 'package:geolocator/geolocator.dart';
+import 'group.dart';
 
 class User {
-  String uid;
-  String profilePictureUrl;
-  String email;
-  String name;
-  bool verified;
-  String university;
-  String course;
-  Position? location;
-  String bio;
-  String contact;
+  String? id;
+  String? email;
+  String? username;
+  String? university;
+  String? major;
+  double? lat;
+  double? lon;
+  String? bio;
+  String? mobile;
+  String? discord;
+  List<Group>? groups;
 
   User({
-    this.uid = '',
-    this.profilePictureUrl = '',
-    this.email = '',
-    this.name = '',
-    this.verified = false,
-    this.university = '',
-    this.course = '',
-    this.location,
-    this.bio = '',
-    this.contact = '',
+    this.id,
+    this.email,
+    this.username,
+    this.university,
+    this.major,
+    this.lat,
+    this.lon,
+    this.bio,
+    this.mobile,
+    this.discord,
+    this.groups,
   });
 
   update({
-    String? uid,
-    String? profilePictureUrl,
+    String? id,
     String? email,
-    String? name,
-    bool? verified,
+    String? username,
     String? university,
-    String? course,
-    Position? location,
+    String? major,
+    double? lat,
+    double? lon,
     String? bio,
-    String? contact,
+    String? mobile,
+    String? discord,
+    List<Group>? groups,
   }) {
-    this.uid = uid ?? this.uid;
-    this.profilePictureUrl = profilePictureUrl ?? this.profilePictureUrl;
+    this.id = id ?? this.id;
     this.email = email ?? this.email;
-    this.name = name ?? this.name;
-    this.verified = verified ?? this.verified;
+    this.username = username ?? this.username;
     this.university = university ?? this.university;
-    this.course = course ?? this.course;
-    this.location = location ?? this.location;
+    this.major = major ?? this.major;
+    this.lat = lat ?? this.lat;
+    this.lon = lon ?? this.lon;
     this.bio = bio ?? this.bio;
-    this.contact = contact ?? this.contact;
+    this.mobile = mobile ?? this.mobile;
+    this.discord = discord ?? this.discord;
+    this.groups = groups ?? this.groups;
   }
 
   User.fromApi(Map<String, dynamic> json)
-      : uid = json['uid'] ?? '',
-        profilePictureUrl = json['profilePictureUrl'] ?? '',
-        email = json['email'] ?? '',
-        name = json['name'] ?? '',
-        verified = json['verified'] ?? false,
-        university = json['university'] ?? '',
-        course = json['course'] ?? '',
-        location = json['location'],
-        bio = json['bio'] ?? '',
-        contact = json['contact'] ?? '';
+      : id = json['id'],
+        email = json['email'],
+        username = json['username'],
+        university = json['university'],
+        major = json['major'],
+        lat = json['lat'],
+        lon = json['lon'],
+        bio = json['bio'],
+        mobile = json['mobile'],
+        discord = json['discord'],
+        groups = (json['groups'] as List<dynamic>)
+            .map((group) => Group.fromApi(group))
+            .toList();
 }
-
-  factory User.fromApi(Map<String, dynamic> data) {
-    return User(
-      uid: data['uid'],
-      email: data['email'],
-      username: data['username'],
-      verified: data['verified'],
-      public: data['public'],
-      university: data['university'],
-      major: data['major'],
-      location: data['location'],
-      bio: data['bio'],
-      mobile: data['mobile'],
-      discord: data['discord'],
-    );
-  }
-}
-

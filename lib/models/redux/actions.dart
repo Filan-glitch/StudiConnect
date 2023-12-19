@@ -3,6 +3,8 @@ enum ActionTypes {
   stopTask,
   setUser,
   updateUser,
+  updateSearchResults,
+  updateSessionID,
 }
 
 class Action {
