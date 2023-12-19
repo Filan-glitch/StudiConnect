@@ -147,6 +147,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     style: AuthButtonStyle(
                       textStyle: TextStyle(
                         fontFamily: GoogleFonts.roboto().fontFamily,
+                        color: Theme.of(context).textTheme.labelSmall?.color
                       ),
                     ),
                   ),

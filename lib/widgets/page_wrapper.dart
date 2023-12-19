@@ -37,13 +37,22 @@ class PageWrapper extends StatelessWidget {
     if (simpleDesign) {
       mainContent = Scaffold(
           appBar: AppBar(
-            title: Text(title),
+            title: Text(
+              title,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 30.0,
+              ),
+            ),
           ),
           body: Padding(
             padding: EdgeInsets.only(
               bottom: MediaQuery.of(context).viewPadding.bottom,
             ),
-            child: body,
+            child: Padding(
+              padding: padding,
+              child: body,
+            ),
           ));
     } else {
       mainContent = Scaffold(
@@ -66,16 +75,6 @@ class PageWrapper extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          if (Navigator.canPop(context))
-                            IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              icon: const Icon(
-                                Icons.arrow_back_ios,
-                                color: Colors.white,
-                              ),
-                            ),
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.symmetric(

@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate,
         ],
         navigatorKey: navigatorKey,
-        initialRoute: '/home',
+        initialRoute: '/welcome',
         routes: {
           '/home': (context) => const HomePage(),
           '/welcome': (context) => const WelcomePage(),

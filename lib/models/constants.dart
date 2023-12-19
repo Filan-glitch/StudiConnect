@@ -1,3 +1,3 @@
-const termsURL = "https://www.google.com";
-const imprintURL = "https://www.google.com";
-const privacyURL = "https://www.google.com";
+const termsURL = "https://studiconnect.janbellenberg.de/terms";
+const imprintURL = "https://studiconnect.janbellenberg.de/imprint";
+const privacyURL = "https://studiconnect.janbellenberg.de/privacy";
