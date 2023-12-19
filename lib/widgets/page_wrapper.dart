@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:oktoast/oktoast.dart';
 
 import '../models/redux/app_state.dart';
 import '../pages/loading_page.dart';
@@ -149,11 +150,13 @@ class PageWrapper extends StatelessWidget {
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (BuildContext context, state) {
-          return Stack(
-            children: [
-              mainContent,
-              if (state.loading) const LoadingPage(),
-            ],
+          return OKToast(
+            child: Stack(
+              children: [
+                mainContent,
+                if (state.loading) const LoadingPage(),
+              ],
+            ),
           );
         });
   }

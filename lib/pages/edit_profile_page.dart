@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:latlong2/latlong.dart';
 
+import '../dialogs/select_location_dialog.dart';
 import '../models/redux/actions.dart' as redux;
 import '../models/redux/app_state.dart';
 import '../models/redux/store.dart';
 import '/widgets/page_wrapper.dart';
+import 'package:geocoding/geocoding.dart' as geo;
 
+// TODO: upload profile image
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key});
 
@@ -15,10 +19,13 @@ class EditProfilePage extends StatefulWidget {
 
 class _EditProfilePage extends State<EditProfilePage> {
   final _formKey = GlobalKey<FormState>();
-  String? name;
-  String? course;
+  String? username;
+  String? major;
   String? university;
+  String? mobile;
+  String? discord;
   String? bio;
+  LatLng? _selectedLocation;
 
   @override
   Widget build(BuildContext context) {
@@ -39,27 +46,27 @@ class _EditProfilePage extends State<EditProfilePage> {
                         decoration: const InputDecoration(
                           labelText: "Name",
                         ),
-                        initialValue: state.user?.name,
+                        initialValue: state.user?.username,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Bitte gib einen Namen ein";
                           }
                           return null;
                         },
-                        onChanged: (value) => name = value,
+                        onChanged: (value) => username = value,
                       ),
                       TextFormField(
                         decoration: const InputDecoration(
                           labelText: "Studiengang",
                         ),
-                        initialValue: state.user?.course,
+                        initialValue: state.user?.major,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Bitte gib einen Studiengang ein";
                           }
                           return null;
                         },
-                        onChanged: (value) => course = value,
+                        onChanged: (value) => major = value,
                       ),
                       TextFormField(
                         decoration: const InputDecoration(
@@ -75,8 +82,12 @@ class _EditProfilePage extends State<EditProfilePage> {
                         onChanged: (value) => university = value,
                       ),
                       TextFormField(
+                        keyboardType: TextInputType.multiline,
+                        minLines: 5,
+                        maxLines: null,
                         decoration: const InputDecoration(
                           labelText: "Über mich",
+                          border: OutlineInputBorder(),
                         ),
                         initialValue: state.user?.bio,
                         validator: (value) {
@@ -87,6 +98,22 @@ class _EditProfilePage extends State<EditProfilePage> {
                         },
                         onChanged: (value) => bio = value,
                       ),
+                      TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: "Telefonnummer",
+                        ),
+                        initialValue: state.user?.mobile,
+                        validator: (value) => null,
+                        onChanged: (value) => mobile = value,
+                      ),
+                      TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: "Discord",
+                        ),
+                        initialValue: state.user?.discord,
+                        validator: (value) => null,
+                        onChanged: (value) => discord = value,
+                      ),
                     ]
                         .map((e) => Padding(
                               padding: const EdgeInsets.symmetric(
@@ -95,6 +122,78 @@ class _EditProfilePage extends State<EditProfilePage> {
                               child: e,
                             ))
                         .toList(),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 20.0, right: 20.0, bottom: 30.0),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: TextButton(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.0),
+                            ),
+                          ),
+                        ),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => SelectLocationDialog(
+                              onLocationSelected: (location) {
+                                setState(() {
+                                  _selectedLocation = location;
+                                });
+
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          );
+                        },
+                        child: Row(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(right: 20.0),
+                              child: Icon(Icons.location_on),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "Treffpunkt auswählen",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16.0,
+                                  ),
+                                ),
+                                if (_selectedLocation != null)
+                                  FutureBuilder(
+                                    future: geo.placemarkFromCoordinates(
+                                      _selectedLocation!.latitude,
+                                      _selectedLocation!.longitude,
+                                    ),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        geo.Placemark location =
+                                            snapshot.data![0];
+                                        return Text(
+                                          '${location.street} ${location.locality}',
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16.0,
+                                          ),
+                                        );
+                                      } else {
+                                        return Container();
+                                      }
+                                    },
+                                  ),
+                              ],
+                            ),
+                          ],
+                        )),
                   ),
                 ),
                 Padding(
@@ -109,10 +208,14 @@ class _EditProfilePage extends State<EditProfilePage> {
                               redux.Action(
                                 redux.ActionTypes.updateUser,
                                 payload: {
-                                  "name": name,
-                                  "course": course,
+                                  "username": username,
+                                  "major": major,
                                   "university": university,
                                   "bio": bio,
+                                  "mobile": mobile,
+                                  "discord": discord,
+                                  "lat": _selectedLocation?.latitude,
+                                  "lon": _selectedLocation?.longitude,
                                 },
                               ),
                             );
