@@ -39,7 +39,7 @@ class GroupInfoPage extends StatelessWidget {
                   );
                 },
               ),
-              ListTile(
+              if (state.user?.id != group.creator?.id) ListTile(
                 leading: const Icon(Icons.exit_to_app),
                 title: const Text('Gruppe verlassen'),
                 onTap: () {
@@ -55,53 +55,77 @@ class GroupInfoPage extends StatelessWidget {
                 },
               ),
             ],
-            // TODO: Add group info
-            // Gruppenbild oben mittig
-            // Gruppenbeschreibung darunter mittig
-            // Darunter ein kleinen Titel "{count} Mitglieder"
-            // Darunter eine Liste mit allen Mitgliedern, die Mitglieder sind klickbar
-            // Wenn man auf ein Mitglied klickt öffnet sich die UserInfoPage
-            body: SizedBox(
-              width: double.infinity,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    //Gruppenbild
-                    CircleAvatar(
-                      backgroundImage: NetworkImage("$backendURL/api/group/${group.id}/image"),
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                //Gruppenbild
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 25, bottom: 10),
+                    child: CircleAvatar(
+                      radius: 65,
+                      backgroundImage: NetworkImage(
+                        '$backendURL/api/group/${group.id}/image',
+                      ),
                     ),
-                    //Gruppenbeschreibung
-                    Text(group.description ?? "Keine Beschreibung vorhanden"),
-                    //Mitgliederanzahl
-                    Text("${group.members?.length ?? "0"} Mitglieder"),
-                    //Mitgliederliste
-                    ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: group.members?.length ?? 0,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              '/user-info',
-                              arguments: group.members?[index],
-                            );
-                          },
-                          leading: CircleAvatar(
-                            backgroundImage: NetworkImage("$backendURL/api/user/${group.members?[index].id}/image"),
-                          ),
-                          title: Text(group.members?[index].username ?? "Kein Name"),
-                          subtitle: Text(group.members?[index].email ?? "Keine E-Mail"),
-                        );
+                  )
+                ),
+                //Modul
+                Center(
+                  child: Text(
+                    group.module ?? "",
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                //Gruppenbeschreibung
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: Text(
+                      group.description ?? "",
+                      style: const TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                  )
+                ),
+                //Gruppenmitgliederanzahl
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, bottom: 10),
+                  child: Text(
+                    "${(group.members?.length ?? 0) + 1} Mitglieder",
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                //Gruppenmitglieder Liste
+                Expanded(child: ListView.builder(
+                  itemCount: (group.members?.length ?? 0) + 1,
+                  itemBuilder: (context, index) {
+                    final user = index == 0 ? group.creator : group.members?[index - 1];
+                    return ListTile(
+                      onTap: () {
+                        // NamedRoute pushen
+                        Navigator.pushNamed(context, "/user-info", arguments: user);
                       },
-                    ),
-                  ],
-                )
-              )
-            )
+                      leading: CircleAvatar(
+                        backgroundImage: NetworkImage(
+                          '$backendURL/api/user/${user?.id}/image',
+                        ),
+                      ),
+                      title: Text(user?.username ?? "Unbekannt"),
+                    );
+                  },
+                ))
+              ],
+            ),
         );
-      },
+      }
     );
   }
 }
