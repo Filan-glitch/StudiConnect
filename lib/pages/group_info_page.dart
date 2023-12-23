@@ -25,7 +25,7 @@ class GroupInfoPage extends StatelessWidget {
                 leading: const Icon(Icons.group_add),
                 title: const Text('Beitrittsanfragen'),
                 onTap: () {
-
+                  Navigator.pushNamed(context, '/group-requests', arguments: group);
                 },
               ),
               if (state.user?.id == group.creator?.id) ListTile(
@@ -39,18 +39,24 @@ class GroupInfoPage extends StatelessWidget {
                   );
                 },
               ),
-              if (state.user?.id != group.creator?.id) ListTile(
+              if (group.members?.contains(state.user) ?? false) ListTile(
                 leading: const Icon(Icons.exit_to_app),
                 title: const Text('Gruppe verlassen'),
                 onTap: () {
-
+                  //TODO: API Call and update data
+                },
+              ),
+              if (!(group.members?.contains(state.user) ?? true)) ListTile(
+                leading: const Icon(Icons.person_add),
+                title: const Text('Gruppe beitreten'),
+                onTap: () {
+                  //TODO: API Call and update data
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.settings),
                 title: const Text('Einstellungen'),
                 onTap: () {
-                  Navigator.pop(context);
                   Navigator.pushNamed(context, '/settings');
                 },
               ),

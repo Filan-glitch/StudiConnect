@@ -45,6 +45,13 @@ class PageWrapper extends StatelessWidget {
               ),
           ],
           title: Text(title),
+          titleTextStyle: const TextStyle(
+            fontSize: 20.0,
+            color: Colors.white,
+          ),
+          iconTheme: const IconThemeData(
+            color: Colors.white,
+          ),
         ),
         body: Padding(
           padding: EdgeInsets.only(

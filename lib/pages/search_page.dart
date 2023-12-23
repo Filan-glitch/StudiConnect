@@ -87,6 +87,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
+      title: 'Suche',
       headerControls: [
         TextField(
           controller: _moduleInputController,
@@ -127,6 +128,15 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ),
       ],
+      menuActions: [
+        ListTile(
+          leading: const Icon(Icons.settings),
+          title: const Text('Einstellungen'),
+          onTap: () {
+            Navigator.pushNamed(context, '/settings');
+          },
+        ),
+      ],
       body: Padding(
         padding: const EdgeInsets.only(
           left: 20.0,
@@ -145,35 +155,34 @@ class _SearchPageState extends State<SearchPage> {
                 vertical: 10.0,
               ),
               decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor.withOpacity(0.2),
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.7),
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    group.title!,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+              child: GestureDetector(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        group.title!,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text('Erstellt an ${group.createdAt}'),
+                      Text('Erstellt von ${group.creator!.username}'),
+                      Text('Mitglieder: ${group.members!.length}'),
+                    ],
                   ),
-                  Text('Erstellt an ${group.createdAt}'),
-                  Text('Erstellt von ${group.creator!.username}'),
-                  Text('Mitglieder: ${group.members!.length}'),
-                ],
+                  onTap: () {
+                    Navigator.pushNamed(
+                        context,
+                        '/group-info',
+                        arguments: group
+                    );
+                  }
               ),
             );
           },
         ),
       ),
-      menuActions: [
-        ListTile(
-          leading: const Icon(Icons.settings),
-          title: const Text('Einstellungen'),
-          onTap: () {
-            Navigator.pushNamed(context, '/settings');
-          },
-        ),
-      ],
-      title: 'Suche',
     );
   }
 }

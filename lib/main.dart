@@ -67,6 +67,8 @@ class MyApp extends StatelessWidget {
           '/settings': (context) => const SettingsPage(),
           CreateAndEditGroupPage.routeName: (context) => const CreateAndEditGroupPage(),
           GroupInfoPage.routeName: (context) => const GroupInfoPage(),
+          // GroupRequestpage.routeName (context) => const GroupRequestsPage(),
+          // UserInfoPage.routeName: (context) => const UserInfoPage(),
         },
       ),
     );
