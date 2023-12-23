@@ -15,7 +15,7 @@ class CreateAndEditGroupPage extends StatefulWidget {
 class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
   @override
   Widget build(BuildContext context) {
-    final group = ModalRoute.of(context)!.settings.arguments as Group;
+    final group = ModalRoute.of(context)!.settings.arguments as Group?;
 
     return const PageWrapper(
       title: "Create or edit Group",

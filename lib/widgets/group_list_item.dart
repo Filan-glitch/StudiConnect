@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
 import '../models/group.dart';
 
 class GroupListItem extends StatelessWidget {
@@ -18,10 +19,10 @@ class GroupListItem extends StatelessWidget {
         );
       },
       leading: CircleAvatar(
-        backgroundImage: NetworkImage(group.photoUrl),
+        backgroundImage: NetworkImage("$backendURL/api/groups/${group.id}/image"),
       ),
-      title: Text(group.title),
-      subtitle: Text(group.description),
+      title: Text(group.title ?? "Gruppe ${group.id}"),
+      subtitle: Text(group.description ?? "Keine Beschreibung"),
     );
   }
 }

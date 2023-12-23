@@ -1,7 +1,7 @@
 import 'user.dart';
 
 class Group {
-  final String? id;
+  final String id;
   final String? title;
   final String? description;
   final String? module;
@@ -13,7 +13,7 @@ class Group {
   final double? lon;
 
   const Group({
-    this.id,
+    required this.id,
     this.title,
     this.description,
     this.module,

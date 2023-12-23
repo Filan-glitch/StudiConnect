@@ -7,18 +7,17 @@ import '../widgets/page_wrapper.dart';
 
 class GroupsPage extends StatelessWidget {
   final List<Widget> children = [
-    const GroupListItem(
+    GroupListItem(
       group: Group(
         id: '1',
         title: 'Gruppe 1',
         description: 'Beschreibung 1',
-        photoUrl: 'https://picsum.photos/200',
         module: 'Modul 1',
-        creator: User(),
+        creator: User(id: '1'),
         members: <User>[],
         createdAt: "01.01.1970",
         lat: 0.0000,
-        long: 0.0000,
+        lon: 0.0000,
       )
     ),
   ];
@@ -40,7 +39,7 @@ class GroupsPage extends StatelessWidget {
           title: const Text('Gruppe erstellen'),
           onTap: () {
             Navigator.pop(context);
-            Navigator.pushNamed(context, '/create-group');
+            Navigator.pushNamed(context, '/create-and-edit-group');
           },
         ),
         ListTile(

@@ -44,7 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ],
                       ),
                       child: Image.network(
-                        "$BACKEND_URL/api/users/${state.user?.id}/image",
+                        "$backendURL/api/users/${state.user?.id}/image",
                         fit: BoxFit.cover,
                         errorBuilder: (
                           BuildContext context,

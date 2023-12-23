@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
+import '../constants.dart';
 import '../models/group.dart';
 import '../models/redux/app_state.dart';
 import '../widgets/page_wrapper.dart';
@@ -17,17 +18,17 @@ class GroupInfoPage extends StatelessWidget {
       converter: (store) => store.state,
       builder: (context, state) {
         return PageWrapper(
-            title: group.title,
+            title: group.title ?? "Gruppe",
             simpleDesign: true,
             menuActions: [
-              if (state.user?.uid == group.creator.uid) ListTile(
+              if (state.user?.id == group.creator?.id) ListTile(
                 leading: const Icon(Icons.group_add),
                 title: const Text('Beitrittsanfragen'),
                 onTap: () {
 
                 },
               ),
-              if (state.user?.uid == group.creator.uid) ListTile(
+              if (state.user?.id == group.creator?.id) ListTile(
                 leading: const Icon(Icons.edit),
                 title: const Text('Gruppe bearbeiten'),
                 onTap: () {
@@ -68,30 +69,30 @@ class GroupInfoPage extends StatelessWidget {
                   children: [
                     //Gruppenbild
                     CircleAvatar(
-                      backgroundImage: NetworkImage(group.photoUrl),
+                      backgroundImage: NetworkImage("$backendURL/api/group/${group.id}/image"),
                     ),
                     //Gruppenbeschreibung
-                    Text(group.description),
+                    Text(group.description ?? "Keine Beschreibung vorhanden"),
                     //Mitgliederanzahl
-                    Text("${group.members.length} Mitglieder"),
+                    Text("${group.members?.length ?? "0"} Mitglieder"),
                     //Mitgliederliste
                     ListView.builder(
                       shrinkWrap: true,
-                      itemCount: group.members.length,
+                      itemCount: group.members?.length ?? 0,
                       itemBuilder: (context, index) {
                         return ListTile(
                           onTap: () {
                             Navigator.pushNamed(
                               context,
                               '/user-info',
-                              arguments: group.members[index],
+                              arguments: group.members?[index],
                             );
                           },
                           leading: CircleAvatar(
-                            backgroundImage: NetworkImage(group.members[index].photoUrl),
+                            backgroundImage: NetworkImage("$backendURL/api/user/${group.members?[index].id}/image"),
                           ),
-                          title: Text(group.members[index].username),
-                          subtitle: Text(group.members[index].email),
+                          title: Text(group.members?[index].username ?? "Kein Name"),
+                          subtitle: Text(group.members?[index].email ?? "Keine E-Mail"),
                         );
                       },
                     ),
