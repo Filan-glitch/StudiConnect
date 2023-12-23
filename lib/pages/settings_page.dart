@@ -4,7 +4,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:yaml/yaml.dart';
 
 import '../models/constants.dart';
-import '../models/redux/store.dart';
 import '../widgets/page_wrapper.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -22,11 +21,11 @@ class SettingsPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 30.0, bottom: 40.0),
+                padding: const EdgeInsets.only(top: 30.0, bottom: 20.0),
                 child: SizedBox(
-                  height: 75.0,
+                  height: 100.0,
                   child: Image.asset(
-                    "assets/images/icon.png",
+                    "assets/icons/icon.png",
                   ),
                 ),
               ),
@@ -48,6 +47,7 @@ class SettingsPage extends StatelessWidget {
                   return Container();
                 },
               ),
+              const SizedBox(height: 20),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 30.0),
                 child: Divider(
@@ -58,7 +58,9 @@ class SettingsPage extends StatelessWidget {
                 leading: const Icon(Icons.account_balance),
                 title: const Text("Lizenzen"),
                 onTap: () {
-                  showLicensePage(context: context);
+                  showLicensePage(
+                    context: context,
+                  );
                 },
               ),
               ListTile(

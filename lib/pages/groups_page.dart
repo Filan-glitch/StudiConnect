@@ -28,18 +28,18 @@ class GroupsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
-      body: Scaffold(
-        body: Center(
-            child: Column(
+      body: Center(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: children,
-        )),
+        ),
       ),
       menuActions: [
         ListTile(
           leading: const Icon(Icons.add),
           title: const Text('Gruppe erstellen'),
           onTap: () {
+            Navigator.pop(context);
             Navigator.pushNamed(context, '/create-group');
           },
         ),

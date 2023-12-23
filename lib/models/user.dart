@@ -1,45 +1,70 @@
-import 'package:geolocator/geolocator.dart';
+import 'group.dart';
 
 class User {
-  final String uid;
-  final String email;
-  final String username;
-  final bool verified;
-  final String university;
-  final String major;
-  final Position? location;
-  final String bio;
-  final String mobile;
-  final String discord;
-  final String photoUrl;
+  String? id;
+  String? email;
+  String? username;
+  String? university;
+  String? major;
+  double? lat;
+  double? lon;
+  String? bio;
+  String? mobile;
+  String? discord;
+  List<Group>? groups;
 
-  const User({
-    this.uid = '',
-    this.email = '',
-    this.username = '',
-    this.verified = false,
-    this.university = '',
-    this.major = '',
-    this.location,
-    this.bio = '',
-    this.mobile = '',
-    this.discord = '',
-    this.photoUrl = '',
+  User({
+    this.id,
+    this.email,
+    this.username,
+    this.university,
+    this.major,
+    this.lat,
+    this.lon,
+    this.bio,
+    this.mobile,
+    this.discord,
+    this.groups,
   });
 
-  static fromApi(Map<String, dynamic> data) {
-    return User(
-      uid: data['uid'],
-      email: data['email'],
-      username: data['username'],
-      verified: data['verified'],
-      university: data['university'],
-      major: data['major'],
-      location: data['location'],
-      bio: data['bio'],
-      mobile: data['mobile'],
-      discord: data['discord'],
-      photoUrl: data['photoUrl'],
-    );
+  update({
+    String? id,
+    String? email,
+    String? username,
+    String? university,
+    String? major,
+    double? lat,
+    double? lon,
+    String? bio,
+    String? mobile,
+    String? discord,
+    List<Group>? groups,
+  }) {
+    this.id = id ?? this.id;
+    this.email = email ?? this.email;
+    this.username = username ?? this.username;
+    this.university = university ?? this.university;
+    this.major = major ?? this.major;
+    this.lat = lat ?? this.lat;
+    this.lon = lon ?? this.lon;
+    this.bio = bio ?? this.bio;
+    this.mobile = mobile ?? this.mobile;
+    this.discord = discord ?? this.discord;
+    this.groups = groups ?? this.groups;
   }
+
+  User.fromApi(Map<String, dynamic> json)
+      : id = json['id'],
+        email = json['email'],
+        username = json['username'],
+        university = json['university'],
+        major = json['major'],
+        lat = json['lat'],
+        lon = json['lon'],
+        bio = json['bio'],
+        mobile = json['mobile'],
+        discord = json['discord'],
+        groups = (json['groups'] as List<dynamic>)
+            .map((group) => Group.fromApi(group))
+            .toList();
 }

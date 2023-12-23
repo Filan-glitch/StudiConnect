@@ -3,8 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:studiconnect/services/authentication.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../models/constants.dart';
+import 'package:studiconnect/services/firebase/authentication.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -13,10 +14,8 @@ class WelcomePage extends StatefulWidget {
   State<WelcomePage> createState() => _WelcomePageState();
 }
 
-
 class _WelcomePageState extends State<WelcomePage> {
   bool _googleButtonLoading = false;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +50,12 @@ class _WelcomePageState extends State<WelcomePage> {
                       style: const TextStyle(color: Colors.blue),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-
+                          launchUrl(
+                            Uri.parse(
+                              termsURL,
+                            ),
+                            mode: LaunchMode.inAppWebView,
+                          );
                         }
                     ),
                     const TextSpan(
@@ -62,11 +66,17 @@ class _WelcomePageState extends State<WelcomePage> {
                       style: const TextStyle(color: Colors.blue),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-
+                          launchUrl(
+                              Uri.parse(
+                                privacyURL,
+                              ),
+                              mode: LaunchMode.inAppWebView,
+                          );
                         }
                     ),
                     const TextSpan(
-                      text: ' findest du weitere Informationen zur Verarbeitung deiner Daten.',
+                      text:
+                          ' findest du weitere Informationen zur Verarbeitung deiner Daten.',
                     ),
                   ],
                 ),
@@ -81,6 +91,7 @@ class _WelcomePageState extends State<WelcomePage> {
               style: AuthButtonStyle(
                 textStyle: TextStyle(
                   fontFamily: GoogleFonts.roboto().fontFamily,
+                  color: Theme.of(context).textTheme.labelSmall?.color
                 ),
               ),
             ),
@@ -90,12 +101,13 @@ class _WelcomePageState extends State<WelcomePage> {
                 setState(() {
                   _googleButtonLoading = true;
                 });
-                Authentication.signInWithGoogle().then((UserCredential? userCredential) {
-                  if(userCredential != null) {
-
+                // TODO: call controller
+                signInWithGoogle().then((String? userCredential) {
+                  if (userCredential != null) {
                     //TODO: API call to obtain user data
 
-                    Navigator.pushNamedAndRemoveUntil(context, "/groups", (route) => false);
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, "/groups", (route) => false);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -113,7 +125,7 @@ class _WelcomePageState extends State<WelcomePage> {
               style: AuthButtonStyle(
                 textStyle: TextStyle(
                   fontFamily: GoogleFonts.roboto().fontFamily,
-                  color: Colors.black,
+                  color: Theme.of(context).textTheme.labelSmall?.color
                 ),
               ),
             ),
@@ -134,8 +146,7 @@ class _WelcomePageState extends State<WelcomePage> {
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             Navigator.pushNamed(context, "/login");
-                          }
-                    ),
+                          }),
                   ],
                 ),
               ),

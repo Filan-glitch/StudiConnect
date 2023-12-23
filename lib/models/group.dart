@@ -1,42 +1,46 @@
-import '/models/user.dart';
+import 'user.dart';
 
 class Group {
-  final String id;
-  final String title;
-  final String description;
-  final String photoUrl;
-  final String module;
-  final User creator;
-  final List<User> members;
-  final String createdAt;
-  final double lat;
-  final double long;
+  final String? id;
+  final String? title;
+  final String? description;
+  final String? module;
+  final User? creator;
+  final List<User>? members;
+  final List<User>? joinRequests;
+  final String? createdAt;
+  final double? lat;
+  final double? lon;
 
   const Group({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.photoUrl,
-    required this.module,
-    required this.creator,
-    required this.members,
-    required this.createdAt,
-    required this.lat,
-    required this.long
+    this.id,
+    this.title,
+    this.description,
+    this.module,
+    this.creator,
+    this.members,
+    this.joinRequests,
+    this.createdAt,
+    this.lat,
+    this.lon,
   });
 
-  static fromApi(Map<String, dynamic> data) {
+  factory Group.fromApi(Map<String, dynamic> data) {
     return Group(
       id: data['id'],
-      title: data['name'],
+      title: data['title'],
       description: data['description'],
-      photoUrl: data['photoUrl'],
       module: data['module'],
       creator: User.fromApi(data['creator']),
-      members: data['members'],
+      members: data['members'] != null
+          ? (data['members'] as List).map((e) => User.fromApi(e)).toList()
+          : null,
+      joinRequests: data['joinRequests'] != null
+          ? (data['joinRequests'] as List).map((e) => User.fromApi(e)).toList()
+          : null,
       createdAt: data['createdAt'],
       lat: data['lat'],
-      long: data['long'],
+      lon: data['lon'],
     );
   }
 }

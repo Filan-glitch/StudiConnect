@@ -31,7 +31,13 @@ dependencies:
   logger: ^2.0.2+1
   yaml: ^3.1.2
   url_launcher: ^6.2.1
+  flutter_map: ^6.1.0
+  latlong2: ^0.9.0
+  location: ^5.0.3
+  geocoding: ^2.1.1
   curved_navigation_bar: ^1.0.3
+  graphql: ^5.2.0-beta.6
+  oktoast: ^3.4.0
 
 dev_dependencies:
   flutter_test:
@@ -41,4 +47,5 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/icons/google_logo.svg
+    - assets/icons/icon.png
+    - pubspec.yaml

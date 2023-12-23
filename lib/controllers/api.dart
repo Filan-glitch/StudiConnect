@@ -1,5 +1,6 @@
-import 'dart:io';
+import 'package:oktoast/oktoast.dart';
 
+import '../services/graphql/errors/api_exception.dart';
 import '/models/redux/store.dart';
 import '/models/redux/actions.dart' as redux;
 
@@ -10,41 +11,39 @@ Future<T?> runApiService<T>({
 }) async {
   // Loading Screen
   if (showLoading) {
-    store.dispatch(redux.Action(
-      redux.ActionTypes.startTask,
-      payload: null
-    ));
+    store.dispatch(redux.Action(redux.ActionTypes.startTask, payload: null));
   }
 
   // API Call
   final Map<String, dynamic>? response;
   try {
     response = await apiCall();
-  } catch (e) {
-    //TODO: Error Handling
-
+  } on ApiException catch (e) {
     if (showLoading) {
       store.dispatch(redux.Action(redux.ActionTypes.stopTask));
     }
 
+    showToast(e.message);
     return null;
   }
 
   // Parsing
   T? parsed;
-  if(response != null) {
+  if (response != null) {
     try {
       parsed = parser(response);
     } catch (e) {
-      //TODO: Error Handling
+      if (showLoading) {
+        store.dispatch(redux.Action(redux.ActionTypes.stopTask));
+      }
+
+      showToast("Die Daten konnten nicht verarbeitet werden.");
+      return null;
     }
   }
 
   if (showLoading) {
-    store.dispatch(redux.Action(
-        redux.ActionTypes.stopTask,
-        payload: null
-    ));
+    store.dispatch(redux.Action(redux.ActionTypes.stopTask, payload: null));
   }
 
   return parsed;
