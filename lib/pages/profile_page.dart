@@ -27,128 +27,142 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 30, bottom: 15),
                     child: Container(
-                      width: 100,
-                      height: 100,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.4),
-                            spreadRadius: 2,
-                            blurRadius: 10,
-                            offset: const Offset(0, 0),
-                          ),
-                        ],
-                      ),
-                      child: Stack(
-                        children: [
-                          Image.network(
-                            "$backendURL/api/users/${state.user?.id}/image",
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              // ERROR Logging
-                              return Container();
-                            }
-                          ),
-                          Container(
-                            color: Colors.white,
-                            child: Icon(
-                              Icons.person,
-                              size: 100.0,
-                              color: Theme.of(context).colorScheme.primary,
+                        width: 100,
+                        height: 100,
+                        clipBehavior: Clip.antiAlias,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.4),
+                              spreadRadius: 2,
+                              blurRadius: 10,
+                              offset: const Offset(0, 0),
                             ),
-                          )
-                        ]
-                      )
+                          ],
+                        ),
+                        child: Stack(
+                            children: [
+                              Image.network(
+                                  "$backendURL/api/users/${state.user?.id}/image",
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    // ERROR Logging
+                                    return Container();
+                                  }
+                              ),
+                              Container(
+                                color: Colors.white,
+                                child: Icon(
+                                  Icons.person,
+                                  size: 100.0,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              )
+                            ]
+                        )
                     ),
                   ),
                 ),
                 Center(
                   child: Text(
-                    state.user?.username ?? 'ERROR',
+                    state.user?.username ?? '-',
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                Padding(
-                    padding: const EdgeInsets.only(left: 5),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 10),
-                        const Text(
-                          'Studiengang',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Text(
+                        'Studiengang',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          // underlined
+                          decoration: TextDecoration.underline,
+                          decorationColor: Theme.of(context).textTheme.bodySmall?.color,
                         ),
-                        Text(
-                          state.user?.major ?? 'ERROR',
-                          style: const TextStyle(
-                            fontSize: 15,
-                          ),
+                      ),
+                    ),
+                    Text(
+                      state.user?.major ?? '-',
+                      style: const TextStyle(
+                        fontSize: 15,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Text(
+                        'Universität',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline,
+                          decorationColor: Theme.of(context).textTheme.bodySmall?.color,
                         ),
-                        const SizedBox(height: 10),
-                        const SizedBox(height: 10),
-                        const Text(
-                          'Universität',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      ),
+                    ),
+                    Text(
+                      state.user?.university ?? '-',
+                      style: const TextStyle(
+                        fontSize: 15,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Text(
+                        'Kontaktmöglichkeiten',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline,
+                          decorationColor: Theme.of(context).textTheme.bodySmall?.color,
                         ),
-                        Text(
-                          state.user?.university ?? 'ERROR',
-                          style: const TextStyle(
-                            fontSize: 15,
-                          ),
+                      ),
+                    ),
+                    Text(
+                      "E-Mail: ${state.user?.email ?? '-'}",
+                      style: const TextStyle(
+                        fontSize: 15,
+                      ),
+                    ),
+                    Text(
+                      "Tel: ${state.user?.mobile ?? '-'}",
+                      style: const TextStyle(
+                        fontSize: 15,
+                      ),
+                    ),
+                    Text(
+                      "Discord: ${state.user?.discord ?? '-'}",
+                      style: const TextStyle(
+                        fontSize: 15,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Text(
+                        'Über mich',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline,
+                          decorationColor: Theme.of(context).textTheme.bodySmall?.color,
                         ),
-                        const SizedBox(height: 10),
-                        const Text(
-                          'Kontaktmöglichkeiten',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          state.user?.email ?? '',
-                          style: const TextStyle(
-                            fontSize: 15,
-                          ),
-                        ),
-                        Text(
-                          state.user?.mobile ?? '',
-                          style: const TextStyle(
-                            fontSize: 15,
-                          ),
-                        ),
-                        Text(
-                          state.user?.discord ?? '',
-                          style: const TextStyle(
-                            fontSize: 15,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        const Text(
-                          'Über mich',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          state.user?.bio ?? 'ERROR',
-                          style: const TextStyle(
-                            fontSize: 15,
-                          ),
-                        ),
-                      ],
-                    )),
+                      ),
+                    ),
+                    Text(
+                      state.user?.bio ?? '',
+                      style: const TextStyle(
+                        fontSize: 15,
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

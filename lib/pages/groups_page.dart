@@ -13,7 +13,6 @@ class GroupsPage extends StatelessWidget {
         title: 'Gruppe 1',
         description: 'Beschreibung 1',
         module: 'Modul 1',
-        creator: User(id: '1', username: 'Max Mustermann', email: 'max.mustermann@mail.de', university: 'Hochschule Ruhr West', major: 'Informatik', bio: 'Hallo, ich bin Max Mustermann.', discord: 'max.mustermann'),
         members: <User>[
           User(id: '2', username: 'Maxine Musterfrau', email: 'maxine.musterfrau@mail.de', university: 'Hochschule Ruhr West', major: 'Informatik', bio: 'Hallo, ich bin Maxine Musterfrau.', discord: 'maxine.musterfrau'),
           User(id: '2', username: 'Maxine Musterfrau', email: 'maxine.musterfrau@mail.de', university: 'Hochschule Ruhr West', major: 'Informatik', bio: 'Hallo, ich bin Maxine Musterfrau.', discord: 'maxine.musterfrau'),
@@ -22,6 +21,11 @@ class GroupsPage extends StatelessWidget {
           User(id: '2', username: 'Maxine Musterfrau', email: 'maxine.musterfrau@mail.de', university: 'Hochschule Ruhr West', major: 'Informatik', bio: 'Hallo, ich bin Maxine Musterfrau.', discord: 'maxine.musterfrau'),
           User(id: '2', username: 'Maxine Musterfrau', email: 'maxine.musterfrau@mail.de', university: 'Hochschule Ruhr West', major: 'Informatik', bio: 'Hallo, ich bin Maxine Musterfrau.', discord: 'maxine.musterfrau'),
           User(id: '2', username: 'Maxine Musterfrau', email: 'maxine.musterfrau@mail.de', university: 'Hochschule Ruhr West', major: 'Informatik', bio: 'Hallo, ich bin Maxine Musterfrau.', discord: 'maxine.musterfrau'),
+          User(id: '2', username: 'Maxine Musterfrau', email: 'maxine.musterfrau@mail.de', university: 'Hochschule Ruhr West', major: 'Informatik', bio: 'Hallo, ich bin Maxine Musterfrau.', discord: 'maxine.musterfrau'),
+          User(id: '2', username: 'Maxine Musterfrau', email: 'maxine.musterfrau@mail.de', university: 'Hochschule Ruhr West', major: 'Informatik', bio: 'Hallo, ich bin Maxine Musterfrau.', discord: 'maxine.musterfrau'),
+          User(id: '2', username: 'Maxine Musterfrau', email: 'maxine.musterfrau@mail.de', university: 'Hochschule Ruhr West', major: 'Informatik', bio: 'Hallo, ich bin Maxine Musterfrau.', discord: 'maxine.musterfrau'),
+        ],
+        joinRequests: <User>[
           User(id: '2', username: 'Maxine Musterfrau', email: 'maxine.musterfrau@mail.de', university: 'Hochschule Ruhr West', major: 'Informatik', bio: 'Hallo, ich bin Maxine Musterfrau.', discord: 'maxine.musterfrau'),
           User(id: '2', username: 'Maxine Musterfrau', email: 'maxine.musterfrau@mail.de', university: 'Hochschule Ruhr West', major: 'Informatik', bio: 'Hallo, ich bin Maxine Musterfrau.', discord: 'maxine.musterfrau'),
           User(id: '2', username: 'Maxine Musterfrau', email: 'maxine.musterfrau@mail.de', university: 'Hochschule Ruhr West', major: 'Informatik', bio: 'Hallo, ich bin Maxine Musterfrau.', discord: 'maxine.musterfrau'),

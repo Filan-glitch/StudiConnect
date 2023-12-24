@@ -25,7 +25,7 @@ class GroupInfoPage extends StatelessWidget {
                 leading: const Icon(Icons.group_add),
                 title: const Text('Beitrittsanfragen'),
                 onTap: () {
-                  Navigator.pushNamed(context, '/group-requests', arguments: group);
+                  Navigator.pushNamed(context, '/join-group-requests', arguments: group.joinRequests ?? []);
                 },
               ),
               if (state.user?.id == group.creator?.id) ListTile(
