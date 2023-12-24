@@ -6,7 +6,7 @@ import '../widgets/group_list_item.dart';
 import '../widgets/page_wrapper.dart';
 
 class GroupsPage extends StatelessWidget {
-  final List<Widget> children = [
+  final List<Widget> childrenMock = [
     GroupListItem(
       group: Group(
         id: '1',
@@ -27,8 +27,8 @@ class GroupsPage extends StatelessWidget {
           User(id: '2', username: 'Maxine Musterfrau', email: 'maxine.musterfrau@mail.de', university: 'Hochschule Ruhr West', major: 'Informatik', bio: 'Hallo, ich bin Maxine Musterfrau.', discord: 'maxine.musterfrau'),
         ],
         createdAt: "01.01.1970",
-        lat: 0.0000,
-        lon: 0.0000,
+        lat: 51.527467,
+        lon: 6.927127,
       )
     ),
     GroupListItem(
@@ -40,8 +40,8 @@ class GroupsPage extends StatelessWidget {
           creator: User(id: '1', username: 'Max Mustermann', email: 'max.mustermann@mail.de', university: 'Hochschule Ruhr West', major: 'Informatik', bio: 'Hallo, ich bin Max Mustermann.', discord: 'max.mustermann'),
           members: <User>[],
           createdAt: "01.01.1970",
-          lat: 0.0000,
-          lon: 0.0000,
+          lat: 51.527467,
+          lon: 6.927127,
         )
     ),
   ];
@@ -54,7 +54,7 @@ class GroupsPage extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: children,
+          children: childrenMock,
         ),
       ),
       menuActions: [
