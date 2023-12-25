@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:studiconnect/widgets/location_display.dart';
 
 import '../constants.dart';
 import '../models/group.dart';
@@ -14,11 +15,12 @@ class GroupInfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final group = ModalRoute.of(context)!.settings.arguments as Group;
+
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       builder: (context, state) {
         return PageWrapper(
-            title: group.title ?? "Gruppe",
+            title: "Gruppenbeschreibung",
             simpleDesign: true,
             menuActions: [
               if (state.user?.id == group.creator?.id) ListTile(
@@ -64,7 +66,6 @@ class GroupInfoPage extends StatelessWidget {
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                //Gruppenbild
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.only(top: 25, bottom: 10),
@@ -76,58 +77,106 @@ class GroupInfoPage extends StatelessWidget {
                     ),
                   )
                 ),
-                //Modul
                 Center(
                   child: Text(
-                    group.module ?? "",
+                    group.title ?? "",
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                //Gruppenbeschreibung
-                Center(
+                Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: Text(
-                      group.description ?? "",
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
-                  )
-                ),
-                //Gruppenmitgliederanzahl
-                Padding(
-                  padding: const EdgeInsets.only(left: 10, bottom: 10),
-                  child: Text(
-                    "${(group.members?.length ?? 0) + 1} Mitglieder",
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                    padding: const EdgeInsets.only(left: 15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Text(
+                            'Modul',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline,
+                              decorationColor: Theme.of(context).textTheme.bodySmall?.color,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          group.module ?? "",
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Text(
+                            'Beschreibung',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline,
+                              decorationColor: Theme.of(context).textTheme.bodySmall?.color,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          group.description ?? "",
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Text(
+                            'Treffpunkt',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline,
+                              decorationColor: Theme.of(context).textTheme.bodySmall?.color,
+                            ),
+                          ),
+                        ),
+                        LocationDisplay(lat: group.lat ?? 0, lon: group.lon ?? 0),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10, bottom: 10),
+                          child: Text(
+                            "${(group.members?.length ?? 0) + 1} Mitglieder",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline,
+                              decorationColor: Theme.of(context).textTheme.bodySmall?.color,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: (group.members?.length ?? 0) + 1,
+                            itemBuilder: (context, index) {
+                              final user = index == 0 ? group.creator : group.members?[index - 1];
+                              return ListTile(
+                                onTap: () {
+                                  // NamedRoute pushen
+                                  Navigator.pushNamed(context, "/user-info", arguments: user);
+                                },
+                                leading: CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                    '$backendURL/api/user/${user?.id}/image',
+                                  ),
+                                ),
+                                title: Text("${user?.username ?? "Unbekannt"} ${user?.id == group.creator?.id ? "(Gruppenleiter)" : ""}"),
+                              );
+                            },
+                          ),
+                        )
+                      ],
                     ),
                   ),
-                ),
-                //Gruppenmitglieder Liste
-                Expanded(child: ListView.builder(
-                  itemCount: (group.members?.length ?? 0) + 1,
-                  itemBuilder: (context, index) {
-                    final user = index == 0 ? group.creator : group.members?[index - 1];
-                    return ListTile(
-                      onTap: () {
-                        // NamedRoute pushen
-                        Navigator.pushNamed(context, "/user-info", arguments: user);
-                      },
-                      leading: CircleAvatar(
-                        backgroundImage: NetworkImage(
-                          '$backendURL/api/user/${user?.id}/image',
-                        ),
-                      ),
-                      title: Text(user?.username ?? "Unbekannt"),
-                    );
-                  },
-                ))
+                )
               ],
             ),
         );
