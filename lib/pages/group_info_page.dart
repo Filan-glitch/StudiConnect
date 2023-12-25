@@ -74,6 +74,7 @@ class GroupInfoPage extends StatelessWidget {
                       id: group.id,
                       type: Type.group,
                       radius: 65,
+                      loadingCircleStrokeWidth: 5.0,
                     ),
                   )
                 ),
@@ -163,10 +164,11 @@ class GroupInfoPage extends StatelessWidget {
                                   // NamedRoute pushen
                                   Navigator.pushNamed(context, "/user-info", arguments: user);
                                 },
-                                leading: CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                    '$backendURL/api/user/${user?.id}/image',
-                                  ),
+                                leading: AvatarPicture(
+                                  id: user?.id,
+                                  type: Type.user,
+                                  radius: 20,
+                                  loadingCircleStrokeWidth: 3.5,
                                 ),
                                 title: Text("${user?.username ?? "Unbekannt"} ${user?.id == group.creator?.id ? "(Gruppenleiter)" : ""}"),
                               );
