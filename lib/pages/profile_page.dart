@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:studiconnect/widgets/avatar_picture.dart';
 import '../constants.dart';
 import '../models/redux/app_state.dart';
 import '/widgets/page_wrapper.dart';
 
-// TODO: show profile of other user
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -41,26 +41,11 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ],
                       ),
-                      child: Stack(
-                        children: [
-                          Image.network(
-                            "$backendURL/api/users/${state.user?.id}/image",
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              // ERROR Logging
-                              return Container();
-                            }
-                          ),
-                          Container(
-                            color: Colors.white,
-                            child: Icon(
-                              Icons.person,
-                              size: 100.0,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          )
-                        ]
-                      )
+                      child: AvatarPicture(
+                        id: state.user?.id,
+                        type: Type.user,
+                        radius: 100,
+                      ),
                     ),
                   ),
                 ),

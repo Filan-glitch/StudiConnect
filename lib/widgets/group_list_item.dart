@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:studiconnect/widgets/avatar_picture.dart';
 
 import '../constants.dart';
 import '../models/group.dart';
@@ -18,8 +19,9 @@ class GroupListItem extends StatelessWidget {
           arguments: group,
         );
       },
-      leading: CircleAvatar(
-        backgroundImage: NetworkImage("$backendURL/api/groups/${group.id}/image"),
+      leading: AvatarPicture(
+        id: group.id,
+        type: Type.group,
       ),
       title: Text(group.title ?? "Gruppe ${group.id}"),
       subtitle: Text(group.description ?? "Keine Beschreibung"),

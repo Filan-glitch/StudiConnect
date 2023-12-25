@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:studiconnect/widgets/avatar_picture.dart';
 import 'package:studiconnect/widgets/location_display.dart';
 
 import '../constants.dart';
@@ -69,11 +70,10 @@ class GroupInfoPage extends StatelessWidget {
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.only(top: 25, bottom: 10),
-                    child: CircleAvatar(
+                    child: AvatarPicture(
+                      id: group.id,
+                      type: Type.group,
                       radius: 65,
-                      backgroundImage: NetworkImage(
-                        '$backendURL/api/group/${group.id}/image',
-                      ),
                     ),
                   )
                 ),
