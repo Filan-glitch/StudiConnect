@@ -145,7 +145,7 @@ class _SearchPageState extends State<SearchPage> {
         ),
         child: ListView.builder(
           itemCount: searchResultsMock.length,
-          padding: EdgeInsets.zero,
+          padding: const EdgeInsets.only(bottom: 100),
           itemBuilder: (context, index) {
             Group group = searchResultsMock[index];
             return Container(
@@ -164,21 +164,35 @@ class _SearchPageState extends State<SearchPage> {
                     children: [
                       Text(
                         group.title!,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
-                      Text('Erstellt an ${group.createdAt}'),
-                      Text('Erstellt von ${group.creator!.username}'),
-                      Text('Mitglieder: ${group.members!.length}'),
+                      Text(
+                        'Erstellt an ${group.createdAt}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        'Erstellt von ${group.creator!.username}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        'Mitglieder: ${group.members!.length}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
                     ],
                   ),
                   onTap: () {
-                    Navigator.pushNamed(
-                        context,
-                        '/group-info',
-                        arguments: group
-                    );
-                  }
-              ),
+                    Navigator.pushNamed(context, '/group-info',
+                        arguments: group);
+                  }),
             );
           },
         ),

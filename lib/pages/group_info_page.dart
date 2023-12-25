@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:studiconnect/widgets/avatar_network_icon.dart';
 import 'package:studiconnect/widgets/location_display.dart';
 
 import '../constants.dart';
@@ -17,44 +18,46 @@ class GroupInfoPage extends StatelessWidget {
     final group = ModalRoute.of(context)!.settings.arguments as Group;
 
     return StoreConnector<AppState, AppState>(
-      converter: (store) => store.state,
-      builder: (context, state) {
-        return PageWrapper(
+        converter: (store) => store.state,
+        builder: (context, state) {
+          return PageWrapper(
             title: "Gruppenbeschreibung",
             simpleDesign: true,
             menuActions: [
-              if (state.user?.id == group.creator?.id) ListTile(
-                leading: const Icon(Icons.group_add),
-                title: const Text('Beitrittsanfragen'),
-                onTap: () {
-                  Navigator.pushNamed(context, '/join-group-requests', arguments: group.joinRequests ?? []);
-                },
-              ),
-              if (state.user?.id == group.creator?.id) ListTile(
-                leading: const Icon(Icons.edit),
-                title: const Text('Gruppe bearbeiten'),
-                onTap: () {
-                  Navigator.pushNamed(
-                      context,
-                      '/create-and-edit-group',
-                      arguments: group
-                  );
-                },
-              ),
-              if (group.members?.contains(state.user) ?? false) ListTile(
-                leading: const Icon(Icons.exit_to_app),
-                title: const Text('Gruppe verlassen'),
-                onTap: () {
-                  //TODO: API Call and update data
-                },
-              ),
-              if (!(group.members?.contains(state.user) ?? true)) ListTile(
-                leading: const Icon(Icons.person_add),
-                title: const Text('Gruppe beitreten'),
-                onTap: () {
-                  //TODO: API Call and update data
-                },
-              ),
+              if (state.user?.id == group.creator?.id)
+                ListTile(
+                  leading: const Icon(Icons.group_add),
+                  title: const Text('Beitrittsanfragen'),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/join-group-requests',
+                        arguments: group.joinRequests ?? []);
+                  },
+                ),
+              if (state.user?.id == group.creator?.id)
+                ListTile(
+                  leading: const Icon(Icons.edit),
+                  title: const Text('Gruppe bearbeiten'),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/create-and-edit-group',
+                        arguments: group);
+                  },
+                ),
+              if (group.members?.contains(state.user) ?? false)
+                ListTile(
+                  leading: const Icon(Icons.exit_to_app),
+                  title: const Text('Gruppe verlassen'),
+                  onTap: () {
+                    //TODO: API Call and update data
+                  },
+                ),
+              if (!(group.members?.contains(state.user) ?? true))
+                ListTile(
+                  leading: const Icon(Icons.person_add),
+                  title: const Text('Gruppe beitreten'),
+                  onTap: () {
+                    //TODO: API Call and update data
+                  },
+                ),
               ListTile(
                 leading: const Icon(Icons.settings),
                 title: const Text('Einstellungen'),
@@ -69,13 +72,11 @@ class GroupInfoPage extends StatelessWidget {
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.only(top: 25, bottom: 10),
-                    child: CircleAvatar(
-                      radius: 65,
-                      backgroundImage: NetworkImage(
-                        '$backendURL/api/group/${group.id}/image',
-                      ),
+                    child: AvatarNetworkIcon(
+                      url: "$backendURL/api/groups/${group.id}/image",
+                      fallbackIcon: Icons.group,
                     ),
-                  )
+                  ),
                 ),
                 Center(
                   child: Text(
@@ -93,14 +94,14 @@ class GroupInfoPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(top: 10),
+                          padding: const EdgeInsets.only(top: 20),
                           child: Text(
                             'Modul',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline,
-                              decorationColor: Theme.of(context).textTheme.bodySmall?.color,
+                              decorationColor:
+                                  Theme.of(context).textTheme.bodySmall?.color,
                             ),
                           ),
                         ),
@@ -111,14 +112,14 @@ class GroupInfoPage extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 10),
+                          padding: const EdgeInsets.only(top: 20),
                           child: Text(
                             'Beschreibung',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline,
-                              decorationColor: Theme.of(context).textTheme.bodySmall?.color,
+                              decorationColor:
+                                  Theme.of(context).textTheme.bodySmall?.color,
                             ),
                           ),
                         ),
@@ -129,27 +130,28 @@ class GroupInfoPage extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 10),
+                          padding: const EdgeInsets.only(top: 20),
                           child: Text(
                             'Treffpunkt',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline,
-                              decorationColor: Theme.of(context).textTheme.bodySmall?.color,
+                              decorationColor:
+                                  Theme.of(context).textTheme.bodySmall?.color,
                             ),
                           ),
                         ),
-                        LocationDisplay(lat: group.lat ?? 0, lon: group.lon ?? 0),
+                        LocationDisplay(
+                            lat: group.lat ?? 0, lon: group.lon ?? 0),
                         Padding(
-                          padding: const EdgeInsets.only(top: 10, bottom: 10),
+                          padding: const EdgeInsets.only(top: 20, bottom: 10),
                           child: Text(
                             "${(group.members?.length ?? 0) + 1} Mitglieder",
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline,
-                              decorationColor: Theme.of(context).textTheme.bodySmall?.color,
+                              decorationColor:
+                                  Theme.of(context).textTheme.bodySmall?.color,
                             ),
                           ),
                         ),
@@ -157,18 +159,21 @@ class GroupInfoPage extends StatelessWidget {
                           child: ListView.builder(
                             itemCount: (group.members?.length ?? 0) + 1,
                             itemBuilder: (context, index) {
-                              final user = index == 0 ? group.creator : group.members?[index - 1];
+                              final user = index == 0
+                                  ? group.creator
+                                  : group.members?[index - 1];
                               return ListTile(
                                 onTap: () {
                                   // NamedRoute pushen
-                                  Navigator.pushNamed(context, "/user-info", arguments: user);
+                                  Navigator.pushNamed(context, "/user-info",
+                                      arguments: user);
                                 },
-                                leading: CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                    '$backendURL/api/user/${user?.id}/image',
-                                  ),
+                                leading: AvatarNetworkIcon(
+                                  url: "$backendURL/api/user/${user?.id}/image",
+                                  size: 50,
                                 ),
-                                title: Text("${user?.username ?? "Unbekannt"} ${user?.id == group.creator?.id ? "(Gruppenleiter)" : ""}"),
+                                title: Text(
+                                    "${user?.username ?? "Unbekannt"} ${user?.id == group.creator?.id ? "(Gruppenleiter)" : ""}"),
                               );
                             },
                           ),
@@ -179,8 +184,7 @@ class GroupInfoPage extends StatelessWidget {
                 )
               ],
             ),
-        );
-      }
-    );
+          );
+        });
   }
 }

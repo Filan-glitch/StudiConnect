@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import '../constants.dart';
 import '../models/redux/app_state.dart';
+import '../widgets/avatar_network_icon.dart';
 import '/widgets/page_wrapper.dart';
 
 // TODO: show profile of other user
@@ -26,41 +27,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.only(top: 30, bottom: 15),
-                    child: Container(
-                        width: 100,
-                        height: 100,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.4),
-                              spreadRadius: 2,
-                              blurRadius: 10,
-                              offset: const Offset(0, 0),
-                            ),
-                          ],
-                        ),
-                        child: Stack(
-                            children: [
-                              Image.network(
-                                  "$backendURL/api/users/${state.user?.id}/image",
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    // ERROR Logging
-                                    return Container();
-                                  }
-                              ),
-                              Container(
-                                color: Colors.white,
-                                child: Icon(
-                                  Icons.person,
-                                  size: 100.0,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                              )
-                            ]
-                        )
+                    child: AvatarNetworkIcon(
+                      url: "$backendURL/api/users/${state.user?.id}/image",
                     ),
                   ),
                 ),
@@ -77,15 +45,14 @@ class _ProfilePageState extends State<ProfilePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(top: 10),
+                      padding: const EdgeInsets.only(top: 20),
                       child: Text(
                         'Studiengang',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          // underlined
-                          decoration: TextDecoration.underline,
-                          decorationColor: Theme.of(context).textTheme.bodySmall?.color,
+                          decorationColor:
+                              Theme.of(context).textTheme.bodySmall?.color,
                         ),
                       ),
                     ),
@@ -96,14 +63,14 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 10),
+                      padding: const EdgeInsets.only(top: 20),
                       child: Text(
                         'Universität',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline,
-                          decorationColor: Theme.of(context).textTheme.bodySmall?.color,
+                          decorationColor:
+                              Theme.of(context).textTheme.bodySmall?.color,
                         ),
                       ),
                     ),
@@ -114,14 +81,14 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 10),
+                      padding: const EdgeInsets.only(top: 20),
                       child: Text(
                         'Kontaktmöglichkeiten',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline,
-                          decorationColor: Theme.of(context).textTheme.bodySmall?.color,
+                          decorationColor:
+                              Theme.of(context).textTheme.bodySmall?.color,
                         ),
                       ),
                     ),
@@ -144,14 +111,14 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 10),
+                      padding: const EdgeInsets.only(top: 20),
                       child: Text(
                         'Über mich',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline,
-                          decorationColor: Theme.of(context).textTheme.bodySmall?.color,
+                          decorationColor:
+                              Theme.of(context).textTheme.bodySmall?.color,
                         ),
                       ),
                     ),

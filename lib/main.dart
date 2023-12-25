@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
         title: 'StudiConnect',
         theme: lightTheme,
         darkTheme: darkTheme,
-        themeMode: ThemeMode.system,
+        themeMode: ThemeMode.light,
         supportedLocales: const [
           Locale('en', 'US'),
           Locale('de', 'DE'),
@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate,
         ],
         navigatorKey: navigatorKey,
-        initialRoute: '/welcome',
+        initialRoute: '/home',
         routes: {
           '/home': (context) => const HomePage(),
           '/welcome': (context) => const WelcomePage(),
@@ -67,9 +67,11 @@ class MyApp extends StatelessWidget {
           '/further-registration': (context) => const FurtherRegistrationPage(),
           '/edit-profile': (context) => const EditProfilePage(),
           '/settings': (context) => const SettingsPage(),
-          CreateAndEditGroupPage.routeName: (context) => const CreateAndEditGroupPage(),
+          CreateAndEditGroupPage.routeName: (context) =>
+              const CreateAndEditGroupPage(),
           GroupInfoPage.routeName: (context) => const GroupInfoPage(),
-          JoinGroupRequestsPage.routeName: (context) => const JoinGroupRequestsPage(),
+          JoinGroupRequestsPage.routeName: (context) =>
+              const JoinGroupRequestsPage(),
           UserInfoPage.routeName: (context) => const UserInfoPage(),
         },
       ),
