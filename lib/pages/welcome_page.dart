@@ -1,10 +1,9 @@
 import 'package:auth_buttons/auth_buttons.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../models/constants.dart';
+import '/constants.dart';
 import 'package:studiconnect/services/firebase/authentication.dart';
 
 class WelcomePage extends StatefulWidget {

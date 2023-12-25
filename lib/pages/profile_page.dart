@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import '../constants.dart';
@@ -43,24 +41,26 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ],
                       ),
-                      child: Image.network(
-                        "$BACKEND_URL/api/users/${state.user?.id}/image",
-                        fit: BoxFit.cover,
-                        errorBuilder: (
-                          BuildContext context,
-                          Object exception,
-                          StackTrace? stackTrace,
-                        ) {
-                          return Container(
+                      child: Stack(
+                        children: [
+                          Image.network(
+                            "$backendURL/api/users/${state.user?.id}/image",
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              // ERROR Logging
+                              return Container();
+                            }
+                          ),
+                          Container(
                             color: Colors.white,
                             child: Icon(
                               Icons.person,
-                              size: 80.0,
+                              size: 100.0,
                               color: Theme.of(context).colorScheme.primary,
                             ),
-                          );
-                        },
-                      ),
+                          )
+                        ]
+                      )
                     ),
                   ),
                 ),

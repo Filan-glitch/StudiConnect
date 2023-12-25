@@ -18,7 +18,7 @@ class GraphQL {
   /// Builds a new [GraphQLClient], based on the session id and the settings about the server.
   static Future<GraphQLClient> _getClient() async {
     final httpLink = HttpLink(
-      '$BACKEND_URL/api/graphql',
+      '$backendURL/api/graphql',
       defaultHeaders: {
         "Cookies": "session: ${store.state.sessionID}",
       },

@@ -36,24 +36,30 @@ class PageWrapper extends StatelessWidget {
 
     if (simpleDesign) {
       mainContent = Scaffold(
-          appBar: AppBar(
-            title: Text(
-              title,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 30.0,
+        appBar: AppBar(
+          actions: [
+            if (menuActions.isNotEmpty)
+              IconButton(
+                icon: const Icon(Icons.more_vert),
+                onPressed: () => _showActionMenu(context),
               ),
-            ),
+          ],
+          title: Text(title),
+          titleTextStyle: const TextStyle(
+            fontSize: 20.0,
+            color: Colors.white,
           ),
-          body: Padding(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewPadding.bottom,
-            ),
-            child: Padding(
-              padding: padding,
-              child: body,
-            ),
-          ));
+          iconTheme: const IconThemeData(
+            color: Colors.white,
+          ),
+        ),
+        body: Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewPadding.bottom,
+          ),
+          child: body,
+        )
+      );
     } else {
       mainContent = Scaffold(
         bottomNavigationBar: bottomNavigationBar,

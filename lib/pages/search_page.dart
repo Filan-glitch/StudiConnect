@@ -20,66 +20,66 @@ class _SearchPageState extends State<SearchPage> {
       id: '1',
       title: 'Gruppe 1',
       createdAt: "2023-12-11",
-      creator: User(name: "Jan Bellenberg"),
+      creator: User(id: "1", username: "Jan Bellenberg"),
       members: [
-        User(name: "User 1"),
-        User(name: "User 2"),
-        User(name: "User 3"),
+        User(id: "2", username: "User 1"),
+        User(id: "3", username: "User 2"),
+        User(id: "4", username: "User 3"),
       ],
     ),
     Group(
       id: '2',
       title: 'Gruppe 2',
       createdAt: "2023-12-11",
-      creator: User(name: "Jan Bellenberg"),
+      creator: User(id: "1", username: "Jan Bellenberg"),
       members: [
-        User(name: "User 1"),
-        User(name: "User 2"),
-        User(name: "User 3"),
-      ],
-    ),
-    Group(
-      id: '1',
-      title: 'Gruppe 1',
-      createdAt: "2023-12-11",
-      creator: User(name: "Jan Bellenberg"),
-      members: [
-        User(name: "User 1"),
-        User(name: "User 2"),
-        User(name: "User 3"),
+        User(id: "5", username: "User 1"),
+        User(id: "6", username: "User 2"),
+        User(id: "7", username: "User 3"),
       ],
     ),
     Group(
       id: '2',
-      title: 'Gruppe 2',
+      title: 'Gruppe 3',
       createdAt: "2023-12-11",
-      creator: User(name: "Jan Bellenberg"),
+      creator: User(id: "1", username: "Jan Bellenberg"),
       members: [
-        User(name: "User 1"),
-        User(name: "User 2"),
-        User(name: "User 3"),
+        User(id: "8", username: "User 1"),
+        User(id: "9", username: "User 2"),
+        User(id: "10", username: "User 3"),
       ],
     ),
     Group(
-      id: '1',
-      title: 'Gruppe 1',
+      id: '3',
+      title: 'Gruppe 4',
       createdAt: "2023-12-11",
-      creator: User(name: "Jan Bellenberg"),
+      creator: User(id: "1", username: "Jan Bellenberg"),
       members: [
-        User(name: "User 1"),
-        User(name: "User 2"),
-        User(name: "User 3"),
+        User(id: "11", username: "User 1"),
+        User(id: "12", username: "User 2"),
+        User(id: "13", username: "User 3"),
       ],
     ),
     Group(
-      id: '2',
-      title: 'Gruppe 2',
+      id: '4',
+      title: 'Gruppe 5',
       createdAt: "2023-12-11",
-      creator: User(name: "Jan Bellenberg"),
+      creator: User(id: "1", username: "Jan Bellenberg"),
       members: [
-        User(name: "User 1"),
-        User(name: "User 2"),
-        User(name: "User 3"),
+        User(id: "14", username: "User 1"),
+        User(id: "15", username: "User 2"),
+        User(id: "16", username: "User 3"),
+      ],
+    ),
+    Group(
+      id: '5',
+      title: 'Gruppe 6',
+      createdAt: "2023-12-11",
+      creator: User(id: "1", username: "Jan Bellenberg"),
+      members: [
+        User(id: "17", username: "User 1"),
+        User(id: "18", username: "User 2"),
+        User(id: "19", username: "User 3"),
       ],
     ),
   ];
@@ -87,6 +87,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
+      title: 'Suche',
       headerControls: [
         TextField(
           controller: _moduleInputController,
@@ -127,6 +128,15 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ),
       ],
+      menuActions: [
+        ListTile(
+          leading: const Icon(Icons.settings),
+          title: const Text('Einstellungen'),
+          onTap: () {
+            Navigator.pushNamed(context, '/settings');
+          },
+        ),
+      ],
       body: Padding(
         padding: const EdgeInsets.only(
           left: 20.0,
@@ -145,35 +155,34 @@ class _SearchPageState extends State<SearchPage> {
                 vertical: 10.0,
               ),
               decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor.withOpacity(0.2),
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.7),
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    group.title!,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+              child: GestureDetector(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        group.title!,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text('Erstellt an ${group.createdAt}'),
+                      Text('Erstellt von ${group.creator!.username}'),
+                      Text('Mitglieder: ${group.members!.length}'),
+                    ],
                   ),
-                  Text('Erstellt an ${group.createdAt}'),
-                  Text('Erstellt von ${group.creator!.name}'),
-                  Text('Mitglieder: ${group.members!.length}'),
-                ],
+                  onTap: () {
+                    Navigator.pushNamed(
+                        context,
+                        '/group-info',
+                        arguments: group
+                    );
+                  }
               ),
             );
           },
         ),
       ),
-      menuActions: [
-        ListTile(
-          leading: const Icon(Icons.settings),
-          title: const Text('Einstellungen'),
-          onTap: () {
-            Navigator.pushNamed(context, '/settings');
-          },
-        ),
-      ],
-      title: 'Suche',
     );
   }
 }

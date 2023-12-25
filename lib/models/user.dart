@@ -1,7 +1,7 @@
 import 'group.dart';
 
 class User {
-  String? id;
+  String id;
   String? email;
   String? username;
   String? university;
@@ -14,7 +14,7 @@ class User {
   List<Group>? groups;
 
   User({
-    this.id,
+    required this.id,
     this.email,
     this.username,
     this.university,
