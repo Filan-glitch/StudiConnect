@@ -1,4 +1,3 @@
-import '../user.dart';
 import 'actions.dart';
 import 'app_state.dart';
 
@@ -11,7 +10,7 @@ AppState appReducer(AppState state, dynamic action) {
     case ActionTypes.stopTask:
       state.runningTasks--;
     case ActionTypes.setUser:
-      state.user = User.fromApi(action.payload);
+      state.user = action.payload;
     case ActionTypes.updateUser:
       state.user?.update(
         username: action.payload['username'],

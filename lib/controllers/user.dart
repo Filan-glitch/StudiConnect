@@ -1,17 +1,30 @@
+import 'dart:developer';
+
+import '../main.dart';
 import '../models/redux/actions.dart';
 import '../models/redux/store.dart';
 import '../models/user.dart';
 import 'api.dart';
 import '../services/graphql/user.dart' as service;
+import '../services/storage/credentials.dart' as storage;
 
-Future<void> loadUserInfo() async {
-  // TODO: load user id from shared prefs
+Future<bool> loadUserInfo() async {
+  Map<String, String> credentials = await storage.loadCredentials();
+
+  if (credentials.isEmpty) {
+    return false;
+  }
+
+  String userID = credentials["userID"]!;
 
   User? result = await runApiService(
-    apiCall: () => service.loadMyUserInfo("TODO"),
-    parser: (result) => User.fromApi(
-      result["user"],
-    ),
+    apiCall: () => service.loadMyUserInfo(userID),
+    parser: (result) {
+      User u = User.fromApi(
+        result["user"],
+      );
+      return u;
+    },
   );
 
   if (result == null) {
@@ -21,7 +34,13 @@ Future<void> loadUserInfo() async {
         payload: null,
       ),
     );
-    return;
+
+    navigatorKey.currentState!.pushNamedAndRemoveUntil(
+      '/welcome',
+      (route) => false,
+    );
+
+    return false;
   }
 
   store.dispatch(
@@ -30,6 +49,8 @@ Future<void> loadUserInfo() async {
       payload: result,
     ),
   );
+
+  return true;
 }
 
 Future<void> updateProfile(
@@ -64,6 +85,10 @@ Future<void> updateProfile(
         ActionTypes.updateSessionID,
         payload: null,
       ),
+    );
+    navigatorKey.currentState!.pushNamedAndRemoveUntil(
+      '/welcome',
+      (route) => false,
     );
     return;
   }

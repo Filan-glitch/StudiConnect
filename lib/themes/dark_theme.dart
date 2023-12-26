@@ -5,30 +5,30 @@ ThemeData darkTheme = ThemeData(
   useMaterial3: true,
   fontFamily: GoogleFonts.roboto().fontFamily,
   colorScheme: const ColorScheme.dark(
-    primary: Color.fromARGB(255, 114, 243, 33),
-    secondary: Color.fromARGB(255, 255, 205, 68),
+    primary: Color(0xff3e3699),
+    secondary: Color(0xff0032bb),
+    background: Color.fromARGB(255, 44, 44, 44),
   ),
   appBarTheme: const AppBarTheme(
-    backgroundColor: Color.fromARGB(255, 114, 243, 33),
+    backgroundColor: Color(0xff3e3699),
   ),
-  scaffoldBackgroundColor: const Color.fromARGB(255, 0, 0, 0),
-  textTheme: GoogleFonts.robotoTextTheme().apply(
-    bodyColor: Colors.white,
-    displayColor: Colors.white,
-  ),
+  scaffoldBackgroundColor: Color.fromARGB(255, 41, 41, 41),
+  textTheme: GoogleFonts.robotoTextTheme()
+      .apply(bodyColor: Colors.white, displayColor: Colors.white),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
       alignment: Alignment.center,
       backgroundColor: MaterialStateProperty.all<Color>(
-        const Color.fromARGB(255, 114, 243, 33),
+        const Color(0xff3e3699),
       ),
       foregroundColor: MaterialStateProperty.all<Color>(
-        const Color.fromARGB(255, 255, 255, 255),
+        Colors.white,
       ),
       textStyle: MaterialStateProperty.all<TextStyle>(
         const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
+          color: Colors.white,
         ),
       ),
     ),
