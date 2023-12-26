@@ -31,7 +31,6 @@ def keystoreProperties = new Properties()
 android {
     namespace "de.hrw.bot.bellenbergdilan.studiconnect"
     compileSdkVersion flutter.compileSdkVersion
-    ndkVersion flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -48,7 +47,7 @@ android {
 
     defaultConfig {
         applicationId "de.hrw.bot.bellenbergdilan.studiconnect"
-        minSdkVersion 21
+        minSdkVersion 26
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

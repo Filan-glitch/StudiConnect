@@ -3,18 +3,19 @@ import 'package:latlong2/latlong.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 
 import '../dialogs/select_location_dialog.dart';
+import '../models/group.dart';
 import '/widgets/page_wrapper.dart';
 
-class EditGroupPage extends StatefulWidget {
-  const EditGroupPage({this.groupID, super.key});
+class CreateAndEditGroupPage extends StatefulWidget {
+  const CreateAndEditGroupPage({super.key});
 
-  final int? groupID;
+  static const routeName = '/create-and-edit-group';
 
   @override
-  State<EditGroupPage> createState() => _EditGroupPageState();
+  State<CreateAndEditGroupPage> createState() => _CreateAndEditGroupPageState();
 }
 
-class _EditGroupPageState extends State<EditGroupPage> {
+class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
   final TextEditingController _groupTitleController = TextEditingController();
   final TextEditingController _groupModuleController = TextEditingController();
   final TextEditingController _groupDescriptionController = TextEditingController();
@@ -22,16 +23,12 @@ class _EditGroupPageState extends State<EditGroupPage> {
   LatLng? _selectedLocation;
 
   @override
-  void initState() {
-    super.initState();
-    // TODO: load group data if groupID is not null
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final group = ModalRoute.of(context)!.settings.arguments as Group?;
     return PageWrapper(
+      simpleDesign: true,
       padding: const EdgeInsets.only(top: 20.0),
-      title: widget.groupID == null ? "Gruppe erstellen" : "Gruppe bearbeiten",
+      title: (((group?.id) == null) ? "Gruppe erstellen" : "Gruppe bearbeiten"),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,10 +87,10 @@ class _EditGroupPageState extends State<EditGroupPage> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                            Text(
                               "Treffpunkt auswählen",
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Theme.of(context).textTheme.labelSmall?.color,
                                 fontSize: 16.0,
                               ),
                             ),
@@ -108,8 +105,8 @@ class _EditGroupPageState extends State<EditGroupPage> {
                                     geo.Placemark location = snapshot.data![0];
                                     return Text(
                                       '${location.street} ${location.locality}',
-                                      style: const TextStyle(
-                                        color: Colors.black,
+                                      style: TextStyle(
+                                        color: Theme.of(context).textTheme.bodySmall?.color,
                                         fontSize: 16.0,
                                       ),
                                     );

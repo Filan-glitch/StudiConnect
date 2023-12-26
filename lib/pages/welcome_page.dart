@@ -3,8 +3,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../controllers/authentication.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '/constants.dart';
+import '/services/firebase/authentication.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -54,16 +56,34 @@ class _WelcomePageState extends State<WelcomePage> {
                       text: 'Mit deiner Anmeldung stimmst du unseren ',
                     ),
                     TextSpan(
-                        text: 'AGBs',
-                        style: const TextStyle(color: Colors.blue),
-                        recognizer: TapGestureRecognizer()..onTap = () {}),
+                      text: 'AGBs',
+                      style: const TextStyle(color: Colors.blue),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          launchUrl(
+                            Uri.parse(
+                              termsURL,
+                            ),
+                            mode: LaunchMode.inAppWebView,
+                          );
+                        }
+                    ),
                     const TextSpan(
                       text: ' zu. In unserer ',
                     ),
                     TextSpan(
-                        text: 'Datenschutzerklärung',
-                        style: const TextStyle(color: Colors.blue),
-                        recognizer: TapGestureRecognizer()..onTap = () {}),
+                      text: 'Datenschutzerklärung',
+                      style: const TextStyle(color: Colors.blue),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          launchUrl(
+                              Uri.parse(
+                                privacyURL,
+                              ),
+                              mode: LaunchMode.inAppWebView,
+                          );
+                        }
+                    ),
                     const TextSpan(
                       text:
                           ' findest du weitere Informationen zur Verarbeitung deiner Daten.',
@@ -84,6 +104,7 @@ class _WelcomePageState extends State<WelcomePage> {
               style: AuthButtonStyle(
                 textStyle: TextStyle(
                   fontFamily: GoogleFonts.roboto().fontFamily,
+                  color: Theme.of(context).textTheme.labelSmall?.color
                 ),
               ),
             ),

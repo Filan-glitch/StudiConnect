@@ -36,15 +36,30 @@ class PageWrapper extends StatelessWidget {
 
     if (simpleDesign) {
       mainContent = Scaffold(
-          appBar: AppBar(
-            title: Text(title),
+        appBar: AppBar(
+          actions: [
+            if (menuActions.isNotEmpty)
+              IconButton(
+                icon: const Icon(Icons.more_vert),
+                onPressed: () => _showActionMenu(context),
+              ),
+          ],
+          title: Text(title),
+          titleTextStyle: const TextStyle(
+            fontSize: 20.0,
+            color: Colors.white,
           ),
-          body: Padding(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewPadding.bottom,
-            ),
-            child: body,
-          ));
+          iconTheme: const IconThemeData(
+            color: Colors.white,
+          ),
+        ),
+        body: Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewPadding.bottom,
+          ),
+          child: body,
+        )
+      );
     } else {
       mainContent = Scaffold(
         bottomNavigationBar: bottomNavigationBar,
@@ -66,16 +81,6 @@ class PageWrapper extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          if (Navigator.canPop(context))
-                            IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              icon: const Icon(
-                                Icons.arrow_back_ios,
-                                color: Colors.white,
-                              ),
-                            ),
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.symmetric(

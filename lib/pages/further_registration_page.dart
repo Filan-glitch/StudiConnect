@@ -99,7 +99,10 @@ class _FurtherRegistrationPageState extends State<FurtherRegistrationPage> {
                     onPressed: () {
                       // TODO: update profile
                       Navigator.pushNamedAndRemoveUntil(
-                          context, '/home', (route) => false);
+                          context,
+                          '/home',
+                          (route) => false
+                      );
                     },
                     child: const Text('Speichern'),
                   ),
