@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
         title: 'StudiConnect',
         theme: lightTheme,
         darkTheme: darkTheme,
-        themeMode: ThemeMode.light,
+        themeMode: ThemeMode.system,
         supportedLocales: const [
           Locale('en', 'US'),
           Locale('de', 'DE'),

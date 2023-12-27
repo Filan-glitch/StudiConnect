@@ -79,7 +79,7 @@ class GroupInfoPage extends StatelessWidget {
                       loadingCircleStrokeWidth: 5.0,
                     ),
                   ),
-                )),
+                ),
                 Center(
                   child: Text(
                     group.title ?? "",
