@@ -31,13 +31,14 @@ class Group {
       title: data['title'],
       description: data['description'],
       module: data['module'],
-      creator: User.fromApi(data['creator']),
-      members: data['members'] != null
-          ? (data['members'] as List).map((e) => User.fromApi(e)).toList()
-          : null,
-      joinRequests: data['joinRequests'] != null
-          ? (data['joinRequests'] as List).map((e) => User.fromApi(e)).toList()
-          : null,
+      creator:
+          data.containsKey("creator") ? User.fromApi(data['creator']) : null,
+      members: ((data['members'] ?? []) as List<dynamic>)
+          .map((e) => User.fromApi(e))
+          .toList(),
+      joinRequests: ((data['joinRequests'] ?? []) as List<dynamic>)
+          .map((e) => User.fromApi(e))
+          .toList(),
       createdAt: data['createdAt'],
       lat: data['lat'],
       lon: data['lon'],

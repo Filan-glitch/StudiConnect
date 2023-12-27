@@ -14,6 +14,24 @@ Future<String?> signInWithEmailAndPassword(
   return userCredential.user?.getIdToken();
 }
 
+Future<String?> signUpWithEmailAndPassword(
+    String email, String password) async {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  UserCredential? userCredential;
+
+  userCredential = await auth.createUserWithEmailAndPassword(
+    email: email,
+    password: password,
+  );
+
+  return userCredential.user?.getIdToken();
+}
+
+Future<void> triggerPasswordReset(String email) async {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  await auth.sendPasswordResetEmail(email: email);
+}
+
 Future<String?> signInWithGoogle() async {
   FirebaseAuth auth = FirebaseAuth.instance;
   UserCredential? userCredential;
