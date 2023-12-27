@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:oktoast/oktoast.dart';
 
 import '../services/graphql/errors/api_exception.dart';
@@ -33,6 +35,7 @@ Future<T?> runApiService<T>({
     try {
       parsed = parser(response);
     } catch (e) {
+      log(e.toString());
       if (showLoading) {
         store.dispatch(redux.Action(redux.ActionTypes.stopTask));
       }

@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 const backendURL = kDebugMode
-    ? 'http://10.0.2.2:8000'
+    ? 'http://192.168.178.21:8080'
     : 'https://studiconnect.janbellenberg.de';
 
 const termsURL = "https://studiconnect.janbellenberg.de/terms";

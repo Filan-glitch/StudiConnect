@@ -19,6 +19,7 @@ class PageWrapper extends StatelessWidget {
       right: 20.0,
       top: 20.0,
     ),
+    this.overrideLoadingScreen = false,
     super.key,
   });
 
@@ -29,6 +30,7 @@ class PageWrapper extends StatelessWidget {
   final List<Widget> menuActions;
   final bool simpleDesign;
   final EdgeInsets padding;
+  final bool overrideLoadingScreen;
 
   @override
   Widget build(BuildContext context) {
@@ -36,30 +38,29 @@ class PageWrapper extends StatelessWidget {
 
     if (simpleDesign) {
       mainContent = Scaffold(
-        appBar: AppBar(
-          actions: [
-            if (menuActions.isNotEmpty)
-              IconButton(
-                icon: const Icon(Icons.more_vert),
-                onPressed: () => _showActionMenu(context),
-              ),
-          ],
-          title: Text(title),
-          titleTextStyle: const TextStyle(
-            fontSize: 20.0,
-            color: Colors.white,
+          appBar: AppBar(
+            actions: [
+              if (menuActions.isNotEmpty)
+                IconButton(
+                  icon: const Icon(Icons.more_vert),
+                  onPressed: () => _showActionMenu(context),
+                ),
+            ],
+            title: Text(title),
+            titleTextStyle: const TextStyle(
+              fontSize: 20.0,
+              color: Colors.white,
+            ),
+            iconTheme: const IconThemeData(
+              color: Colors.white,
+            ),
           ),
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-        ),
-        body: Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewPadding.bottom,
-          ),
-          child: body,
-        )
-      );
+          body: Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewPadding.bottom,
+            ),
+            child: body,
+          ));
     } else {
       mainContent = Scaffold(
         bottomNavigationBar: bottomNavigationBar,
@@ -160,7 +161,8 @@ class PageWrapper extends StatelessWidget {
             child: Stack(
               children: [
                 mainContent,
-                if (state.loading) const LoadingPage(),
+                if (state.loading && !overrideLoadingScreen)
+                  const LoadingPage(),
               ],
             ),
           );

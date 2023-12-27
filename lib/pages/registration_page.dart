@@ -1,9 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:auth_buttons/auth_buttons.dart'
     show AuthButtonStyle, EmailAuthButton;
 import 'package:google_fonts/google_fonts.dart';
+import '/controllers/authentication.dart';
 
 import '/models/redux/app_state.dart';
 
@@ -39,11 +39,6 @@ class _RegisterPageState extends State<RegisterPage> {
             .hasMatch(_passwordController.text);
   }*/
 
-  Future<UserCredential> registerWithEmail() async {
-    return await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text, password: _passwordController.text);
-  }
-
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
@@ -67,6 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: TextField(
                       controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Email',
@@ -132,11 +128,20 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   const SizedBox(height: 30),
                   EmailAuthButton(
+                    themeMode: Theme.of(context).brightness == Brightness.light
+                        ? ThemeMode.light
+                        : ThemeMode.dark,
+                    // TODO: set null if not valid
                     onPressed: () {
                       setState(() {
                         _emailButtonLoading = true;
                       });
-                      //registerWithEmail();
+
+                      signUpWithEmailAndPassword(
+                        _emailController.text,
+                        _passwordController.text,
+                      );
+
                       setState(() {
                         _emailButtonLoading = false;
                       });

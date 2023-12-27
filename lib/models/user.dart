@@ -64,7 +64,7 @@ class User {
         bio = json['bio'],
         mobile = json['mobile'],
         discord = json['discord'],
-        groups = (json['groups'] as List<dynamic>)
+        groups = ((json['groups'] ?? []) as List<dynamic>)
             .map((group) => Group.fromApi(group))
             .toList();
 }

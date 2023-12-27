@@ -12,8 +12,9 @@ Future<Map<String, dynamic>?> searchGroups(
       query SearchGroups(\$module: String!, \$radius: Int!) {
         searchGroups(module: \$module, radius: \$radius) {
           id
-          name
+          title
           description
+          module
           createdAt
           creator {
             id

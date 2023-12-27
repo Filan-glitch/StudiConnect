@@ -8,14 +8,14 @@ class FurtherRegistrationPage extends StatefulWidget {
   const FurtherRegistrationPage({super.key});
 
   @override
-  State<FurtherRegistrationPage> createState() => _FurtherRegistrationPageState();
+  State<FurtherRegistrationPage> createState() =>
+      _FurtherRegistrationPageState();
 }
 
 class _FurtherRegistrationPageState extends State<FurtherRegistrationPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _universityController = TextEditingController();
   final TextEditingController _courseController = TextEditingController();
-
 
   @override
   void dispose() {
@@ -89,10 +89,15 @@ class _FurtherRegistrationPageState extends State<FurtherRegistrationPage> {
                   ElevatedButton(
                     style: ButtonStyle(
                       //Button should be 5px smaller on each side than the maximum screen size in width and it should be dynamic to all screen sizes
-                      minimumSize: MaterialStateProperty.all<Size>(Size(MediaQuery.of(context).size.width - 20, 40)),
-                      textStyle: MaterialStateProperty.all<TextStyle>(TextStyle(color: Colors.white, fontSize: 18, fontFamily: GoogleFonts.roboto().fontFamily)),
+                      minimumSize: MaterialStateProperty.all<Size>(
+                          Size(MediaQuery.of(context).size.width - 20, 40)),
+                      textStyle: MaterialStateProperty.all<TextStyle>(TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontFamily: GoogleFonts.roboto().fontFamily)),
                     ),
                     onPressed: () {
+                      // TODO: update profile
                       Navigator.pushNamedAndRemoveUntil(
                           context,
                           '/home',
@@ -105,7 +110,6 @@ class _FurtherRegistrationPageState extends State<FurtherRegistrationPage> {
               ),
             ),
           );
-        }
-    );
+        });
   }
 }

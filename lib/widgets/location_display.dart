@@ -32,11 +32,17 @@ class _LocationDisplayState extends State<LocationDisplay> {
   }
 
   Future<void> _getAddress() async {
-    final List<geo.Placemark> placemarks = await geo.placemarkFromCoordinates(
-        widget.lat, widget.lon);
-    final geo.Placemark place = placemarks[0];
-    setState(() {
-      _address = '${place.street}, ${place.postalCode} ${place.locality}';
-    });
+    try {
+      final List<geo.Placemark> placemarks = await geo.placemarkFromCoordinates(
+          widget.lat, widget.lon);
+      final geo.Placemark place = placemarks[0];
+      setState(() {
+        _address = '${place.street ?? ""}, ${place.postalCode ?? ""} ${place.locality ?? ""}';
+      });
+    } catch (e) {
+      setState(() {
+        _address = 'Keine Adresse gefunden';
+      });
+    }
   }
 }

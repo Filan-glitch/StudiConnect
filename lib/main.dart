@@ -1,8 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:studiconnect/pages/join_group_requests_page.dart';
+import 'package:studiconnect/pages/user_info_page.dart';
 
 import '/pages/group_info_page.dart';
 import '/pages/create_and_edit_group_page.dart';
@@ -13,11 +14,12 @@ import '/models/redux/store.dart';
 import '/themes/light_theme.dart';
 import '/themes/dark_theme.dart';
 import '/pages/registration_page.dart';
-import '/pages/login_help_page.dart';
-import '/pages/welcome_page.dart';
+import 'pages/password_reset_page.dart';
 import '/firebase_options.dart';
 import '/pages/login_page.dart';
+import 'controllers/authentication.dart';
 import 'pages/home_page.dart';
+import 'pages/welcome_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +27,10 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+  // setup
+  loadCredentials();
+
+  //await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
 
   runApp(const MyApp());
 }
@@ -43,7 +48,7 @@ class MyApp extends StatelessWidget {
         title: 'StudiConnect',
         theme: lightTheme,
         darkTheme: darkTheme,
-        themeMode: ThemeMode.system,
+        themeMode: ThemeMode.light,
         supportedLocales: const [
           Locale('en', 'US'),
           Locale('de', 'DE'),
@@ -55,20 +60,22 @@ class MyApp extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate,
         ],
         navigatorKey: navigatorKey,
-        initialRoute: '/welcome',
+        initialRoute: '/home',
         routes: {
           '/home': (context) => const HomePage(),
           '/welcome': (context) => const WelcomePage(),
           '/login': (context) => const LoginPage(),
           '/register': (context) => const RegisterPage(),
-          '/login-help': (context) => const LoginHelpPage(),
+          '/login-help': (context) => PasswordResetPage(),
           '/further-registration': (context) => const FurtherRegistrationPage(),
           '/edit-profile': (context) => const EditProfilePage(),
           '/settings': (context) => const SettingsPage(),
-          CreateAndEditGroupPage.routeName: (context) => const CreateAndEditGroupPage(),
+          CreateAndEditGroupPage.routeName: (context) =>
+              const CreateAndEditGroupPage(),
           GroupInfoPage.routeName: (context) => const GroupInfoPage(),
-          // GroupRequestpage.routeName (context) => const GroupRequestsPage(),
-          // UserInfoPage.routeName: (context) => const UserInfoPage(),
+          JoinGroupRequestsPage.routeName: (context) =>
+              const JoinGroupRequestsPage(),
+          UserInfoPage.routeName: (context) => const UserInfoPage(),
         },
       ),
     );

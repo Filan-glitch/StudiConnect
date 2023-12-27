@@ -1,10 +1,11 @@
 import 'package:auth_buttons/auth_buttons.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../controllers/authentication.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '/constants.dart';
-import 'package:studiconnect/services/firebase/authentication.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -17,13 +18,22 @@ class _WelcomePageState extends State<WelcomePage> {
   bool _googleButtonLoading = false;
 
   @override
+  void initState() {
+    super.initState();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            //TODO: Add logo
+            Image.asset(
+              "assets/icons/icon.png",
+              width: 200,
+            ),
             const SizedBox(height: 50),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 40),
@@ -45,34 +55,32 @@ class _WelcomePageState extends State<WelcomePage> {
                       text: 'Mit deiner Anmeldung stimmst du unseren ',
                     ),
                     TextSpan(
-                      text: 'AGBs',
-                      style: const TextStyle(color: Colors.blue),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          launchUrl(
-                            Uri.parse(
-                              termsURL,
-                            ),
-                            mode: LaunchMode.inAppWebView,
-                          );
-                        }
-                    ),
+                        text: 'AGBs',
+                        style: const TextStyle(color: Colors.blue),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            launchUrl(
+                              Uri.parse(
+                                termsURL,
+                              ),
+                              mode: LaunchMode.inAppWebView,
+                            );
+                          }),
                     const TextSpan(
                       text: ' zu. In unserer ',
                     ),
                     TextSpan(
-                      text: 'Datenschutzerklärung',
-                      style: const TextStyle(color: Colors.blue),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          launchUrl(
+                        text: 'Datenschutzerklärung',
+                        style: const TextStyle(color: Colors.blue),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            launchUrl(
                               Uri.parse(
                                 privacyURL,
                               ),
                               mode: LaunchMode.inAppWebView,
-                          );
-                        }
-                    ),
+                            );
+                          }),
                     const TextSpan(
                       text:
                           ' findest du weitere Informationen zur Verarbeitung deiner Daten.',
@@ -83,48 +91,43 @@ class _WelcomePageState extends State<WelcomePage> {
             ),
             const SizedBox(height: 5),
             EmailAuthButton(
+              themeMode: Theme.of(context).brightness == Brightness.light
+                  ? ThemeMode.light
+                  : ThemeMode.dark,
               onPressed: () {
                 Navigator.pushNamed(context, "/register");
               },
               text: "Konto erstellen",
               style: AuthButtonStyle(
                 textStyle: TextStyle(
-                  fontFamily: GoogleFonts.roboto().fontFamily,
-                  color: Theme.of(context).textTheme.labelSmall?.color
-                ),
+                    fontFamily: GoogleFonts.roboto().fontFamily,
+                    color: Theme.of(context).textTheme.labelSmall?.color),
               ),
             ),
             const SizedBox(height: 5),
             GoogleAuthButton(
-              onPressed: () {
+              onPressed: () async {
                 setState(() {
                   _googleButtonLoading = true;
                 });
-                // TODO: call controller
-                signInWithGoogle().then((String? userCredential) {
-                  if (userCredential != null) {
-                    //TODO: API call to obtain user data
 
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, "/groups", (route) => false);
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Es ist ein Fehler aufgetreten."),
-                      ),
-                    );
-                  }
-                });
+                await signInWithGoogle();
+
                 setState(() {
                   _googleButtonLoading = false;
                 });
               },
               isLoading: _googleButtonLoading,
+              themeMode: Theme.of(context).brightness == Brightness.light
+                  ? ThemeMode.light
+                  : ThemeMode.dark,
               text: "Mit Google anmelden",
               style: AuthButtonStyle(
                 textStyle: TextStyle(
                   fontFamily: GoogleFonts.roboto().fontFamily,
-                  color: Theme.of(context).textTheme.labelSmall?.color
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? Colors.black
+                      : Colors.white,
                 ),
               ),
             ),

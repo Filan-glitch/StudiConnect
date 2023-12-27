@@ -6,7 +6,7 @@ Future<Map<String, dynamic>?> loadGroupInfo(String id) async {
   return GraphQL.query(
     QueryOptions(
       document: gql("""
-      query LoadGroupInfo(\$id: String!) {
+      query LoadGroupInfo(\$id: ID!) {
         group(id: \$id) {
           id
           name
@@ -63,7 +63,7 @@ Future<Map<String, dynamic>?> updateGroup(
   return GraphQL.mutate(
     MutationOptions(
       document: gql("""
-      mutation UpdateGroup(\$id: String!, \$title: String!, \$description: String!, \$module: String!, \$lat: Float!, \$lon: Float!) {
+      mutation UpdateGroup(\$id: ID!, \$title: String!, \$description: String!, \$module: String!, \$lat: Float!, \$lon: Float!) {
         updateGroup(id: \$id, title: \$title, description: \$description, module: \$module, lat: \$lat, lon: \$lon) {
           id
         }
@@ -87,7 +87,7 @@ Future<Map<String, dynamic>?> deleteGroup(
   return GraphQL.mutate(
     MutationOptions(
       document: gql("""
-      mutation DeleteGroup(\$id: String!) {
+      mutation DeleteGroup(\$id: ID!) {
         deleteGroup(id: \$id)
       }
 """),
@@ -104,7 +104,7 @@ Future<Map<String, dynamic>?> joinGroup(
   return GraphQL.mutate(
     MutationOptions(
       document: gql("""
-      mutation JoinGroup(\$id: String!) {
+      mutation JoinGroup(\$id: ID!) {
         joinGroup(id: \$id)
       }
 """),
@@ -119,7 +119,7 @@ Future<Map<String, dynamic>?> addMember(String id, String user) async {
   return GraphQL.mutate(
     MutationOptions(
       document: gql("""
-      mutation AddMember(\$id: String!, \$user: String!) {
+      mutation AddMember(\$id: ID!, \$user: String!) {
         addMember(id: \$id, user: \$user)
       }
 """),
@@ -135,7 +135,7 @@ Future<Map<String, dynamic>?> removeMember(String id, String user) async {
   return GraphQL.mutate(
     MutationOptions(
       document: gql("""
-      mutation RemoveMember(\$id: String!, \$user: String!) {
+      mutation RemoveMember(\$id: ID!, \$user: String!) {
         removeMember(id: \$id, user: \$user)
       }
 """),
