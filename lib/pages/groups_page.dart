@@ -13,6 +13,14 @@ class GroupsPage extends StatelessWidget {
       title: 'Gruppe 1',
       description: 'Beschreibung 1',
       module: 'Modul 1',
+      creator: User(
+          id: '1',
+          username: 'Max Mustermann',
+          email: 'max.mustermann@mail.de',
+          university: 'Hochschule Ruhr West',
+          major: 'Informatik',
+          bio: 'Hallo, ich bin Max Mustermann.',
+          discord: 'max.mustermann'),
       members: <User>[
         User(
             id: '2',
@@ -121,7 +129,7 @@ class GroupsPage extends StatelessWidget {
             bio: 'Hallo, ich bin Maxine Musterfrau.',
             discord: 'maxine.musterfrau'),
       ],
-      createdAt: "01.01.1970",
+      createdAt: DateTime.now(),
       lat: 51.527467,
       lon: 6.927127,
     )),
@@ -140,7 +148,7 @@ class GroupsPage extends StatelessWidget {
           bio: 'Hallo, ich bin Max Mustermann.',
           discord: 'max.mustermann'),
       members: <User>[],
-      createdAt: "01.01.1970",
+      createdAt: DateTime.now(),
       lat: 51.527467,
       lon: 6.927127,
     )),

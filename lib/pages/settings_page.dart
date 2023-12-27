@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yaml/yaml.dart';
 
+import '../controllers/authentication.dart';
 import '/constants.dart';
 import '../widgets/page_wrapper.dart';
 
@@ -80,11 +81,10 @@ class SettingsPage extends StatelessWidget {
                 title: const Text("Datenschutz"),
                 onTap: () {
                   launchUrl(
-                    Uri.parse(
-                      privacyURL,
-                    ),
-                    mode: LaunchMode.inAppWebView
-                  );
+                      Uri.parse(
+                        privacyURL,
+                      ),
+                      mode: LaunchMode.inAppWebView);
                 },
               ),
               ListTile(
@@ -106,11 +106,10 @@ class SettingsPage extends StatelessWidget {
                 ),
               ),
               ListTile(
-                leading: Icon(Icons.logout,
-                    color: Colors.red.withOpacity(0.7)),
+                leading: Icon(Icons.logout, color: Colors.red.withOpacity(0.7)),
                 title: const Text("Abmelden"),
                 onTap: () {
-                  Navigator.pop(context);
+                  signOut();
                 },
               ),
             ],

@@ -6,14 +6,13 @@ Future<Map<String, dynamic>?> loadMyUserInfo(String id) async {
   return GraphQL.query(
     QueryOptions(
       document: gql("""
-      query LoadMyUserInfo(\$id: String!) {
+      query LoadMyUserInfo(\$id: ID!) {
         user(id: \$id) {
           id
           username
+          email
           university
           major
-          lat
-          lon
           bio
           mobile
           discord
@@ -36,7 +35,7 @@ Future<Map<String, dynamic>?> loadUserInfo(String id) async {
   return GraphQL.query(
     QueryOptions(
       document: gql("""
-      query LoadUserInfo(\$id: String!) {
+      query LoadUserInfo(\$id: ID!) {
         user(id: \$id) {
           id
           username

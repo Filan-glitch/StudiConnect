@@ -70,14 +70,16 @@ class GroupInfoPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 25, bottom: 10),
-                    child: AvatarNetworkIcon(
-                      url: "$backendURL/api/groups/${group.id}/image",
-                      fallbackIcon: Icons.group,
+                    child: Padding(
+                  padding: const EdgeInsets.only(top: 25, bottom: 10),
+                  // TODO: replace avatar
+                  child: CircleAvatar(
+                    radius: 65,
+                    backgroundImage: NetworkImage(
+                      '$backendURL/api/group/${group.id}/image',
                     ),
                   ),
-                ),
+                )),
                 Center(
                   child: Text(
                     group.title ?? "",
@@ -146,7 +148,7 @@ class GroupInfoPage extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(top: 20, bottom: 10),
                           child: Text(
-                            "${(group.members?.length ?? 0) + 1} Mitglieder",
+                            "${group.members?.length ?? 0} Mitglieder",
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -157,20 +159,20 @@ class GroupInfoPage extends StatelessWidget {
                         ),
                         Expanded(
                           child: ListView.builder(
-                            itemCount: (group.members?.length ?? 0) + 1,
+                            itemCount: (group.members?.length ?? 0),
                             itemBuilder: (context, index) {
-                              final user = index == 0
-                                  ? group.creator
-                                  : group.members?[index - 1];
+                              final user = group.members?[index];
                               return ListTile(
                                 onTap: () {
                                   // NamedRoute pushen
                                   Navigator.pushNamed(context, "/user-info",
                                       arguments: user);
                                 },
-                                leading: AvatarNetworkIcon(
-                                  url: "$backendURL/api/user/${user?.id}/image",
-                                  size: 50,
+                                // TODO: update icon
+                                leading: CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                    '$backendURL/api/user/${user?.id}/image',
+                                  ),
                                 ),
                                 title: Text(
                                     "${user?.username ?? "Unbekannt"} ${user?.id == group.creator?.id ? "(Gruppenleiter)" : ""}"),
