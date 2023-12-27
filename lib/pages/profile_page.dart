@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:studiconnect/widgets/avatar_picture.dart';
 import '../constants.dart';
 import '../models/redux/app_state.dart';
 import '../widgets/avatar_network_icon.dart';
 import '/widgets/page_wrapper.dart';
 
-// TODO: show profile of other user
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -27,8 +27,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.only(top: 30, bottom: 15),
-                    child: AvatarNetworkIcon(
-                      url: "$backendURL/api/users/${state.user?.id}/image",
+                    child: AvatarPicture(
+                      id: state.user?.id,
+                      type: Type.user,
+                      radius: 65,
+                      loadingCircleStrokeWidth: 5.0,
                     ),
                   ),
                 ),

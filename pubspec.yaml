@@ -38,6 +38,7 @@ dependencies:
   curved_navigation_bar: ^1.0.3
   graphql: ^5.2.0-beta.6
   oktoast: ^3.4.0
+  cached_network_image: ^3.3.0
   shared_preferences: ^2.2.2
   intl: ^0.18.1
 
