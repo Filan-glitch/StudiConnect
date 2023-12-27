@@ -8,7 +8,7 @@ class Group {
   final User? creator;
   final List<User>? members;
   final List<User>? joinRequests;
-  final String? createdAt;
+  final DateTime? createdAt;
   final double? lat;
   final double? lon;
 
@@ -39,7 +39,8 @@ class Group {
       joinRequests: ((data['joinRequests'] ?? []) as List<dynamic>)
           .map((e) => User.fromApi(e))
           .toList(),
-      createdAt: data['createdAt'],
+      // parse date
+      createdAt: DateTime.parse(data['createdAt']),
       lat: data['lat'],
       lon: data['lon'],
     );
