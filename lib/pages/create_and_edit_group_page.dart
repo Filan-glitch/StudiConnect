@@ -25,6 +25,12 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
   @override
   Widget build(BuildContext context) {
     final group = ModalRoute.of(context)!.settings.arguments as Group?;
+    if (group != null) {
+      _groupTitleController.text = group.title ?? "";
+      _groupModuleController.text = group.module ?? "";
+      _groupDescriptionController.text = group.description ?? "";
+      _selectedLocation = LatLng(group.lat ?? 0.0, group.lon ?? 0.0);
+    }
     return PageWrapper(
       simpleDesign: true,
       padding: const EdgeInsets.only(top: 20.0),
@@ -39,6 +45,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                 controller: _groupTitleController,
                 decoration: const InputDecoration(
                   labelText: "Titel",
+
                 ),
               ),
             ),
@@ -87,7 +94,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            if (_selectedLocation == null) Text(
                               "Treffpunkt auswählen",
                               style: TextStyle(
                                 color: Theme.of(context).textTheme.labelSmall?.color,
@@ -142,6 +149,8 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                 child: ElevatedButton(
                   onPressed: () {
                     // TODO: save group data
+
+                    Navigator.of(context).pop();
                   },
                   child: const Text(
                     "Speichern",

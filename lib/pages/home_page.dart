@@ -32,8 +32,9 @@ class _HomePageState extends State<HomePage> {
     }
 
     return Scaffold(
+      extendBody: true,
       bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Colors.transparent,
         color: Theme.of(context).colorScheme.primary,
         items: const <Widget>[
           Icon(Icons.group, size: 30, color: Colors.white),

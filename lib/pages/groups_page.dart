@@ -103,6 +103,32 @@ class GroupsPage extends StatelessWidget {
             bio: 'Hallo, ich bin Maxine Musterfrau.',
             discord: 'maxine.musterfrau'),
       ],
+      joinRequests: <User>[
+        User(
+            id: '2',
+            username: 'Maxine Musterfrau',
+            email: 'maxine.musterfrau@mail.de',
+            university: 'Hochschule Ruhr West',
+            major: 'Informatik',
+            bio: 'Hallo, ich bin Maxine Musterfrau.',
+            discord: 'maxine.musterfrau'),
+        User(
+            id: '2',
+            username: 'Maxine Musterfrau',
+            email: 'maxine.musterfrau@mail.de',
+            university: 'Hochschule Ruhr West',
+            major: 'Informatik',
+            bio: 'Hallo, ich bin Maxine Musterfrau.',
+            discord: 'maxine.musterfrau'),
+        User(
+            id: '2',
+            username: 'Maxine Musterfrau',
+            email: 'maxine.musterfrau@mail.de',
+            university: 'Hochschule Ruhr West',
+            major: 'Informatik',
+            bio: 'Hallo, ich bin Maxine Musterfrau.',
+            discord: 'maxine.musterfrau'),
+      ],
       createdAt: DateTime.now(),
       lat: 51.527467,
       lon: 6.927127,
@@ -133,10 +159,13 @@ class GroupsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: childrenMock,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 100),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: childrenMock,
+          ),
         ),
       ),
       menuActions: [

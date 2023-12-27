@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:studiconnect/pages/join_group_requests_page.dart';
+import 'package:studiconnect/pages/user_info_page.dart';
 
 import '/pages/group_info_page.dart';
 import '/pages/create_and_edit_group_page.dart';
@@ -46,7 +48,7 @@ class MyApp extends StatelessWidget {
         title: 'StudiConnect',
         theme: lightTheme,
         darkTheme: darkTheme,
-        themeMode: ThemeMode.light,
+        themeMode: ThemeMode.system,
         supportedLocales: const [
           Locale('en', 'US'),
           Locale('de', 'DE'),
@@ -58,7 +60,7 @@ class MyApp extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate,
         ],
         navigatorKey: navigatorKey,
-        initialRoute: '/welcome',
+        initialRoute: '/home',
         routes: {
           '/home': (context) => const HomePage(),
           '/welcome': (context) => const WelcomePage(),
@@ -68,10 +70,12 @@ class MyApp extends StatelessWidget {
           '/further-registration': (context) => const FurtherRegistrationPage(),
           '/edit-profile': (context) => const EditProfilePage(),
           '/settings': (context) => const SettingsPage(),
-          CreateAndEditGroupPage.routeName: (context) => const CreateAndEditGroupPage(),
+          CreateAndEditGroupPage.routeName: (context) =>
+              const CreateAndEditGroupPage(),
           GroupInfoPage.routeName: (context) => const GroupInfoPage(),
-          // GroupRequestpage.routeName (context) => const GroupRequestsPage(),
-          // UserInfoPage.routeName: (context) => const UserInfoPage(),
+          JoinGroupRequestsPage.routeName: (context) =>
+              const JoinGroupRequestsPage(),
+          UserInfoPage.routeName: (context) => const UserInfoPage(),
         },
       ),
     );

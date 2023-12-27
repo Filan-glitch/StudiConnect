@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:studiconnect/widgets/avatar_picture.dart';
 import 'package:studiconnect/widgets/location_display.dart';
 
 import '../constants.dart';
@@ -28,8 +29,8 @@ class GroupInfoPage extends StatelessWidget {
                   leading: const Icon(Icons.group_add),
                   title: const Text('Beitrittsanfragen'),
                   onTap: () {
-                    Navigator.pushNamed(context, '/group-requests',
-                        arguments: group);
+                    Navigator.pushNamed(context, '/join-group-requests',
+                        arguments: group.joinRequests ?? []);
                   },
                 ),
               if (state.user?.id == group.creator?.id)
@@ -69,16 +70,16 @@ class GroupInfoPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
-                    child: Padding(
-                  padding: const EdgeInsets.only(top: 25, bottom: 10),
-                  // TODO: replace avatar
-                  child: CircleAvatar(
-                    radius: 65,
-                    backgroundImage: NetworkImage(
-                      '$backendURL/api/group/${group.id}/image',
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 25, bottom: 10),
+                    child: AvatarPicture(
+                      id: group.id,
+                      type: Type.group,
+                      radius: 65,
+                      loadingCircleStrokeWidth: 5.0,
                     ),
                   ),
-                )),
+                ),
                 Center(
                   child: Text(
                     group.title ?? "",
@@ -145,7 +146,7 @@ class GroupInfoPage extends StatelessWidget {
                         LocationDisplay(
                             lat: group.lat ?? 0, lon: group.lon ?? 0),
                         Padding(
-                          padding: const EdgeInsets.only(top: 10, bottom: 10),
+                          padding: const EdgeInsets.only(top: 20, bottom: 10),
                           child: Text(
                             "${group.members?.length ?? 0} Mitglieder",
                             style: TextStyle(
@@ -167,11 +168,11 @@ class GroupInfoPage extends StatelessWidget {
                                   Navigator.pushNamed(context, "/user-info",
                                       arguments: user);
                                 },
-                                // TODO: update icon
-                                leading: CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                    '$backendURL/api/user/${user?.id}/image',
-                                  ),
+                                leading: AvatarPicture(
+                                  id: user?.id,
+                                  type: Type.user,
+                                  radius: 20,
+                                  loadingCircleStrokeWidth: 3.5,
                                 ),
                                 title: Text(
                                     "${user?.username ?? "Unbekannt"} ${user?.id == group.creator?.id ? "(Gruppenleiter)" : ""}"),

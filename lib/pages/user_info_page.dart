@@ -1,50 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:studiconnect/widgets/avatar_picture.dart';
+
 import '../constants.dart';
-import '../models/redux/app_state.dart';
+import '../models/user.dart';
 import '../widgets/avatar_network_icon.dart';
-import '/widgets/page_wrapper.dart';
+import '../widgets/page_wrapper.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+class UserInfoPage extends StatelessWidget {
+  const UserInfoPage({super.key});
 
-  @override
-  State<ProfilePage> createState() => _ProfilePageState();
-}
+  static const routeName = '/user-info';
 
-class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, AppState>(
-      converter: (store) => store.state,
-      builder: (context, state) {
-        return PageWrapper(
-          body: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 30, bottom: 15),
-                    child: AvatarPicture(
-                      id: state.user?.id,
-                      type: Type.user,
-                      radius: 65,
-                      loadingCircleStrokeWidth: 5.0,
-                    ),
-                  ),
+    final user = ModalRoute.of(context)!.settings.arguments as User;
+    return PageWrapper(
+      title: 'Nutzerinformationen',
+      simpleDesign: true,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 30, bottom: 15),
+                child: AvatarNetworkIcon(
+                  url: "$backendURL/api/users/${user.id}/image",
                 ),
-                Center(
-                  child: Text(
-                    state.user?.username ?? '-',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+              ),
+            ),
+            Center(
+              child: Text(
+                user.username ?? '-',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
-                Column(
+              ),
+            ),
+            Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
@@ -60,7 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     Text(
-                      state.user?.major ?? '-',
+                      user.major ?? '-',
                       style: const TextStyle(
                         fontSize: 15,
                       ),
@@ -78,7 +73,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     Text(
-                      state.user?.university ?? '-',
+                      user.university ?? '-',
                       style: const TextStyle(
                         fontSize: 15,
                       ),
@@ -96,19 +91,19 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     Text(
-                      "E-Mail: ${state.user?.email ?? '-'}",
+                      "E-Mail: ${user.email ?? '-'}",
                       style: const TextStyle(
                         fontSize: 15,
                       ),
                     ),
                     Text(
-                      "Tel: ${state.user?.mobile ?? '-'}",
+                      "Tel: ${user.mobile ?? '-'}",
                       style: const TextStyle(
                         fontSize: 15,
                       ),
                     ),
                     Text(
-                      "Discord: ${state.user?.discord ?? '-'}",
+                      "Discord: ${user.discord ?? '-'}",
                       style: const TextStyle(
                         fontSize: 15,
                       ),
@@ -126,37 +121,16 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     Text(
-                      state.user?.bio ?? '',
+                      user.bio ?? '',
                       style: const TextStyle(
                         fontSize: 15,
                       ),
                     ),
                   ],
-                ),
-              ],
-            ),
-          ),
-          menuActions: [
-            ListTile(
-              leading: const Icon(Icons.edit),
-              title: const Text('Profil bearbeiten'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/edit-profile');
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Einstellungen'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/settings');
-              },
-            ),
+                )),
           ],
-          title: 'Profil',
-        );
-      },
+        ),
+      ),
     );
   }
 }
