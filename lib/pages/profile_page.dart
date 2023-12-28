@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:studiconnect/widgets/avatar_picture.dart';
-import '../constants.dart';
 import '../models/redux/app_state.dart';
-import '../widgets/avatar_network_icon.dart';
 import '/widgets/page_wrapper.dart';
 
 class ProfilePage extends StatefulWidget {
