@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../controllers/authentication.dart';
+import 'package:studiconnect/controllers/authentication.dart';
 
 class PasswordResetPage extends StatelessWidget {
   PasswordResetPage({super.key});

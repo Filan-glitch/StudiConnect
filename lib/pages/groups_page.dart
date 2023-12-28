@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../models/group.dart';
-import '../models/user.dart';
-import '../widgets/group_list_item.dart';
-import '../widgets/page_wrapper.dart';
+import 'package:studiconnect/models/group.dart';
+import 'package:studiconnect/models/user.dart';
+import 'package:studiconnect/widgets/group_list_item.dart';
+import 'package:studiconnect/widgets/page_wrapper.dart';
 
 class GroupsPage extends StatelessWidget {
   final List<Widget> childrenMock = [

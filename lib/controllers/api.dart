@@ -1,10 +1,8 @@
 import 'dart:developer';
-
 import 'package:oktoast/oktoast.dart';
-
-import '../services/graphql/errors/api_exception.dart';
-import '/models/redux/store.dart';
-import '/models/redux/actions.dart' as redux;
+import 'package:studiconnect/services/graphql/errors/api_exception.dart';
+import 'package:studiconnect/models/redux/store.dart';
+import 'package:studiconnect/models/redux/actions.dart' as redux;
 
 Future<T?> runApiService<T>({
   required Future<Map<String, dynamic>?> Function() apiCall,

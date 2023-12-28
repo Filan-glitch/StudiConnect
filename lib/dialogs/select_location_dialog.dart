@@ -1,11 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
-
-import 'dialog_wrapper.dart';
+import 'package:studiconnect/dialogs/dialog_wrapper.dart';
 
 class SelectLocationDialog extends StatefulWidget {
   const SelectLocationDialog({required this.onLocationSelected, super.key});

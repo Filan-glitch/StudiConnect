@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:studiconnect/widgets/avatar_picture.dart';
-
-import '../models/user.dart';
-import '../widgets/page_wrapper.dart';
+import 'package:studiconnect/models/user.dart';
+import 'package:studiconnect/widgets/page_wrapper.dart';
 
 class UserInfoPage extends StatelessWidget {
   const UserInfoPage({super.key});

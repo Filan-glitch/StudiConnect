@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geocoding/geocoding.dart' as geo;
-
-import '../dialogs/select_location_dialog.dart';
-import '../models/group.dart';
-import '/widgets/page_wrapper.dart';
+import 'package:studiconnect/dialogs/select_location_dialog.dart';
+import 'package:studiconnect/models/group.dart';
+import 'package:studiconnect/widgets/page_wrapper.dart';
 
 class CreateAndEditGroupPage extends StatefulWidget {
   const CreateAndEditGroupPage({super.key});

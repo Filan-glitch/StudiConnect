@@ -3,15 +3,15 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:graphql/client.dart';
 
-import '../../constants.dart';
-import '/models/redux/store.dart';
-import 'errors/api_exception.dart';
-import 'errors/input_error.dart';
-import 'errors/internal_server_error.dart';
-import 'errors/not_found_exception.dart';
-import 'errors/connection_error.dart';
-import 'errors/forbidden_error.dart';
-import 'errors/unauthorized_error.dart';
+import 'package:studiconnect/constants.dart';
+import 'package:studiconnect/models/redux/store.dart';
+import 'package:studiconnect/services/graphql/errors/api_exception.dart';
+import 'package:studiconnect/services/graphql/errors/input_error.dart';
+import 'package:studiconnect/services/graphql/errors/internal_server_error.dart';
+import 'package:studiconnect/services/graphql/errors/not_found_exception.dart';
+import 'package:studiconnect/services/graphql/errors/connection_error.dart';
+import 'package:studiconnect/services/graphql/errors/forbidden_error.dart';
+import 'package:studiconnect/services/graphql/errors/unauthorized_error.dart';
 
 /// Implementations for GraphQL API queries & mutations.
 class GraphQL {

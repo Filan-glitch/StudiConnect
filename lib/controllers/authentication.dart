@@ -1,13 +1,13 @@
 import 'package:oktoast/oktoast.dart';
 
-import '../main.dart';
-import '../models/redux/actions.dart';
-import '../models/redux/store.dart';
-import '../services/firebase/authentication.dart' as firebase;
-import '../services/graphql/authentication.dart' as service;
-import '../services/storage/credentials.dart' as storage;
-import 'api.dart';
-import 'user.dart';
+import 'package:studiconnect/main.dart';
+import 'package:studiconnect/models/redux/actions.dart';
+import 'package:studiconnect/models/redux/store.dart';
+import 'package:studiconnect/services/firebase/authentication.dart' as firebase;
+import 'package:studiconnect/services/graphql/authentication.dart' as service;
+import 'package:studiconnect/services/storage/credentials.dart' as storage;
+import 'package:studiconnect/controllers/api.dart';
+import 'package:studiconnect/controllers/user.dart';
 
 Future<void> loadCredentials() async {
   Map<String, String> credentials = await storage.loadCredentials();

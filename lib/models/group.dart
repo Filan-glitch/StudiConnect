@@ -1,4 +1,4 @@
-import 'user.dart';
+import 'package:studiconnect/models/user.dart';
 
 class Group {
   final String id;

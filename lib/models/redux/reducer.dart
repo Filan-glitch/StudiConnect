@@ -1,5 +1,5 @@
-import 'actions.dart';
-import 'app_state.dart';
+import 'package:studiconnect/models/redux/actions.dart';
+import 'package:studiconnect/models/redux/app_state.dart';
 
 AppState appReducer(AppState state, dynamic action) {
   if (action is! Action) return state;

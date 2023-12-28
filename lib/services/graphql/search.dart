@@ -1,6 +1,6 @@
 import 'package:graphql/client.dart';
 
-import 'api.dart';
+import 'package:studiconnect/services/graphql/api.dart';
 
 Future<Map<String, dynamic>?> searchGroups(
   String module,

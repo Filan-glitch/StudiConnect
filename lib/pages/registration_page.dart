@@ -3,9 +3,8 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:auth_buttons/auth_buttons.dart'
     show AuthButtonStyle, EmailAuthButton;
 import 'package:google_fonts/google_fonts.dart';
-import '/controllers/authentication.dart';
-
-import '/models/redux/app_state.dart';
+import 'package:studiconnect/controllers/authentication.dart';
+import 'package:studiconnect/models/redux/app_state.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});

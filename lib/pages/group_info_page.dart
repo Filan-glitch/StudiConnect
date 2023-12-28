@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:studiconnect/widgets/avatar_picture.dart';
 import 'package:studiconnect/widgets/location_display.dart';
-
-import '../models/group.dart';
-import '../models/redux/app_state.dart';
-import '../widgets/page_wrapper.dart';
+import 'package:studiconnect/models/group.dart';
+import 'package:studiconnect/models/redux/app_state.dart';
+import 'package:studiconnect/widgets/page_wrapper.dart';
 
 class GroupInfoPage extends StatelessWidget {
   static const routeName = '/group-info';

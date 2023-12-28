@@ -1,13 +1,11 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:intl/intl.dart';
-
-import '../controllers/groups.dart';
-import '../models/group.dart';
-import '../models/redux/app_state.dart';
-import '/widgets/page_wrapper.dart';
+import 'package:studiconnect/controllers/groups.dart';
+import 'package:studiconnect/models/group.dart';
+import 'package:studiconnect/models/redux/app_state.dart';
+import 'package:studiconnect/widgets/page_wrapper.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});

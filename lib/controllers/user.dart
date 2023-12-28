@@ -1,10 +1,10 @@
-import '../main.dart';
-import '../models/redux/actions.dart';
-import '../models/redux/store.dart';
-import '../models/user.dart';
-import 'api.dart';
-import '../services/graphql/user.dart' as service;
-import '../services/storage/credentials.dart' as storage;
+import 'package:studiconnect/main.dart';
+import 'package:studiconnect/models/redux/actions.dart';
+import 'package:studiconnect/models/redux/store.dart';
+import 'package:studiconnect/models/user.dart';
+import 'package:studiconnect/controllers/api.dart';
+import 'package:studiconnect/services/graphql/user.dart' as service;
+import 'package:studiconnect/services/storage/credentials.dart' as storage;
 
 Future<bool> loadUserInfo() async {
   Map<String, String> credentials = await storage.loadCredentials();

@@ -1,9 +1,9 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'groups_page.dart';
-import 'profile_page.dart';
-import 'search_page.dart';
+import 'package:studiconnect/pages/groups_page.dart';
+import 'package:studiconnect/pages/profile_page.dart';
+import 'package:studiconnect/pages/search_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
