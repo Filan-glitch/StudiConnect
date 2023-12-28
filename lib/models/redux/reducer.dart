@@ -22,6 +22,14 @@ AppState appReducer(AppState state, dynamic action) {
         mobile: action.payload['mobile'],
         discord: action.payload['discord'],
       );
+    case ActionTypes.updateGroup:
+      state.user?.groups?.firstWhere((element) => element.id == action.payload['id']).update(
+        title: action.payload['title'],
+        description: action.payload['description'],
+        module: action.payload['module'],
+        lat: action.payload['lat'],
+        lon: action.payload['lon'],
+      );
     case ActionTypes.updateSessionID:
       state.sessionID = action.payload;
     case ActionTypes.updateSearchResults:

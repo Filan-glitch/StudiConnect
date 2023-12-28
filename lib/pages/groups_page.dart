@@ -13,14 +13,7 @@ class GroupsPage extends StatelessWidget {
       title: 'Gruppe 1',
       description: 'Beschreibung 1',
       module: 'Modul 1',
-      creator: User(
-          id: '1',
-          username: 'Max Mustermann',
-          email: 'max.mustermann@mail.de',
-          university: 'Hochschule Ruhr West',
-          major: 'Informatik',
-          bio: 'Hallo, ich bin Max Mustermann.',
-          discord: 'max.mustermann'),
+
       members: <User>[
         User(
             id: '2',

@@ -4,6 +4,8 @@ import 'package:geocoding/geocoding.dart' as geo;
 import 'package:studiconnect/dialogs/select_location_dialog.dart';
 import 'package:studiconnect/models/group.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
+import 'package:studiconnect/models/redux/actions.dart' as redux;
+import 'package:studiconnect/models/redux/store.dart';
 
 class CreateAndEditGroupPage extends StatefulWidget {
   const CreateAndEditGroupPage({super.key});
@@ -20,16 +22,24 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
   final TextEditingController _groupDescriptionController = TextEditingController();
 
   LatLng? _selectedLocation;
+  Group? group;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      group = ModalRoute.of(context)!.settings.arguments as Group?;
+      if (group != null) {
+        _groupTitleController.text = group!.title ?? "";
+        _groupModuleController.text = group!.module ?? "";
+        _groupDescriptionController.text = group!.description ?? "";
+        _selectedLocation = LatLng(group!.lat ?? 0.0, group!.lon ?? 0.0);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final group = ModalRoute.of(context)!.settings.arguments as Group?;
-    if (group != null) {
-      _groupTitleController.text = group.title ?? "";
-      _groupModuleController.text = group.module ?? "";
-      _groupDescriptionController.text = group.description ?? "";
-      _selectedLocation = LatLng(group.lat ?? 0.0, group.lon ?? 0.0);
-    }
     return PageWrapper(
       simpleDesign: true,
       padding: const EdgeInsets.only(top: 20.0),
@@ -59,7 +69,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
             ),
             Padding(
               padding:
-                  const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 30.0),
+              const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 30.0),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: TextButton(
@@ -147,9 +157,30 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                 width: MediaQuery.of(context).size.width,
                 child: ElevatedButton(
                   onPressed: () {
-                    // TODO: save group data
+                    // Update the group data
+                    if (group != null) {
+                      var updatedGroup = group!.update(
+                        title: _groupTitleController.text,
+                        module: _groupModuleController.text,
+                        description: _groupDescriptionController.text,
+                        lat: _selectedLocation?.latitude,
+                        lon: _selectedLocation?.longitude,
+                      );
 
-                    Navigator.of(context).pop();
+                      // Update the group data in store
+                      store.dispatch(
+                          redux.Action(
+                              redux.ActionTypes.updateGroup,
+                              payload: updatedGroup
+                          )
+                      );
+
+                      // TODO: Check if okay and uncomment API Call
+                      //updateGroup((updatedGroup as Group).id, updatedGroup.title ?? "", updatedGroup.description ?? "", updatedGroup.module ?? "", updatedGroup.lat ?? 0, updatedGroup.lon ?? 0);
+
+                      // Pop the page and pass the updated group data
+                      Navigator.of(context).pop(updatedGroup);
+                    }
                   },
                   child: const Text(
                     "Speichern",
