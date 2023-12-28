@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:studiconnect/widgets/avatar_picture.dart';
-import 'package:studiconnect/widgets/location_display.dart';
-import 'package:studiconnect/models/group.dart';
-import 'package:studiconnect/models/redux/app_state.dart';
-import 'package:studiconnect/widgets/page_wrapper.dart';
+
+import '../controllers/groups.dart';
+import '../dialogs/remove_member_dialog.dart';
+import '../models/group.dart';
+import '../models/redux/app_state.dart';
+import '../widgets/avatar_picture.dart';
+import '../widgets/location_display.dart';
+import '../widgets/page_wrapper.dart';
 
 class GroupInfoPage extends StatelessWidget {
   static const routeName = '/group-info';
@@ -14,6 +17,8 @@ class GroupInfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final group = ModalRoute.of(context)!.settings.arguments as Group;
+
+    final members = (group.members ?? []).map((e) => e.id).toList();
 
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
@@ -27,8 +32,11 @@ class GroupInfoPage extends StatelessWidget {
                   leading: const Icon(Icons.group_add),
                   title: const Text('Beitrittsanfragen'),
                   onTap: () {
-                    Navigator.pushNamed(context, '/join-group-requests',
-                        arguments: group.joinRequests ?? []);
+                    Navigator.pushNamed(
+                      context,
+                      '/join-group-requests',
+                      arguments: group.id,
+                    );
                   },
                 ),
               if (state.user?.id == group.creator?.id)
@@ -36,24 +44,35 @@ class GroupInfoPage extends StatelessWidget {
                   leading: const Icon(Icons.edit),
                   title: const Text('Gruppe bearbeiten'),
                   onTap: () {
-                    Navigator.pushNamed(context, '/create-and-edit-group',
-                        arguments: group);
+                    Navigator.pushNamed(
+                      context,
+                      '/create-and-edit-group',
+                      arguments: group,
+                    );
                   },
                 ),
-              if (group.members?.contains(state.user) ?? false)
+              if (members.contains(state.user?.id))
                 ListTile(
                   leading: const Icon(Icons.exit_to_app),
                   title: const Text('Gruppe verlassen'),
                   onTap: () {
-                    //TODO: API Call and update data
+                    leaveGroup(group.id);
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/home',
+                      (route) => false,
+                    );
                   },
                 ),
-              if (!(group.members?.contains(state.user) ?? true))
+              if (!members.contains(state.user?.id))
                 ListTile(
                   leading: const Icon(Icons.person_add),
                   title: const Text('Gruppe beitreten'),
                   onTap: () {
-                    //TODO: API Call and update data
+                    joinGroup(group.id);
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/home',
+                      (route) => false,
+                    );
                   },
                 ),
               ListTile(
@@ -160,20 +179,34 @@ class GroupInfoPage extends StatelessWidget {
                             itemCount: (group.members?.length ?? 0),
                             itemBuilder: (context, index) {
                               final user = group.members?[index];
+                              if (user == null) return Container();
+
                               return ListTile(
+                                onLongPress: () {
+                                  if (user.id == state.user?.id) return;
+
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => RemoveMemberDialog(
+                                      user: user,
+                                      groupID: group.id,
+                                    ),
+                                  );
+                                },
                                 onTap: () {
                                   // NamedRoute pushen
                                   Navigator.pushNamed(context, "/user-info",
                                       arguments: user);
                                 },
                                 leading: AvatarPicture(
-                                  id: user?.id,
+                                  id: user.id,
                                   type: Type.user,
                                   radius: 20,
                                   loadingCircleStrokeWidth: 3.5,
                                 ),
                                 title: Text(
-                                    "${user?.username ?? "Unbekannt"} ${user?.id == group.creator?.id ? "(Gruppenleiter)" : ""}"),
+                                  "${user.username ?? "Unbekannt"} ${user.id == group.creator?.id ? "(Gruppenleiter)" : ""}",
+                                ),
                               );
                             },
                           ),

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geocoding/geocoding.dart' as geo;
-import 'package:studiconnect/dialogs/select_location_dialog.dart';
-import 'package:studiconnect/models/group.dart';
-import 'package:studiconnect/widgets/page_wrapper.dart';
+
+import '../controllers/groups.dart';
+import '../dialogs/select_location_dialog.dart';
+import '../models/group.dart';
+import '/widgets/page_wrapper.dart';
 
 class CreateAndEditGroupPage extends StatefulWidget {
   const CreateAndEditGroupPage({super.key});
@@ -17,12 +19,14 @@ class CreateAndEditGroupPage extends StatefulWidget {
 class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
   final TextEditingController _groupTitleController = TextEditingController();
   final TextEditingController _groupModuleController = TextEditingController();
-  final TextEditingController _groupDescriptionController = TextEditingController();
+  final TextEditingController _groupDescriptionController =
+      TextEditingController();
 
   LatLng? _selectedLocation;
 
   @override
   Widget build(BuildContext context) {
+    // TODO: upload an image
     final group = ModalRoute.of(context)!.settings.arguments as Group?;
     if (group != null) {
       _groupTitleController.text = group.title ?? "";
@@ -33,7 +37,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
     return PageWrapper(
       simpleDesign: true,
       padding: const EdgeInsets.only(top: 20.0),
-      title: (((group?.id) == null) ? "Gruppe erstellen" : "Gruppe bearbeiten"),
+      title: group?.id == null ? "Gruppe erstellen" : "Gruppe bearbeiten",
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,7 +48,6 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                 controller: _groupTitleController,
                 decoration: const InputDecoration(
                   labelText: "Titel",
-
                 ),
               ),
             ),
@@ -93,13 +96,17 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            if (_selectedLocation == null) Text(
-                              "Treffpunkt auswählen",
-                              style: TextStyle(
-                                color: Theme.of(context).textTheme.labelSmall?.color,
-                                fontSize: 16.0,
+                            if (_selectedLocation == null)
+                              Text(
+                                "Treffpunkt auswählen",
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .labelSmall
+                                      ?.color,
+                                  fontSize: 16.0,
+                                ),
                               ),
-                            ),
                             if (_selectedLocation != null)
                               FutureBuilder(
                                 future: geo.placemarkFromCoordinates(
@@ -109,11 +116,18 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
                                     geo.Placemark location = snapshot.data![0];
-                                    return Text(
-                                      '${location.street} ${location.locality}',
-                                      style: TextStyle(
-                                        color: Theme.of(context).textTheme.bodySmall?.color,
-                                        fontSize: 16.0,
+                                    return SizedBox(
+                                      width: MediaQuery.of(context).size.width -
+                                          150,
+                                      child: Text(
+                                        '${location.street}\n${location.locality}',
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall
+                                              ?.color,
+                                          fontSize: 16.0,
+                                        ),
                                       ),
                                     );
                                   } else {
@@ -142,21 +156,68 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
             ),
             // save button
             Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20, bottom: 30.0),
+              padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10.0),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: ElevatedButton(
                   onPressed: () {
-                    // TODO: save group data
+                    if (group?.id == null) {
+                      createGroup(
+                        _groupTitleController.text,
+                        _groupDescriptionController.text,
+                        _groupModuleController.text,
+                        _selectedLocation?.latitude ?? 0.0,
+                        _selectedLocation?.longitude ?? 0.0,
+                      );
+                    } else {
+                      updateGroup(
+                        group!.id,
+                        _groupTitleController.text,
+                        _groupDescriptionController.text,
+                        _groupModuleController.text,
+                        _selectedLocation?.latitude ?? 0.0,
+                        _selectedLocation?.longitude ?? 0.0,
+                      );
+                    }
 
                     Navigator.of(context).pop();
                   },
                   child: const Text(
-                    "Speichern",
+                    "Gruppe speichern",
                   ),
                 ),
               ),
             ),
+            if (group?.id != null)
+              Padding(
+                padding:
+                    const EdgeInsets.only(left: 20, right: 20, bottom: 30.0),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      deleteGroup(group!.id);
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                        '/home',
+                        (route) => false,
+                      );
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        Colors.transparent,
+                      ),
+                      side: MaterialStateProperty.all<BorderSide>(
+                        BorderSide(
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                      ),
+                    ),
+                    child: const Text(
+                      "Gruppe löschen",
+                    ),
+                  ),
+                ),
+              ),
           ],
         ),
       ),

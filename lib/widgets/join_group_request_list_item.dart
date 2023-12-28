@@ -1,63 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:studiconnect/constants.dart';
 
-import 'package:studiconnect/models/user.dart';
+import '../constants.dart';
+import '../controllers/groups.dart';
+import '../models/group.dart';
+import '../models/user.dart';
 
 class JoinGroupRequestListItem extends StatefulWidget {
-  const JoinGroupRequestListItem({super.key, required this.request});
+  const JoinGroupRequestListItem(
+      {super.key, required this.user, required this.group});
 
-  final User request;
+  final User user;
+  final Group group;
 
   @override
-  State<JoinGroupRequestListItem> createState() => _JoinGroupRequestListItemState();
+  State<JoinGroupRequestListItem> createState() =>
+      _JoinGroupRequestListItemState();
 }
 
 class _JoinGroupRequestListItemState extends State<JoinGroupRequestListItem> {
-  var _acceptLoading = false;
-  var _declineLoading = false;
-  var _decided = false;
-
   @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: CircleAvatar(
-        backgroundImage: NetworkImage("$backendURL/api/user/${widget.request.id}/image"),
+        backgroundImage: NetworkImage(
+          "$backendURL/api/user/${widget.user.id}/image",
+        ),
       ),
-      title: Text(widget.request.username ?? "Unbekannt"),
-      subtitle: Text(widget.request.university ?? ""),
+      title: Text(widget.user.username ?? "Unbekannt"),
+      subtitle: Text(widget.user.university ?? ""),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (!_decided) IconButton(
-            icon: (_acceptLoading) ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.primary,), strokeWidth: 2.0)) : const Icon(Icons.check),
+          IconButton(
+            icon: const Icon(Icons.check),
             onPressed: () {
-              setState(() {
-                _acceptLoading = true;
-              });
-              //TODO: API Call
-              setState(() {
-                _decided = true;
-              });
+              addMember(widget.group.id, widget.user.id);
             },
           ),
-          if(!_decided) IconButton(
-            icon: (_declineLoading) ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.primary,), strokeWidth: 2.0)) : const Icon(Icons.close),
+          IconButton(
+            icon: const Icon(Icons.close),
             onPressed: () {
-              setState(() {
-                _declineLoading = true;
-              });
-              //TODO: API Call
-              setState(() {
-                _decided = true;
-              });
+              removeJoinRequest(widget.group.id, widget.user.id);
             },
           ),
         ],
       ),
       onTap: () {
-        Navigator.pushNamed(context, '/user-info', arguments: widget.request);
+        Navigator.pushNamed(context, '/user-info', arguments: widget.user);
       },
     );
   }
-  
 }

@@ -154,40 +154,42 @@ class _SearchPageState extends State<SearchPage> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: GestureDetector(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              group.title!,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
+                      behavior: HitTestBehavior.opaque,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            group.title!,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
-                            Text(
-                              'Erstellt an ${formatter.format(group.createdAt!)}',
-                              style: const TextStyle(
-                                color: Colors.white,
-                              ),
+                          ),
+                          Text(
+                            'Erstellt an ${formatter.format(group.createdAt!)}',
+                            style: const TextStyle(
+                              color: Colors.white,
                             ),
-                            Text(
-                              'Erstellt von ${group.creator!.username}',
-                              style: const TextStyle(
-                                color: Colors.white,
-                              ),
+                          ),
+                          Text(
+                            'Erstellt von ${group.creator!.username}',
+                            style: const TextStyle(
+                              color: Colors.white,
                             ),
-                            Text(
-                              'Mitglieder: ${group.members!.length}',
-                              style: const TextStyle(
-                                color: Colors.white,
-                              ),
+                          ),
+                          Text(
+                            'Mitglieder: ${group.members!.length}',
+                            style: const TextStyle(
+                              color: Colors.white,
                             ),
-                          ],
-                        ),
-                        onTap: () {
-                          Navigator.pushNamed(context, '/group-info',
-                              arguments: group);
-                        }),
+                          ),
+                        ],
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/group-info',
+                            arguments: group);
+                      },
+                    ),
                   );
                 },
               ),
