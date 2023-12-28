@@ -37,7 +37,7 @@ class _AvatarPictureState extends State<AvatarPicture> {
               strokeWidth: widget.loadingCircleStrokeWidth ?? 4.0
           ),
       errorWidget: (context, url, error) {
-        return CircleAvatar(
+        return (widget.type == Type.user) ? CircleAvatar(
           radius: widget.radius ?? 10,
           backgroundColor: Colors.grey,
           child: Icon(
@@ -45,6 +45,15 @@ class _AvatarPictureState extends State<AvatarPicture> {
             color: Colors.white,
             size: widget.radius ?? 10,
           ),
+        ) :
+        CircleAvatar(
+          radius: widget.radius ?? 10,
+          backgroundColor: Colors.grey,
+          child: Icon(
+          Icons.group,
+          color: Colors.white,
+          size: widget.radius ?? 10,
+          )
         );
       },
     );
