@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
+import 'package:studiconnect/constants.dart';
 
 enum Type { user, group }
 
@@ -33,12 +33,20 @@ class _AvatarPictureState extends State<AvatarPicture> {
       imageUrl: "$backendURL/api/${widget.type.name}/${widget.id}/image",
       progressIndicatorBuilder: (context, url, downloadProgress) =>
           CircularProgressIndicator(
-        value: downloadProgress.progress,
-        strokeWidth: widget.loadingCircleStrokeWidth ?? 4.0,
-      ),
-      errorWidget: (context, url, error) => const Icon(
-        Icons.error,
-      ),
+              value: downloadProgress.progress,
+              strokeWidth: widget.loadingCircleStrokeWidth ?? 4.0
+          ),
+      errorWidget: (context, url, error) {
+        return CircleAvatar(
+          radius: widget.radius ?? 10,
+          backgroundColor: Colors.grey,
+          child: Icon(
+            Icons.person,
+            color: Colors.white,
+            size: widget.radius ?? 10,
+          ),
+        );
+      },
     );
   }
 }
