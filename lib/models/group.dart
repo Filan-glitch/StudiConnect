@@ -40,7 +40,9 @@ class Group {
           .map((e) => User.fromApi(e))
           .toList(),
       // parse date
-      createdAt: DateTime.parse(data['createdAt']),
+      createdAt: data.containsKey("createdAt")
+          ? DateTime.parse(data['createdAt'])
+          : null,
       lat: data['lat'],
       lon: data['lon'],
     );

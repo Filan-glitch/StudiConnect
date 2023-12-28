@@ -3,7 +3,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:studiconnect/widgets/avatar_picture.dart';
 import 'package:studiconnect/widgets/location_display.dart';
 
-import '../constants.dart';
 import '../models/group.dart';
 import '../models/redux/app_state.dart';
 import '../widgets/page_wrapper.dart';

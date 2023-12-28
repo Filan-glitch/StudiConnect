@@ -31,8 +31,14 @@ class _AvatarPictureState extends State<AvatarPicture> {
       height: 2 * (widget.radius ?? 10),
       fit: BoxFit.cover,
       imageUrl: "$backendURL/api/${widget.type.name}/${widget.id}/image",
-      progressIndicatorBuilder: (context, url, downloadProgress) => CircularProgressIndicator(value: downloadProgress.progress, strokeWidth: widget.loadingCircleStrokeWidth ?? 4.0),
-      errorWidget: (context, url, error) => const Icon(Icons.error),
+      progressIndicatorBuilder: (context, url, downloadProgress) =>
+          CircularProgressIndicator(
+        value: downloadProgress.progress,
+        strokeWidth: widget.loadingCircleStrokeWidth ?? 4.0,
+      ),
+      errorWidget: (context, url, error) => const Icon(
+        Icons.error,
+      ),
     );
   }
 }

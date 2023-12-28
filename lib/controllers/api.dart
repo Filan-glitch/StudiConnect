@@ -21,6 +21,8 @@ Future<T?> runApiService<T>({
   try {
     response = await apiCall();
   } on ApiException catch (e) {
+    log("API Exception ${e.code}: ${e.message}");
+
     if (showLoading) {
       store.dispatch(redux.Action(redux.ActionTypes.stopTask));
     }
