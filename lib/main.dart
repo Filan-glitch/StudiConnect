@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:studiconnect/pages/join_group_requests_page.dart';
+import 'package:studiconnect/pages/password_change_page.dart';
 import 'package:studiconnect/pages/user_info_page.dart';
 import 'package:studiconnect/pages/group_info_page.dart';
 import 'package:studiconnect/pages/create_and_edit_group_page.dart';
@@ -19,6 +20,8 @@ import 'package:studiconnect/pages/login_page.dart';
 import 'package:studiconnect/controllers/authentication.dart';
 import 'package:studiconnect/pages/home_page.dart';
 import 'package:studiconnect/pages/welcome_page.dart';
+
+import 'pages/delete_account_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -59,7 +62,7 @@ class MyApp extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate,
         ],
         navigatorKey: navigatorKey,
-        initialRoute: '/home',
+        initialRoute: '/welcome',
         routes: {
           '/home': (context) => const HomePage(),
           '/welcome': (context) => const WelcomePage(),
@@ -69,6 +72,8 @@ class MyApp extends StatelessWidget {
           '/further-registration': (context) => const FurtherRegistrationPage(),
           '/edit-profile': (context) => const EditProfilePage(),
           '/settings': (context) => const SettingsPage(),
+          '/delete-account': (context) => DeleteAccountPage(),
+          '/update-password': (context) => const PasswordChangePage(),
           CreateAndEditGroupPage.routeName: (context) =>
               const CreateAndEditGroupPage(),
           GroupInfoPage.routeName: (context) => const GroupInfoPage(),

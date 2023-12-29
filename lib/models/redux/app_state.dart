@@ -6,7 +6,9 @@ class AppState {
   bool get loading => runningTasks > 0;
 
   String? sessionID;
+  String? authProviderType;
   User? user;
+  bool profileImageAvailable = false;
 
   List<Group> searchResults = [];
 }

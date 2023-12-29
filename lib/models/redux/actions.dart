@@ -6,6 +6,8 @@ enum ActionTypes {
   updateGroup,
   updateSearchResults,
   updateSessionID,
+  updateAuthProviderType,
+  setProfileImageAvailable,
 }
 
 class Action {

@@ -21,8 +21,19 @@ Future<Map<String, String>> loadCredentials() async {
   };
 }
 
+Future<void> saveAuthProviderType(String type) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString("authProviderType", type);
+}
+
+Future<String?> loadAuthProviderType() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getString("authProviderType");
+}
+
 Future<void> deleteCredentials() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.remove("userID");
   await prefs.remove("sessionID");
+  await prefs.remove("authProviderType");
 }
