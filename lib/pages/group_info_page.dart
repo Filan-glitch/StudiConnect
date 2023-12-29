@@ -32,7 +32,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    final members = (group.members ?? []).map((e) => e.id).toList();
+    final members = (group?.members ?? []).map((e) => e.id).toList();
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (context, state) {
@@ -76,7 +76,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                   leading: const Icon(Icons.exit_to_app),
                   title: const Text('Gruppe verlassen'),
                   onTap: () {
-                    leaveGroup(group.id);
+                    leaveGroup(group!.id);
                     Navigator.of(context).pushNamedAndRemoveUntil(
                       '/home',
                       (route) => false,
@@ -88,7 +88,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                   leading: const Icon(Icons.person_add),
                   title: const Text('Gruppe beitreten'),
                   onTap: () {
-                    joinGroup(!group.id);
+                    joinGroup(group!.id);
                     Navigator.of(context).pushNamedAndRemoveUntil(
                       '/home',
                       (route) => false,
@@ -209,7 +209,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                                     context: context,
                                     builder: (context) => RemoveMemberDialog(
                                       user: user,
-                                      groupID: group?.id,
+                                      groupID: group!.id,
                                     ),
                                   );
                                 },
