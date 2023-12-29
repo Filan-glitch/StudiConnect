@@ -44,7 +44,8 @@ class _AvatarPictureState extends State<AvatarPicture> {
       progressIndicatorBuilder: (context, url, downloadProgress) =>
           CircularProgressIndicator(
               value: downloadProgress.progress,
-              strokeWidth: widget.loadingCircleStrokeWidth ?? 4.0),
+              strokeWidth: widget.loadingCircleStrokeWidth ?? 4.0
+          ),
       errorWidget: (context, url, error) {
         if (widget.type == Type.user && widget.id == store.state.user?.id) {
           store.dispatch(redux.Action(
@@ -53,7 +54,7 @@ class _AvatarPictureState extends State<AvatarPicture> {
           ));
         }
 
-        return CircleAvatar(
+        return (widget.type == Type.user) ? CircleAvatar(
           radius: widget.radius ?? 10,
           backgroundColor: Colors.grey,
           child: Icon(
@@ -61,6 +62,15 @@ class _AvatarPictureState extends State<AvatarPicture> {
             color: Colors.white,
             size: widget.radius ?? 10,
           ),
+        ) :
+        CircleAvatar(
+          radius: widget.radius ?? 10,
+          backgroundColor: Colors.grey,
+          child: Icon(
+          Icons.group,
+          color: Colors.white,
+          size: widget.radius ?? 10,
+          )
         );
       },
     );

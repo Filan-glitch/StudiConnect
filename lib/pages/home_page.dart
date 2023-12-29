@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    late Widget page = GroupsPage();
+    late Widget page = const GroupsPage();
 
     if (_selectedPage == 1) {
       page = const SearchPage();
