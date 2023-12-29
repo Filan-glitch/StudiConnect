@@ -26,6 +26,10 @@ AppState appReducer(AppState state, dynamic action) {
       state.sessionID = action.payload;
     case ActionTypes.updateSearchResults:
       state.searchResults = action.payload;
+    case ActionTypes.updateAuthProviderType:
+      state.authProviderType = action.payload;
+    case ActionTypes.setProfileImageAvailable:
+      state.profileImageAvailable = action.payload;
   }
 
   return state;

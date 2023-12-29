@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:oktoast/oktoast.dart';
 
 Future<String?> signInWithEmailAndPassword(
     String email, String password) async {
@@ -64,4 +67,43 @@ Future<void> signOut() async {
 
 Future<void> sendPasswordResetEmail(String email) async {
   await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+}
+
+Future<void> deleteEmailAccount(String password) async {
+  try {
+    await FirebaseAuth.instance.currentUser?.reauthenticateWithCredential(
+      EmailAuthProvider.credential(
+        email: FirebaseAuth.instance.currentUser!.email!,
+        password: password,
+      ),
+    );
+
+    await FirebaseAuth.instance.currentUser?.delete();
+  } catch (e) {
+    log(e.toString());
+    showToast("Bitte überprüfen Sie Ihr Passwort");
+  }
+}
+
+Future<void> deleteGoogleAccount() async {
+  await FirebaseAuth.instance.currentUser
+      ?.reauthenticateWithProvider(GoogleAuthProvider());
+
+  await FirebaseAuth.instance.currentUser?.delete();
+}
+
+Future<void> updatePassword(String oldPassword, String newPassword) async {
+  try {
+    await FirebaseAuth.instance.currentUser?.reauthenticateWithCredential(
+      EmailAuthProvider.credential(
+        email: FirebaseAuth.instance.currentUser!.email!,
+        password: oldPassword,
+      ),
+    );
+
+    await FirebaseAuth.instance.currentUser?.updatePassword(newPassword);
+  } catch (e) {
+    log(e.toString());
+    showToast("Bitte überprüfen Sie Ihr Passwort");
+  }
 }

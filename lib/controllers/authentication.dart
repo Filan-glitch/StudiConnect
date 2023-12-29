@@ -65,6 +65,8 @@ Future<void> signInWithGoogle() async {
     ),
   );
 
+  await storage.saveAuthProviderType("google");
+
   loadUserInfo();
 
   navigatorKey.currentState!.pushNamedAndRemoveUntil(
@@ -102,6 +104,8 @@ Future<void> signInWithEmailAndPassword(String email, String password) async {
       payload: sessionID,
     ),
   );
+
+  await storage.saveAuthProviderType("email");
 
   loadUserInfo();
 
@@ -141,6 +145,8 @@ Future<void> signUpWithEmailAndPassword(String email, String password) async {
     ),
   );
 
+  await storage.saveAuthProviderType("email");
+
   loadUserInfo();
 
   navigatorKey.currentState!.pushNamedAndRemoveUntil(
@@ -177,4 +183,9 @@ Future<void> triggerPasswordReset(String email) async {
   await firebase.sendPasswordResetEmail(email);
   showToast(
       "Ein Link zum Zurücksetzen des Passworts wurde an Ihre E-Mail gesendet.");
+}
+
+Future<void> updatePassword(String oldPassword, String newPassword) async {
+  await firebase.updatePassword(oldPassword, newPassword);
+  showToast("Passwort erfolgreich aktualisiert");
 }
