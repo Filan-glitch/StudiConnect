@@ -1,6 +1,5 @@
 import 'package:graphql/client.dart';
-
-import 'api.dart';
+import 'package:studiconnect/services/graphql/api.dart';
 
 Future<Map<String, dynamic>?> login(String idToken) async {
   return GraphQL.mutate(

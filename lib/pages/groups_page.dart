@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../models/group.dart';
-import '../models/user.dart';
-import '../widgets/group_list_item.dart';
-import '../widgets/page_wrapper.dart';
+import 'package:studiconnect/models/group.dart';
+import 'package:studiconnect/models/user.dart';
+import 'package:studiconnect/widgets/group_list_item.dart';
+import 'package:studiconnect/widgets/page_wrapper.dart';
 
 class GroupsPage extends StatelessWidget {
   final List<Widget> childrenMock = [
@@ -13,14 +13,7 @@ class GroupsPage extends StatelessWidget {
       title: 'Gruppe 1',
       description: 'Beschreibung 1',
       module: 'Modul 1',
-      creator: User(
-          id: '1',
-          username: 'Max Mustermann',
-          email: 'max.mustermann@mail.de',
-          university: 'Hochschule Ruhr West',
-          major: 'Informatik',
-          bio: 'Hallo, ich bin Max Mustermann.',
-          discord: 'max.mustermann'),
+
       members: <User>[
         User(
             id: '2',

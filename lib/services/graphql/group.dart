@@ -1,6 +1,6 @@
 import 'package:graphql/client.dart';
 
-import 'api.dart';
+import 'package:studiconnect/services/graphql/api.dart';
 
 Future<Map<String, dynamic>?> loadGroupInfo(String id) async {
   return GraphQL.query(
@@ -9,11 +9,38 @@ Future<Map<String, dynamic>?> loadGroupInfo(String id) async {
       query LoadGroupInfo(\$id: ID!) {
         group(id: \$id) {
           id
-          name
+          title
           description
+          module
+          createdAt
+          lat
+          lon
+          creator {
+            id
+            username
+            university
+            major
+            bio
+            mobile
+            discord
+          }
           members {
             id
             username
+            university
+            major
+            bio
+            mobile
+            discord
+          }
+          joinRequests {
+            id
+            username
+            university
+            major
+            bio
+            mobile
+            discord
           }
         }
       }

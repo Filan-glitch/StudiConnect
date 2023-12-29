@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:latlong2/latlong.dart';
-
-import '../dialogs/select_location_dialog.dart';
-import '../models/redux/actions.dart' as redux;
-import '../models/redux/app_state.dart';
-import '../models/redux/store.dart';
-import '/widgets/page_wrapper.dart';
+import 'package:studiconnect/dialogs/select_location_dialog.dart';
+import 'package:studiconnect/models/redux/actions.dart' as redux;
+import 'package:studiconnect/models/redux/app_state.dart';
+import 'package:studiconnect/models/redux/store.dart';
+import 'package:studiconnect/widgets/page_wrapper.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 
 // TODO: upload profile image

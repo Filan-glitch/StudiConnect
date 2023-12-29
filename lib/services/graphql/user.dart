@@ -1,6 +1,6 @@
 import 'package:graphql/client.dart';
 
-import 'api.dart';
+import 'package:studiconnect/services/graphql/api.dart';
 
 Future<Map<String, dynamic>?> loadMyUserInfo(String id) async {
   return GraphQL.query(
@@ -9,10 +9,13 @@ Future<Map<String, dynamic>?> loadMyUserInfo(String id) async {
       query LoadMyUserInfo(\$id: ID!) {
         user(id: \$id) {
           id
+          email
           username
           email
           university
           major
+          lat
+          lon
           bio
           mobile
           discord
@@ -20,6 +23,37 @@ Future<Map<String, dynamic>?> loadMyUserInfo(String id) async {
             id
             title
             description
+            module
+            createdAt
+            lat
+            lon
+            creator {
+              id
+              username
+              university
+              major
+              bio
+              mobile
+              discord
+            }
+            members {
+              id
+              username
+              university
+              major
+              bio
+              mobile
+              discord
+            }
+            joinRequests {
+              id
+              username
+              university
+              major
+              bio
+              mobile
+              discord
+            }
           }
         }
       }

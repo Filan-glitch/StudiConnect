@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:oktoast/oktoast.dart';
 
-import '../models/redux/app_state.dart';
-import '../pages/loading_page.dart';
-import 'action_menu.dart';
+import 'package:studiconnect/models/redux/app_state.dart';
+import 'package:studiconnect/pages/loading_page.dart';
+import 'package:studiconnect/widgets/action_menu.dart';
 
 class PageWrapper extends StatelessWidget {
   const PageWrapper({

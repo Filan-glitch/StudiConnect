@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yaml/yaml.dart';
-
-import '../controllers/authentication.dart';
-import '/constants.dart';
-import '../widgets/page_wrapper.dart';
+import 'package:studiconnect/controllers/authentication.dart';
+import 'package:studiconnect/constants.dart';
+import 'package:studiconnect/widgets/page_wrapper.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});

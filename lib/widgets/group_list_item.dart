@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:studiconnect/widgets/avatar_picture.dart';
-import '../models/group.dart';
+import 'package:studiconnect/models/group.dart';
 
 class GroupListItem extends StatelessWidget {
   final Group group;

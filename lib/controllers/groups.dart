@@ -1,12 +1,12 @@
 import 'package:oktoast/oktoast.dart';
 
-import '../models/group.dart';
-import '../models/redux/actions.dart';
-import '../models/redux/store.dart';
-import '../models/user.dart';
-import '../services/graphql/search.dart' as search_service;
-import '../services/graphql/group.dart' as service;
-import 'api.dart';
+import 'package:studiconnect/models/group.dart';
+import 'package:studiconnect/models/redux/actions.dart';
+import 'package:studiconnect/models/redux/store.dart';
+import 'package:studiconnect/models/user.dart';
+import 'package:studiconnect/services/graphql/search.dart' as search_service;
+import 'package:studiconnect/services/graphql/group.dart' as service;
+import 'package:studiconnect/controllers/api.dart';
 
 Future<void> searchGroups(String module, int radius) async {
   List<Group>? result = await runApiService(

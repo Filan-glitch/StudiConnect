@@ -1,6 +1,5 @@
 import 'package:studiconnect/models/group.dart';
-
-import '../user.dart';
+import 'package:studiconnect/models/user.dart';
 
 class AppState {
   int runningTasks = 0;

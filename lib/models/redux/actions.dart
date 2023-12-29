@@ -3,6 +3,7 @@ enum ActionTypes {
   stopTask,
   setUser,
   updateUser,
+  updateGroup,
   updateSearchResults,
   updateSessionID,
 }

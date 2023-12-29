@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../models/redux/app_state.dart';
+import 'package:studiconnect/models/redux/app_state.dart';
 
 class FurtherRegistrationPage extends StatefulWidget {
   const FurtherRegistrationPage({super.key});

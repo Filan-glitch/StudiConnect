@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-
-import '../constants.dart';
-import '../models/user.dart';
-import '../widgets/avatar_network_icon.dart';
-import '../widgets/page_wrapper.dart';
+import 'package:studiconnect/widgets/avatar_picture.dart';
+import 'package:studiconnect/models/user.dart';
+import 'package:studiconnect/widgets/page_wrapper.dart';
 
 class UserInfoPage extends StatelessWidget {
   const UserInfoPage({super.key});
@@ -23,8 +21,11 @@ class UserInfoPage extends StatelessWidget {
             Center(
               child: Padding(
                 padding: const EdgeInsets.only(top: 30, bottom: 15),
-                child: AvatarNetworkIcon(
-                  url: "$backendURL/api/users/${user.id}/image",
+                child: AvatarPicture(
+                  id: user.id,
+                  type: Type.user,
+                  radius: 65,
+                  loadingCircleStrokeWidth: 5.0,
                 ),
               ),
             ),

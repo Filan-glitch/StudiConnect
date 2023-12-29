@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 import 'package:studiconnect/widgets/join_group_request_list_item.dart';
-
-import '../models/redux/app_state.dart';
-import '../models/user.dart';
+import 'package:studiconnect/models/redux/app_state.dart';
+import 'package:studiconnect/models/user.dart';
 
 class JoinGroupRequestsPage extends StatelessWidget {
   const JoinGroupRequestsPage({super.key});

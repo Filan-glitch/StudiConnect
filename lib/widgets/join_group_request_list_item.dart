@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:studiconnect/constants.dart';
 
-import '../models/user.dart';
+import 'package:studiconnect/models/user.dart';
 
 class JoinGroupRequestListItem extends StatefulWidget {
   const JoinGroupRequestListItem({super.key, required this.request});
