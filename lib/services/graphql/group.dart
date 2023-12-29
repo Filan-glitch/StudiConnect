@@ -146,7 +146,7 @@ Future<Map<String, dynamic>?> addMember(String id, String user) async {
   return GraphQL.mutate(
     MutationOptions(
       document: gql("""
-      mutation AddMember(\$id: ID!, \$user: String!) {
+      mutation AddMember(\$id: ID!, \$user: ID!) {
         addMember(id: \$id, user: \$user)
       }
 """),
@@ -162,13 +162,30 @@ Future<Map<String, dynamic>?> removeMember(String id, String user) async {
   return GraphQL.mutate(
     MutationOptions(
       document: gql("""
-      mutation RemoveMember(\$id: ID!, \$user: String!) {
+      mutation RemoveMember(\$id: ID!, \$user: ID!) {
         removeMember(id: \$id, user: \$user)
       }
 """),
       variables: <String, dynamic>{
         'id': id,
         'user': user,
+      },
+    ),
+  );
+}
+
+Future<Map<String, dynamic>?> removeJoinRequest(
+    String groupID, String userID) async {
+  return GraphQL.mutate(
+    MutationOptions(
+      document: gql("""
+      mutation RemoveJoinRequest(\$groupID: ID!, \$userID: ID!) {
+        removeJoinRequest(id: \$groupID, user: \$userID)
+      }
+"""),
+      variables: <String, dynamic>{
+        'groupID': groupID,
+        'userID': userID,
       },
     ),
   );

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geocoding/geocoding.dart' as geo;
+
+import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/dialogs/select_location_dialog.dart';
 import 'package:studiconnect/models/group.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
@@ -43,7 +45,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
     return PageWrapper(
       simpleDesign: true,
       padding: const EdgeInsets.only(top: 20.0),
-      title: (((group?.id) == null) ? "Gruppe erstellen" : "Gruppe bearbeiten"),
+      title: group?.id == null ? "Gruppe erstellen" : "Gruppe bearbeiten",
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,7 +56,6 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                 controller: _groupTitleController,
                 decoration: const InputDecoration(
                   labelText: "Titel",
-
                 ),
               ),
             ),
@@ -69,7 +70,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
             ),
             Padding(
               padding:
-              const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 30.0),
+                  const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 30.0),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: TextButton(
@@ -103,13 +104,14 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            if (_selectedLocation == null) Text(
-                              "Treffpunkt auswählen",
-                              style: TextStyle(
-                                color: Theme.of(context).textTheme.labelSmall?.color,
-                                fontSize: 16.0,
+                            if (_selectedLocation == null)
+                              Text(
+                                "Treffpunkt auswählen",
+                                style: TextStyle(
+                                  color: Theme.of(context).textTheme.labelSmall?.color,
+                                  fontSize: 16.0,
+                                ),
                               ),
-                            ),
                             if (_selectedLocation != null)
                               FutureBuilder(
                                 future: geo.placemarkFromCoordinates(
@@ -119,11 +121,15 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
                                     geo.Placemark location = snapshot.data![0];
-                                    return Text(
-                                      '${location.street} ${location.locality}',
-                                      style: TextStyle(
-                                        color: Theme.of(context).textTheme.bodySmall?.color,
-                                        fontSize: 16.0,
+                                    return SizedBox(
+                                      width: MediaQuery.of(context).size.width -
+                                          150,
+                                      child: Text(
+                                        '${location.street}\n${location.locality}',
+                                        style: TextStyle(
+                                          color: Theme.of(context).textTheme.bodySmall?.color,
+                                          fontSize: 16.0,
+                                        ),
                                       ),
                                     );
                                   } else {
@@ -152,13 +158,31 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
             ),
             // save button
             Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20, bottom: 30.0),
+              padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10.0),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Update the group data
-                    if (group != null) {
+                    if (group == null) {
+                      createGroup(
+                        _groupTitleController.text,
+                        _groupDescriptionController.text,
+                        _groupModuleController.text,
+                        _selectedLocation?.latitude ?? 0.0,
+                        _selectedLocation?.longitude ?? 0.0,
+                      );
+
+                      Navigator.of(context).pop();
+                    } else {
+                      updateGroup(
+                        group!.id,
+                        _groupTitleController.text,
+                        _groupDescriptionController.text,
+                        _groupModuleController.text,
+                        _selectedLocation?.latitude ?? 0.0,
+                        _selectedLocation?.longitude ?? 0.0,
+                      );
+
                       var updatedGroup = group!.update(
                         title: _groupTitleController.text,
                         module: _groupModuleController.text,
@@ -175,19 +199,46 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                           )
                       );
 
-                      // TODO: Check if okay and uncomment API Call
-                      //updateGroup((updatedGroup as Group).id, updatedGroup.title ?? "", updatedGroup.description ?? "", updatedGroup.module ?? "", updatedGroup.lat ?? 0, updatedGroup.lon ?? 0);
-
                       // Pop the page and pass the updated group data
                       Navigator.of(context).pop(updatedGroup);
                     }
                   },
                   child: const Text(
-                    "Speichern",
+                    "Gruppe speichern",
                   ),
                 ),
               ),
             ),
+            if (group?.id != null)
+              Padding(
+                padding:
+                    const EdgeInsets.only(left: 20, right: 20, bottom: 30.0),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      deleteGroup(group!.id);
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                        '/home',
+                        (route) => false,
+                      );
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        Colors.transparent,
+                      ),
+                      side: MaterialStateProperty.all<BorderSide>(
+                        BorderSide(
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                      ),
+                    ),
+                    child: const Text(
+                      "Gruppe löschen",
+                    ),
+                  ),
+                ),
+              ),
           ],
         ),
       ),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:studiconnect/widgets/page_wrapper.dart';
-import 'package:studiconnect/widgets/join_group_request_list_item.dart';
-import 'package:studiconnect/models/redux/app_state.dart';
-import 'package:studiconnect/models/user.dart';
+
+import '../models/redux/app_state.dart';
+import '../widgets/join_group_request_list_item.dart';
+import '../widgets/page_wrapper.dart';
 
 class JoinGroupRequestsPage extends StatelessWidget {
   const JoinGroupRequestsPage({super.key});
@@ -12,21 +12,37 @@ class JoinGroupRequestsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final requests = ModalRoute.of(context)!.settings.arguments as List<User>;
+    final groupID = ModalRoute.of(context)!.settings.arguments as String;
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       builder: (context, state) {
-        return PageWrapper(
+        final group =
+            state.user?.groups?.firstWhere((group) => group.id == groupID);
+
+        if ((group?.joinRequests ?? []).isEmpty) {
+          return const PageWrapper(
             title: 'Anfragen',
             simpleDesign: true,
-            body: ListView.builder(
-              itemCount: requests.length,
-              itemBuilder: (context, index) {
-                return JoinGroupRequestListItem(request: requests[index]);
-              },
+            body: Center(
+              child: Text('Keine Anfragen'),
             ),
           );
-      }
+        }
+
+        return PageWrapper(
+          title: 'Anfragen',
+          simpleDesign: true,
+          body: ListView.builder(
+            itemCount: group!.joinRequests?.length ?? 0,
+            itemBuilder: (context, index) {
+              return JoinGroupRequestListItem(
+                group: group,
+                user: group.joinRequests![index],
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

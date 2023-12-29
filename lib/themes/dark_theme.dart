@@ -7,12 +7,14 @@ ThemeData darkTheme = ThemeData(
   colorScheme: const ColorScheme.dark(
     primary: Color(0xff3e3699),
     secondary: Color(0xff0032bb),
+    error: Colors.red,
   ),
   appBarTheme: const AppBarTheme(
     backgroundColor: Color(0xff3e3699),
   ),
   scaffoldBackgroundColor: const Color.fromARGB(255, 11, 4, 33),
-  textTheme: GoogleFonts.robotoTextTheme().apply(bodyColor: Colors.white, displayColor: Colors.white),
+  textTheme: GoogleFonts.robotoTextTheme()
+      .apply(bodyColor: Colors.white, displayColor: Colors.white),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
       alignment: Alignment.center,

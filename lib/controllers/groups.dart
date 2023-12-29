@@ -23,14 +23,30 @@ Future<void> searchGroups(String module, int radius) async {
   store.dispatch(Action(ActionTypes.updateSearchResults, payload: result));
 }
 
-Future<String> createGroup(String title, String description, String module,
+Future<void> createGroup(String title, String description, String module,
     double lat, double lon) async {
   String? id = await runApiService(
     apiCall: () => service.createGroup(title, description, module, lat, lon),
-    parser: (result) => result['createGroup']['id'] as String,
+    parser: (result) => result['createGroup']['id'],
   );
 
-  return id ?? "";
+  if (id == null) {
+    return;
+  }
+
+  Group? group = await runApiService(
+    apiCall: () => service.loadGroupInfo(id),
+    parser: (result) => Group.fromApi(result['group']),
+  );
+
+  if (group == null) {
+    return;
+  }
+
+  // update groups of user
+  User currentUser = store.state.user!;
+  currentUser.groups!.add(group);
+  store.dispatch(Action(ActionTypes.setUser, payload: currentUser));
 }
 
 Future<void> updateGroup(String id, String title, String description,
@@ -40,6 +56,21 @@ Future<void> updateGroup(String id, String title, String description,
         service.updateGroup(id, title, description, module, lat, lon),
     parser: (result) => null,
   );
+
+  Group? group = await runApiService(
+    apiCall: () => service.loadGroupInfo(id),
+    parser: (result) => Group.fromApi(result['group']),
+  );
+
+  if (group == null) {
+    return;
+  }
+
+  // update groups of user
+  User currentUser = store.state.user!;
+  currentUser.groups =
+      currentUser.groups!.map((e) => e.id == id ? group : e).toList();
+  store.dispatch(Action(ActionTypes.setUser, payload: currentUser));
 }
 
 Future<void> deleteGroup(String id) async {
@@ -47,6 +78,11 @@ Future<void> deleteGroup(String id) async {
     apiCall: () => service.deleteGroup(id),
     parser: (result) => null,
   );
+
+  // update groups of user
+  User currentUser = store.state.user!;
+  currentUser.groups!.removeWhere((group) => group.id == id);
+  store.dispatch(Action(ActionTypes.setUser, payload: currentUser));
 }
 
 Future<void> joinGroup(String id) async {
@@ -60,7 +96,7 @@ Future<void> joinGroup(String id) async {
 
 Future<void> leaveGroup(String id) async {
   await runApiService(
-    apiCall: () => service.removeMember(id, store.state.user?.username ?? ''),
+    apiCall: () => service.removeMember(id, store.state.user?.id ?? ''),
     parser: (result) => null,
   );
 
@@ -71,9 +107,9 @@ Future<void> leaveGroup(String id) async {
   store.dispatch(Action(ActionTypes.setUser, payload: currentUser));
 }
 
-Future<void> addMember(String id, String username) async {
+Future<void> addMember(String id, String userID) async {
   await runApiService(
-    apiCall: () => service.addMember(id, username),
+    apiCall: () => service.addMember(id, userID),
     parser: (result) => null,
   );
 
@@ -88,13 +124,14 @@ Future<void> addMember(String id, String username) async {
 
   // update groups of user
   User currentUser = store.state.user!;
-  currentUser.groups!.map((e) => e.id == id ? group : e).toList();
+  currentUser.groups =
+      currentUser.groups!.map((e) => e.id == id ? group : e).toList();
   store.dispatch(Action(ActionTypes.setUser, payload: currentUser));
 }
 
-Future<void> removeMember(String id, String username) async {
+Future<void> removeMember(String id, String userID) async {
   await runApiService(
-    apiCall: () => service.removeMember(id, username),
+    apiCall: () => service.removeMember(id, userID),
     parser: (result) => null,
   );
 
@@ -109,6 +146,29 @@ Future<void> removeMember(String id, String username) async {
 
   // update groups of user
   User currentUser = store.state.user!;
-  currentUser.groups!.map((e) => e.id == id ? group : e).toList();
+  currentUser.groups =
+      currentUser.groups!.map((e) => e.id == id ? group : e).toList();
+  store.dispatch(Action(ActionTypes.setUser, payload: currentUser));
+}
+
+Future<void> removeJoinRequest(String groupID, String userID) async {
+  await runApiService(
+    apiCall: () => service.removeJoinRequest(groupID, userID),
+    parser: (result) => null,
+  );
+
+  Group? group = await runApiService(
+    apiCall: () => service.loadGroupInfo(groupID),
+    parser: (result) => Group.fromApi(result['group']),
+  );
+
+  if (group == null) {
+    return;
+  }
+
+  // update groups of user
+  User currentUser = store.state.user!;
+  currentUser.groups =
+      currentUser.groups!.map((e) => e.id == groupID ? group : e).toList();
   store.dispatch(Action(ActionTypes.setUser, payload: currentUser));
 }
