@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 
-import '../controllers/groups.dart';
-import '../dialogs/select_location_dialog.dart';
-import '../models/group.dart';
-import '/widgets/page_wrapper.dart';
+import 'package:studiconnect/controllers/groups.dart';
+import 'package:studiconnect/dialogs/select_location_dialog.dart';
+import 'package:studiconnect/models/group.dart';
+import 'package:studiconnect/widgets/page_wrapper.dart';
+import 'package:studiconnect/models/redux/actions.dart' as redux;
+import 'package:studiconnect/models/redux/store.dart';
 
 class CreateAndEditGroupPage extends StatefulWidget {
   const CreateAndEditGroupPage({super.key});
@@ -19,21 +21,27 @@ class CreateAndEditGroupPage extends StatefulWidget {
 class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
   final TextEditingController _groupTitleController = TextEditingController();
   final TextEditingController _groupModuleController = TextEditingController();
-  final TextEditingController _groupDescriptionController =
-      TextEditingController();
+  final TextEditingController _groupDescriptionController = TextEditingController();
 
   LatLng? _selectedLocation;
+  Group? group;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      group = ModalRoute.of(context)!.settings.arguments as Group?;
+      if (group != null) {
+        _groupTitleController.text = group!.title ?? "";
+        _groupModuleController.text = group!.module ?? "";
+        _groupDescriptionController.text = group!.description ?? "";
+        _selectedLocation = LatLng(group!.lat ?? 0.0, group!.lon ?? 0.0);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: upload an image
-    final group = ModalRoute.of(context)!.settings.arguments as Group?;
-    if (group != null) {
-      _groupTitleController.text = group.title ?? "";
-      _groupModuleController.text = group.module ?? "";
-      _groupDescriptionController.text = group.description ?? "";
-      _selectedLocation = LatLng(group.lat ?? 0.0, group.lon ?? 0.0);
-    }
     return PageWrapper(
       simpleDesign: true,
       padding: const EdgeInsets.only(top: 20.0),
@@ -100,10 +108,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                               Text(
                                 "Treffpunkt auswählen",
                                 style: TextStyle(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .labelSmall
-                                      ?.color,
+                                  color: Theme.of(context).textTheme.labelSmall?.color,
                                   fontSize: 16.0,
                                 ),
                               ),
@@ -122,10 +127,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                                       child: Text(
                                         '${location.street}\n${location.locality}',
                                         style: TextStyle(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall
-                                              ?.color,
+                                          color: Theme.of(context).textTheme.bodySmall?.color,
                                           fontSize: 16.0,
                                         ),
                                       ),
@@ -161,7 +163,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                 width: MediaQuery.of(context).size.width,
                 child: ElevatedButton(
                   onPressed: () {
-                    if (group?.id == null) {
+                    if (group == null) {
                       createGroup(
                         _groupTitleController.text,
                         _groupDescriptionController.text,
@@ -169,6 +171,8 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                         _selectedLocation?.latitude ?? 0.0,
                         _selectedLocation?.longitude ?? 0.0,
                       );
+
+                      Navigator.of(context).pop();
                     } else {
                       updateGroup(
                         group!.id,
@@ -178,9 +182,26 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                         _selectedLocation?.latitude ?? 0.0,
                         _selectedLocation?.longitude ?? 0.0,
                       );
-                    }
 
-                    Navigator.of(context).pop();
+                      var updatedGroup = group!.update(
+                        title: _groupTitleController.text,
+                        module: _groupModuleController.text,
+                        description: _groupDescriptionController.text,
+                        lat: _selectedLocation?.latitude,
+                        lon: _selectedLocation?.longitude,
+                      );
+
+                      // Update the group data in store
+                      store.dispatch(
+                          redux.Action(
+                              redux.ActionTypes.updateGroup,
+                              payload: updatedGroup
+                          )
+                      );
+
+                      // Pop the page and pass the updated group data
+                      Navigator.of(context).pop(updatedGroup);
+                    }
                   },
                   child: const Text(
                     "Gruppe speichern",

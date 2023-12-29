@@ -47,4 +47,30 @@ class Group {
       lon: data['lon'],
     );
   }
+
+  update({
+    String? id,
+    String? title,
+    String? description,
+    String? module,
+    User? creator,
+    List<User>? members,
+    List<User>? joinRequests,
+    DateTime? createdAt,
+    double? lat,
+    double? lon,
+  }) {
+    return Group(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      module: module ?? this.module,
+      creator: creator ?? this.creator,
+      members: members ?? this.members,
+      joinRequests: joinRequests ?? this.joinRequests,
+      createdAt: createdAt ?? this.createdAt,
+      lat: lat ?? this.lat,
+      lon: lon ?? this.lon,
+    );
+  }
 }

@@ -1,25 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:studiconnect/dialogs/remove_member_dialog.dart';
+import 'package:studiconnect/controllers/groups.dart';
+import 'package:studiconnect/widgets/avatar_picture.dart';
+import 'package:studiconnect/widgets/location_display.dart';
+import 'package:studiconnect/models/group.dart';
+import 'package:studiconnect/models/redux/app_state.dart';
+import 'package:studiconnect/widgets/page_wrapper.dart';
 
-import '../controllers/groups.dart';
-import '../dialogs/remove_member_dialog.dart';
-import '../models/group.dart';
-import '../models/redux/app_state.dart';
-import '../widgets/avatar_picture.dart';
-import '../widgets/location_display.dart';
-import '../widgets/page_wrapper.dart';
-
-class GroupInfoPage extends StatelessWidget {
+class GroupInfoPage extends StatefulWidget {
   static const routeName = '/group-info';
 
   const GroupInfoPage({super.key});
 
   @override
+  State<GroupInfoPage> createState() => _GroupInfoPageState();
+}
+
+class _GroupInfoPageState extends State<GroupInfoPage> {
+  Group? group;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      setState(() {
+        group = ModalRoute.of(context)!.settings.arguments as Group?;
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final group = ModalRoute.of(context)!.settings.arguments as Group;
-
     final members = (group.members ?? []).map((e) => e.id).toList();
-
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (context, state) {
@@ -27,28 +40,35 @@ class GroupInfoPage extends StatelessWidget {
             title: "Gruppenbeschreibung",
             simpleDesign: true,
             menuActions: [
-              if (state.user?.id == group.creator?.id)
+              if (state.user?.id == group?.creator?.id)
                 ListTile(
                   leading: const Icon(Icons.group_add),
                   title: const Text('Beitrittsanfragen'),
                   onTap: () {
                     Navigator.pushNamed(
-                      context,
-                      '/join-group-requests',
-                      arguments: group.id,
+                        context,
+                        '/join-group-requests',
+                        arguments: group?.joinRequests ?? []
                     );
                   },
                 ),
-              if (state.user?.id == group.creator?.id)
+              if (state.user?.id == group?.creator?.id)
                 ListTile(
                   leading: const Icon(Icons.edit),
                   title: const Text('Gruppe bearbeiten'),
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      '/create-and-edit-group',
-                      arguments: group,
+                  onTap: () async {
+                    final updatedGroup = await Navigator.pushNamed(
+                        context,
+                        '/create-and-edit-group',
+                        arguments: group
                     );
+
+                    // If the group data is updated, update the state
+                    if (updatedGroup != null) {
+                      setState(() {
+                        group = updatedGroup as Group;
+                      });
+                    }
                   },
                 ),
               if (members.contains(state.user?.id))
@@ -68,7 +88,7 @@ class GroupInfoPage extends StatelessWidget {
                   leading: const Icon(Icons.person_add),
                   title: const Text('Gruppe beitreten'),
                   onTap: () {
-                    joinGroup(group.id);
+                    joinGroup(!group.id);
                     Navigator.of(context).pushNamedAndRemoveUntil(
                       '/home',
                       (route) => false,
@@ -90,7 +110,7 @@ class GroupInfoPage extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 25, bottom: 10),
                     child: AvatarPicture(
-                      id: group.id,
+                      id: group?.id,
                       type: Type.group,
                       radius: 65,
                       loadingCircleStrokeWidth: 5.0,
@@ -99,7 +119,7 @@ class GroupInfoPage extends StatelessWidget {
                 ),
                 Center(
                   child: Text(
-                    group.title ?? "",
+                    group?.title ?? "",
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -125,7 +145,7 @@ class GroupInfoPage extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          group.module ?? "",
+                          group?.module ?? "",
                           style: const TextStyle(
                             fontSize: 16,
                           ),
@@ -143,7 +163,7 @@ class GroupInfoPage extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          group.description ?? "",
+                          group?.description ?? "",
                           style: const TextStyle(
                             fontSize: 16,
                           ),
@@ -161,11 +181,11 @@ class GroupInfoPage extends StatelessWidget {
                           ),
                         ),
                         LocationDisplay(
-                            lat: group.lat ?? 0, lon: group.lon ?? 0),
+                            lat: group?.lat ?? 0, lon: group?.lon ?? 0),
                         Padding(
                           padding: const EdgeInsets.only(top: 20, bottom: 10),
                           child: Text(
-                            "${group.members?.length ?? 0} Mitglieder",
+                            "${group?.members?.length ?? 0} Mitglieder",
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -176,9 +196,9 @@ class GroupInfoPage extends StatelessWidget {
                         ),
                         Expanded(
                           child: ListView.builder(
-                            itemCount: (group.members?.length ?? 0),
+                            itemCount: (group?.members?.length ?? 0),
                             itemBuilder: (context, index) {
-                              final user = group.members?[index];
+                              final user = group?.members?[index];
                               if (user == null) return Container();
 
                               return ListTile(
@@ -189,7 +209,7 @@ class GroupInfoPage extends StatelessWidget {
                                     context: context,
                                     builder: (context) => RemoveMemberDialog(
                                       user: user,
-                                      groupID: group.id,
+                                      groupID: group?.id,
                                     ),
                                   );
                                 },
@@ -205,7 +225,7 @@ class GroupInfoPage extends StatelessWidget {
                                   loadingCircleStrokeWidth: 3.5,
                                 ),
                                 title: Text(
-                                  "${user.username ?? "Unbekannt"} ${user.id == group.creator?.id ? "(Gruppenleiter)" : ""}",
+                                    "${user.username ?? "Unbekannt"} ${user.id == group?.creator?.id ? "(Gruppenleiter)" : ""}",
                                 ),
                               );
                             },

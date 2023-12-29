@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
-import '../models/redux/app_state.dart';
-import '../widgets/group_list_item.dart';
-import '../widgets/page_wrapper.dart';
+import 'package:studiconnect/models/redux/app_state.dart';
+import 'package:studiconnect/models/group.dart';
+import 'package:studiconnect/models/user.dart';
+import 'package:studiconnect/widgets/group_list_item.dart';
+import 'package:studiconnect/widgets/page_wrapper.dart';
 
 class GroupsPage extends StatelessWidget {
   const GroupsPage({super.key});
