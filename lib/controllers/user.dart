@@ -8,7 +8,7 @@ import 'package:studiconnect/models/redux/store.dart';
 import 'package:studiconnect/models/user.dart';
 import 'package:studiconnect/controllers/api.dart';
 import 'package:studiconnect/services/graphql/user.dart' as service;
-import 'package:studiconnect/services/rest/profile_image.dart' as restService;
+import 'package:studiconnect/services/rest/profile_image.dart' as rest_service;
 import 'package:studiconnect/services/storage/credentials.dart' as storage;
 import 'package:studiconnect/services/firebase/authentication.dart' as firebase;
 
@@ -135,7 +135,7 @@ Future<void> uploadProfileImage(XFile file) async {
   Uint8List content = await file.readAsBytes();
 
   await runRestApi(
-      apiCall: () => restService.uploadProfileImage(content),
+      apiCall: () => rest_service.uploadProfileImage(content),
       parser: (result) => null);
 
   store.dispatch(
@@ -150,7 +150,7 @@ Future<void> uploadProfileImage(XFile file) async {
 
 Future<void> deleteProfileImage() async {
   await runRestApi(
-      apiCall: () => restService.deleteProfileImage(),
+      apiCall: () => rest_service.deleteProfileImage(),
       parser: (result) => null);
 
   store.dispatch(

@@ -2,6 +2,11 @@ import 'package:graphql/client.dart';
 
 import 'package:studiconnect/services/graphql/api.dart';
 
+/// Fetches the information of a user by their ID.
+///
+/// The [id] parameter is required and represents the ID of the user.
+/// Returns a Future that completes with a Map if the request was successful.
+/// The Map contains the user's information.
 Future<Map<String, dynamic>?> loadMyUserInfo(String id) async {
   return GraphQL.query(
     QueryOptions(
@@ -65,6 +70,11 @@ Future<Map<String, dynamic>?> loadMyUserInfo(String id) async {
   );
 }
 
+/// Fetches the public information of a user by their ID.
+///
+/// The [id] parameter is required and represents the ID of the user.
+/// Returns a Future that completes with a Map if the request was successful.
+/// The Map contains the user's public information.
 Future<Map<String, dynamic>?> loadUserInfo(String id) async {
   return GraphQL.query(
     QueryOptions(
@@ -90,6 +100,11 @@ Future<Map<String, dynamic>?> loadUserInfo(String id) async {
   );
 }
 
+/// Updates the profile of the current user.
+///
+/// The [username], [university], [major], [lat], [lon], [bio], [mobile], and [discord] parameters are required.
+/// Returns a Future that completes with a Map if the request was successful.
+/// The Map contains the ID of the updated user.
 Future<Map<String, dynamic>?> updateProfile(
   String username,
   String university,
@@ -132,6 +147,10 @@ Future<Map<String, dynamic>?> updateProfile(
   );
 }
 
+/// Deletes the account of the current user.
+///
+/// Returns a Future that completes with a Map if the request was successful.
+/// The Map is empty.
 Future<Map<String, dynamic>?> deleteAccount() {
   return GraphQL.mutate(
     MutationOptions(

@@ -2,6 +2,12 @@ import 'package:graphql/client.dart';
 
 import 'package:studiconnect/services/graphql/api.dart';
 
+/// Searches for groups based on a module and a radius.
+///
+/// The [module] parameter is required and represents the module of the groups.
+/// The [radius] parameter is required and represents the radius for the search.
+/// Returns a Future that completes with a Map if the request was successful.
+/// The Map contains the groups that match the search criteria.
 Future<Map<String, dynamic>?> searchGroups(
   String module,
   int radius,

@@ -6,6 +6,30 @@ import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/pages/loading_page.dart';
 import 'package:studiconnect/widgets/action_menu.dart';
 
+/// A widget that wraps the main content of a page.
+///
+/// This widget is a stateless widget that takes a title, body, bottom navigation bar,
+/// menu actions, header controls, padding, and a flag for simple design and loading screen override as input.
+/// It displays a Scaffold with an AppBar, body, and bottom navigation bar.
+/// The AppBar contains the title and an optional action menu.
+/// The body contains the main content of the page, wrapped in a Container with padding.
+///
+/// The [title] parameter is required and represents the title of the page.
+///
+/// The [body] parameter is required and represents the main content of the page.
+///
+/// The [bottomNavigationBar] parameter is optional and represents the bottom navigation bar of the page.
+///
+/// The [menuActions] parameter is optional and defaults to an empty list. It represents the actions in the action menu.
+///
+/// The [headerControls] parameter is optional and defaults to an empty list. It represents the controls in the header of the page.
+///
+/// The [simpleDesign] parameter is optional and defaults to false. If set to true, the page will have a simple design.
+///
+/// The [padding] parameter is optional and defaults to EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0).
+/// It represents the padding of the main content of the page.
+///
+/// The [overrideLoadingScreen] parameter is optional and defaults to false. If set to true, the loading screen will be overridden.
 class PageWrapper extends StatelessWidget {
   const PageWrapper({
     required this.title,
@@ -34,8 +58,10 @@ class PageWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Main content of the page
     Widget mainContent;
 
+    // If simple design is enabled, use a simple Scaffold
     if (simpleDesign) {
       mainContent = Scaffold(
           appBar: AppBar(
@@ -62,6 +88,7 @@ class PageWrapper extends StatelessWidget {
             child: body,
           ));
     } else {
+      // If simple design is not enabled, use a custom Scaffold
       mainContent = Scaffold(
         bottomNavigationBar: bottomNavigationBar,
         body: Container(
@@ -154,6 +181,7 @@ class PageWrapper extends StatelessWidget {
       );
     }
 
+    // Return the main content wrapped in a StoreConnector and OKToast
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (BuildContext context, state) {
@@ -169,6 +197,7 @@ class PageWrapper extends StatelessWidget {
         });
   }
 
+  /// Shows the action menu.
   void _showActionMenu(BuildContext context) {
     showModalBottomSheet(
       isScrollControlled: true,

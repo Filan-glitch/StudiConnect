@@ -9,9 +9,10 @@ import 'package:studiconnect/services/graphql/errors/api_exception.dart';
 import 'package:studiconnect/services/graphql/errors/connection_error.dart';
 import 'package:studiconnect/services/rest/api.dart';
 
-/// Implementations for GraphQL API queries & mutations.
+/// This class provides methods for performing GraphQL queries and mutations.
 class GraphQL {
   /// Builds a new [GraphQLClient], based on the session id and the settings about the server.
+  /// Returns a [GraphQLClient] instance.
   static Future<GraphQLClient> _getClient() async {
     final httpLink = HttpLink(
       '$backendURL/api/graphql',
@@ -26,17 +27,11 @@ class GraphQL {
     );
   }
 
-  /// Performs the GraphQL query, specified in [options].
+  /// Performs a GraphQL query.
   ///
-  /// If the query was successful and the client received data, it will be returned as a [Map],
-  /// otherwise null will be returned.
-  /// If an error occurred during the request, a [HttpException] for a unknown error will be thrown.
-  /// If the result from the server indicates with a HTTP status code, that an
-  /// error occurred, a [HttpException] with the code-specific error message will be thrown.
-  ///
-  /// See also:
-  /// - [_getClient] which builds the client object.
-  /// - [_getExceptionFromResult] which parses an error-response into a HttpException.
+  /// [options] - The options for the query.
+  /// Returns a [Map] if the query was successful, otherwise null.
+  /// Throws an [ApiException] if an error occurred during the request.
   static Future<Map<String, dynamic>?> query(QueryOptions options) async {
     QueryResult result;
 
@@ -55,17 +50,11 @@ class GraphQL {
     return result.data;
   }
 
-  /// Performs the GraphQL mutation, specified in [options].
+  /// Performs a GraphQL mutation.
   ///
-  /// If the mutation was successful and the client received data, it will be returned as a [Map],
-  /// otherwise null will be returned.
-  /// If an error occurred during the request, a [HttpException] for a unknown error will be thrown.
-  /// If the result from the server indicates with a HTTP status code, that an
-  /// error occurred, a [HttpException] with the code-specific error message will be thrown.
-  ///
-  /// See also:
-  /// - [_getClient] which builds the client object.
-  /// - [_getExceptionFromResult] which parses an error-response into a HttpException.
+  /// [options] - The options for the mutation.
+  /// Returns a [Map] if the mutation was successful, otherwise null.
+  /// Throws an [ApiException] if an error occurred during the request.
   static Future<Map<String, dynamic>?> mutate(MutationOptions options) async {
     QueryResult result;
     try {
@@ -83,6 +72,10 @@ class GraphQL {
     return result.data;
   }
 
+  /// Parses an error-response into a [ApiException].
+  ///
+  /// [result] - The result from the server.
+  /// Returns an [ApiException].
   static ApiException _getExceptionFromResult(QueryResult result) {
     LinkException? exception = result.exception!.linkException;
 
