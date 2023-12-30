@@ -1,7 +1,11 @@
+/// This library contains the CreateAndEditGroupPage widget.
+///
+/// {@category PAGES}
+library pages.create_and_edit_group_page;
+
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geocoding/geocoding.dart' as geo;
-
 import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/dialogs/select_location_dialog.dart';
 import 'package:studiconnect/models/group.dart';
@@ -9,6 +13,11 @@ import 'package:studiconnect/widgets/page_wrapper.dart';
 import 'package:studiconnect/models/redux/actions.dart' as redux;
 import 'package:studiconnect/models/redux/store.dart';
 
+/// A StatefulWidget that allows the user to create or edit a group.
+///
+/// The page contains text fields for the group title, module, and description,
+/// as well as a button to select the group's location.
+/// If a group is passed as an argument to the page, the fields are pre-filled with the group's data.
 class CreateAndEditGroupPage extends StatefulWidget {
   const CreateAndEditGroupPage({super.key});
 
@@ -18,6 +27,9 @@ class CreateAndEditGroupPage extends StatefulWidget {
   State<CreateAndEditGroupPage> createState() => _CreateAndEditGroupPageState();
 }
 
+/// The state for the [CreateAndEditGroupPage] widget.
+///
+/// This class contains the logic for creating or editing a group.
 class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
   final TextEditingController _groupTitleController = TextEditingController();
   final TextEditingController _groupModuleController = TextEditingController();

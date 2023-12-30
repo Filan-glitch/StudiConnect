@@ -1,3 +1,7 @@
+/// This library contains the [InternalServerException] class.
+///
+/// {@category EXCEPTIONS}
+library services.graphql.errors.internal_server_error;
 import 'package:studiconnect/services/graphql/errors/api_exception.dart';
 
 /// Represents an internal server exception.

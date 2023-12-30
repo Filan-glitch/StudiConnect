@@ -1,3 +1,8 @@
+/// This library is part of the Redux state management system. It contains the [ActionTypes] enum and the [Action] class.
+///
+/// {@category REDUX}
+library models.redux.actions;
+
 /// Enum representing the different types of actions that can be dispatched in the application.
 ///
 /// The different types of actions include:

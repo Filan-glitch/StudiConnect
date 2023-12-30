@@ -1,3 +1,7 @@
+/// This library contains the [ActionMenu] widget.
+///
+/// {@category WIDGETS}
+library widgets.action_menu;
 import 'dart:ui';
 import 'package:flutter/material.dart';
 

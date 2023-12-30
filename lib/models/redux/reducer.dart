@@ -1,3 +1,7 @@
+/// This library is part of the Redux state management system. It contains the [appReducer] function.
+///
+/// {@category REDUX}
+library models.redux.reducer;
 import 'package:studiconnect/models/redux/actions.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 

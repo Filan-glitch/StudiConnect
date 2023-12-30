@@ -1,5 +1,8 @@
+/// This library contains the functions that are used to search for groups.
+///
+/// {@category SERVICES}
+library services.graphql.search;
 import 'package:graphql/client.dart';
-
 import 'package:studiconnect/services/graphql/api.dart';
 
 /// Searches for groups based on a module and a radius.

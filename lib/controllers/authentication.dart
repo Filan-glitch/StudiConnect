@@ -1,3 +1,6 @@
+/// This library contains functions for authentication.
+///
+/// {@category CONTROLLERS}
 library controllers.authentication;
 import 'package:oktoast/oktoast.dart';
 import 'package:studiconnect/main.dart';

@@ -1,3 +1,6 @@
+/// This library contains the [DialogWrapper] widget.
+///
+/// {@category DIALOGS}
 library dialogs.dialog_wrapper;
 import 'dart:ui';
 import 'package:flutter/material.dart';

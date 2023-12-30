@@ -1,3 +1,6 @@
+/// This library contains constants used throughout the app.
+///
+/// {@category CORE}
 library core.constants;
 import 'package:flutter/foundation.dart';
 

@@ -1,9 +1,18 @@
+/// This library contains the ProfilePage widget.
+///
+/// {@category PAGES}
+library pages.profile_page;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:studiconnect/widgets/avatar_picture.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
+/// A StatefulWidget that displays the user's profile.
+///
+/// The page contains the user's avatar, username, major, university, contact information, and bio,
+/// as well as options to edit the profile and navigate to the settings page.
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -11,6 +20,9 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
+/// The state for the [ProfilePage] widget.
+///
+/// This class contains the logic for handling the user's interactions with the page.
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
@@ -134,6 +146,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ),
+          /// The menu actions include the options to edit the profile and to navigate to the settings page.
           menuActions: [
             ListTile(
               leading: const Icon(Icons.edit),

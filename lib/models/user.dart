@@ -1,3 +1,7 @@
+/// This library contains the [User] class.
+///
+/// {@category MODELS}
+library models.user;
 import 'package:studiconnect/models/group.dart';
 
 /// Class representing a user in the application.

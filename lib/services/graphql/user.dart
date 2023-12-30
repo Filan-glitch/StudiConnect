@@ -1,5 +1,8 @@
+/// This library contains all the GraphQL queries and mutations related to the user.
+///
+/// {@category SERVICES}
+library services.graphql.user;
 import 'package:graphql/client.dart';
-
 import 'package:studiconnect/services/graphql/api.dart';
 
 /// Fetches the information of a user by their ID.

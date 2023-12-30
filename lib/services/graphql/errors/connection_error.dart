@@ -1,3 +1,7 @@
+/// This library contains the [ConnectionException] class.
+///
+/// {@category EXCEPTIONS}
+library services.graphql.errors.connection_error;
 import 'package:studiconnect/services/graphql/errors/api_exception.dart';
 
 /// Represents a connection exception.

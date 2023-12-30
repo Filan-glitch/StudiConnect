@@ -1,5 +1,8 @@
+/// This library contains the authentication services for the application.
+///
+/// {@category SERVICES}
+library services.firebase.authentication;
 import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:oktoast/oktoast.dart';

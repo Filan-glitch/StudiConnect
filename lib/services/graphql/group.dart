@@ -1,5 +1,8 @@
+/// This library contains all the GraphQL queries and mutations for the group entity.
+///
+/// {@category SERVICES}
+library services.graphql.group;
 import 'package:graphql/client.dart';
-
 import 'package:studiconnect/services/graphql/api.dart';
 
 /// Fetches the information of a group by its ID.

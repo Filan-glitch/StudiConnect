@@ -1,3 +1,7 @@
+/// This library contains the model for a [Group].
+///
+/// {@category MODELS}
+library models.group;
 import 'package:studiconnect/models/user.dart';
 
 /// A class that represents a group.

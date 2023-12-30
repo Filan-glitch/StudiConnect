@@ -1,3 +1,6 @@
+/// This library contains the [SelectLocationDialog] widget.
+///
+/// {@category DIALOGS}
 library dialogs.select_location_dialog;
 import 'dart:async';
 import 'package:flutter/material.dart';

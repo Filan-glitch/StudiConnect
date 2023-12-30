@@ -5,7 +5,12 @@ dartdoc:
     # The version of your package, as it should appear in the output.
     version: '1.0.0'
 
-
+    # The files to exclude from documentation.
     nodoc: ['lib/firebase_options.dart', 'lib/main.dart']
 
+    # The location of the documentation's homepage.
+    linkTo:
+        url: 'studiconnect.janbellenberg.de/docs'
+
+    # The location of the favicon for your package.
     favicon: 'assets/icons/icon.png'

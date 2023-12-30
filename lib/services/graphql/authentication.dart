@@ -1,3 +1,7 @@
+/// This library contains the GraphQL queries and mutations for the authentication
+///
+/// {@category SERVICES}
+library services.graphql.authentication;
 import 'package:graphql/client.dart';
 import 'package:studiconnect/services/graphql/api.dart';
 

@@ -1,3 +1,6 @@
+/// This library contains the functions for user.
+///
+/// {@category CONTROLLERS}
 library controllers.user;
 import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';

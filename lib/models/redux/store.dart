@@ -1,3 +1,7 @@
+/// This library is part of the Redux state management system. It contains the global [store] variable.
+///
+/// {@category REDUX}
+library models.redux.store;
 import 'package:redux/redux.dart';
 import 'package:studiconnect/models/redux/reducer.dart';
 import 'package:studiconnect/models/redux/app_state.dart';

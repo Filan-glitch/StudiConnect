@@ -1,3 +1,7 @@
+/// This library is part of the Redux state management system. It contains the [AppState] class.
+///
+/// {@category REDUX}
+library models.redux.app_state;
 import 'package:studiconnect/models/group.dart';
 import 'package:studiconnect/models/user.dart';
 

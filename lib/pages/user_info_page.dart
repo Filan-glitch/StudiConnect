@@ -1,16 +1,27 @@
+/// This library contains the UserInfoPage widget.
+///
+/// {@category PAGES}
+library pages.user_info_page;
+
 import 'package:flutter/material.dart';
 import 'package:studiconnect/widgets/avatar_picture.dart';
 import 'package:studiconnect/models/user.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
+/// A StatelessWidget that displays information about a user.
+///
+/// The page contains the user's avatar, username, major, university, contact information, and bio.
 class UserInfoPage extends StatelessWidget {
   const UserInfoPage({super.key});
 
+  /// The route name for navigation.
   static const routeName = '/user-info';
 
   @override
   Widget build(BuildContext context) {
+    /// The user whose information is to be displayed.
     final user = ModalRoute.of(context)!.settings.arguments as User;
+
     return PageWrapper(
       title: 'Nutzerinformationen',
       simpleDesign: true,

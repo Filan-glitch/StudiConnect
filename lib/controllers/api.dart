@@ -1,3 +1,6 @@
+/// This library contains functions for executing API calls.
+///
+/// {@category CONTROLLERS}
 library controllers.api;
 import 'dart:developer';
 import 'package:oktoast/oktoast.dart';

@@ -1,12 +1,22 @@
+/// This library contains the DeleteAccountPage widget.
+///
+/// {@category PAGES}
+library pages.delete_account_page;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:studiconnect/controllers/user.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
+/// A StatelessWidget that provides the user with the option to delete their account.
+///
+/// The page contains a text field for the user to enter their password (if necessary),
+/// and a button to confirm the deletion of the account.
 class DeleteAccountPage extends StatelessWidget {
   DeleteAccountPage({super.key});
 
+  /// The controller for the password text field.
   final TextEditingController _passwordController = TextEditingController();
 
   @override
@@ -17,6 +27,7 @@ class DeleteAccountPage extends StatelessWidget {
       body: StoreConnector<AppState, AppState>(
           converter: (store) => store.state,
           builder: (context, state) {
+            /// Determines whether the user needs to enter their password to delete their account.
             bool passwordNeeded = state.authProviderType == "email";
             return Center(
               child: Column(

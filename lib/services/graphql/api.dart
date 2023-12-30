@@ -1,8 +1,10 @@
+/// This library contains the graphql api services for the application.
+///
+/// {@category SERVICES}
+library services.graphql.api;
 import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
 import 'package:graphql/client.dart';
-
 import 'package:studiconnect/constants.dart';
 import 'package:studiconnect/models/redux/store.dart';
 import 'package:studiconnect/services/graphql/errors/api_exception.dart';

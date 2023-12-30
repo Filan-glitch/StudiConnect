@@ -1,3 +1,6 @@
+/// This library contains the [RemoveMemberDialog] widget.
+///
+/// {@category DIALOGS}
 library dialogs.remove_member_dialog;
 import 'package:flutter/material.dart';
 import 'package:studiconnect/dialogs/dialog_wrapper.dart';

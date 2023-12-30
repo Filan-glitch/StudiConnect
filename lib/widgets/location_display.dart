@@ -1,3 +1,7 @@
+/// This library contains the [LocationDisplay] widget.
+///
+/// {@category WIDGETS}
+library widgets.location_display;
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 

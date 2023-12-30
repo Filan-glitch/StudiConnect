@@ -1,3 +1,6 @@
+/// This library contains functions for groups.
+///
+/// {@category CONTROLLERS}
 library controllers.groups;
 import 'package:oktoast/oktoast.dart';
 import 'package:studiconnect/models/group.dart';

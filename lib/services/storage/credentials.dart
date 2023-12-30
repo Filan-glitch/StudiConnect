@@ -1,3 +1,7 @@
+/// This file contains functions that save and load the user's credentials and the type of the authentication provider in shared preferences.
+///
+/// {@category SERVICES}
+library services.storage.credentials;
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Saves the user's credentials in shared preferences.

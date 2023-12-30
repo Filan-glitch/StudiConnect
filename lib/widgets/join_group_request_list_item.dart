@@ -1,5 +1,8 @@
+/// This library contains the [JoinGroupRequestListItem] widget.
+///
+/// {@category WIDGETS}
+library widgets.join_group_request_list_item;
 import 'package:flutter/material.dart';
-
 import 'package:studiconnect/constants.dart';
 import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/models/group.dart';

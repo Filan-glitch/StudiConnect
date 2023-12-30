@@ -1,8 +1,16 @@
+/// This library contains the FurtherRegistrationPage widget.
+///
+/// {@category PAGES}
+library pages.further_registration_page;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 
+/// A StatefulWidget that allows the user to provide additional registration information.
+///
+/// The page contains text fields for the user's name, university, and course.
 class FurtherRegistrationPage extends StatefulWidget {
   const FurtherRegistrationPage({super.key});
 
@@ -11,9 +19,17 @@ class FurtherRegistrationPage extends StatefulWidget {
       _FurtherRegistrationPageState();
 }
 
+/// The state for the [FurtherRegistrationPage] widget.
+///
+/// This class contains the logic for handling the user's input and updating the user's profile.
 class _FurtherRegistrationPageState extends State<FurtherRegistrationPage> {
+  /// The controller for the name text field.
   final TextEditingController _nameController = TextEditingController();
+
+  /// The controller for the university text field.
   final TextEditingController _universityController = TextEditingController();
+
+  /// The controller for the course text field.
   final TextEditingController _courseController = TextEditingController();
 
   @override

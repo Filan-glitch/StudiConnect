@@ -1,7 +1,10 @@
+/// This library contains the [PageWrapper] widget.
+///
+/// {@category WIDGETS}
+library widgets.page_wrapper;
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:oktoast/oktoast.dart';
-
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/pages/loading_page.dart';
 import 'package:studiconnect/widgets/action_menu.dart';

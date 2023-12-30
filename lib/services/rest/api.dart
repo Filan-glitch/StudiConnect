@@ -1,3 +1,7 @@
+/// This file contains the [processHttpStatusCodes] function.
+///
+/// {@category SERVICES}
+library services.rest.api;
 import 'package:studiconnect/services/graphql/errors/input_error.dart';
 import 'package:studiconnect/services/graphql/errors/internal_server_error.dart';
 import 'package:studiconnect/services/graphql/errors/not_found_exception.dart';

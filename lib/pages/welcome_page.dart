@@ -1,3 +1,8 @@
+/// This library contains the WelcomePage widget.
+///
+/// {@category PAGES}
+library pages.welcome_page;
+
 import 'package:auth_buttons/auth_buttons.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +12,11 @@ import 'package:studiconnect/controllers/authentication.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:studiconnect/constants.dart';
 
+/// A StatefulWidget that provides the user with the option to register or log in.
+///
+/// The page contains buttons to register with email or Google,
+/// as well as a link to the login page.
+/// The user is also presented with the terms of service and privacy policy.
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
 
@@ -14,12 +24,17 @@ class WelcomePage extends StatefulWidget {
   State<WelcomePage> createState() => _WelcomePageState();
 }
 
+/// The state for the [WelcomePage] widget.
+///
+/// This class contains the logic for handling the user's interactions with the page.
 class _WelcomePageState extends State<WelcomePage> {
+  /// Whether the Google login button is currently loading.
   bool _googleButtonLoading = false;
 
   @override
   void initState() {
     super.initState();
+    /// Sets the system UI overlay style to dark.
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
   }
 
@@ -30,11 +45,13 @@ class _WelcomePageState extends State<WelcomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            /// The application's logo.
             Image.asset(
               "assets/icons/icon.png",
               width: 200,
             ),
             const SizedBox(height: 50),
+            /// The welcome message.
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 40),
               child: Text(
@@ -44,6 +61,7 @@ class _WelcomePageState extends State<WelcomePage> {
               ),
             ),
             const SizedBox(height: 100),
+            /// The terms of service and privacy policy.
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: RichText(
@@ -90,6 +108,7 @@ class _WelcomePageState extends State<WelcomePage> {
               ),
             ),
             const SizedBox(height: 5),
+            /// The button to register with email.
             EmailAuthButton(
               themeMode: Theme.of(context).brightness == Brightness.light
                   ? ThemeMode.light
@@ -105,6 +124,7 @@ class _WelcomePageState extends State<WelcomePage> {
               ),
             ),
             const SizedBox(height: 5),
+            /// The button to register with Google.
             GoogleAuthButton(
               onPressed: () async {
                 setState(() {
@@ -132,6 +152,7 @@ class _WelcomePageState extends State<WelcomePage> {
               ),
             ),
             const SizedBox(height: 5),
+            /// The link to the login page.
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: RichText(

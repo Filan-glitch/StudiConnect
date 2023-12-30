@@ -1,3 +1,7 @@
+/// This library contains the [UnauthorizedException] class.
+///
+/// {@category EXCEPTIONS}
+library services.graphql.errors.unauthorized_error;
 import 'package:studiconnect/services/graphql/errors/api_exception.dart';
 
 /// Represents an unauthorized exception.

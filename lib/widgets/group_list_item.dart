@@ -1,3 +1,7 @@
+/// This library contains the [GroupListItem] widget.
+///
+/// {@category WIDGETS}
+library widgets.group_list_item;
 import 'package:flutter/material.dart';
 import 'package:studiconnect/widgets/avatar_picture.dart';
 import 'package:studiconnect/models/group.dart';

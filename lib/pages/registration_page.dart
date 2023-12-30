@@ -1,3 +1,8 @@
+/// This library contains the RegisterPage widget.
+///
+/// {@category PAGES}
+library pages.register_page;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:auth_buttons/auth_buttons.dart'
@@ -6,6 +11,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:studiconnect/controllers/authentication.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 
+/// A StatefulWidget that provides the user with the option to register.
+///
+/// The page contains text fields for the user to enter their email and password,
+/// as well as a button to confirm the registration.
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
@@ -13,14 +22,27 @@ class RegisterPage extends StatefulWidget {
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
+/// The state for the [RegisterPage] widget.
+///
+/// This class contains the logic for handling the user's input and registering.
 class _RegisterPageState extends State<RegisterPage> {
+  /// The controller for the email text field.
   final TextEditingController _emailController = TextEditingController();
+
+  /// The controller for the password text field.
   final TextEditingController _passwordController = TextEditingController();
+
+  /// The controller for the password repeat text field.
   final TextEditingController _passwordRepeatController =
       TextEditingController();
 
+  /// Whether the password field is currently obscured.
   bool _isObscure = true;
+
+  /// Whether the password repeat field is currently obscured.
   bool _isObscureRepeat = true;
+
+  /// Whether the email registration button is currently loading.
   bool _emailButtonLoading = false;
 
   @override
@@ -30,13 +52,6 @@ class _RegisterPageState extends State<RegisterPage> {
     _passwordRepeatController.dispose();
     super.dispose();
   }
-
-  /*Valid Password: Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character
-  bool _validatePassword() {
-    return _passwordController.text != _passwordRepeatController.text &&
-        RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')
-            .hasMatch(_passwordController.text);
-  }*/
 
   @override
   Widget build(BuildContext context) {
