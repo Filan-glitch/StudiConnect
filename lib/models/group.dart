@@ -1,5 +1,27 @@
 import 'package:studiconnect/models/user.dart';
 
+/// A class that represents a group.
+///
+/// This class contains all the information about a group, including its ID, title, description,
+/// module, creator, members, join requests, creation date, and location.
+///
+/// The [id] parameter is required and represents the ID of the group.
+///
+/// The [title] parameter is optional and represents the title of the group.
+///
+/// The [description] parameter is optional and represents the description of the group.
+///
+/// The [module] parameter is optional and represents the module of the group.
+///
+/// The [creator] parameter is optional and represents the creator of the group.
+///
+/// The [members] parameter is optional and represents the members of the group.
+///
+/// The [joinRequests] parameter is optional and represents the join requests of the group.
+///
+/// The [createdAt] parameter is optional and represents the creation date of the group.
+///
+/// The [lat] and [lon] parameters are optional and represent the latitude and longitude of the group.
 class Group {
   final String id;
   final String? title;
@@ -25,6 +47,9 @@ class Group {
     this.lon,
   });
 
+  /// A factory constructor that creates a new instance of the [Group] class from a map.
+  ///
+  /// The [data] parameter is required and represents the map from which the group is created.
   factory Group.fromApi(Map<String, dynamic> data) {
     return Group(
       id: data['id'],
@@ -48,6 +73,11 @@ class Group {
     );
   }
 
+  /// A method that updates the properties of the group.
+  ///
+  /// The [id], [title], [description], [module], [creator], [members], [joinRequests], [createdAt],
+  /// [lat], and [lon] parameters are optional and represent the new values of the corresponding properties.
+  /// If a parameter is not provided, the corresponding property will not be updated.
   update({
     String? id,
     String? title,

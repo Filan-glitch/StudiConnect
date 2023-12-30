@@ -1,0 +1,11 @@
+dartdoc:
+    # The name of your package, as it should appear in the output.
+    name: 'StudiConnect'
+
+    # The version of your package, as it should appear in the output.
+    version: '1.0.0'
+
+
+    nodoc: ['lib/firebase_options.dart', 'lib/main.dart']
+
+    favicon: 'assets/icons/icon.png'

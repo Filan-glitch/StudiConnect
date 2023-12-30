@@ -1,3 +1,4 @@
+library controllers.api;
 import 'dart:developer';
 import 'package:oktoast/oktoast.dart';
 import 'package:studiconnect/services/graphql/errors/api_exception.dart';

@@ -1,5 +1,5 @@
+library controllers.authentication;
 import 'package:oktoast/oktoast.dart';
-
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/redux/actions.dart';
 import 'package:studiconnect/models/redux/store.dart';

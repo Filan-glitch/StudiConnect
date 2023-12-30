@@ -1,3 +1,4 @@
+library core.constants;
 import 'package:flutter/foundation.dart';
 
 /// The base URL of the backend server.
