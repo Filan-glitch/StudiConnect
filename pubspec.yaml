@@ -42,12 +42,12 @@ dependencies:
   shared_preferences: ^2.2.2
   intl: ^0.18.1
   image_picker: ^1.0.5
-  dartdoc: ^6.3.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
+  dartdoc: ^6.3.0
 
 flutter:
   uses-material-design: true
