@@ -5,6 +5,7 @@ class AppState {
   int runningTasks = 0;
   bool get loading => runningTasks > 0;
 
+  bool connected = true;
   String? sessionID;
   String? authProviderType;
   User? user;
