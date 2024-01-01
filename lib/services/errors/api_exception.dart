@@ -1,7 +1,7 @@
 /// This library contains the [ApiException] class.
 ///
 /// {@category EXCEPTIONS}
-library services.graphql.errors.api_exception;
+library services.error.api_exception;
 
 /// Represents an API exception.
 ///

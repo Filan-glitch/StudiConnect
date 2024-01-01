@@ -1,8 +1,9 @@
 /// This library contains the [InputException] class.
 ///
 /// {@category EXCEPTIONS}
-library services.graphql.errors.input_error;
-import 'package:studiconnect/services/graphql/errors/api_exception.dart';
+library services.error.input_error;
+
+import 'package:studiconnect/services/errors/api_exception.dart';
 
 /// Represents an input exception.
 ///

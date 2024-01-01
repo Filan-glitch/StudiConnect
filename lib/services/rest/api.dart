@@ -2,12 +2,13 @@
 ///
 /// {@category SERVICES}
 library services.rest.api;
-import 'package:studiconnect/services/graphql/errors/input_error.dart';
-import 'package:studiconnect/services/graphql/errors/internal_server_error.dart';
-import 'package:studiconnect/services/graphql/errors/not_found_exception.dart';
-import 'package:studiconnect/services/graphql/errors/connection_error.dart';
-import 'package:studiconnect/services/graphql/errors/forbidden_error.dart';
-import 'package:studiconnect/services/graphql/errors/unauthorized_error.dart';
+
+import 'package:studiconnect/services/errors/input_error.dart';
+import 'package:studiconnect/services/errors/internal_server_error.dart';
+import 'package:studiconnect/services/errors/not_found_exception.dart';
+import 'package:studiconnect/services/errors/connection_error.dart';
+import 'package:studiconnect/services/errors/forbidden_error.dart';
+import 'package:studiconnect/services/errors/unauthorized_error.dart';
 
 /// Processes HTTP status codes and throws the appropriate exception.
 ///

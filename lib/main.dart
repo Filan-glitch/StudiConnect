@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:studiconnect/pages/delete_account_page.dart';
 import 'package:studiconnect/pages/join_group_requests_page.dart';
 import 'package:studiconnect/pages/password_change_page.dart';
 import 'package:studiconnect/pages/user_info_page.dart';
@@ -20,8 +21,6 @@ import 'package:studiconnect/pages/login_page.dart';
 import 'package:studiconnect/controllers/authentication.dart';
 import 'package:studiconnect/pages/home_page.dart';
 import 'package:studiconnect/pages/welcome_page.dart';
-
-import 'pages/delete_account_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

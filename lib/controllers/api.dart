@@ -2,9 +2,10 @@
 ///
 /// {@category CONTROLLERS}
 library controllers.api;
+
 import 'dart:developer';
 import 'package:oktoast/oktoast.dart';
-import 'package:studiconnect/services/graphql/errors/api_exception.dart';
+import 'package:studiconnect/services/errors/api_exception.dart';
 import 'package:studiconnect/models/redux/store.dart';
 import 'package:studiconnect/models/redux/actions.dart' as redux;
 

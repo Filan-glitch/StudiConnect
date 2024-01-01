@@ -1,8 +1,9 @@
 /// This library contains the [NotFoundException] class.
 ///
 /// {@category EXCEPTIONS}
-library services.graphql.errors.not_found_exception;
-import 'package:studiconnect/services/graphql/errors/api_exception.dart';
+library services.error.not_found_exception;
+
+import 'package:studiconnect/services/errors/api_exception.dart';
 
 /// Represents a not found exception.
 ///

@@ -2,13 +2,14 @@
 ///
 /// {@category SERVICES}
 library services.graphql.api;
+
 import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:graphql/client.dart';
 import 'package:studiconnect/constants.dart';
 import 'package:studiconnect/models/redux/store.dart';
-import 'package:studiconnect/services/graphql/errors/api_exception.dart';
-import 'package:studiconnect/services/graphql/errors/connection_error.dart';
+import 'package:studiconnect/services/errors/api_exception.dart';
+import 'package:studiconnect/services/errors/connection_error.dart';
 import 'package:studiconnect/services/rest/api.dart';
 
 /// This class provides methods for performing GraphQL queries and mutations.
