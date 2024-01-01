@@ -27,6 +27,7 @@ Future<Map<String, dynamic>?> loadMyUserInfo(String id) async {
             createdAt
             lat
             lon
+            imageExists
             creator {
               id
               username
