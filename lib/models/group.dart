@@ -11,6 +11,7 @@ class Group {
   final DateTime? createdAt;
   final double? lat;
   final double? lon;
+  final bool imageExists;
 
   const Group({
     required this.id,
@@ -23,6 +24,7 @@ class Group {
     this.createdAt,
     this.lat,
     this.lon,
+    this.imageExists = false,
   });
 
   factory Group.fromApi(Map<String, dynamic> data) {
@@ -45,10 +47,11 @@ class Group {
           : null,
       lat: data['lat'],
       lon: data['lon'],
+      imageExists: data['imageExists'] ?? false,
     );
   }
 
-  update({
+  Group update({
     String? id,
     String? title,
     String? description,
@@ -59,6 +62,7 @@ class Group {
     DateTime? createdAt,
     double? lat,
     double? lon,
+    bool? imageExists,
   }) {
     return Group(
       id: id ?? this.id,
@@ -71,6 +75,7 @@ class Group {
       createdAt: createdAt ?? this.createdAt,
       lat: lat ?? this.lat,
       lon: lon ?? this.lon,
+      imageExists: imageExists ?? this.imageExists,
     );
   }
 }
