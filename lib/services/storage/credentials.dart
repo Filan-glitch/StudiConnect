@@ -1,15 +1,16 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:studiconnect/services/storage/secure_storage_provider.dart';
 
 Future<void> saveCredentials(String userID, String sessionID) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setString("userID", userID);
-  await prefs.setString("sessionID", sessionID);
+  FlutterSecureStorage storage = secureStorage;
+  await storage.write(key: "userID", value: userID);
+  await storage.write(key: "sessionID", value: sessionID);
 }
 
 Future<Map<String, String>> loadCredentials() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? userID = prefs.getString("userID");
-  String? sessionID = prefs.getString("sessionID");
+  FlutterSecureStorage storage = secureStorage;
+  String? userID = await storage.read(key: "userID");
+  String? sessionID = await storage.read(key: "sessionID");
 
   if (userID == null || sessionID == null) {
     return {};
@@ -22,18 +23,18 @@ Future<Map<String, String>> loadCredentials() async {
 }
 
 Future<void> saveAuthProviderType(String type) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setString("authProviderType", type);
+  FlutterSecureStorage storage = secureStorage;
+  storage.write(key: "authProviderType", value: type);
 }
 
 Future<String?> loadAuthProviderType() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.getString("authProviderType");
+  FlutterSecureStorage storage = secureStorage;
+  return storage.read(key: "authProviderType");
 }
 
 Future<void> deleteCredentials() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.remove("userID");
-  await prefs.remove("sessionID");
-  await prefs.remove("authProviderType");
+  FlutterSecureStorage storage = secureStorage;
+  await storage.delete(key: "userID");
+  await storage.delete(key: "sessionID");
+  await storage.delete(key: "authProviderType");
 }
