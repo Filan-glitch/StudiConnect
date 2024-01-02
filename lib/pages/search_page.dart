@@ -92,13 +92,11 @@ class _SearchPageState extends State<SearchPage> {
       menuActions: [
         ListTile(
             leading: const Icon(Icons.share),
-            title: const Text('Teilen'),
+            title: const Text('Studiconnect weiterempfehlen'),
             onTap: () {
               Share.share(
-                  'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=de.studiconnect.app'
-              );
-            }
-        ),
+                  'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=de.studiconnect.app');
+            }),
         ListTile(
           leading: const Icon(Icons.settings),
           title: const Text('Einstellungen'),

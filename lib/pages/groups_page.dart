@@ -14,7 +14,6 @@ class GroupsPage extends StatefulWidget {
 }
 
 class _GroupsPageState extends State<GroupsPage> {
-
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
@@ -71,14 +70,12 @@ class _GroupsPageState extends State<GroupsPage> {
           },
         ),
         ListTile(
-          leading: const Icon(Icons.share),
-          title: const Text('Teilen'),
-          onTap: () {
-            Share.share(
-                'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=$appID'
-            );
-          }
-        ),
+            leading: const Icon(Icons.share),
+            title: const Text('Studiconnect weiterempfehlen'),
+            onTap: () {
+              Share.share(
+                  'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=$appID');
+            }),
         ListTile(
           leading: const Icon(Icons.settings),
           title: const Text('Einstellungen'),
