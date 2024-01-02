@@ -6,19 +6,22 @@ class NoConnectivityPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Keine Verbindung'),
-      ),
-      body: const Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
+            Icon(
+              Icons.wifi_off,
+              size: 100,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            const SizedBox(height: 30),
+            const Text(
               'Keine Internetverbindung gefunden',
               style: TextStyle(fontSize: 24),
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'Bitte überprüfe deine Internetverbindung und versuche es erneut.',
               style: TextStyle(fontSize: 18),
               textAlign: TextAlign.center,

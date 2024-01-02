@@ -21,7 +21,8 @@ class CreateAndEditGroupPage extends StatefulWidget {
 class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
   final TextEditingController _groupTitleController = TextEditingController();
   final TextEditingController _groupModuleController = TextEditingController();
-  final TextEditingController _groupDescriptionController = TextEditingController();
+  final TextEditingController _groupDescriptionController =
+      TextEditingController();
 
   LatLng? _selectedLocation;
   Group? group;
@@ -43,7 +44,6 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
-      simpleDesign: true,
       padding: const EdgeInsets.only(top: 20.0),
       title: group?.id == null ? "Gruppe erstellen" : "Gruppe bearbeiten",
       body: SingleChildScrollView(
@@ -108,7 +108,10 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                               Text(
                                 "Treffpunkt auswählen",
                                 style: TextStyle(
-                                  color: Theme.of(context).textTheme.labelSmall?.color,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .labelSmall
+                                      ?.color,
                                   fontSize: 16.0,
                                 ),
                               ),
@@ -127,7 +130,10 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                                       child: Text(
                                         '${location.street}\n${location.locality}',
                                         style: TextStyle(
-                                          color: Theme.of(context).textTheme.bodySmall?.color,
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall
+                                              ?.color,
                                           fontSize: 16.0,
                                         ),
                                       ),
@@ -192,12 +198,8 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                       );
 
                       // Update the group data in store
-                      store.dispatch(
-                          redux.Action(
-                              redux.ActionTypes.updateGroup,
-                              payload: updatedGroup
-                          )
-                      );
+                      store.dispatch(redux.Action(redux.ActionTypes.updateGroup,
+                          payload: updatedGroup));
 
                       // Pop the page and pass the updated group data
                       Navigator.of(context).pop(updatedGroup);

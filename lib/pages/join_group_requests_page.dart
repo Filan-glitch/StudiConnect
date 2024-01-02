@@ -22,7 +22,6 @@ class JoinGroupRequestsPage extends StatelessWidget {
         if ((group?.joinRequests ?? []).isEmpty) {
           return const PageWrapper(
             title: 'Anfragen',
-            simpleDesign: true,
             body: Center(
               child: Text('Keine Anfragen'),
             ),
@@ -31,7 +30,6 @@ class JoinGroupRequestsPage extends StatelessWidget {
 
         return PageWrapper(
           title: 'Anfragen',
-          simpleDesign: true,
           body: ListView.builder(
             itemCount: group!.joinRequests?.length ?? 0,
             itemBuilder: (context, index) {

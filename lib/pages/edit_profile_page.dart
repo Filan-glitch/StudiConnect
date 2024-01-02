@@ -80,7 +80,6 @@ class _EditProfilePage extends State<EditProfilePage> {
       converter: (store) => store.state,
       builder: (context, state) {
         return PageWrapper(
-          simpleDesign: true,
           title: "Profil bearbeiten",
           body: SingleChildScrollView(
             child: Padding(

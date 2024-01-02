@@ -12,6 +12,12 @@ import 'package:studiconnect/widgets/action_menu.dart';
 import 'package:studiconnect/models/redux/actions.dart' as redux;
 import 'package:studiconnect/models/redux/store.dart';
 
+enum PageType {
+  empty,
+  simple,
+  complex,
+}
+
 class PageWrapper extends StatefulWidget {
   const PageWrapper({
     required this.title,
@@ -19,7 +25,7 @@ class PageWrapper extends StatefulWidget {
     this.bottomNavigationBar,
     this.menuActions = const [],
     this.headerControls = const [],
-    this.simpleDesign = false,
+    this.type = PageType.simple,
     this.padding = const EdgeInsets.only(
       left: 20.0,
       right: 20.0,
@@ -34,38 +40,33 @@ class PageWrapper extends StatefulWidget {
   final List<Widget> headerControls;
   final String title;
   final List<Widget> menuActions;
-  final bool simpleDesign;
+  final PageType type;
   final EdgeInsets padding;
   final bool overrideLoadingScreen;
 
   @override
   State<PageWrapper> createState() => _PageWrapperState();
-
 }
 
 class _PageWrapperState extends State<PageWrapper> {
   late StreamSubscription<ConnectivityResult> subscription;
 
+  void _onConnectivityChanged(ConnectivityResult result) {
+    store.dispatch(
+      redux.Action(
+        redux.ActionTypes.setConnectionState,
+        payload: !(result == ConnectivityResult.none ||
+            result == ConnectivityResult.bluetooth),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
-    Connectivity().onConnectivityChanged.last.then((ConnectivityResult result) {
-      store.dispatch(
-        redux.Action(
-          redux.ActionTypes.setConnectionState,
-          payload: result != ConnectivityResult.none,
-        ),
-      );
-    });
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      store.dispatch(
-        redux.Action(
-          redux.ActionTypes.setConnectionState,
-          payload: result != ConnectivityResult.none,
-        ),
-      );
-      setState(() {});
-    });
+    Connectivity().checkConnectivity().then(_onConnectivityChanged);
+    subscription =
+        Connectivity().onConnectivityChanged.listen(_onConnectivityChanged);
   }
 
   @override
@@ -73,14 +74,19 @@ class _PageWrapperState extends State<PageWrapper> {
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       builder: (context, state) {
-
         if (!state.connected) {
           return const NoConnectivityPage();
         }
 
+        if (widget.type == PageType.empty) {
+          return Scaffold(
+            body: OKToast(child: widget.body),
+          );
+        }
+
         Widget mainContent;
 
-        if (widget.simpleDesign) {
+        if (widget.type == PageType.simple) {
           mainContent = Scaffold(
               appBar: AppBar(
                 actions: [
@@ -99,11 +105,13 @@ class _PageWrapperState extends State<PageWrapper> {
                   color: Colors.white,
                 ),
               ),
-              body: Padding(
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewPadding.bottom,
+              body: OKToast(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewPadding.bottom,
+                  ),
+                  child: widget.body,
                 ),
-                child: widget.body,
               ));
         } else {
           mainContent = Scaffold(

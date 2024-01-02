@@ -13,7 +13,6 @@ class UserInfoPage extends StatelessWidget {
     final user = ModalRoute.of(context)!.settings.arguments as User;
     return PageWrapper(
       title: 'Nutzerinformationen',
-      simpleDesign: true,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

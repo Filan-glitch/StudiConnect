@@ -13,10 +13,10 @@ class GroupsPage extends StatefulWidget {
 }
 
 class _GroupsPageState extends State<GroupsPage> {
-
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
+      type: PageType.complex,
       body: Padding(
         padding: const EdgeInsets.only(bottom: 100),
         child: StoreConnector<AppState, AppState>(
