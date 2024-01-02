@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:studiconnect/widgets/avatar_picture.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
@@ -142,6 +143,15 @@ class _ProfilePageState extends State<ProfilePage> {
                 Navigator.pop(context);
                 Navigator.pushNamed(context, '/edit-profile');
               },
+            ),
+            ListTile(
+                leading: const Icon(Icons.share),
+                title: const Text('Teilen'),
+                onTap: () {
+                  Share.share(
+                      'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=de.studiconnect.app'
+                  );
+                }
             ),
             ListTile(
               leading: const Icon(Icons.settings),

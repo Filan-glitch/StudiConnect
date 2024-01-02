@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-
+import 'package:share_plus/share_plus.dart';
+import 'package:studiconnect/constants.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/widgets/group_list_item.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
@@ -68,6 +69,15 @@ class _GroupsPageState extends State<GroupsPage> {
             Navigator.pushNamed(context, '/create-and-edit-group');
             setState(() {});
           },
+        ),
+        ListTile(
+          leading: const Icon(Icons.share),
+          title: const Text('Teilen'),
+          onTap: () {
+            Share.share(
+                'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=$appID'
+            );
+          }
         ),
         ListTile(
           leading: const Icon(Icons.settings),
