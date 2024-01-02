@@ -38,6 +38,8 @@ AppState appReducer(AppState state, dynamic action) {
       state.authProviderType = action.payload;
     case ActionTypes.setProfileImageAvailable:
       state.profileImageAvailable = action.payload;
+    case ActionTypes.setConnectionState:
+      state.connected = action.payload;
   }
 
   return state;

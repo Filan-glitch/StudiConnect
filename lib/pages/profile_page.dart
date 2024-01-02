@@ -18,6 +18,7 @@ class _ProfilePageState extends State<ProfilePage> {
       converter: (store) => store.state,
       builder: (context, state) {
         return PageWrapper(
+          type: PageType.complex,
           body: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

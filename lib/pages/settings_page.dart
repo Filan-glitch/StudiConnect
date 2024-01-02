@@ -12,7 +12,6 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
-      simpleDesign: true,
       title: "Einstellungen",
       body: SizedBox(
         width: double.infinity,

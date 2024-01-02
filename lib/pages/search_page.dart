@@ -34,6 +34,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return PageWrapper(
       title: 'Suche',
+      type: PageType.complex,
       overrideLoadingScreen: true,
       headerControls: [
         TextField(

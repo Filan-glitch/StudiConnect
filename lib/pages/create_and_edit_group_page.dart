@@ -47,7 +47,6 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
-      simpleDesign: true,
       padding: const EdgeInsets.only(top: 20.0),
       title: group?.id == null ? "Gruppe erstellen" : "Gruppe bearbeiten",
       body: SingleChildScrollView(
@@ -203,10 +202,9 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                           lon: _selectedLocation?.longitude,
                         );
 
-                        // Update the group data in store
-                        store.dispatch(redux.Action(
-                            redux.ActionTypes.updateGroup,
-                            payload: updatedGroup));
+                      // Update the group data in store
+                      store.dispatch(redux.Action(redux.ActionTypes.updateGroup,
+                          payload: updatedGroup));
 
                         // Pop the page and pass the updated group data
                         Navigator.of(context).pop(updatedGroup);

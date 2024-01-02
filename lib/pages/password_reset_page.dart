@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:studiconnect/controllers/authentication.dart';
+import 'package:studiconnect/widgets/page_wrapper.dart';
 
 class PasswordResetPage extends StatelessWidget {
   PasswordResetPage({super.key});
@@ -8,10 +9,8 @@ class PasswordResetPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Passwort zurücksetzen"),
-      ),
+    return PageWrapper(
+      title: "Passwort zurücksetzen",
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

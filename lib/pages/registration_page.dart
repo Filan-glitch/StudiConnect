@@ -5,6 +5,7 @@ import 'package:auth_buttons/auth_buttons.dart'
 import 'package:google_fonts/google_fonts.dart';
 import 'package:studiconnect/controllers/authentication.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
+import 'package:studiconnect/widgets/page_wrapper.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -43,8 +44,9 @@ class _RegisterPageState extends State<RegisterPage> {
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (BuildContext context, AppState state) {
-          return Scaffold(
-            appBar: AppBar(),
+          return PageWrapper(
+            title: "Registrieren",
+            type: PageType.empty,
             body: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -150,9 +152,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     isLoading: _emailButtonLoading,
                     style: AuthButtonStyle(
                       textStyle: TextStyle(
-                        fontFamily: GoogleFonts.roboto().fontFamily,
-                        color: Theme.of(context).textTheme.labelSmall?.color
-                      ),
+                          fontFamily: GoogleFonts.roboto().fontFamily,
+                          color: Theme.of(context).textTheme.labelSmall?.color),
                     ),
                   ),
                   const SizedBox(height: 30),

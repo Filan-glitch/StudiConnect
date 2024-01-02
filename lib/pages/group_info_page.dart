@@ -38,18 +38,14 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
         builder: (context, state) {
           return PageWrapper(
             title: "Gruppenbeschreibung",
-            simpleDesign: true,
             menuActions: [
               if (state.user?.id == group?.creator?.id)
                 ListTile(
                   leading: const Icon(Icons.group_add),
                   title: const Text('Beitrittsanfragen'),
                   onTap: () {
-                    Navigator.pushNamed(
-                        context,
-                        '/join-group-requests',
-                        arguments: group?.joinRequests ?? []
-                    );
+                    Navigator.pushNamed(context, '/join-group-requests',
+                        arguments: group?.joinRequests ?? []);
                   },
                 ),
               if (state.user?.id == group?.creator?.id)
@@ -58,10 +54,8 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                   title: const Text('Gruppe bearbeiten'),
                   onTap: () async {
                     final updatedGroup = await Navigator.pushNamed(
-                        context,
-                        '/create-and-edit-group',
-                        arguments: group
-                    );
+                        context, '/create-and-edit-group',
+                        arguments: group);
 
                     // If the group data is updated, update the state
                     if (updatedGroup != null) {
@@ -225,7 +219,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                                   loadingCircleStrokeWidth: 3.5,
                                 ),
                                 title: Text(
-                                    "${user.username ?? "Unbekannt"} ${user.id == group?.creator?.id ? "(Gruppenleiter)" : ""}",
+                                  "${user.username ?? "Unbekannt"} ${user.id == group?.creator?.id ? "(Gruppenleiter)" : ""}",
                                 ),
                               );
                             },

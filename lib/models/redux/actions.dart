@@ -8,6 +8,7 @@ enum ActionTypes {
   updateSessionID,
   updateAuthProviderType,
   setProfileImageAvailable,
+  setConnectionState,
 }
 
 class Action {
