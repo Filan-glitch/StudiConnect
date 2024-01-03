@@ -2,6 +2,8 @@
 ///
 /// {@category CONTROLLERS}
 library controllers.groups;
+
+import 'package:image_picker/image_picker.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:studiconnect/models/group.dart';
 import 'package:studiconnect/models/redux/actions.dart';
@@ -9,6 +11,7 @@ import 'package:studiconnect/models/redux/store.dart';
 import 'package:studiconnect/models/user.dart';
 import 'package:studiconnect/services/graphql/search.dart' as search_service;
 import 'package:studiconnect/services/graphql/group.dart' as service;
+import 'package:studiconnect/services/rest/group_image.dart' as restService;
 import 'package:studiconnect/controllers/api.dart';
 
 /// Searches for groups based on the provided module and radius.
@@ -203,4 +206,53 @@ Future<void> removeJoinRequest(String groupID, String userID) async {
   currentUser.groups =
       currentUser.groups!.map((e) => e.id == groupID ? group : e).toList();
   store.dispatch(Action(ActionTypes.setUser, payload: currentUser));
+}
+
+Future<void> uploadGroupImage(String id, XFile file) async {
+  Uint8List content = await file.readAsBytes();
+
+  await runRestApi(
+    apiCall: () => restService.uploadGroupImage(id, content),
+    parser: (result) => null,
+  );
+
+  // update groups of user
+  User currentUser = store.state.user!;
+  currentUser.groups = currentUser.groups!.map((e) {
+    if (e.id == id) {
+      return e.update(imageExists: true);
+    }
+    return e;
+  }).toList();
+
+  store.dispatch(Action(ActionTypes.setUser, payload: currentUser));
+
+  showToast("Profilbild erfolgreich hochgeladen.");
+}
+
+Future<void> deleteGroupImage(String id) async {
+  await runRestApi(
+      apiCall: () => restService.deleteGroupImage(id),
+      parser: (result) => null);
+
+  store.dispatch(
+    Action(
+      ActionTypes.setProfileImageAvailable,
+      payload: false,
+    ),
+  );
+
+  // update groups of user
+  User currentUser = store.state.user!;
+  currentUser.groups = currentUser.groups!.map((e) {
+    if (e.id == id) {
+      return e.update(imageExists: false);
+    }
+    return e;
+  }).toList();
+
+  store.dispatch(Action(ActionTypes.setUser, payload: currentUser));
+
+  showToast(
+      "Profilbild erfolgreich gelöscht. Evtl. liegt das Bild noch im Cache.");
 }

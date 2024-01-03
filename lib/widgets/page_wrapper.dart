@@ -2,12 +2,24 @@
 ///
 /// {@category WIDGETS}
 library widgets.page_wrapper;
+
+import 'dart:async';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/pages/loading_page.dart';
+import 'package:studiconnect/pages/no_connectivity_page.dart';
 import 'package:studiconnect/widgets/action_menu.dart';
+import 'package:studiconnect/models/redux/actions.dart' as redux;
+import 'package:studiconnect/models/redux/store.dart';
+
+enum PageType {
+  empty,
+  simple,
+  complex,
+}
 
 /// A widget that wraps the main content of a page.
 ///
@@ -33,14 +45,15 @@ import 'package:studiconnect/widgets/action_menu.dart';
 /// It represents the padding of the main content of the page.
 ///
 /// The [overrideLoadingScreen] parameter is optional and defaults to false. If set to true, the loading screen will be overridden.
-class PageWrapper extends StatelessWidget {
+
+class PageWrapper extends StatefulWidget {
   const PageWrapper({
     required this.title,
     required this.body,
     this.bottomNavigationBar,
     this.menuActions = const [],
     this.headerControls = const [],
-    this.simpleDesign = false,
+    this.type = PageType.simple,
     this.padding = const EdgeInsets.only(
       left: 20.0,
       right: 20.0,
@@ -55,149 +68,183 @@ class PageWrapper extends StatelessWidget {
   final List<Widget> headerControls;
   final String title;
   final List<Widget> menuActions;
-  final bool simpleDesign;
+  final PageType type;
   final EdgeInsets padding;
   final bool overrideLoadingScreen;
 
   @override
-  Widget build(BuildContext context) {
-    // Main content of the page
-    Widget mainContent;
+  State<PageWrapper> createState() => _PageWrapperState();
+}
 
-    // If simple design is enabled, use a simple Scaffold
-    if (simpleDesign) {
-      mainContent = Scaffold(
-          appBar: AppBar(
-            actions: [
-              if (menuActions.isNotEmpty)
-                IconButton(
-                  icon: const Icon(Icons.more_vert),
-                  onPressed: () => _showActionMenu(context),
+class _PageWrapperState extends State<PageWrapper> {
+  late StreamSubscription<ConnectivityResult> subscription;
+
+  void _onConnectivityChanged(ConnectivityResult result) {
+    store.dispatch(
+      redux.Action(
+        redux.ActionTypes.setConnectionState,
+        payload: !(result == ConnectivityResult.none ||
+            result == ConnectivityResult.bluetooth),
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Connectivity().checkConnectivity().then(_onConnectivityChanged);
+    subscription =
+        Connectivity().onConnectivityChanged.listen(_onConnectivityChanged);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnector<AppState, AppState>(
+      converter: (store) => store.state,
+      builder: (context, state) {
+        if (!state.connected) {
+          return const NoConnectivityPage();
+        }
+
+        if (widget.type == PageType.empty) {
+          return Scaffold(
+            body: OKToast(child: widget.body),
+          );
+        }
+
+        Widget mainContent;
+
+        if (widget.type == PageType.simple) {
+          mainContent = Scaffold(
+              appBar: AppBar(
+                actions: [
+                  if (widget.menuActions.isNotEmpty)
+                    IconButton(
+                      icon: const Icon(Icons.more_vert),
+                      onPressed: () => _showActionMenu(context),
+                    ),
+                ],
+                title: Text(widget.title),
+                titleTextStyle: const TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.white,
                 ),
-            ],
-            title: Text(title),
-            titleTextStyle: const TextStyle(
-              fontSize: 20.0,
-              color: Colors.white,
-            ),
-            iconTheme: const IconThemeData(
-              color: Colors.white,
-            ),
-          ),
-          body: Padding(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewPadding.bottom,
-            ),
-            child: body,
-          ));
-    } else {
-      // If simple design is not enabled, use a custom Scaffold
-      mainContent = Scaffold(
-        bottomNavigationBar: bottomNavigationBar,
-        body: Container(
-          padding: EdgeInsets.only(
-            top: MediaQuery.of(context).viewPadding.top - 5.0,
-          ),
-          color: Theme.of(context).colorScheme.primary,
-          child: StoreConnector<AppState, AppState>(
-              converter: (store) => store.state,
-              builder: (context, state) {
-                return Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 15.0,
-                        horizontal: 10.0,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 20.0,
-                              ),
-                              child: Text(
-                                title,
-                                overflow: TextOverflow.fade,
-                                maxLines: 1,
-                                softWrap: false,
-                                style: const TextStyle(
-                                  fontSize: 30.0,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
+                iconTheme: const IconThemeData(
+                  color: Colors.white,
+                ),
+              ),
+              body: OKToast(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewPadding.bottom,
+                  ),
+                  child: widget.body,
+                ),
+              ));
+        } else {
+          mainContent = Scaffold(
+            bottomNavigationBar: widget.bottomNavigationBar,
+            body: Container(
+              padding: EdgeInsets.only(
+                top: MediaQuery.of(context).viewPadding.top - 5.0,
+              ),
+              color: Theme.of(context).colorScheme.primary,
+              child: StoreConnector<AppState, AppState>(
+                  converter: (store) => store.state,
+                  builder: (context, state) {
+                    return Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 15.0,
+                            horizontal: 10.0,
                           ),
-                          if (menuActions.isNotEmpty)
-                            Row(
-                              children: [
-                                IconButton(
-                                  padding: const EdgeInsets.all(0),
-                                  icon: const Icon(
-                                    Icons.more_vert,
-                                    size: 30.0,
-                                    color: Colors.white,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0,
                                   ),
-                                  onPressed: () => _showActionMenu(context),
+                                  child: Text(
+                                    widget.title,
+                                    overflow: TextOverflow.fade,
+                                    maxLines: 1,
+                                    softWrap: false,
+                                    style: const TextStyle(
+                                      fontSize: 30.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
+                              ),
+                              if (widget.menuActions.isNotEmpty)
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      padding: const EdgeInsets.all(0),
+                                      icon: const Icon(
+                                        Icons.more_vert,
+                                        size: 30.0,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: () => _showActionMenu(context),
+                                    ),
+                                  ],
+                                ),
+                            ],
+                          ),
+                        ),
+                        if (widget.headerControls.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20.0,
+                              vertical: 10.0,
+                            ),
+                            child: Column(
+                              children: [
+                                ...widget.headerControls,
                               ],
                             ),
-                        ],
-                      ),
-                    ),
-                    if (headerControls.isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0,
-                          vertical: 10.0,
-                        ),
-                        child: Column(
-                          children: [
-                            ...headerControls,
-                          ],
-                        ),
-                      ),
-                    Expanded(
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewPadding.bottom,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.background,
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(30.0),
-                            topRight: Radius.circular(30.0),
+                          ),
+                        Expanded(
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewPadding.bottom,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.background,
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(30.0),
+                                topRight: Radius.circular(30.0),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: widget.padding,
+                              child: widget.body,
+                            ),
                           ),
                         ),
-                        child: Padding(
-                          padding: padding,
-                          child: body,
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              }),
-        ),
-      );
-    }
-
-    // Return the main content wrapped in a StoreConnector and OKToast
-    return StoreConnector<AppState, AppState>(
-        converter: (store) => store.state,
-        builder: (BuildContext context, state) {
-          return OKToast(
-            child: Stack(
-              children: [
-                mainContent,
-                if (state.loading && !overrideLoadingScreen)
-                  const LoadingPage(),
-              ],
+                      ],
+                    );
+                  }),
             ),
           );
-        });
+        }
+
+        return OKToast(
+          child: Stack(
+            children: [
+              mainContent,
+              if (state.loading && !widget.overrideLoadingScreen)
+                const LoadingPage(),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   /// Shows the action menu.
@@ -207,7 +254,7 @@ class PageWrapper extends StatelessWidget {
       context: context,
       constraints: const BoxConstraints(maxWidth: 400.0),
       builder: (context) => ActionMenu(
-        children: menuActions,
+        children: widget.menuActions,
       ),
       barrierColor: Colors.transparent,
       shape: const RoundedRectangleBorder(

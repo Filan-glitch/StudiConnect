@@ -23,6 +23,7 @@ Future<Map<String, dynamic>?> loadGroupInfo(String id) async {
           createdAt
           lat
           lon
+          imageExists
           creator {
             id
             username

@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:auth_buttons/auth_buttons.dart'
     show AuthButtonStyle, EmailAuthButton, GoogleAuthButton;
 import 'package:studiconnect/controllers/authentication.dart';
+import 'package:studiconnect/widgets/page_wrapper.dart';
 
 /// A StatefulWidget that provides the user with the option to log in.
 ///
@@ -46,8 +47,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(),
+    return PageWrapper(
+        type: PageType.empty,
+        title: "Anmelden",
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
+import 'package:studiconnect/widgets/page_wrapper.dart';
 
 /// A StatefulWidget that allows the user to provide additional registration information.
 ///
@@ -45,8 +46,9 @@ class _FurtherRegistrationPageState extends State<FurtherRegistrationPage> {
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (BuildContext context, AppState state) {
-          return Scaffold(
-            appBar: AppBar(),
+          return PageWrapper(
+            type: PageType.empty,
+            title: "Weitere Informationen",
             body: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -114,10 +116,7 @@ class _FurtherRegistrationPageState extends State<FurtherRegistrationPage> {
                     onPressed: () {
                       // TODO: update profile
                       Navigator.pushNamedAndRemoveUntil(
-                          context,
-                          '/home',
-                          (route) => false
-                      );
+                          context, '/home', (route) => false);
                     },
                     child: const Text('Speichern'),
                   ),

@@ -5,6 +5,7 @@ library pages.password_reset_page;
 
 import 'package:flutter/material.dart';
 import 'package:studiconnect/controllers/authentication.dart';
+import 'package:studiconnect/widgets/page_wrapper.dart';
 
 /// A StatelessWidget that provides the user with the option to reset their password.
 ///
@@ -18,11 +19,8 @@ class PasswordResetPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        /// The title of the AppBar is "Passwort zurücksetzen".
-        title: const Text("Passwort zurücksetzen"),
-      ),
+    return PageWrapper(
+      title: "Passwort zurücksetzen",
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

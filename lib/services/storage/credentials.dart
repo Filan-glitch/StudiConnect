@@ -2,16 +2,18 @@
 ///
 /// {@category SERVICES}
 library services.storage.credentials;
-import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:studiconnect/services/storage/secure_storage_provider.dart';
 
 /// Saves the user's credentials in shared preferences.
 ///
 /// The [userID] and [sessionID] parameters are required.
 /// This function does not return a value.
 Future<void> saveCredentials(String userID, String sessionID) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setString("userID", userID);
-  await prefs.setString("sessionID", sessionID);
+  FlutterSecureStorage storage = secureStorage;
+  await storage.write(key: "userID", value: userID);
+  await storage.write(key: "sessionID", value: sessionID);
 }
 
 /// Loads the user's credentials from shared preferences.
@@ -19,9 +21,9 @@ Future<void> saveCredentials(String userID, String sessionID) async {
 /// Returns a Future that completes with a Map containing the user's credentials.
 /// If the credentials are not found, the Map is empty.
 Future<Map<String, String>> loadCredentials() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? userID = prefs.getString("userID");
-  String? sessionID = prefs.getString("sessionID");
+  FlutterSecureStorage storage = secureStorage;
+  String? userID = await storage.read(key: "userID");
+  String? sessionID = await storage.read(key: "sessionID");
 
   if (userID == null || sessionID == null) {
     return {};
@@ -38,8 +40,8 @@ Future<Map<String, String>> loadCredentials() async {
 /// The [type] parameter is required.
 /// This function does not return a value.
 Future<void> saveAuthProviderType(String type) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setString("authProviderType", type);
+  FlutterSecureStorage storage = secureStorage;
+  storage.write(key: "authProviderType", value: type);
 }
 
 /// Loads the type of the authentication provider from shared preferences.
@@ -47,16 +49,16 @@ Future<void> saveAuthProviderType(String type) async {
 /// Returns a Future that completes with the type of the authentication provider.
 /// If the type is not found, the Future completes with null.
 Future<String?> loadAuthProviderType() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.getString("authProviderType");
+  FlutterSecureStorage storage = secureStorage;
+  return storage.read(key: "authProviderType");
 }
 
 /// Deletes the user's credentials and the type of the authentication provider from shared preferences.
 ///
 /// This function does not return a value.
 Future<void> deleteCredentials() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.remove("userID");
-  await prefs.remove("sessionID");
-  await prefs.remove("authProviderType");
+  FlutterSecureStorage storage = secureStorage;
+  await storage.delete(key: "userID");
+  await storage.delete(key: "sessionID");
+  await storage.delete(key: "authProviderType");
 }

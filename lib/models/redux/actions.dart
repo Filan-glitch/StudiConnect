@@ -25,6 +25,7 @@ enum ActionTypes {
   updateSessionID,
   updateAuthProviderType,
   setProfileImageAvailable,
+  setConnectionState,
 }
 
 /// Class representing an action that can be dispatched in the application.

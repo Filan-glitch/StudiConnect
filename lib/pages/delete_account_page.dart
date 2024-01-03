@@ -23,7 +23,6 @@ class DeleteAccountPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return PageWrapper(
       title: "Konto löschen",
-      simpleDesign: true,
       body: StoreConnector<AppState, AppState>(
           converter: (store) => store.state,
           builder: (context, state) {

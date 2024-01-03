@@ -24,7 +24,6 @@ class UserInfoPage extends StatelessWidget {
 
     return PageWrapper(
       title: 'Nutzerinformationen',
-      simpleDesign: true,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -37,6 +37,7 @@ class Group {
   final DateTime? createdAt;
   final double? lat;
   final double? lon;
+  final bool imageExists;
 
   const Group({
     required this.id,
@@ -49,6 +50,7 @@ class Group {
     this.createdAt,
     this.lat,
     this.lon,
+    this.imageExists = false,
   });
 
   /// A factory constructor that creates a new instance of the [Group] class from a map.
@@ -74,6 +76,7 @@ class Group {
           : null,
       lat: data['lat'],
       lon: data['lon'],
+      imageExists: data['imageExists'] ?? false,
     );
   }
 
@@ -82,7 +85,7 @@ class Group {
   /// The [id], [title], [description], [module], [creator], [members], [joinRequests], [createdAt],
   /// [lat], and [lon] parameters are optional and represent the new values of the corresponding properties.
   /// If a parameter is not provided, the corresponding property will not be updated.
-  update({
+  Group update({
     String? id,
     String? title,
     String? description,
@@ -93,6 +96,7 @@ class Group {
     DateTime? createdAt,
     double? lat,
     double? lon,
+    bool? imageExists,
   }) {
     return Group(
       id: id ?? this.id,
@@ -105,6 +109,7 @@ class Group {
       createdAt: createdAt ?? this.createdAt,
       lat: lat ?? this.lat,
       lon: lon ?? this.lon,
+      imageExists: imageExists ?? this.imageExists,
     );
   }
 }

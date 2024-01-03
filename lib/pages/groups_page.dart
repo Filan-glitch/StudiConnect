@@ -5,7 +5,8 @@ library pages.groups_page;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-
+import 'package:share_plus/share_plus.dart';
+import 'package:studiconnect/constants.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/widgets/group_list_item.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
@@ -25,10 +26,10 @@ class GroupsPage extends StatefulWidget {
 ///
 /// This class contains the logic for handling the user's interactions with the page.
 class _GroupsPageState extends State<GroupsPage> {
-
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
+      type: PageType.complex,
       /// The body of the page is a list of the user's groups.
       /// If the user is not a member of any groups, they are presented with the option to create a group.
       body: Padding(
@@ -84,6 +85,13 @@ class _GroupsPageState extends State<GroupsPage> {
             setState(() {});
           },
         ),
+        ListTile(
+            leading: const Icon(Icons.share),
+            title: const Text('Studiconnect weiterempfehlen'),
+            onTap: () {
+              Share.share(
+                  'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=$appID');
+            }),
         ListTile(
           leading: const Icon(Icons.settings),
           title: const Text('Einstellungen'),

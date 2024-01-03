@@ -7,6 +7,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/models/group.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
@@ -54,6 +55,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return PageWrapper(
       title: 'Suche',
+      type: PageType.complex,
       overrideLoadingScreen: true,
       headerControls: [
         TextField(
@@ -110,6 +112,13 @@ class _SearchPageState extends State<SearchPage> {
       ],
       /// The menu actions include the option to navigate to the settings page.
       menuActions: [
+        ListTile(
+            leading: const Icon(Icons.share),
+            title: const Text('Studiconnect weiterempfehlen'),
+            onTap: () {
+              Share.share(
+                  'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=de.studiconnect.app');
+            }),
         ListTile(
           leading: const Icon(Icons.settings),
           title: const Text('Einstellungen'),

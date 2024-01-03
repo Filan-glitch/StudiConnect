@@ -26,3 +26,5 @@ const imprintURL = "https://studiconnect.janbellenberg.de/imprint";
 ///
 /// This constant is set to the URL of the privacy policy page on the production server.
 const privacyURL = "https://studiconnect.janbellenberg.de/privacy";
+
+const appID = ''; // TODO: Add App ID

@@ -3,6 +3,8 @@
 /// {@category SERVICES}
 library services.rest.api;
 
+import 'package:studiconnect/models/redux/actions.dart';
+import 'package:studiconnect/models/redux/store.dart';
 import 'package:studiconnect/services/errors/input_error.dart';
 import 'package:studiconnect/services/errors/internal_server_error.dart';
 import 'package:studiconnect/services/errors/not_found_exception.dart';
@@ -27,6 +29,12 @@ import 'package:studiconnect/services/errors/unauthorized_error.dart';
 void processHttpStatusCodes(int statusCode, {String? customMessage}) {
   if (statusCode < 100) {
     // If the status code is less than 100, throw a ConnectionException.
+    store.dispatch(
+      Action(
+        ActionTypes.setConnectionState,
+        payload: false,
+      ),
+    );
     throw ConnectionException(code: statusCode);
   } else if (statusCode == 401) {
     // If the status code is 401, throw an UnauthorizedException.

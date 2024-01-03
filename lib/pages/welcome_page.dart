@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:studiconnect/controllers/authentication.dart';
+import 'package:studiconnect/widgets/page_wrapper.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:studiconnect/constants.dart';
 
@@ -40,7 +41,9 @@ class _WelcomePageState extends State<WelcomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PageWrapper(
+      type: PageType.empty,
+      title: "Willkommen",
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
