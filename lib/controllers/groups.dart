@@ -3,6 +3,7 @@
 /// {@category CONTROLLERS}
 library controllers.groups;
 
+import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:studiconnect/models/group.dart';
