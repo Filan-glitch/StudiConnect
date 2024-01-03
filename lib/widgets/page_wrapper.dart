@@ -1,10 +1,13 @@
-import 'dart:async';
+/// This library contains the [PageWrapper] widget.
+///
+/// {@category WIDGETS}
+library widgets.page_wrapper;
 
+import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:oktoast/oktoast.dart';
-
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/pages/loading_page.dart';
 import 'package:studiconnect/pages/no_connectivity_page.dart';
@@ -17,6 +20,31 @@ enum PageType {
   simple,
   complex,
 }
+
+/// A widget that wraps the main content of a page.
+///
+/// This widget is a stateless widget that takes a title, body, bottom navigation bar,
+/// menu actions, header controls, padding, and a flag for simple design and loading screen override as input.
+/// It displays a Scaffold with an AppBar, body, and bottom navigation bar.
+/// The AppBar contains the title and an optional action menu.
+/// The body contains the main content of the page, wrapped in a Container with padding.
+///
+/// The [title] parameter is required and represents the title of the page.
+///
+/// The [body] parameter is required and represents the main content of the page.
+///
+/// The [bottomNavigationBar] parameter is optional and represents the bottom navigation bar of the page.
+///
+/// The [menuActions] parameter is optional and defaults to an empty list. It represents the actions in the action menu.
+///
+/// The [headerControls] parameter is optional and defaults to an empty list. It represents the controls in the header of the page.
+///
+/// The [simpleDesign] parameter is optional and defaults to false. If set to true, the page will have a simple design.
+///
+/// The [padding] parameter is optional and defaults to EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0).
+/// It represents the padding of the main content of the page.
+///
+/// The [overrideLoadingScreen] parameter is optional and defaults to false. If set to true, the loading screen will be overridden.
 
 class PageWrapper extends StatefulWidget {
   const PageWrapper({
@@ -219,6 +247,7 @@ class _PageWrapperState extends State<PageWrapper> {
     );
   }
 
+  /// Shows the action menu.
   void _showActionMenu(BuildContext context) {
     showModalBottomSheet(
       isScrollControlled: true,

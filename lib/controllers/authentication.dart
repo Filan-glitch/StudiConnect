@@ -1,5 +1,8 @@
+/// This library contains functions for authentication.
+///
+/// {@category CONTROLLERS}
+library controllers.authentication;
 import 'package:oktoast/oktoast.dart';
-
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/redux/actions.dart';
 import 'package:studiconnect/models/redux/store.dart';
@@ -9,6 +12,11 @@ import 'package:studiconnect/services/storage/credentials.dart' as storage;
 import 'package:studiconnect/controllers/api.dart';
 import 'package:studiconnect/controllers/user.dart';
 
+/// Loads the user's credentials from shared preferences.
+///
+/// If the credentials are not found, the function returns without doing anything.
+/// If the credentials are found, the function dispatches an action to update the session ID in the store,
+/// loads the user's information, and navigates to the home page.
 Future<void> loadCredentials() async {
   Map<String, String> credentials = await storage.loadCredentials();
 
@@ -37,6 +45,11 @@ Future<void> loadCredentials() async {
   );
 }
 
+/// Signs in a user with Google.
+///
+/// If the sign in is successful, the function dispatches an action to update the session ID in the store,
+/// loads the user's information, navigates to the home page, and saves the user's credentials in shared preferences.
+/// If the sign in is not successful, the function shows a toast with an error message.
 Future<void> signInWithGoogle() async {
   String? idToken = await firebase.signInWithGoogle();
 
@@ -77,6 +90,11 @@ Future<void> signInWithGoogle() async {
   storage.saveCredentials(userID, sessionID);
 }
 
+/// Signs in a user with email and password.
+///
+/// If the sign in is successful, the function dispatches an action to update the session ID in the store,
+/// loads the user's information, navigates to the home page, and saves the user's credentials in shared preferences.
+/// If the sign in is not successful, the function shows a toast with an error message.
 Future<void> signInWithEmailAndPassword(String email, String password) async {
   String? idToken = await firebase.signInWithEmailAndPassword(email, password);
 
@@ -117,6 +135,11 @@ Future<void> signInWithEmailAndPassword(String email, String password) async {
   storage.saveCredentials(userID, sessionID);
 }
 
+/// Signs up a user with email and password.
+///
+/// If the sign up is successful, the function dispatches an action to update the session ID in the store,
+/// loads the user's information, navigates to the home page, and saves the user's credentials in shared preferences.
+/// If the sign up is not successful, the function shows a toast with an error message.
 Future<void> signUpWithEmailAndPassword(String email, String password) async {
   String? idToken = await firebase.signUpWithEmailAndPassword(email, password);
 
@@ -157,6 +180,11 @@ Future<void> signUpWithEmailAndPassword(String email, String password) async {
   storage.saveCredentials(userID, sessionID);
 }
 
+/// Signs out the current user.
+///
+/// The function signs out the user from Firebase, logs out the user from the GraphQL service,
+/// dispatches an action to update the session ID in the store, navigates to the welcome page,
+/// and deletes the user's credentials from shared preferences.
 Future<void> signOut() async {
   await firebase.signOut();
   await runApiService(
@@ -179,12 +207,20 @@ Future<void> signOut() async {
   storage.deleteCredentials();
 }
 
+/// Sends a password reset email to the user.
+///
+/// The [email] parameter is required and represents the email of the user.
+/// The function sends a password reset email to the user and shows a toast with a success message.
 Future<void> triggerPasswordReset(String email) async {
   await firebase.sendPasswordResetEmail(email);
   showToast(
       "Ein Link zum Zurücksetzen des Passworts wurde an Ihre E-Mail gesendet.");
 }
 
+/// Updates the password of the current user.
+///
+/// The [oldPassword] and [newPassword] parameters are required and represent the old and new passwords of the user.
+/// The function updates the user's password and shows a toast with a success message.
 Future<void> updatePassword(String oldPassword, String newPassword) async {
   await firebase.updatePassword(oldPassword, newPassword);
   showToast("Passwort erfolgreich aktualisiert");

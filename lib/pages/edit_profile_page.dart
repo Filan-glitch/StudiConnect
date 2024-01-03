@@ -1,3 +1,8 @@
+/// This library contains the EditProfilePage widget.
+///
+/// {@category PAGES}
+library pages.edit_profile_page;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,9 +12,13 @@ import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/models/redux/store.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 import 'package:geocoding/geocoding.dart' as geo;
+import 'package:studiconnect/controllers/user.dart';
 
-import '../controllers/user.dart';
-
+/// A StatefulWidget that allows the user to edit their profile.
+///
+/// The page contains text fields for the user's username, major, university, bio, mobile number, and Discord username,
+/// as well as a button to select the user's location.
+/// The fields are pre-filled with the user's current data.
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key});
 
@@ -17,6 +26,9 @@ class EditProfilePage extends StatefulWidget {
   State<EditProfilePage> createState() => _EditProfilePage();
 }
 
+/// The state for the [EditProfilePage] widget.
+///
+/// This class contains the logic for editing the user's profile.
 class _EditProfilePage extends State<EditProfilePage> {
   final _formKey = GlobalKey<FormState>();
 
