@@ -9,7 +9,7 @@ import 'package:studiconnect/models/redux/store.dart';
 import 'package:studiconnect/models/user.dart';
 import 'package:studiconnect/services/graphql/search.dart' as search_service;
 import 'package:studiconnect/services/graphql/group.dart' as service;
-import 'package:studiconnect/services/rest/group_image.dart' as restService;
+import 'package:studiconnect/services/rest/group_image.dart' as rest_service;
 import 'package:studiconnect/controllers/api.dart';
 
 Future<void> searchGroups(String module, int radius) async {
@@ -181,7 +181,7 @@ Future<void> uploadGroupImage(String id, XFile file) async {
   Uint8List content = await file.readAsBytes();
 
   await runRestApi(
-    apiCall: () => restService.uploadGroupImage(id, content),
+    apiCall: () => rest_service.uploadGroupImage(id, content),
     parser: (result) => null,
   );
 
@@ -201,7 +201,7 @@ Future<void> uploadGroupImage(String id, XFile file) async {
 
 Future<void> deleteGroupImage(String id) async {
   await runRestApi(
-      apiCall: () => restService.deleteGroupImage(id),
+      apiCall: () => rest_service.deleteGroupImage(id),
       parser: (result) => null);
 
   store.dispatch(

@@ -1,10 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:auth_buttons/auth_buttons.dart'
-    show AuthButtonStyle, EmailAuthButton, GoogleAuthButton;
+    show AuthButtonStyle, EmailAuthButton;
 import 'package:studiconnect/controllers/authentication.dart';
-import 'package:studiconnect/main.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
 class LoginPage extends StatefulWidget {
@@ -18,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _emailButtonLoading = false;
-  bool _googleButtonLoading = false;
+  String _errorMessage = "";
 
   @override
   void dispose() {
@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
-        type: PageType.empty,
+        type: PageType.simple,
         title: "Anmelden",
         body: Center(
           child: Column(
@@ -66,17 +66,69 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
+              // Error Label, invisible if no error
+              Visibility(
+                visible: _errorMessage.isNotEmpty,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+                  child: Text(
+                    _errorMessage,
+                    style: const TextStyle(
+                      color: Colors.red,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ),
               const SizedBox(height: 30),
               EmailAuthButton(
                 onPressed: () async {
+                  if(_emailButtonLoading) return;
+
+                  if(_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+                    setState(() {
+                      _errorMessage = "Bitte fülle alle Felder aus.";
+                    });
+                    return;
+                  }
+
                   setState(() {
                     _emailButtonLoading = true;
                   });
 
-                  await signInWithEmailAndPassword(
-                    _emailController.text,
-                    _passwordController.text,
-                  );
+                  try {
+                    await signInWithEmailAndPassword(
+                      _emailController.text,
+                      _passwordController.text,
+                    );
+                  } on FirebaseAuthException catch (e) {
+                    final errorMessages = {
+                      'user-not-found': "Es existiert kein Nutzer mit dieser E-Mail.",
+                      'wrong-password': "Das Passwort ist falsch.",
+                      'invalid-email': "Die E-Mail ist ungültig.",
+                      'user-disabled': "Dieser Nutzer wurde deaktiviert.",
+                      'too-many-requests': "Zu viele Anfragen. Bitte versuche es später erneut.",
+                      'operation-not-allowed': "Diese Anmeldung ist nicht erlaubt.",
+                      'network-request-failed': "Keine Internetverbindung.",
+                      'invalid-credential': "Die Anmeldeinformationen sind ungültig.",
+                      'account-exists-with-different-credential': "Es existiert bereits ein Nutzer mit dieser E-Mail und einer anderen Anmeldemethode.",
+                      'invalid-verification-code': "Der Verifizierungscode ist ungültig.",
+                      'invalid-verification-id': "Die Verifizierungs-ID ist ungültig.",
+                      'invalid-action-code': "Der Aktionscode ist ungültig.",
+                    };
+
+                    setState(() {
+                      _errorMessage = errorMessages[e.code] ?? "${e.code}: ${e.message}";
+                      _emailButtonLoading = false;
+                    });
+                    return;
+                  } catch (e) {
+                    setState(() {
+                      _errorMessage = "Ein Fehler ist aufgetreten.";
+                      _emailButtonLoading = false;
+                    });
+                    return;
+                  }
 
                   setState(() {
                     _emailButtonLoading = false;
@@ -106,35 +158,6 @@ class _LoginPageState extends State<LoginPage> {
                         },
                     ),
                   ],
-                ),
-              ),
-              const SizedBox(height: 50),
-              GoogleAuthButton(
-                onPressed: () async {
-                  setState(() {
-                    _googleButtonLoading = true;
-                  });
-
-                  bool? isNewUser = await signInWithGoogle();
-
-                  setState(() {
-                    _googleButtonLoading = false;
-                  });
-
-                  if (isNewUser == true) {
-                    navigatorKey.currentState!.pushNamed('/edit-profile');
-                  }
-                },
-                themeMode: Theme.of(context).brightness == Brightness.light
-                    ? ThemeMode.light
-                    : ThemeMode.dark,
-                isLoading: _googleButtonLoading,
-                text: "Mit Google anmelden",
-                style: AuthButtonStyle(
-                  textStyle: TextStyle(
-                    fontFamily: GoogleFonts.roboto().fontFamily,
-                    color: Colors.black,
-                  ),
                 ),
               ),
             ],

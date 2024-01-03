@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -20,8 +21,7 @@ import 'package:studiconnect/pages/login_page.dart';
 import 'package:studiconnect/controllers/authentication.dart';
 import 'package:studiconnect/pages/home_page.dart';
 import 'package:studiconnect/pages/welcome_page.dart';
-
-import 'pages/delete_account_page.dart';
+import 'package:studiconnect/pages/delete_account_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,7 +32,9 @@ Future<void> main() async {
   // setup
   loadCredentials();
 
-  //await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+  if(kDebugMode) {
+    //await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+  }
 
   runApp(const MyApp());
 }

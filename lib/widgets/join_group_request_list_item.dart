@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
-import '../controllers/groups.dart';
-import '../models/group.dart';
-import '../models/user.dart';
+import 'package:studiconnect/constants.dart';
+import 'package:studiconnect/controllers/groups.dart';
+import 'package:studiconnect/models/group.dart';
+import 'package:studiconnect/models/user.dart';
 
 class JoinGroupRequestListItem extends StatefulWidget {
   const JoinGroupRequestListItem(

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geocoding/geocoding.dart' as geo;
-
 import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/dialogs/select_location_dialog.dart';
 import 'package:studiconnect/models/group.dart';

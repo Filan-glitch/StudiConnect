@@ -1,10 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-
 import 'package:studiconnect/constants.dart';
-
-import '../models/redux/store.dart';
-import '../models/redux/actions.dart' as redux;
+import 'package:studiconnect/models/redux/store.dart';
+import 'package:studiconnect/models/redux/actions.dart' as redux;
 
 enum Type { user, group }
 
