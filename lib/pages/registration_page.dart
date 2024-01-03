@@ -3,7 +3,9 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:auth_buttons/auth_buttons.dart'
     show AuthButtonStyle, EmailAuthButton;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:studiconnect/controllers/authentication.dart';
+import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
@@ -64,6 +66,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: TextField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
+                      autocorrect: false,
+                      textCapitalization: TextCapitalization.none,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Email',
@@ -132,13 +136,18 @@ class _RegisterPageState extends State<RegisterPage> {
                     themeMode: Theme.of(context).brightness == Brightness.light
                         ? ThemeMode.light
                         : ThemeMode.dark,
-                    // TODO: set null if not valid
-                    onPressed: () {
+                    onPressed: () async {
+                      if (_passwordController.text !=
+                          _passwordRepeatController.text) {
+                        showToast("Die Passwörter stimmen nicht überein");
+                        return;
+                      }
+
                       setState(() {
                         _emailButtonLoading = true;
                       });
 
-                      signUpWithEmailAndPassword(
+                      await signUpWithEmailAndPassword(
                         _emailController.text,
                         _passwordController.text,
                       );
@@ -146,7 +155,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       setState(() {
                         _emailButtonLoading = false;
                       });
-                      Navigator.pushNamed(context, "/further-registration");
+
+                      navigatorKey.currentState!.pushNamed('/edit-profile');
                     },
                     text: "Konto erstellen",
                     isLoading: _emailButtonLoading,

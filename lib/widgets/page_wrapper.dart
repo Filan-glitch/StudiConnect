@@ -80,7 +80,7 @@ class _PageWrapperState extends State<PageWrapper> {
 
         if (widget.type == PageType.empty) {
           return Scaffold(
-            body: OKToast(child: widget.body),
+            body: widget.body,
           );
         }
 
@@ -206,14 +206,12 @@ class _PageWrapperState extends State<PageWrapper> {
           );
         }
 
-        return OKToast(
-          child: Stack(
-            children: [
-              mainContent,
-              if (state.loading && !widget.overrideLoadingScreen)
-                const LoadingPage(),
-            ],
-          ),
+        return Stack(
+          children: [
+            mainContent,
+            if (state.loading && !widget.overrideLoadingScreen)
+              const LoadingPage(),
+          ],
         );
       },
     );

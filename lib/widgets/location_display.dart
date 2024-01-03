@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 
@@ -33,13 +35,15 @@ class _LocationDisplayState extends State<LocationDisplay> {
 
   Future<void> _getAddress() async {
     try {
-      final List<geo.Placemark> placemarks = await geo.placemarkFromCoordinates(
-          widget.lat, widget.lon);
+      final List<geo.Placemark> placemarks =
+          await geo.placemarkFromCoordinates(widget.lat, widget.lon);
       final geo.Placemark place = placemarks[0];
       setState(() {
-        _address = '${place.street ?? ""}, ${place.postalCode ?? ""} ${place.locality ?? ""}';
+        _address =
+            '${place.street ?? ""}, ${place.postalCode ?? ""} ${place.locality ?? ""}';
       });
     } catch (e) {
+      log(e.toString());
       setState(() {
         _address = 'Keine Adresse gefunden';
       });

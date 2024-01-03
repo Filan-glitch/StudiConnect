@@ -202,9 +202,10 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                           lon: _selectedLocation?.longitude,
                         );
 
-                      // Update the group data in store
-                      store.dispatch(redux.Action(redux.ActionTypes.updateGroup,
-                          payload: updatedGroup));
+                        // Update the group data in store
+                        store.dispatch(redux.Action(
+                            redux.ActionTypes.updateGroup,
+                            payload: updatedGroup));
 
                         // Pop the page and pass the updated group data
                         Navigator.of(context).pop(updatedGroup);
@@ -245,23 +246,24 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                         ),
                       ),
                     ),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      final ImagePicker picker = ImagePicker();
-                      picker
-                          .pickImage(source: ImageSource.gallery)
-                          .then((value) {
-                        if (value != null) {
-                          uploadGroupImage(group?.id ?? "", value);
-                        }
-                      });
-                    },
-                    icon: const Icon(Icons.upload),
-                    label: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 5.0),
-                      child: Text("Gruppenbild\nhochladen"),
+                  if (group?.id != null)
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        final ImagePicker picker = ImagePicker();
+                        picker
+                            .pickImage(source: ImageSource.gallery)
+                            .then((value) {
+                          if (value != null) {
+                            uploadGroupImage(group?.id ?? "", value);
+                          }
+                        });
+                      },
+                      icon: const Icon(Icons.upload),
+                      label: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 5.0),
+                        child: Text("Gruppenbild\nhochladen"),
+                      ),
                     ),
-                  ),
                   if (group?.imageExists ?? false)
                     ElevatedButton.icon(
                       onPressed: () {

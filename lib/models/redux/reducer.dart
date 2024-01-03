@@ -5,6 +5,8 @@ AppState appReducer(AppState state, dynamic action) {
   if (action is! Action) return state;
 
   switch (action.type) {
+    case ActionTypes.clear:
+      state = AppState();
     case ActionTypes.startTask:
       state.runningTasks++;
     case ActionTypes.stopTask:
@@ -23,13 +25,15 @@ AppState appReducer(AppState state, dynamic action) {
         discord: action.payload['discord'],
       );
     case ActionTypes.updateGroup:
-      state.user?.groups?.firstWhere((element) => element.id == action.payload['id']).update(
-        title: action.payload['title'],
-        description: action.payload['description'],
-        module: action.payload['module'],
-        lat: action.payload['lat'],
-        lon: action.payload['lon'],
-      );
+      state.user?.groups
+          ?.firstWhere((element) => element.id == action.payload['id'])
+          .update(
+            title: action.payload['title'],
+            description: action.payload['description'],
+            module: action.payload['module'],
+            lat: action.payload['lat'],
+            lon: action.payload['lon'],
+          );
     case ActionTypes.updateSessionID:
       state.sessionID = action.payload;
     case ActionTypes.updateSearchResults:

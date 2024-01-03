@@ -62,6 +62,11 @@ Future<bool> loadUserInfo() async {
     ),
   );
 
+  store.dispatch(Action(
+    ActionTypes.setProfileImageAvailable,
+    payload: await restService.profileImageAvailable(),
+  ));
+
   return true;
 }
 

@@ -208,6 +208,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  // TODO: switch to widget
                                   FutureBuilder(
                                     future: geo.placemarkFromCoordinates(
                                       _selectedLocation.latitude,
@@ -234,7 +235,16 @@ class _EditProfilePage extends State<EditProfilePage> {
                                           ),
                                         );
                                       } else {
-                                        return Container();
+                                        return Text(
+                                          "Standort festlegen",
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall
+                                                ?.color,
+                                            fontSize: 16.0,
+                                          ),
+                                        );
                                       }
                                     },
                                   ),

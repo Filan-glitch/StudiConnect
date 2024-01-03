@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:auth_buttons/auth_buttons.dart'
     show AuthButtonStyle, EmailAuthButton, GoogleAuthButton;
 import 'package:studiconnect/controllers/authentication.dart';
+import 'package:studiconnect/main.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
 class LoginPage extends StatefulWidget {
@@ -45,6 +46,8 @@ class _LoginPageState extends State<LoginPage> {
                 child: TextField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
+                  autocorrect: false,
+                  textCapitalization: TextCapitalization.none,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'E-Mail',
@@ -112,11 +115,15 @@ class _LoginPageState extends State<LoginPage> {
                     _googleButtonLoading = true;
                   });
 
-                  await signInWithGoogle();
+                  bool? isNewUser = await signInWithGoogle();
 
                   setState(() {
                     _googleButtonLoading = false;
                   });
+
+                  if (isNewUser == true) {
+                    navigatorKey.currentState!.pushNamed('/edit-profile');
+                  }
                 },
                 themeMode: Theme.of(context).brightness == Brightness.light
                     ? ThemeMode.light
