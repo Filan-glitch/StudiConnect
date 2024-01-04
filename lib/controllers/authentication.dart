@@ -157,6 +157,38 @@ Future<void> signUpWithEmailAndPassword(String email, String password) async {
   );
 }
 
+Future<void> signInAsGuest() async {
+  Map<String, dynamic>? session = await runApiService(
+    apiCall: () => service.loginAsGuest(),
+    parser: (result) => result["loginAsGuest"],
+  );
+
+  if (session == null) {
+    showToast("Anmeldung fehlgeschlagen");
+    return;
+  }
+
+  String sessionID = session["sessionID"];
+  String userID = session["user"];
+
+  store.dispatch(
+    Action(
+      ActionTypes.updateSessionID,
+      payload: sessionID,
+    ),
+  );
+
+  await storage.saveAuthProviderType("guest");
+  await storage.saveCredentials(userID, sessionID);
+
+  loadUserInfo();
+
+  navigatorKey.currentState!.pushNamedAndRemoveUntil(
+    '/home',
+    (route) => false,
+  );
+}
+
 Future<void> signOut() async {
   await firebase.signOut();
   await runApiService(

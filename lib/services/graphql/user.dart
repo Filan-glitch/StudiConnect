@@ -137,7 +137,7 @@ Future<Map<String, dynamic>?> deleteAccount() {
   return GraphQL.mutate(
     MutationOptions(
       document: gql("""
-      mutation {
+      mutation DeleteAccount {
         deleteAccount
       }
 """),

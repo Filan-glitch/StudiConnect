@@ -64,6 +64,9 @@ Future<Map?> signInWithGoogle() async {
 }
 
 Future<void> signOut() async {
+  if (FirebaseAuth.instance.currentUser == null) {
+    return;
+  }
   await FirebaseAuth.instance.signOut();
   await GoogleSignIn().signOut();
 }
