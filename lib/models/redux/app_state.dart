@@ -3,6 +3,8 @@ import 'package:studiconnect/models/user.dart';
 
 class AppState {
   int runningTasks = 0;
+
+  bool setupDone = false;
   bool get loading => runningTasks > 0;
 
   bool connected = true;

@@ -11,6 +11,8 @@ AppState appReducer(AppState state, dynamic action) {
       state.runningTasks++;
     case ActionTypes.stopTask:
       state.runningTasks--;
+    case ActionTypes.setupDone:
+      state.setupDone = true;
     case ActionTypes.setUser:
       state.user = action.payload;
     case ActionTypes.updateUser:
