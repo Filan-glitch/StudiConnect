@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
 
         return Scaffold(
           extendBody: true,
-          bottomNavigationBar: CurvedNavigationBar(
+          bottomNavigationBar: (!state.loading) ? CurvedNavigationBar(
             backgroundColor: Colors.transparent,
             color: Theme.of(context).colorScheme.primary,
             items: const <Widget>[
@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePage> {
                 _selectedPage = index;
               });
             },
-          ),
+          ) : null,
           body: page,
         );
       },

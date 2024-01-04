@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:studiconnect/dialogs/remove_member_dialog.dart';
 import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/widgets/avatar_picture.dart';
@@ -120,8 +121,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                         child: Text(
                           group?.title ?? "",
                           style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
                           ),
                         ),
                       ),
@@ -186,8 +186,10 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                                 ),
                               ),
                               LocationDisplay(
-                                lat: group?.lat ?? 0,
-                                lon: group?.lon ?? 0,
+                                position: LatLng(
+                                    group?.lat ?? 0,
+                                    group?.lon ?? 0,
+                                ),
                               ),
                               Padding(
                                 padding:
@@ -246,7 +248,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                             ],
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
           );

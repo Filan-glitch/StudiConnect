@@ -11,7 +11,7 @@ Future<T?> runApiService<T>({
 }) async {
   // Loading Screen
   if (showLoading) {
-    store.dispatch(redux.Action(redux.ActionTypes.startTask, payload: null));
+    store.dispatch(redux.Action(redux.ActionTypes.startTask));
   }
 
   // API Call
@@ -46,7 +46,7 @@ Future<T?> runApiService<T>({
   }
 
   if (showLoading) {
-    store.dispatch(redux.Action(redux.ActionTypes.stopTask, payload: null));
+    store.dispatch(redux.Action(redux.ActionTypes.stopTask));
   }
 
   return parsed;
@@ -59,7 +59,7 @@ Future<T?> runRestApi<T>({
 }) async {
   // Loading Screen
   if (showLoading) {
-    store.dispatch(redux.Action(redux.ActionTypes.startTask, payload: null));
+    store.dispatch(redux.Action(redux.ActionTypes.startTask));
   }
 
   // API Call
@@ -94,7 +94,7 @@ Future<T?> runRestApi<T>({
   }
 
   if (showLoading) {
-    store.dispatch(redux.Action(redux.ActionTypes.stopTask, payload: null));
+    store.dispatch(redux.Action(redux.ActionTypes.stopTask));
   }
 
   return parsed;
