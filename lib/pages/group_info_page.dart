@@ -124,51 +124,6 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                             fontSize: 16,
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20),
-                          child: Text(
-                            'Beschreibung',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              decorationColor:
-                                  Theme.of(context).textTheme.bodySmall?.color,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          group?.description ?? "",
-                          style: const TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20),
-                          child: Text(
-                            'Treffpunkt',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              decorationColor:
-                                  Theme.of(context).textTheme.bodySmall?.color,
-                            ),
-                          ),
-                        ),
-                        LocationDisplay(
-                            position: LatLng(group?.lat ?? 0, group?.lon ?? 0),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20, bottom: 10),
-                          child: Text(
-                            "${group?.members?.length ?? 0} Mitglieder",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              decorationColor:
-                                  Theme.of(context).textTheme.bodySmall?.color,
-                            ),
-                          ),
-                        ),
                       ),
                       Expanded(
                         child: Padding(
@@ -231,8 +186,10 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                                 ),
                               ),
                               LocationDisplay(
-                                lat: group?.lat ?? 0,
-                                lon: group?.lon ?? 0,
+                                position: LatLng(
+                                    group?.lat ?? 0,
+                                    group?.lon ?? 0,
+                                ),
                               ),
                               Padding(
                                 padding:
@@ -291,7 +248,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                             ],
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
           );

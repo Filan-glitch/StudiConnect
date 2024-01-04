@@ -13,6 +13,7 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return PageWrapper(
       title: "Einstellungen",
+      showLoading: false,
       body: SizedBox(
         width: double.infinity,
         child: SingleChildScrollView(

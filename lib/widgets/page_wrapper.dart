@@ -32,6 +32,7 @@ class PageWrapper extends StatefulWidget {
       top: 20.0,
     ),
     this.overrideLoadingScreen = false,
+    this.showLoading = true,
     super.key,
   });
 
@@ -43,6 +44,7 @@ class PageWrapper extends StatefulWidget {
   final PageType type;
   final EdgeInsets padding;
   final bool overrideLoadingScreen;
+  final bool showLoading;
 
   @override
   State<PageWrapper> createState() => _PageWrapperState();
@@ -209,7 +211,7 @@ class _PageWrapperState extends State<PageWrapper> {
         return Stack(
           children: [
             mainContent,
-            if (state.loading && !widget.overrideLoadingScreen)
+            if (state.loading && !widget.overrideLoadingScreen && widget.showLoading)
               const LoadingPage(),
           ],
         );
