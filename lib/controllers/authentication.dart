@@ -37,12 +37,14 @@ Future<void> loadCredentials() async {
   );
 }
 
-Future<void> signInWithGoogle() async {
-  String? idToken = await firebase.signInWithGoogle();
+Future<bool?> signInWithGoogle() async {
+  Map? result = await firebase.signInWithGoogle();
+  String? idToken = result?["idToken"];
+  bool? isNewUser = result?["newUser"];
 
   if (idToken == null) {
     showToast("Anmeldung mit Google fehlgeschlagen");
-    return;
+    return null;
   }
 
   Map<String, dynamic>? session = await runApiService(
@@ -52,7 +54,7 @@ Future<void> signInWithGoogle() async {
 
   if (session == null) {
     showToast("Anmeldung mit Google fehlgeschlagen");
-    return;
+    return null;
   }
 
   String sessionID = session["sessionID"];
@@ -66,6 +68,7 @@ Future<void> signInWithGoogle() async {
   );
 
   await storage.saveAuthProviderType("google");
+  await storage.saveCredentials(userID, sessionID);
 
   loadUserInfo();
 
@@ -74,7 +77,7 @@ Future<void> signInWithGoogle() async {
     (route) => false,
   );
 
-  storage.saveCredentials(userID, sessionID);
+  return isNewUser;
 }
 
 Future<void> signInWithEmailAndPassword(String email, String password) async {
@@ -96,7 +99,7 @@ Future<void> signInWithEmailAndPassword(String email, String password) async {
   }
 
   String sessionID = session["sessionID"];
-  String userID = session["sessionID"];
+  String userID = session["user"];
 
   store.dispatch(
     Action(
@@ -106,15 +109,13 @@ Future<void> signInWithEmailAndPassword(String email, String password) async {
   );
 
   await storage.saveAuthProviderType("email");
-
+  await storage.saveCredentials(userID, sessionID);
   loadUserInfo();
 
   navigatorKey.currentState!.pushNamedAndRemoveUntil(
     '/home',
     (route) => false,
   );
-
-  storage.saveCredentials(userID, sessionID);
 }
 
 Future<void> signUpWithEmailAndPassword(String email, String password) async {
@@ -136,7 +137,7 @@ Future<void> signUpWithEmailAndPassword(String email, String password) async {
   }
 
   String sessionID = session["sessionID"];
-  String userID = session["sessionID"];
+  String userID = session["user"];
 
   store.dispatch(
     Action(
@@ -146,6 +147,7 @@ Future<void> signUpWithEmailAndPassword(String email, String password) async {
   );
 
   await storage.saveAuthProviderType("email");
+  await storage.saveCredentials(userID, sessionID);
 
   loadUserInfo();
 
@@ -153,8 +155,6 @@ Future<void> signUpWithEmailAndPassword(String email, String password) async {
     '/home',
     (route) => false,
   );
-
-  storage.saveCredentials(userID, sessionID);
 }
 
 Future<void> signOut() async {
@@ -166,8 +166,7 @@ Future<void> signOut() async {
 
   store.dispatch(
     Action(
-      ActionTypes.updateSessionID,
-      payload: null,
+      ActionTypes.clear,
     ),
   );
 

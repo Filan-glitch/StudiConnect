@@ -35,7 +35,7 @@ Future<void> triggerPasswordReset(String email) async {
   await auth.sendPasswordResetEmail(email: email);
 }
 
-Future<String?> signInWithGoogle() async {
+Future<Map?> signInWithGoogle() async {
   FirebaseAuth auth = FirebaseAuth.instance;
   UserCredential? userCredential;
 
@@ -57,7 +57,10 @@ Future<String?> signInWithGoogle() async {
     return null;
   }
 
-  return userCredential.user?.getIdToken();
+  return {
+    "idToken": await userCredential.user?.getIdToken(),
+    "newUser": userCredential.additionalUserInfo?.isNewUser,
+  };
 }
 
 Future<void> signOut() async {

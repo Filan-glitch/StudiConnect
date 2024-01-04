@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:studiconnect/dialogs/dialog_wrapper.dart';
 
-import '../controllers/groups.dart';
-import '../models/user.dart';
+import 'package:studiconnect/controllers/groups.dart';
+import 'package:studiconnect/models/user.dart';
 
 class RemoveMemberDialog extends StatelessWidget {
   const RemoveMemberDialog({
