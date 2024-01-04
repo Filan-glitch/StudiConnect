@@ -31,6 +31,8 @@ class _EditProfilePage extends State<EditProfilePage> {
   bool? _serviceEnabled;
   LocationPermission? _permission;
 
+  UniqueKey _locationKey = UniqueKey();
+
   @override
   void initState() {
     super.initState();
@@ -72,14 +74,15 @@ class _EditProfilePage extends State<EditProfilePage> {
     );
 
     determinePosition().then(
-               (value) async {
-      setState(() {
-        _selectedLocation = LatLng(value.latitude, value.longitude);
-      });
-    },
+      (value) async {
+        setState(() {
+          _selectedLocation = LatLng(value.latitude, value.longitude);
+          _locationKey = UniqueKey();
+        });
+      },
       onError: (error) {
         _selectedLocation = const LatLng(0, 0);
-        if(error.toString() == "Location services are disabled.") {
+        if (error.toString() == "Location services are disabled.") {
           setState(() {
             _serviceEnabled = false;
           });
@@ -87,7 +90,8 @@ class _EditProfilePage extends State<EditProfilePage> {
           setState(() {
             _permission = LocationPermission.denied;
           });
-        } else if (error.toString() == "Location permissions are permanently denied, we cannot request permissions.") {
+        } else if (error.toString() ==
+            "Location permissions are permanently denied, we cannot request permissions.") {
           setState(() {
             _permission = LocationPermission.deniedForever;
           });
@@ -201,6 +205,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                       top: 20.0,
                     ),
                     child: LocationDisplay(
+                      key: _locationKey,
                       position: _selectedLocation ?? const LatLng(0, 0),
                       serviceEnabled: _serviceEnabled,
                       permission: _permission,
@@ -305,7 +310,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                           child: ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
-                              Theme.of(context).colorScheme.background,
+                                  Theme.of(context).colorScheme.background,
                               side: const BorderSide(
                                 color: Colors.red,
                                 width: 2.0,
