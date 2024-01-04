@@ -16,7 +16,8 @@ class GraphQL {
     final httpLink = HttpLink(
       '$backendURL/api/graphql',
       defaultHeaders: {
-        "Cookies": "session: ${store.state.sessionID}",
+        if (store.state.sessionID != null)
+          "Cookie": "session=${store.state.sessionID}",
       },
     );
 

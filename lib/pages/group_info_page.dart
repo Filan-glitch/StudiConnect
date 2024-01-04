@@ -39,7 +39,6 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
         builder: (context, state) {
           return PageWrapper(
             title: "Gruppenbeschreibung",
-            simpleDesign: true,
             menuActions: [
               if (state.user?.id == group?.creator?.id)
                 ListTile(
@@ -47,9 +46,9 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                   title: const Text('Beitrittsanfragen'),
                   onTap: () {
                     Navigator.pushNamed(
-                        context,
-                        '/join-group-requests',
-                        arguments: group?.joinRequests ?? []
+                      context,
+                      '/join-group-requests',
+                      arguments: group?.id ?? "",
                     );
                   },
                 ),
@@ -59,10 +58,8 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                   title: const Text('Gruppe bearbeiten'),
                   onTap: () async {
                     final updatedGroup = await Navigator.pushNamed(
-                        context,
-                        '/create-and-edit-group',
-                        arguments: group
-                    );
+                        context, '/create-and-edit-group',
+                        arguments: group);
 
                     // If the group data is updated, update the state
                     if (updatedGroup != null) {
@@ -104,49 +101,25 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                 },
               ),
             ],
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 25, bottom: 10),
-                    child: AvatarPicture(
-                      id: group?.id,
-                      type: Type.group,
-                      radius: 65,
-                      loadingCircleStrokeWidth: 5.0,
-                    ),
-                  ),
-                ),
-                Center(
-                  child: Text(
-                    group?.title ?? "",
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20),
-                          child: Text(
-                            'Modul',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              decorationColor:
-                                  Theme.of(context).textTheme.bodySmall?.color,
-                            ),
+            body: group == null
+                ? Container()
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 25, bottom: 10),
+                          child: AvatarPicture(
+                            id: group?.id,
+                            type: Type.group,
+                            radius: 65,
+                            loadingCircleStrokeWidth: 5.0,
                           ),
                         ),
-                        Text(
-                          group?.module ?? "",
+                      ),
+                      Center(
+                        child: Text(
+                          group?.title ?? "",
                           style: const TextStyle(
                             fontSize: 16,
                           ),
@@ -196,49 +169,131 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                             ),
                           ),
                         ),
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount: (group?.members?.length ?? 0),
-                            itemBuilder: (context, index) {
-                              final user = group?.members?[index];
-                              if (user == null) return Container();
-
-                              return ListTile(
-                                onLongPress: () {
-                                  if (user.id == state.user?.id) return;
-
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => RemoveMemberDialog(
-                                      user: user,
-                                      groupID: group!.id,
-                                    ),
-                                  );
-                                },
-                                onTap: () {
-                                  // NamedRoute pushen
-                                  Navigator.pushNamed(context, "/user-info",
-                                      arguments: user);
-                                },
-                                leading: AvatarPicture(
-                                  id: user.id,
-                                  type: Type.user,
-                                  radius: 20,
-                                  loadingCircleStrokeWidth: 3.5,
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 20),
+                                child: Text(
+                                  'Modul',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    decorationColor: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.color,
+                                  ),
                                 ),
-                                title: Text(
-                                    "${user.username ?? "Unbekannt"} ${user.id == group?.creator?.id ? "(Gruppenleiter)" : ""}",
+                              ),
+                              Text(
+                                group?.module ?? "",
+                                style: const TextStyle(
+                                  fontSize: 16,
                                 ),
-                              );
-                            },
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 20),
+                                child: Text(
+                                  'Beschreibung',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    decorationColor: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.color,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                group?.description ?? "",
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 20),
+                                child: Text(
+                                  'Treffpunkt',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    decorationColor: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.color,
+                                  ),
+                                ),
+                              ),
+                              LocationDisplay(
+                                lat: group?.lat ?? 0,
+                                lon: group?.lon ?? 0,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 20, bottom: 10),
+                                child: Text(
+                                  "${group?.members?.length ?? 0} Mitglieder",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    decorationColor: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.color,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: ListView.builder(
+                                  itemCount: (group?.members?.length ?? 0),
+                                  itemBuilder: (context, index) {
+                                    final user = group?.members?[index];
+                                    if (user == null) return Container();
+
+                                    return ListTile(
+                                      onLongPress: () {
+                                        if (user.id == state.user?.id) return;
+
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) =>
+                                              RemoveMemberDialog(
+                                            user: user,
+                                            groupID: group!.id,
+                                          ),
+                                        );
+                                      },
+                                      onTap: () {
+                                        // NamedRoute pushen
+                                        Navigator.pushNamed(
+                                            context, "/user-info",
+                                            arguments: user);
+                                      },
+                                      leading: AvatarPicture(
+                                        id: user.id,
+                                        type: Type.user,
+                                        radius: 20,
+                                        loadingCircleStrokeWidth: 3.5,
+                                      ),
+                                      title: Text(
+                                        "${user.username ?? "Unbekannt"} ${user.id == group?.creator?.id ? "(Gruppenleiter)" : ""}",
+                                      ),
+                                    );
+                                  },
+                                ),
+                              )
+                            ],
                           ),
-                        )
-                      ],
-                    ),
+                        ),
+                      )
+                    ],
                   ),
-                )
-              ],
-            ),
           );
         });
   }

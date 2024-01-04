@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
-import '../models/redux/app_state.dart';
-import '../widgets/join_group_request_list_item.dart';
-import '../widgets/page_wrapper.dart';
+import 'package:studiconnect/models/redux/app_state.dart';
+import 'package:studiconnect/widgets/join_group_request_list_item.dart';
+import 'package:studiconnect/widgets/page_wrapper.dart';
 
 class JoinGroupRequestsPage extends StatelessWidget {
   const JoinGroupRequestsPage({super.key});
@@ -22,7 +22,6 @@ class JoinGroupRequestsPage extends StatelessWidget {
         if ((group?.joinRequests ?? []).isEmpty) {
           return const PageWrapper(
             title: 'Anfragen',
-            simpleDesign: true,
             body: Center(
               child: Text('Keine Anfragen'),
             ),
@@ -31,7 +30,6 @@ class JoinGroupRequestsPage extends StatelessWidget {
 
         return PageWrapper(
           title: 'Anfragen',
-          simpleDesign: true,
           body: ListView.builder(
             itemCount: group!.joinRequests?.length ?? 0,
             itemBuilder: (context, index) {

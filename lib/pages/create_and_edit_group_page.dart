@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geocoding/geocoding.dart' as geo;
-
 import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/dialogs/select_location_dialog.dart';
 import 'package:studiconnect/models/group.dart';
@@ -47,7 +46,6 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
-      simpleDesign: true,
       padding: const EdgeInsets.only(top: 20.0),
       title: group?.id == null ? "Gruppe erstellen" : "Gruppe bearbeiten",
       body: SingleChildScrollView(
@@ -247,23 +245,24 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                         ),
                       ),
                     ),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      final ImagePicker picker = ImagePicker();
-                      picker
-                          .pickImage(source: ImageSource.gallery)
-                          .then((value) {
-                        if (value != null) {
-                          uploadGroupImage(group?.id ?? "", value);
-                        }
-                      });
-                    },
-                    icon: const Icon(Icons.upload),
-                    label: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 5.0),
-                      child: Text("Gruppenbild\nhochladen"),
+                  if (group?.id != null)
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        final ImagePicker picker = ImagePicker();
+                        picker
+                            .pickImage(source: ImageSource.gallery)
+                            .then((value) {
+                          if (value != null) {
+                            uploadGroupImage(group?.id ?? "", value);
+                          }
+                        });
+                      },
+                      icon: const Icon(Icons.upload),
+                      label: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 5.0),
+                        child: Text("Gruppenbild\nhochladen"),
+                      ),
                     ),
-                  ),
                   if (group?.imageExists ?? false)
                     ElevatedButton.icon(
                       onPressed: () {

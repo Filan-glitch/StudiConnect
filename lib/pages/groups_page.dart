@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-
+import 'package:share_plus/share_plus.dart';
+import 'package:studiconnect/constants.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/widgets/group_list_item.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
@@ -13,10 +14,10 @@ class GroupsPage extends StatefulWidget {
 }
 
 class _GroupsPageState extends State<GroupsPage> {
-
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
+      type: PageType.complex,
       body: Padding(
         padding: const EdgeInsets.only(bottom: 100),
         child: StoreConnector<AppState, AppState>(
@@ -69,6 +70,13 @@ class _GroupsPageState extends State<GroupsPage> {
             setState(() {});
           },
         ),
+        ListTile(
+            leading: const Icon(Icons.share),
+            title: const Text('Studiconnect weiterempfehlen'),
+            onTap: () {
+              Share.share(
+                  'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=$appID');
+            }),
         ListTile(
           leading: const Icon(Icons.settings),
           title: const Text('Einstellungen'),

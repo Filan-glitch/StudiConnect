@@ -25,7 +25,6 @@ class _PasswordChangePageState extends State<PasswordChangePage> {
 
     return PageWrapper(
         title: "Passwort ändern",
-        simpleDesign: true,
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.only(

@@ -1,4 +1,5 @@
 enum ActionTypes {
+  clear,
   startTask,
   stopTask,
   setUser,
@@ -8,6 +9,7 @@ enum ActionTypes {
   updateSessionID,
   updateAuthProviderType,
   setProfileImageAvailable,
+  setConnectionState,
 }
 
 class Action {

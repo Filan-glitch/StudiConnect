@@ -10,7 +10,7 @@ Future<void> uploadGroupImage(String id, Uint8List content) async {
     Uri.parse("$backendURL/api/group/$id/image"),
     headers: {
       "Content-Type": "image/jpg",
-      "Cookies": "session=${store.state.sessionID}",
+      "Cookie": "session=${store.state.sessionID}",
     },
     body: content,
   );
@@ -22,7 +22,7 @@ Future<void> deleteGroupImage(String id) async {
   http.Response response = await http.delete(
     Uri.parse("$backendURL/api/group/$id/image"),
     headers: {
-      "Cookies": "session=${store.state.sessionID}",
+      "Cookie": "session=${store.state.sessionID}",
     },
   );
 
