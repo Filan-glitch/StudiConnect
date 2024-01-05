@@ -26,6 +26,8 @@ import 'package:studiconnect/models/user.dart';
 /// The [createdAt] parameter is optional and represents the creation date of the group.
 ///
 /// The [lat] and [lon] parameters are optional and represent the latitude and longitude of the group.
+///
+/// The [imageExists] parameter is optional and represents whether the group has an image.
 class Group {
   final String id;
   final String? title;
@@ -39,6 +41,9 @@ class Group {
   final double? lon;
   final bool imageExists;
 
+  /// Constructor for the [Group] class.
+  ///
+  /// Takes in the required and optional parameters and initializes the group with these values.
   const Group({
     required this.id,
     this.title,
@@ -83,7 +88,7 @@ class Group {
   /// A method that updates the properties of the group.
   ///
   /// The [id], [title], [description], [module], [creator], [members], [joinRequests], [createdAt],
-  /// [lat], and [lon] parameters are optional and represent the new values of the corresponding properties.
+  /// [lat], [lon], and [imageExists] parameters are optional and represent the new values of the corresponding properties.
   /// If a parameter is not provided, the corresponding property will not be updated.
   Group update({
     String? id,

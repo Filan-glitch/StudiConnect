@@ -2,6 +2,7 @@
 ///
 /// {@category SERVICES}
 library services.rest.profile_image;
+
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:studiconnect/constants.dart';

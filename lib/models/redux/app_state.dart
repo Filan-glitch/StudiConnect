@@ -17,6 +17,8 @@ import 'package:studiconnect/models/user.dart';
 /// The [loading] property is a getter that returns true if there are any running tasks,
 /// and false otherwise.
 ///
+/// The [connected] property represents whether the application is connected to the internet.
+///
 /// The [sessionID] property represents the session ID of the current user. It is nullable.
 ///
 /// The [authProviderType] property represents the type of the auth provider. It is nullable.

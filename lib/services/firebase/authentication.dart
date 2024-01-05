@@ -1,13 +1,14 @@
-/// This library contains the authentication services for the application.
+/// This library provides authentication services for the application using Firebase.
 ///
 /// {@category SERVICES}
 library services.firebase.authentication;
+
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:oktoast/oktoast.dart';
 
-/// Signs in a user with email and password.
+/// Signs in a user with the provided email and password.
 ///
 /// The [email] and [password] parameters are required.
 /// Returns a Future that completes with the user's ID token if the sign in was successful.
@@ -24,7 +25,7 @@ Future<String?> signInWithEmailAndPassword(
   return userCredential.user?.getIdToken();
 }
 
-/// Signs up a user with email and password.
+/// Signs up a user with the provided email and password.
 ///
 /// The [email] and [password] parameters are required.
 /// Returns a Future that completes with the user's ID token if the sign up was successful.

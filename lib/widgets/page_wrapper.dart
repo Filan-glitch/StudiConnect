@@ -1,4 +1,4 @@
-/// This library contains the [PageWrapper] widget.
+/// This library contains the [PageWrapper] widget and the [PageType] enum.
 ///
 /// {@category WIDGETS}
 library widgets.page_wrapper;
@@ -15,6 +15,7 @@ import 'package:studiconnect/widgets/action_menu.dart';
 import 'package:studiconnect/models/redux/actions.dart' as redux;
 import 'package:studiconnect/models/redux/store.dart';
 
+/// Enum representing the type of page.
 enum PageType {
   empty,
   simple,
@@ -45,7 +46,6 @@ enum PageType {
 /// It represents the padding of the main content of the page.
 ///
 /// The [overrideLoadingScreen] parameter is optional and defaults to false. If set to true, the loading screen will be overridden.
-
 class PageWrapper extends StatefulWidget {
   const PageWrapper({
     required this.title,

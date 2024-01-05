@@ -15,6 +15,7 @@ library models.redux.actions;
 /// - updateSessionID: Represents the action of updating the session ID.
 /// - updateAuthProviderType: Represents the action of updating the auth provider type.
 /// - setProfileImageAvailable: Represents the action of setting the profile image availability.
+/// - setConnectionState: Represents the action of setting the connection state.
 enum ActionTypes {
   startTask,
   stopTask,

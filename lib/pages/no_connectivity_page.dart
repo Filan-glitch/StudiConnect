@@ -1,8 +1,24 @@
+/// This file contains the [NoConnectivityPage] widget.
+///
+/// {@category PAGES}
+library pages.no_connectivity_page;
+
 import 'package:flutter/material.dart';
 
+/// A StatelessWidget that displays a page when there is no internet connection.
+///
+/// The page contains an icon and messages informing the user that there is no internet connection
+/// and asking them to check their connection and try again.
 class NoConnectivityPage extends StatelessWidget {
+  /// Creates a NoConnectivityPage widget.
+  ///
+  /// The [key] parameter is optional and represents the key for the widget.
   const NoConnectivityPage({super.key});
 
+  /// Builds the widget tree for the NoConnectivityPage.
+  ///
+  /// The [context] parameter is required and represents the build context.
+  /// Returns a Scaffold widget that contains the page content.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,17 +26,20 @@ class NoConnectivityPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            /// An icon indicating no internet connection.
             Icon(
               Icons.wifi_off,
               size: 100,
               color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(height: 30),
+            /// A message informing the user that there is no internet connection.
             const Text(
               'Keine Internetverbindung gefunden',
               style: TextStyle(fontSize: 24),
             ),
             const SizedBox(height: 16),
+            /// A message asking the user to check their internet connection and try again.
             const Text(
               'Bitte überprüfe deine Internetverbindung und versuche es erneut.',
               style: TextStyle(fontSize: 18),

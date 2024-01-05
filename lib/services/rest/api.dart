@@ -1,4 +1,4 @@
-/// This file contains the [processHttpStatusCodes] function.
+/// This file contains the [processHttpStatusCodes] function which is used to handle HTTP status codes.
 ///
 /// {@category SERVICES}
 library services.rest.api;
