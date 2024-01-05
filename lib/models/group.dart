@@ -1,3 +1,4 @@
+import 'package:studiconnect/models/message.dart';
 import 'package:studiconnect/models/user.dart';
 
 class Group {
@@ -12,6 +13,7 @@ class Group {
   final double? lat;
   final double? lon;
   final bool imageExists;
+  final List<Message>? messages;
 
   const Group({
     required this.id,
@@ -25,6 +27,7 @@ class Group {
     this.lat,
     this.lon,
     this.imageExists = false,
+    this.messages,
   });
 
   factory Group.fromApi(Map<String, dynamic> data) {
@@ -48,6 +51,7 @@ class Group {
       lat: data['lat'],
       lon: data['lon'],
       imageExists: data['imageExists'] ?? false,
+      messages: [],
     );
   }
 
@@ -63,6 +67,7 @@ class Group {
     double? lat,
     double? lon,
     bool? imageExists,
+    List<Message>? messages,
   }) {
     return Group(
       id: id ?? this.id,
@@ -76,6 +81,7 @@ class Group {
       lat: lat ?? this.lat,
       lon: lon ?? this.lon,
       imageExists: imageExists ?? this.imageExists,
+      messages: messages ?? this.messages,
     );
   }
 }

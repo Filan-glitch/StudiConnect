@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:studiconnect/pages/chat_page.dart';
 import 'package:studiconnect/pages/join_group_requests_page.dart';
 import 'package:studiconnect/pages/password_change_page.dart';
 import 'package:studiconnect/pages/user_info_page.dart';
@@ -32,7 +33,7 @@ Future<void> main() async {
   // setup
   loadCredentials();
 
-  if(kDebugMode) {
+  if (kDebugMode) {
     //await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
   }
 
@@ -73,6 +74,7 @@ class MyApp extends StatelessWidget {
             '/login': (context) => const LoginPage(),
             '/register': (context) => const RegisterPage(),
             '/login-help': (context) => PasswordResetPage(),
+            '/chat': (context) => const ChatPage(),
             '/edit-profile': (context) => const EditProfilePage(),
             '/settings': (context) => const SettingsPage(),
             '/delete-account': (context) => DeleteAccountPage(),
