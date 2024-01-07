@@ -4,7 +4,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:auth_buttons/auth_buttons.dart'
     show AuthButtonStyle, EmailAuthButton;
 import 'package:google_fonts/google_fonts.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:studiconnect/controllers/authentication.dart';
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
@@ -191,7 +190,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         });
                         return;
                       } catch (e) {
-                        showToast(e.toString());
+                        _errorMessageNotifier.value = "Ein unbekannter Fehler ist aufgetreten.";
                         setState(() {
                           _emailButtonLoading = false;
                         });

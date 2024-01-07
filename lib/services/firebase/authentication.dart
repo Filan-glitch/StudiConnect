@@ -5,7 +5,7 @@ import 'package:studiconnect/services/logger_provider.dart';
 
 Future<String?> signInWithEmailAndPassword(
     String email, String password) async {
-  logWarning("Signing in with email and password");
+  log("Signing in with email and password");
   FirebaseAuth auth = FirebaseAuth.instance;
   UserCredential? userCredential;
 
@@ -136,6 +136,6 @@ Future<void> updatePassword(String oldPassword, String newPassword) async {
     log("Updated password in Firebase");
   } catch (e) {
     logWarning(e.toString());
-    showToast("Bitte überprüfen Sie Ihr Passwort");
+    rethrow;
   }
 }

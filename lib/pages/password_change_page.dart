@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:studiconnect/controllers/authentication.dart';
 import 'package:studiconnect/services/logger_provider.dart';
@@ -63,25 +64,45 @@ class PasswordChangePage extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 5.0),
+                    padding: const EdgeInsets.symmetric(vertical: 5.0),
                     child: ErrorLabel(
                         errorMessageNotifier: _errorMessageNotifier
                     ),
                   ),
                   const SizedBox(height: 50),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if(_oldPasswordController.text.isEmpty || _newPasswordController.text.isEmpty || _newPasswordRepeatController.text.isEmpty) {
                         _errorMessageNotifier.value = "Bitte fülle alle Felder aus.";
                         return;
                       }
                       if (_newPasswordController.text != _newPasswordRepeatController.text) {
                         _errorMessageNotifier.value = "Die Passwörter stimmen nicht überein.";
+                        return;
                       }
-                      updatePassword(
-                          _oldPasswordController.text,
-                          _newPasswordController.text
-                      );
+                      if (_oldPasswordController.text == _newPasswordController.text) {
+                        _errorMessageNotifier.value = "Das neue Passwort darf nicht mit dem alten Passwort übereinstimmen.";
+                        return;
+                      }
+
+                      try {
+                        await updatePassword(
+                            _oldPasswordController.text,
+                            _newPasswordController.text
+                        );
+                      } on FirebaseAuthException catch (e) {
+                        final errorMessages = {
+                          'user-not-found': "Das Konto existiert nicht mehr.",
+                          'user-disabled': "Das Konto ist deaktiviert.",
+                          'too-many-requests': "Zu viele Anfragen. Bitte versuche es später erneut.",
+                          'operation-not-allowed': "Diese Anmeldung ist nicht erlaubt.",
+                          'network-request-failed': "Keine Internetverbindung.",
+                          'invalid-credential': "Das alte Passwort ist ungültig.",
+                        };
+                        _errorMessageNotifier.value = errorMessages[e.code] ?? "${e.code}: ${e.message}";
+                      } catch (e) {
+                        _errorMessageNotifier.value = "Ein unbekannter Fehler ist aufgetreten.";
+                      }
                     },
                     child: const Text("Passwort ändern"),
                   ),

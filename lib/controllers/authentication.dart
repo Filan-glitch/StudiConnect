@@ -197,6 +197,7 @@ Future<void> signInAsGuest() async {
 
 Future<void> signOut() async {
   await firebase.signOut();
+
   await runApiService(
     apiCall: () => service.logout(),
     parser: (result) => null,

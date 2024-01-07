@@ -109,8 +109,8 @@ class SettingsPage extends StatelessWidget {
               ListTile(
                 leading: Icon(Icons.logout, color: Colors.red.withOpacity(0.7)),
                 title: const Text("Abmelden"),
-                onTap: () {
-                  signOut();
+                onTap: () async {
+                  await signOut();
                 },
               ),
             ],

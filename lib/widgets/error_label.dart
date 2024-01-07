@@ -18,6 +18,7 @@ class ErrorLabel extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
             child: Text(
               value,
+              textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Colors.red,
                 fontSize: 14,
