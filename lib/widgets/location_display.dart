@@ -1,9 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 
 class LocationDisplay extends StatefulWidget {
   final LatLng position;
@@ -20,24 +19,6 @@ class _LocationDisplayState extends State<LocationDisplay> {
   String? _address;
   String? _error;
 
-  @override
-  void initState() {
-    super.initState();
-    _errorMessage();
-    _getAddress();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      _error ?? _address ?? 'Adresse wird geladen...',
-      style: TextStyle(
-        color: Theme.of(context).textTheme.bodySmall?.color,
-        fontSize: 16.0,
-      ),
-    );
-  }
-
   Future<void> _getAddress() async {
     try {
       final List<geo.Placemark> placemarks = await geo.placemarkFromCoordinates(
@@ -45,7 +26,7 @@ class _LocationDisplayState extends State<LocationDisplay> {
       final geo.Placemark place = placemarks[0];
       setState(() {
         _address =
-            '${place.street ?? ""}, ${place.postalCode ?? ""} ${place.locality ?? ""}';
+        '${place.street ?? ""}, ${place.postalCode ?? ""} ${place.locality ?? ""}';
       });
     } catch (e) {
       log(e.toString());
@@ -54,7 +35,7 @@ class _LocationDisplayState extends State<LocationDisplay> {
       });
     }
   }
-  
+
   Future<void> _errorMessage() async {
     if (widget.serviceEnabled != null) {
       if (!widget.serviceEnabled!) {
@@ -73,5 +54,40 @@ class _LocationDisplayState extends State<LocationDisplay> {
         });
       }
     }
+  }
+
+  @override
+  void initState() {
+    log("Initializing LocationDisplay...");
+    super.initState();
+    _errorMessage();
+    _getAddress();
+  }
+
+  @override
+  void dispose() {
+    log("Disposing LocationDisplay...");
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    log("Building LocationDisplay...");
+    return Row(
+      children: [
+        Icon(
+          Icons.location_on,
+          color: Theme.of(context).textTheme.bodySmall?.color,
+          size: 16.0,
+        ),
+        Text(
+          _error ?? _address ?? 'Adresse wird geladen...',
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodySmall?.color,
+            fontSize: 16.0,
+          ),
+        )
+      ]
+    );
   }
 }

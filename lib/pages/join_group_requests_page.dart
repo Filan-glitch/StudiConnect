@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
 import 'package:studiconnect/models/redux/app_state.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/join_group_request_list_item.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
@@ -12,6 +13,7 @@ class JoinGroupRequestsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log("Building JoinGroupRequestsPage...");
     final groupID = ModalRoute.of(context)!.settings.arguments as String;
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,

@@ -3,8 +3,10 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/models/redux/store.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/location_display.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
@@ -19,59 +21,55 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePage extends State<EditProfilePage> {
-  final _formKey = GlobalKey<FormState>();
-
+  late final GlobalKey<FormState> _formKey;
+  late final UniqueKey _locationKey;
   late final TextEditingController _usernameController;
   late final TextEditingController _majorController;
   late final TextEditingController _universityController;
   late final TextEditingController _bioController;
   late final TextEditingController _mobileController;
   late final TextEditingController _discordController;
+
   LatLng? _selectedLocation;
   bool? _serviceEnabled;
   LocationPermission? _permission;
 
-  UniqueKey _locationKey = UniqueKey();
-
   @override
   void initState() {
+    log("Iniatilizing EditProfilePage...");
     super.initState();
-
     _usernameController = TextEditingController.fromValue(
       TextEditingValue(
         text: store.state.user?.username ?? "",
       ),
     );
-
     _majorController = TextEditingController.fromValue(
       TextEditingValue(
         text: store.state.user?.major ?? "",
       ),
     );
-
     _universityController = TextEditingController.fromValue(
       TextEditingValue(
         text: store.state.user?.university ?? "",
       ),
     );
-
     _bioController = TextEditingController.fromValue(
       TextEditingValue(
         text: store.state.user?.bio ?? "",
       ),
     );
-
     _mobileController = TextEditingController.fromValue(
       TextEditingValue(
         text: store.state.user?.mobile ?? "",
       ),
     );
-
     _discordController = TextEditingController.fromValue(
       TextEditingValue(
         text: store.state.user?.discord ?? "",
       ),
     );
+    _formKey = GlobalKey<FormState>();
+    _locationKey = UniqueKey();
 
     determinePosition().then(
       (value) async {
@@ -105,7 +103,20 @@ class _EditProfilePage extends State<EditProfilePage> {
   }
 
   @override
+  void dispose() {
+    log("Disposing EditProfilePage...");
+    _usernameController.dispose();
+    _majorController.dispose();
+    _universityController.dispose();
+    _bioController.dispose();
+    _mobileController.dispose();
+    _discordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    log("Building EditProfilePage...");
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       builder: (context, state) {
@@ -212,54 +223,51 @@ class _EditProfilePage extends State<EditProfilePage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 30.0),
-                    child: Wrap(
-                      spacing: 20.0,
-                      runSpacing: 20.0,
-                      children: [
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            final ImagePicker picker = ImagePicker();
-                            picker
-                                .pickImage(source: ImageSource.gallery)
-                                .then((value) {
-                              if (value != null) {
-                                uploadProfileImage(value);
-                              }
-                            });
-                          },
-                          icon: const Icon(Icons.upload),
-                          label: const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 5.0),
-                            child: Text("Profilbild\nhochladen"),
-                          ),
-                        ),
-                        if (state.profileImageAvailable)
-                          ElevatedButton.icon(
-                            onPressed: () {
-                              deleteProfileImage();
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.background,
-                              side: const BorderSide(
-                                color: Colors.red,
-                                width: 2.0,
-                              ),
-                            ),
-                            icon: const Icon(Icons.delete),
-                            label: const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 5.0),
-                              child: Text("Profilbild\nlöschen"),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                  Padding(
                     padding: const EdgeInsets.only(top: 10.0, bottom: 20.0),
                     child: Column(
                       children: [
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
+                            onPressed: () {
+                              final ImagePicker picker = ImagePicker();
+                              picker
+                                  .pickImage(source: ImageSource.gallery)
+                                  .then((value) {
+                                if (value != null) {
+                                  uploadProfileImage(value);
+                                }
+                              });
+                            },
+                            icon: const Icon(Icons.upload),
+                            label: const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 5.0),
+                              child: Text("Profilbild hochladen"),
+                            ),
+                          ),
+                        ),
+                        if (state.profileImageAvailable)
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                deleteProfileImage();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                Theme.of(context).colorScheme.background,
+                                side: const BorderSide(
+                                  color: Colors.red,
+                                  width: 2.0,
+                                ),
+                              ),
+                              icon: const Icon(Icons.delete),
+                              label: const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 5.0),
+                                child: Text("Profilbild löschen"),
+                              ),
+                            ),
+                          ),
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton.icon(
@@ -276,7 +284,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                                   _discordController.text,
                                 );
 
-                                Navigator.pop(context);
+                                navigatorKey.currentState!.pop();
                               }
                             },
                             icon: const Icon(Icons.done),
@@ -298,7 +306,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                               icon: const Icon(Icons.lock),
                               label: const Padding(
                                 padding: EdgeInsets.symmetric(vertical: 5.0),
-                                child: Text("Passwort\nändern"),
+                                child: Text("Passwort ändern"),
                               ),
                             ),
                           ),

@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:auth_buttons/auth_buttons.dart'
     show AuthButtonStyle, EmailAuthButton;
 import 'package:studiconnect/controllers/authentication.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
 class LoginPage extends StatefulWidget {
@@ -15,13 +16,23 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  late final TextEditingController _emailController;
+  late final TextEditingController _passwordController;
+
   bool _emailButtonLoading = false;
   String _errorMessage = "";
 
   @override
+  void initState() {
+    log("Iniatilizing LoginPage...");
+    super.initState();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+  }
+
+  @override
   void dispose() {
+    log("Disposing LoginPage...");
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -29,6 +40,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    log("Building LoginPage...");
     return PageWrapper(
         type: PageType.simple,
         title: "Anmelden",

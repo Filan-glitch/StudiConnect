@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/redux/actions.dart';
 import 'package:studiconnect/models/redux/store.dart';
@@ -11,6 +12,8 @@ import 'package:studiconnect/services/graphql/user.dart' as service;
 import 'package:studiconnect/services/rest/profile_image.dart' as rest_service;
 import 'package:studiconnect/services/storage/credentials.dart' as storage;
 import 'package:studiconnect/services/firebase/authentication.dart' as firebase;
+
+import '../constants.dart';
 
 Future<bool> loadUserInfo() async {
   Map<String, String> credentials = await storage.loadCredentials();
@@ -150,6 +153,9 @@ Future<void> uploadProfileImage(XFile file) async {
     ),
   );
 
+  await DefaultCacheManager().removeFile("$backendURL/api/group/${store.state.user?.id}/image");
+  await DefaultCacheManager().downloadFile("$backendURL/api/group/${store.state.user?.id}/image");
+
   showToast("Profilbild erfolgreich hochgeladen.");
 }
 
@@ -164,6 +170,8 @@ Future<void> deleteProfileImage() async {
       payload: false,
     ),
   );
+
+  await DefaultCacheManager().removeFile("$backendURL/api/group/${store.state.user?.id}/image");
 
   showToast(
       "Profilbild erfolgreich gelöscht. Evtl. liegt das Bild noch im Cache.");

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:studiconnect/controllers/authentication.dart';
 import 'package:studiconnect/main.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
 import '../widgets/error_label.dart';
@@ -14,6 +15,7 @@ class PasswordResetPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log("Building PasswordResetPage...");
     return PageWrapper(
       title: "Passwort zurücksetzen",
       body: Center(

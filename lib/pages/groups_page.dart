@@ -3,8 +3,11 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:studiconnect/constants.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/group_list_item.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
+
+import '../main.dart';
 
 class GroupsPage extends StatefulWidget {
   const GroupsPage({super.key});
@@ -14,8 +17,22 @@ class GroupsPage extends StatefulWidget {
 }
 
 class _GroupsPageState extends State<GroupsPage> {
+
+  @override
+  void initState() {
+    log("Iniatilizing GroupsPage...");
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    log("Disposing GroupsPage...");
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    log("Building GroupsPage...");
     return PageWrapper(
       type: PageType.complex,
       body: Padding(
@@ -65,8 +82,8 @@ class _GroupsPageState extends State<GroupsPage> {
           leading: const Icon(Icons.add),
           title: const Text('Gruppe erstellen'),
           onTap: () {
-            Navigator.pop(context);
-            Navigator.pushNamed(context, '/create-and-edit-group');
+            navigatorKey.currentState!.pop();
+            navigatorKey.currentState!.pushNamed('/create-and-edit-group');
             setState(() {});
           },
         ),
@@ -74,6 +91,7 @@ class _GroupsPageState extends State<GroupsPage> {
             leading: const Icon(Icons.share),
             title: const Text('Studiconnect weiterempfehlen'),
             onTap: () {
+              navigatorKey.currentState!.pop();
               Share.share(
                   'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=$appID');
             }),
@@ -81,8 +99,8 @@ class _GroupsPageState extends State<GroupsPage> {
           leading: const Icon(Icons.settings),
           title: const Text('Einstellungen'),
           onTap: () {
-            Navigator.pop(context);
-            Navigator.pushNamed(context, '/settings');
+            navigatorKey.currentState!.pop();
+            navigatorKey.currentState!.pushNamed('/settings');
           },
         ),
       ],

@@ -1,10 +1,12 @@
 import 'package:oktoast/oktoast.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/redux/actions.dart';
 import 'package:studiconnect/models/redux/store.dart';
 import 'package:studiconnect/services/firebase/authentication.dart' as firebase;
 import 'package:studiconnect/services/graphql/authentication.dart' as service;
+import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/services/storage/credentials.dart' as storage;
 import 'package:studiconnect/controllers/api.dart';
 import 'package:studiconnect/controllers/user.dart';
@@ -13,6 +15,7 @@ Future<void> loadCredentials() async {
   Map<String, String> credentials = await storage.loadCredentials();
 
   if (!credentials.containsKey("sessionID")) {
+    FlutterNativeSplash.remove();
     return;
   }
 
@@ -28,13 +31,16 @@ Future<void> loadCredentials() async {
   bool success = await loadUserInfo();
 
   if (!success) {
+    FlutterNativeSplash.remove();
     return;
   }
 
+  log("Navigating to home screen");
   navigatorKey.currentState!.pushNamedAndRemoveUntil(
     '/home',
     (route) => false,
   );
+  FlutterNativeSplash.remove();
 }
 
 Future<bool?> signInWithGoogle() async {

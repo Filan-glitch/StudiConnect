@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:studiconnect/models/redux/actions.dart' as redux;
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:studiconnect/pages/join_group_requests_page.dart';
 import 'package:studiconnect/pages/password_change_page.dart';
 import 'package:studiconnect/pages/user_info_page.dart';
@@ -13,6 +13,7 @@ import 'package:studiconnect/pages/create_and_edit_group_page.dart';
 import 'package:studiconnect/pages/settings_page.dart';
 import 'package:studiconnect/pages/edit_profile_page.dart';
 import 'package:studiconnect/models/redux/store.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/themes/light_theme.dart';
 import 'package:studiconnect/themes/dark_theme.dart';
 import 'package:studiconnect/pages/registration_page.dart';
@@ -25,23 +26,22 @@ import 'package:studiconnect/pages/welcome_page.dart';
 import 'package:studiconnect/pages/delete_account_page.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  log("Starting...");
+  log("Running in ${kDebugMode ? "debug" : "release"} mode");
+  log("Running on ${defaultTargetPlatform.toString().split('.').last}");
+
+  log("Initializing Widgets Binding...");
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
+  log("Initializing Firebase...");
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
   // setup
-  Future.wait([
-    loadCredentials(),
-  ]).then((value) {
-    store.dispatch(redux.Action(
-      redux.ActionTypes.setupDone,
-    ));
-  });
-
-  if (kDebugMode) {
-    //await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
-  }
+  log("Setting up...");
+  loadCredentials();
 
   runApp(const MyApp());
 }
@@ -53,6 +53,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log("Building...");
     return StoreProvider(
       store: store,
       child: OKToast(
@@ -83,7 +84,7 @@ class MyApp extends StatelessWidget {
             '/edit-profile': (context) => const EditProfilePage(),
             '/settings': (context) => const SettingsPage(),
             '/delete-account': (context) => DeleteAccountPage(),
-            '/update-password': (context) => const PasswordChangePage(),
+            '/update-password': (context) => PasswordChangePage(),
             CreateAndEditGroupPage.routeName: (context) =>
                 const CreateAndEditGroupPage(),
             GroupInfoPage.routeName: (context) => const GroupInfoPage(),

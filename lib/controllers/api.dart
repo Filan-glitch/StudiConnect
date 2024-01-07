@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'package:studiconnect/services/logger_provider.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:studiconnect/services/graphql/errors/api_exception.dart';
 import 'package:studiconnect/models/redux/store.dart';
@@ -11,17 +11,21 @@ Future<T?> runApiService<T>({
 }) async {
   // Loading Screen
   if (showLoading) {
+    log("Starting Loading Screen");
     store.dispatch(redux.Action(redux.ActionTypes.startTask));
   }
 
   // API Call
   final Map<String, dynamic>? response;
   try {
+    log("Starting API Call");
     response = await apiCall();
+    log("API Call Finished");
   } on ApiException catch (e) {
-    log("API Exception ${e.code}: ${e.message}");
+    logWarning("API Exception ${e.code}: ${e.message}");
 
     if (showLoading) {
+      log("Stopping Loading Screen");
       store.dispatch(redux.Action(redux.ActionTypes.stopTask));
     }
 
@@ -33,10 +37,13 @@ Future<T?> runApiService<T>({
   T? parsed;
   if (response != null) {
     try {
+      log("Starting Parsing");
       parsed = parser(response);
+      log("Parsing Finished");
     } catch (e) {
-      log(e.toString());
+      logError(e.toString(), e as Error);
       if (showLoading) {
+        log("Stopping Loading Screen");
         store.dispatch(redux.Action(redux.ActionTypes.stopTask));
       }
 
@@ -46,6 +53,7 @@ Future<T?> runApiService<T>({
   }
 
   if (showLoading) {
+    log("Stopping Loading Screen");
     store.dispatch(redux.Action(redux.ActionTypes.stopTask));
   }
 
@@ -59,17 +67,21 @@ Future<T?> runRestApi<T>({
 }) async {
   // Loading Screen
   if (showLoading) {
+    log("Starting Loading Screen");
     store.dispatch(redux.Action(redux.ActionTypes.startTask));
   }
 
   // API Call
   final Map<String, dynamic>? response;
   try {
+    log("Starting API Call");
     response = await apiCall();
+    log("API Call Finished");
   } on ApiException catch (e) {
-    log("API Exception ${e.code}: ${e.message}");
+    logWarning("API Exception ${e.code}: ${e.message}");
 
     if (showLoading) {
+      log("Stopping Loading Screen");
       store.dispatch(redux.Action(redux.ActionTypes.stopTask));
     }
 
@@ -81,10 +93,13 @@ Future<T?> runRestApi<T>({
   T? parsed;
   if (response != null) {
     try {
+      log("Starting Parsing");
       parsed = parser(response);
+      log("Parsing Finished");
     } catch (e) {
-      log(e.toString());
+      logWarning(e.toString());
       if (showLoading) {
+        log("Stopping Loading Screen");
         store.dispatch(redux.Action(redux.ActionTypes.stopTask));
       }
 
@@ -94,6 +109,7 @@ Future<T?> runRestApi<T>({
   }
 
   if (showLoading) {
+    log("Stopping Loading Screen");
     store.dispatch(redux.Action(redux.ActionTypes.stopTask));
   }
 

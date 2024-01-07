@@ -1,20 +1,19 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:studiconnect/main.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/avatar_picture.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
-class ProfilePage extends StatefulWidget {
+class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
-}
-
-class _ProfilePageState extends State<ProfilePage> {
-  @override
   Widget build(BuildContext context) {
+    log("Building ProfilePage...");
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       builder: (context, state) {
@@ -141,14 +140,15 @@ class _ProfilePageState extends State<ProfilePage> {
               leading: const Icon(Icons.edit),
               title: const Text('Profil bearbeiten'),
               onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/edit-profile');
+                navigatorKey.currentState!.pop();
+                navigatorKey.currentState!.pushNamed('/edit-profile');
               },
             ),
             ListTile(
                 leading: const Icon(Icons.share),
                 title: const Text('Studiconnect weiterempfehlen'),
                 onTap: () {
+                  navigatorKey.currentState!.pop();
                   Share.share(
                       'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=de.studiconnect.app');
                 }),
@@ -156,8 +156,8 @@ class _ProfilePageState extends State<ProfilePage> {
               leading: const Icon(Icons.settings),
               title: const Text('Einstellungen'),
               onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/settings');
+                navigatorKey.currentState!.pop();
+                navigatorKey.currentState!.pushNamed('/settings');
               },
             ),
           ],

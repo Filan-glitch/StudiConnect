@@ -1,28 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:studiconnect/controllers/authentication.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
-class PasswordChangePage extends StatefulWidget {
-  const PasswordChangePage({super.key});
+import '../widgets/error_label.dart';
 
-  @override
-  State<PasswordChangePage> createState() => _PasswordChangePageState();
-}
+class PasswordChangePage extends StatelessWidget {
+  PasswordChangePage({super.key});
 
-class _PasswordChangePageState extends State<PasswordChangePage> {
   final TextEditingController _oldPasswordController = TextEditingController();
   final TextEditingController _newPasswordController = TextEditingController();
-  final TextEditingController _newPasswordRepeatController =
-      TextEditingController();
+  final TextEditingController _newPasswordRepeatController = TextEditingController();
+  final ValueNotifier<String> _errorMessageNotifier = ValueNotifier("");
 
   @override
   Widget build(BuildContext context) {
-    bool passwordValid =
-        _newPasswordController.text == _newPasswordRepeatController.text &&
-            _newPasswordController.text.isNotEmpty &&
-            _newPasswordRepeatController.text.isNotEmpty &&
-            _oldPasswordController.text.isNotEmpty;
-
+    log("Building PasswordChangePage...");
     return PageWrapper(
         title: "Passwort ändern",
         body: SingleChildScrollView(
@@ -32,53 +25,68 @@ class _PasswordChangePageState extends State<PasswordChangePage> {
               left: 30.0,
               right: 30.0,
             ),
-            child: Column(children: [
-              TextField(
-                controller: _oldPasswordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelStyle: TextStyle(
-                    color: Theme.of(context).textTheme.bodyMedium!.color,
+            child: Column(
+                children: [
+                  TextField(
+                    controller: _oldPasswordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      labelStyle: TextStyle(
+                        color: Theme.of(context).textTheme.bodyMedium!.color,
+                      ),
+                      labelText: 'Altes Passwort',
+                    ),
                   ),
-                  labelText: 'Altes Passwort',
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: _newPasswordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelStyle: TextStyle(
-                    color: Theme.of(context).textTheme.bodyMedium!.color,
+                  const SizedBox(height: 20),
+                  TextField(
+                    controller: _newPasswordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      labelStyle: TextStyle(
+                        color: Theme.of(context).textTheme.bodyMedium!.color,
+                      ),
+                      labelText: 'Neues Passwort',
+                    ),
                   ),
-                  labelText: 'Neues Passwort',
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: _newPasswordRepeatController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelStyle: TextStyle(
-                    color: Theme.of(context).textTheme.bodyMedium!.color,
+                  const SizedBox(height: 20),
+                  TextField(
+                    controller: _newPasswordRepeatController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      labelStyle: TextStyle(
+                        color: Theme.of(context).textTheme.bodyMedium!.color,
+                      ),
+                      labelText: 'Neues Passwort wiederholen',
+                    ),
                   ),
-                  labelText: 'Neues Passwort wiederholen',
-                ),
-              ),
-              const SizedBox(height: 50),
-              ElevatedButton(
-                onPressed: passwordValid
-                    ? () {
-                        updatePassword(_oldPasswordController.text,
-                            _newPasswordController.text);
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 5.0),
+                    child: ErrorLabel(
+                        errorMessageNotifier: _errorMessageNotifier
+                    ),
+                  ),
+                  const SizedBox(height: 50),
+                  ElevatedButton(
+                    onPressed: () {
+                      if(_oldPasswordController.text.isEmpty || _newPasswordController.text.isEmpty || _newPasswordRepeatController.text.isEmpty) {
+                        _errorMessageNotifier.value = "Bitte fülle alle Felder aus.";
+                        return;
                       }
-                    : null,
-                child: const Text("Passwort ändern"),
-              ),
-            ]),
+                      if (_newPasswordController.text != _newPasswordRepeatController.text) {
+                        _errorMessageNotifier.value = "Die Passwörter stimmen nicht überein.";
+                      }
+                      updatePassword(
+                          _oldPasswordController.text,
+                          _newPasswordController.text
+                      );
+                    },
+                    child: const Text("Passwort ändern"),
+                  ),
+                ],
+            ),
           ),
         ));
   }

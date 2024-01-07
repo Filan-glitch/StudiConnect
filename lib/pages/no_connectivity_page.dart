@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 
 class NoConnectivityPage extends StatelessWidget {
   const NoConnectivityPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    log("Building NoConnectivityPage...");
     return Scaffold(
       body: Center(
         child: Column(
