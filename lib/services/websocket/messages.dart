@@ -13,7 +13,7 @@ Future<WebSocketSink?> subscribeToMessages(
   WebSocketChannel channel =
       IOWebSocketChannel.connect(Uri.parse('$wsURL/socket/messages'), headers: {
     "Cookie": "session=${store.state.sessionID}",
-    "Group": groupID,
+    "group": groupID,
   });
 
   channel.stream.listen((event) {

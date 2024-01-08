@@ -1,12 +1,12 @@
 import 'package:graphql/client.dart';
 import 'package:studiconnect/services/graphql/api.dart';
 
-Future<Map<String, dynamic>?> getMessages(String groupID) async {
+Future<Map<String, dynamic>?> getMessages(String groupID, int page) async {
   return GraphQL.query(
     QueryOptions(
       document: gql("""
-      query GetMessages(\$groupID: ID!) {
-        messages(group: \$groupID) {
+      query GetMessages(\$groupID: ID!, \$page: Int!) {
+        messages(group: \$groupID, page: \$page) {
           id
           content
           sender {
@@ -19,6 +19,7 @@ Future<Map<String, dynamic>?> getMessages(String groupID) async {
 """),
       variables: <String, dynamic>{
         'groupID': groupID,
+        'page': page,
       },
     ),
   );

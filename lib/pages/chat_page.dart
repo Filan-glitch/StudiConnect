@@ -25,7 +25,7 @@ class _ChatPageState extends State<ChatPage> {
       setState(() {
         groupID = ModalRoute.of(context)!.settings.arguments as String;
         subscribeToMessages(groupID!).then((value) => sink = value);
-        getMessages(groupID!);
+        getMessages(groupID!, 1);
       });
     });
   }

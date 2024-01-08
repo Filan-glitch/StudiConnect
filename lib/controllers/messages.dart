@@ -9,9 +9,9 @@ import 'package:studiconnect/services/graphql/messages.dart' as service;
 import 'package:studiconnect/services/websocket/messages.dart' as websocket;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-Future<void> getMessages(String groupID) async {
+Future<void> getMessages(String groupID, int page) async {
   List<Message>? result = await runApiService(
-    apiCall: () => service.getMessages(groupID),
+    apiCall: () => service.getMessages(groupID, page),
     parser: (result) {
       return (result["messages"] as List<dynamic>)
           .map((e) => Message.fromApi(e))
@@ -55,6 +55,7 @@ Future<void> sendMessage(String groupID, String content) async {
 }
 
 Future<WebSocketSink?> subscribeToMessages(String groupID) async {
+  log("sub ${groupID}");
   WebSocketSink? sink = await websocket.subscribeToMessages(groupID, (data) {
     Message message = Message.fromApi(data);
 
