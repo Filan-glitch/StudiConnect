@@ -58,8 +58,7 @@ class _PageWrapperState extends State<PageWrapper> {
     store.dispatch(
       redux.Action(
         redux.ActionTypes.setConnectionState,
-        payload: !(result == ConnectivityResult.none ||
-            result == ConnectivityResult.bluetooth),
+        payload: result != ConnectivityResult.none,
       ),
     );
   }

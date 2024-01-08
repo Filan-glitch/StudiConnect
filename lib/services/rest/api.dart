@@ -1,5 +1,3 @@
-import 'package:studiconnect/models/redux/actions.dart';
-import 'package:studiconnect/models/redux/store.dart';
 import 'package:studiconnect/services/graphql/errors/input_error.dart';
 import 'package:studiconnect/services/graphql/errors/internal_server_error.dart';
 import 'package:studiconnect/services/graphql/errors/not_found_exception.dart';
@@ -11,13 +9,7 @@ import 'package:studiconnect/services/logger_provider.dart';
 void processHttpStatusCodes(int statusCode, {String? customMessage}) {
   log("HTTP Status Code: $statusCode");
   if (statusCode < 100) {
-    log("Changing connection state to false");
-    store.dispatch(
-      Action(
-        ActionTypes.setConnectionState,
-        payload: false,
-      ),
-    );
+    log("Informational status code");
     throw ConnectionException(code: statusCode);
   } else if (statusCode == 401) {
     log("Operation was unauthorized");

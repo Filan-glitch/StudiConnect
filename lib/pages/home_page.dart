@@ -26,29 +26,25 @@ class _HomePageState extends State<HomePage> {
 
   int _selectedPage = 0;
 
+  void _onConnectivityChanged(ConnectivityResult result) {
+    store.dispatch(
+      redux.Action(
+        redux.ActionTypes.setConnectionState,
+        payload: result != ConnectivityResult.none,
+      ),
+    );
+  }
+
   @override
   void initState() {
     log("Iniatilizing HomePage...");
     super.initState();
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
-    Connectivity().onConnectivityChanged.last.then((ConnectivityResult result) {
-      store.dispatch(
-        redux.Action(
-          redux.ActionTypes.setConnectionState,
-          payload: result != ConnectivityResult.none,
-        ),
-      );
-    });
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      store.dispatch(
-        redux.Action(
-          redux.ActionTypes.setConnectionState,
-          payload: result != ConnectivityResult.none,
-        ),
-      );
-      setState(() {});
-    });
+    Connectivity().checkConnectivity().then(_onConnectivityChanged);
+    subscription = Connectivity().onConnectivityChanged.listen(_onConnectivityChanged);
+    setState(() {});
   }
+
 
   @override
   void dispose() {

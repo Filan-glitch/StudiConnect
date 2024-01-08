@@ -21,6 +21,7 @@ class NoConnectivityPage extends StatelessWidget {
             const Text(
               'Keine Internetverbindung gefunden',
               style: TextStyle(fontSize: 24),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
             const Text(

@@ -1,5 +1,4 @@
 import 'package:studiconnect/services/logger_provider.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:studiconnect/services/graphql/errors/api_exception.dart';
 import 'package:studiconnect/models/redux/store.dart';
 import 'package:studiconnect/models/redux/actions.dart' as redux;
@@ -29,7 +28,10 @@ Future<T?> runApiService<T>({
       store.dispatch(redux.Action(redux.ActionTypes.stopTask));
     }
 
-    showToast(e.message);
+    if(parser == ((result) => null)) {
+      rethrow;
+    }
+
     return null;
   }
 
@@ -41,13 +43,17 @@ Future<T?> runApiService<T>({
       parsed = parser(response);
       log("Parsing Finished");
     } catch (e) {
-      logError(e.toString(), e as Error);
+      logWarning(e.toString());
+
       if (showLoading) {
         log("Stopping Loading Screen");
         store.dispatch(redux.Action(redux.ActionTypes.stopTask));
       }
 
-      showToast("Die Daten konnten nicht verarbeitet werden.");
+      if(parser == ((result) => null)) {
+        rethrow;
+      }
+
       return null;
     }
   }
@@ -85,7 +91,10 @@ Future<T?> runRestApi<T>({
       store.dispatch(redux.Action(redux.ActionTypes.stopTask));
     }
 
-    showToast(e.message);
+    if(parser == ((result) => null)) {
+      rethrow;
+    }
+
     return null;
   }
 
@@ -98,12 +107,16 @@ Future<T?> runRestApi<T>({
       log("Parsing Finished");
     } catch (e) {
       logWarning(e.toString());
+
       if (showLoading) {
         log("Stopping Loading Screen");
         store.dispatch(redux.Action(redux.ActionTypes.stopTask));
       }
 
-      showToast("Die Daten konnten nicht verarbeitet werden.");
+      if(parser == ((result) => null)) {
+        rethrow;
+      }
+
       return null;
     }
   }
