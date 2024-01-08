@@ -69,7 +69,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                     }
                   },
                 ),
-              if (members.contains(state.user?.id))
+              if (members.contains(state.user?.id) && group?.creator?.id != state.user?.id)
                 ListTile(
                   leading: const Icon(Icons.exit_to_app),
                   title: const Text('Gruppe verlassen'),

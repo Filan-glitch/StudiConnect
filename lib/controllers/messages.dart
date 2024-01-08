@@ -55,7 +55,7 @@ Future<void> sendMessage(String groupID, String content) async {
 }
 
 Future<WebSocketSink?> subscribeToMessages(String groupID) async {
-  log("sub ${groupID}");
+  log("sub $groupID");
   WebSocketSink? sink = await websocket.subscribeToMessages(groupID, (data) {
     Message message = Message.fromApi(data);
 
