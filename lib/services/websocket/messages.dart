@@ -10,9 +10,10 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 Future<WebSocketSink?> subscribeToMessages(
     String groupID, void Function(Map<String, dynamic> data) onMessage) async {
+  log(store.state.sessionID ?? "");
   WebSocketChannel channel =
-      IOWebSocketChannel.connect(Uri.parse('$wsURL/socket/messages'), headers: {
-    "Cookie": "session=${store.state.sessionID}",
+      IOWebSocketChannel.connect(Uri.parse('$wsURL/socket'), headers: {
+    "session": store.state.sessionID,
     "group": groupID,
   });
 
