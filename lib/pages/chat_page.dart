@@ -59,6 +59,13 @@ class _ChatPageState extends State<ChatPage> {
         return PageWrapper(
           title: group.title ?? "",
           menuActions: [
+            ListTile(
+              leading: const Icon(Icons.info),
+              title: const Text('Gruppeninformationen'),
+              onTap: () {
+                Navigator.pushNamed(context, '/group-info', arguments: group);
+              },
+            ),
             if (state.user?.id == group.creator?.id)
               ListTile(
                 leading: const Icon(Icons.group_add),
