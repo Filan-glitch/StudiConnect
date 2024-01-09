@@ -8,11 +8,13 @@ class TimestampedChatMessage extends LeafRenderObjectWidget {
     required this.sender,
     required this.sentAt,
     required this.text,
+    this.brightness = Brightness.light,
   });
 
   final String sender;
   final String sentAt;
   final String text;
+  final Brightness brightness;
 
   @override
   RenderObject createRenderObject(BuildContext context) {
@@ -20,6 +22,7 @@ class TimestampedChatMessage extends LeafRenderObjectWidget {
       sender: sender,
       sentAt: sentAt,
       text: text,
+      brightness: brightness,
       textDirection: Directionality.of(context),
     );
   }
@@ -41,9 +44,11 @@ class TimestampedChatMessageRenderObject extends RenderBox {
     required String sentAt,
     required String text,
     required TextDirection textDirection,
+    required Brightness brightness,
   })  : _sender = sender,
         _sentAt = sentAt,
         _text = text,
+        _brightness = brightness,
         _textDirection = textDirection {
     _textPainter = TextPainter(
       text: textTextSpan,
@@ -63,6 +68,7 @@ class TimestampedChatMessageRenderObject extends RenderBox {
   late String _sentAt;
   late String _text;
   late TextDirection _textDirection;
+  late Brightness _brightness;
 
   late TextPainter _textPainter;
   late TextPainter _sentAtTextPainter;
@@ -101,6 +107,15 @@ class TimestampedChatMessageRenderObject extends RenderBox {
     markNeedsSemanticsUpdate();
   }
 
+  Brightness get brightness => _brightness;
+  set brightness(Brightness value) {
+    if (value == _brightness) return;
+    _brightness = value;
+    markNeedsLayout();
+    markNeedsSemanticsUpdate();
+    markNeedsPaint();
+  }
+
   TextDirection get textDirection => _textDirection;
   set textDirection(TextDirection value) {
     if (value == _textDirection) return;
@@ -109,8 +124,11 @@ class TimestampedChatMessageRenderObject extends RenderBox {
     _sentAtTextPainter.textDirection = value;
   }
 
-  TextSpan get textTextSpan =>
-      TextSpan(text: _text, style: const TextStyle(color: Colors.white));
+  TextSpan get textTextSpan => TextSpan(
+      text: _text,
+      style: TextStyle(
+        color: brightness == Brightness.light ? Colors.black : Colors.white,
+      ));
   TextSpan get sentAtTextSpan =>
       TextSpan(text: _sentAt, style: const TextStyle(color: Colors.grey));
   TextSpan get senderTextSpan => TextSpan(

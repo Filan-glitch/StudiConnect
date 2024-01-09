@@ -6,10 +6,10 @@ import 'package:intl/intl.dart';
 import 'package:studiconnect/controllers/messages.dart';
 import 'package:studiconnect/models/group.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
+import 'package:studiconnect/widgets/chat_bubble.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:studiconnect/controllers/groups.dart';
-import 'package:studiconnect/widgets/timestamped_chat_message.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -170,52 +170,7 @@ class _ChatPageState extends State<ChatPage> {
                                   .format(message.sendAt ?? DateTime(1970)),
                             ),
                           ),
-                        Align(
-                          alignment: message.sender?.id == state.user?.id
-                              ? Alignment.centerRight
-                              : Alignment.centerLeft,
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.5,
-                            margin: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 10,
-                            ),
-                            padding: const EdgeInsets.all(10),
-                            decoration: message.sender?.id == state.user?.id
-                                ? BoxDecoration(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(10),
-                                      topRight: Radius.circular(10),
-                                      bottomLeft: Radius.circular(10),
-                                      bottomRight: Radius.circular(0),
-                                    ),
-                                  )
-                                : BoxDecoration(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .background,
-                                    border: Border.all(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      width: 2,
-                                    ),
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(10),
-                                      topRight: Radius.circular(10),
-                                      bottomLeft: Radius.circular(0),
-                                      bottomRight: Radius.circular(10),
-                                    ),
-                                  ),
-                            child: TimestampedChatMessage(
-                              sender: message.sender?.username ?? "",
-                              sentAt: DateFormat("HH:mm")
-                                  .format(message.sendAt ?? DateTime(1970)),
-                              text: message.content ?? "",
-                            ),
-                          ),
-                        ),
+                        ChatBubble(message: message),
                       ],
                     );
                   },
@@ -224,7 +179,7 @@ class _ChatPageState extends State<ChatPage> {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).colorScheme.primary,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.1),
@@ -240,6 +195,7 @@ class _ChatPageState extends State<ChatPage> {
                         controller: _messageController,
                         decoration: const InputDecoration(
                           hintText: "Nachricht",
+                          hintStyle: TextStyle(color: Colors.white),
                           border: InputBorder.none,
                         ),
                       ),
@@ -255,7 +211,10 @@ class _ChatPageState extends State<ChatPage> {
                         }
                         _messageController.clear();
                       },
-                      icon: const Icon(Icons.send),
+                      icon: const Icon(
+                        Icons.send,
+                        color: Colors.white,
+                      ),
                     ),
                   ],
                 ),
