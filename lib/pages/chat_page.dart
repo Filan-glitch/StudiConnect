@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:intl/intl.dart';
@@ -10,6 +8,7 @@ import 'package:studiconnect/widgets/chat_bubble.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:studiconnect/controllers/groups.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -207,7 +206,7 @@ class _ChatPageState extends State<ChatPage> {
                           await sendMessage(group.id, _messageController.text);
                           setState(() {});
                         } catch (e) {
-                          log(e.toString());
+                          logWarning(e.toString());
                           return;
                         }
                         _messageController.clear();

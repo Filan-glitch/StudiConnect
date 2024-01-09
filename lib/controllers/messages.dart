@@ -24,18 +24,6 @@ Future<int> getMessages(String groupID, int page, bool replace) async {
 
   if (result == null) {
     logWarning("Failed to get messages");
-    return;
-    // store.dispatch(
-    //   Action(
-    //     ActionTypes.updateSessionID,
-    //     payload: null,
-    //   ),
-    // );
-
-    // navigatorKey.currentState!.pushNamedAndRemoveUntil(
-    //   '/welcome',
-    //   (route) => false,
-    // );
     return 0;
   }
   log("Updating messages in store");
