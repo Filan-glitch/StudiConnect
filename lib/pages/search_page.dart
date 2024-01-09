@@ -6,6 +6,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/group.dart';
+import 'package:studiconnect/models/group_parameter.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
@@ -223,8 +224,14 @@ class _SearchPageState extends State<SearchPage> {
                         ],
                       ),
                       onTap: () {
-                        Navigator.pushNamed(context, '/group-info',
-                            arguments: group);
+                        Navigator.pushNamed(
+                          context,
+                          '/group-info',
+                          arguments: GroupLookupParameters(
+                            groupID: group.id,
+                            source: GroupSource.searchedGroups,
+                          ),
+                        );
                       },
                     ),
                   );

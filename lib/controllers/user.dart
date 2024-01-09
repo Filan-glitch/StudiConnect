@@ -51,7 +51,7 @@ Future<bool> loadUserInfo() async {
     return false;
   }
 
-// backup messages for groups
+  // backup messages for groups
   if (store.state.user?.groups != null) {
     result.groups = result.groups?.map((group) {
       final messages = store.state.user?.groups
@@ -108,7 +108,8 @@ Future<void> updateProfile(
       parser: (result) => result["updateProfile"]["id"] as String);
 
   if (id == null) {
-    showToast("Dein Profil konnte nicht aktualisiert werden. Du wirdst nun ausgeloggt.");
+    showToast(
+        "Dein Profil konnte nicht aktualisiert werden. Du wirdst nun ausgeloggt.");
     store.dispatch(
       Action(
         ActionTypes.updateSessionID,
@@ -154,7 +155,7 @@ Future<void> deleteAccount(String credential) async {
   );
   navigatorKey.currentState!.pushNamedAndRemoveUntil(
     '/welcome',
-        (route) => false,
+    (route) => false,
   );
 }
 
@@ -170,8 +171,7 @@ Future<void> uploadProfileImage(XFile file) async {
   try {
     await runRestApi(
         apiCall: () => rest_service.uploadProfileImage(content),
-        parser: (result) => null)
-        .then((value) async {
+        parser: (result) => null).then((value) async {
       store.dispatch(
         Action(
           ActionTypes.setProfileImageAvailable,
@@ -188,10 +188,10 @@ Future<void> uploadProfileImage(XFile file) async {
     return;
   }
 
-  await DefaultCacheManager().removeFile(
-      "$backendURL/api/group/${store.state.user?.id}/image");
-  await DefaultCacheManager().downloadFile(
-      "$backendURL/api/group/${store.state.user?.id}/image");
+  await DefaultCacheManager()
+      .removeFile("$backendURL/api/group/${store.state.user?.id}/image");
+  await DefaultCacheManager()
+      .downloadFile("$backendURL/api/group/${store.state.user?.id}/image");
 }
 
 Future<void> deleteProfileImage() async {
@@ -206,7 +206,8 @@ Future<void> deleteProfileImage() async {
     ),
   );
 
-  await DefaultCacheManager().removeFile("$backendURL/api/group/${store.state.user?.id}/image");
+  await DefaultCacheManager()
+      .removeFile("$backendURL/api/group/${store.state.user?.id}/image");
 
   showToast(
       "Profilbild erfolgreich gelöscht. Evtl. liegt das Bild noch im Cache.");
