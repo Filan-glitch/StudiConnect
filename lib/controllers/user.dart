@@ -2,15 +2,19 @@ import 'dart:typed_data';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/redux/actions.dart';
 import 'package:studiconnect/models/redux/store.dart';
 import 'package:studiconnect/models/user.dart';
 import 'package:studiconnect/controllers/api.dart';
+import 'package:studiconnect/services/graphql/errors/api_exception.dart';
 import 'package:studiconnect/services/graphql/user.dart' as service;
 import 'package:studiconnect/services/rest/profile_image.dart' as rest_service;
 import 'package:studiconnect/services/storage/credentials.dart' as storage;
 import 'package:studiconnect/services/firebase/authentication.dart' as firebase;
+
+import '../constants.dart';
 
 Future<bool> loadUserInfo() async {
   Map<String, String> credentials = await storage.loadCredentials();
@@ -94,6 +98,7 @@ Future<void> updateProfile(
       parser: (result) => result["updateProfile"]["id"] as String);
 
   if (id == null) {
+    showToast("Dein Profil konnte nicht aktualisiert werden. Du wirdst nun ausgeloggt.");
     store.dispatch(
       Action(
         ActionTypes.updateSessionID,
@@ -111,17 +116,25 @@ Future<void> updateProfile(
 }
 
 Future<void> deleteAccount(String credential) async {
-  await Future.wait([
-    runApiService(
-      apiCall: () => service.deleteAccount(),
-      parser: (result) => null,
-    ),
-    storage.deleteCredentials(),
-    if (store.state.authProviderType == "email")
-      firebase.deleteEmailAccount(credential),
-    if (store.state.authProviderType == "google")
-      firebase.deleteGoogleAccount(),
-  ]);
+  try {
+    await Future.wait([
+      runApiService(
+        apiCall: () => service.deleteAccount(),
+        parser: (result) => null,
+      ),
+      storage.deleteCredentials(),
+      if (store.state.authProviderType == "email")
+        firebase.deleteEmailAccount(credential),
+      if (store.state.authProviderType == "google")
+        firebase.deleteGoogleAccount(),
+    ]);
+  } on ApiException catch (e) {
+    showToast(e.message);
+    return;
+  } catch (e) {
+    showToast("Dein Account konnte nicht gelöscht werden.");
+    return;
+  }
 
   store.dispatch(
     Action(
@@ -129,28 +142,46 @@ Future<void> deleteAccount(String credential) async {
       payload: null,
     ),
   );
-
   navigatorKey.currentState!.pushNamedAndRemoveUntil(
     '/welcome',
-    (route) => false,
+        (route) => false,
   );
 }
 
 Future<void> uploadProfileImage(XFile file) async {
-  Uint8List content = await file.readAsBytes();
+  Uint8List content;
+  try {
+    content = await file.readAsBytes();
+  } catch (e) {
+    showToast("Das Bild war fehlerhaft.");
+    return;
+  }
 
-  await runRestApi(
-      apiCall: () => rest_service.uploadProfileImage(content),
-      parser: (result) => null);
+  try {
+    await runRestApi(
+        apiCall: () => rest_service.uploadProfileImage(content),
+        parser: (result) => null)
+        .then((value) async {
+      store.dispatch(
+        Action(
+          ActionTypes.setProfileImageAvailable,
+          payload: true,
+        ),
+      );
+      showToast("Profilbild erfolgreich hochgeladen.");
+    });
+  } on ApiException catch (e) {
+    showToast(e.message);
+    return;
+  } catch (e) {
+    showToast(e.toString());
+    return;
+  }
 
-  store.dispatch(
-    Action(
-      ActionTypes.setProfileImageAvailable,
-      payload: true,
-    ),
-  );
-
-  showToast("Profilbild erfolgreich hochgeladen.");
+  await DefaultCacheManager().removeFile(
+      "$backendURL/api/group/${store.state.user?.id}/image");
+  await DefaultCacheManager().downloadFile(
+      "$backendURL/api/group/${store.state.user?.id}/image");
 }
 
 Future<void> deleteProfileImage() async {
@@ -164,6 +195,8 @@ Future<void> deleteProfileImage() async {
       payload: false,
     ),
   );
+
+  await DefaultCacheManager().removeFile("$backendURL/api/group/${store.state.user?.id}/image");
 
   showToast(
       "Profilbild erfolgreich gelöscht. Evtl. liegt das Bild noch im Cache.");

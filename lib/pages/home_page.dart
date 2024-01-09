@@ -12,6 +12,7 @@ import 'package:studiconnect/pages/search_page.dart';
 import 'package:studiconnect/models/redux/actions.dart' as redux;
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/models/redux/store.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -21,40 +22,40 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedPage = 0;
-  late StreamSubscription<ConnectivityResult> subscription;
+  late final StreamSubscription<ConnectivityResult> subscription;
 
-  @override
-  void initState() {
-    super.initState();
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
-    Connectivity().onConnectivityChanged.last.then((ConnectivityResult result) {
-      store.dispatch(
-        redux.Action(
-          redux.ActionTypes.setConnectionState,
-          payload: result != ConnectivityResult.none,
-        ),
-      );
-    });
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      store.dispatch(
-        redux.Action(
-          redux.ActionTypes.setConnectionState,
-          payload: result != ConnectivityResult.none,
-        ),
-      );
-      setState(() {});
-    });
+  int _selectedPage = 0;
+
+  void _onConnectivityChanged(ConnectivityResult result) {
+    store.dispatch(
+      redux.Action(
+        redux.ActionTypes.setConnectionState,
+        payload: result != ConnectivityResult.none,
+      ),
+    );
   }
 
   @override
+  void initState() {
+    log("Iniatilizing HomePage...");
+    super.initState();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+    Connectivity().checkConnectivity().then(_onConnectivityChanged);
+    subscription = Connectivity().onConnectivityChanged.listen(_onConnectivityChanged);
+    setState(() {});
+  }
+
+
+  @override
   void dispose() {
+    log("Disposing HomePage...");
     subscription.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    log("Building HomePage...");
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       builder: (context, state) {

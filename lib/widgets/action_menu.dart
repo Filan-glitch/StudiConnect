@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 
 class ActionMenu extends StatelessWidget {
   const ActionMenu({
@@ -12,6 +13,7 @@ class ActionMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log("Building ActionMenu...");
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
       child: Container(

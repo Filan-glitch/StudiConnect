@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/avatar_picture.dart';
 import 'package:studiconnect/models/group.dart';
 
@@ -9,6 +10,7 @@ class GroupListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log("Building GroupListItem...");
     return ListTile(
       onTap: () {
         Navigator.pushNamed(
@@ -20,7 +22,7 @@ class GroupListItem extends StatelessWidget {
       leading: AvatarPicture(
         id: group.id,
         type: Type.group,
-        radius: 15,
+        radius: 20,
         loadingCircleStrokeWidth: 1.5,
       ),
       title: Text(group.title ?? "Gruppe ${group.id}"),

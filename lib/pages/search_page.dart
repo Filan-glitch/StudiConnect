@@ -4,8 +4,10 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:studiconnect/controllers/groups.dart';
+import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/group.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
 class SearchPage extends StatefulWidget {
@@ -16,15 +18,17 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  final DateFormat formatter = DateFormat('dd.MM.yyyy');
-  final TextEditingController _moduleInputController = TextEditingController();
-  double _radius = 10;
-
-  late Timer _delayQueryTimer = Timer(Duration.zero, () {});
+  late final DateFormat _formatter;
+  late final TextEditingController _moduleInputController;
+  late double _radius;
+  late Timer _delayQueryTimer;
 
   void _loadSearchResults() {
+    log("Loading search results...");
     String module = _moduleInputController.text;
+
     if (module.isEmpty) {
+      _delayQueryTimer.cancel();
       return;
     }
 
@@ -32,7 +36,29 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   @override
+  void initState() {
+    log("Iniatilizing SearchPage...");
+    super.initState();
+    _radius = 10;
+    _moduleInputController = TextEditingController();
+    _formatter = DateFormat('dd.MM.yyyy');
+    _delayQueryTimer = Timer(
+      const Duration(seconds: 1),
+      _loadSearchResults,
+    );
+  }
+
+  @override
+  void dispose() {
+    log("Disposing SearchPage...");
+    _moduleInputController.dispose();
+    _delayQueryTimer.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    log("Building SearchPage...");
     return PageWrapper(
       title: 'Suche',
       type: PageType.complex,
@@ -95,6 +121,7 @@ class _SearchPageState extends State<SearchPage> {
             leading: const Icon(Icons.share),
             title: const Text('Studiconnect weiterempfehlen'),
             onTap: () {
+              navigatorKey.currentState!.pop();
               Share.share(
                   'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=de.studiconnect.app');
             }),
@@ -102,7 +129,8 @@ class _SearchPageState extends State<SearchPage> {
           leading: const Icon(Icons.settings),
           title: const Text('Einstellungen'),
           onTap: () {
-            Navigator.pushNamed(context, '/settings');
+            navigatorKey.currentState!.pop();
+            navigatorKey.currentState!.pushNamed('/settings');
           },
         ),
       ],
@@ -175,7 +203,7 @@ class _SearchPageState extends State<SearchPage> {
                             ),
                           ),
                           Text(
-                            'Erstellt an ${formatter.format(group.createdAt!)}',
+                            'Erstellt an ${_formatter.format(group.createdAt!)}',
                             style: const TextStyle(
                               color: Colors.white,
                             ),

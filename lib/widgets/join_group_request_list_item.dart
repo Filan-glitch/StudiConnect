@@ -4,6 +4,7 @@ import 'package:studiconnect/constants.dart';
 import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/models/group.dart';
 import 'package:studiconnect/models/user.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 
 class JoinGroupRequestListItem extends StatefulWidget {
   const JoinGroupRequestListItem(
@@ -18,8 +19,22 @@ class JoinGroupRequestListItem extends StatefulWidget {
 }
 
 class _JoinGroupRequestListItemState extends State<JoinGroupRequestListItem> {
+
+  @override
+  void initState() {
+    log("Initializing JoinGroupRequestListItem...");
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    log("Disposing JoinGroupRequestListItem...");
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    log("Building JoinGroupRequestListItem...");
     return ListTile(
       leading: CircleAvatar(
         backgroundImage: NetworkImage(

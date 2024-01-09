@@ -8,6 +8,7 @@ import 'package:oktoast/oktoast.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/pages/loading_page.dart';
 import 'package:studiconnect/pages/no_connectivity_page.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/action_menu.dart';
 import 'package:studiconnect/models/redux/actions.dart' as redux;
 import 'package:studiconnect/models/redux/store.dart';
@@ -51,20 +52,20 @@ class PageWrapper extends StatefulWidget {
 }
 
 class _PageWrapperState extends State<PageWrapper> {
-  late StreamSubscription<ConnectivityResult> subscription;
+  late final StreamSubscription<ConnectivityResult> subscription;
 
   void _onConnectivityChanged(ConnectivityResult result) {
     store.dispatch(
       redux.Action(
         redux.ActionTypes.setConnectionState,
-        payload: !(result == ConnectivityResult.none ||
-            result == ConnectivityResult.bluetooth),
+        payload: result != ConnectivityResult.none,
       ),
     );
   }
 
   @override
   void initState() {
+    log("Initializing PageWrapper...");
     super.initState();
     Connectivity().checkConnectivity().then(_onConnectivityChanged);
     subscription =
@@ -72,7 +73,15 @@ class _PageWrapperState extends State<PageWrapper> {
   }
 
   @override
+  void dispose() {
+    log("Disposing PageWrapper...");
+    subscription.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    log("Building PageWrapper...");
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       builder: (context, state) {
@@ -120,7 +129,9 @@ class _PageWrapperState extends State<PageWrapper> {
             bottomNavigationBar: widget.bottomNavigationBar,
             body: Container(
               padding: EdgeInsets.only(
-                top: MediaQuery.of(context).viewPadding.top - 5.0,
+                top: (MediaQuery.of(context).viewPadding.top - 5.0 >= 0)
+                    ? MediaQuery.of(context).viewPadding.top - 5.0
+                    : 0,
               ),
               color: Theme.of(context).colorScheme.primary,
               child: StoreConnector<AppState, AppState>(
