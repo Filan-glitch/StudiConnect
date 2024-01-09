@@ -8,13 +8,13 @@ class TimestampedChatMessage extends LeafRenderObjectWidget {
     required this.sender,
     required this.sentAt,
     required this.text,
-    required this.style,
+    this.brightness = Brightness.light,
   });
 
   final String sender;
   final String sentAt;
   final String text;
-  final TextStyle style;
+  final Brightness brightness;
 
   @override
   RenderObject createRenderObject(BuildContext context) {
@@ -22,21 +22,18 @@ class TimestampedChatMessage extends LeafRenderObjectWidget {
       sender: sender,
       sentAt: sentAt,
       text: text,
-      style: style,
+      brightness: brightness,
       textDirection: Directionality.of(context),
     );
   }
 
   @override
   void updateRenderObject(
-      BuildContext context,
-      TimestampedChatMessageRenderObject renderObject
-  ) {
+      BuildContext context, TimestampedChatMessageRenderObject renderObject) {
     renderObject
       ..sender = sender
       ..sentAt = sentAt
       ..text = text
-      ..style = style
       ..textDirection = Directionality.of(context);
   }
 }
@@ -46,14 +43,13 @@ class TimestampedChatMessageRenderObject extends RenderBox {
     required String sender,
     required String sentAt,
     required String text,
-    required TextStyle style,
     required TextDirection textDirection,
-  }) :  _sender = sender,
+    required Brightness brightness,
+  })  : _sender = sender,
         _sentAt = sentAt,
         _text = text,
-        _style = style,
-        _textDirection = textDirection
-  {
+        _brightness = brightness,
+        _textDirection = textDirection {
     _textPainter = TextPainter(
       text: textTextSpan,
       textDirection: textDirection,
@@ -71,8 +67,8 @@ class TimestampedChatMessageRenderObject extends RenderBox {
   late String _sender;
   late String _sentAt;
   late String _text;
-  late TextStyle _style;
   late TextDirection _textDirection;
+  late Brightness _brightness;
 
   late TextPainter _textPainter;
   late TextPainter _sentAtTextPainter;
@@ -83,7 +79,6 @@ class TimestampedChatMessageRenderObject extends RenderBox {
   late double _lastMessageLineWidth;
   late double _longestLineWidth;
   late double _sentAtLineWidth;
-  late double _senderLineWidth;
   late int _numMessageLines;
 
   String get sender => _sender;
@@ -112,13 +107,13 @@ class TimestampedChatMessageRenderObject extends RenderBox {
     markNeedsSemanticsUpdate();
   }
 
-  TextStyle get style => _style;
-  set style(TextStyle value) {
-    if (value == _style) return;
-    _style = value;
-    _textPainter.text = textTextSpan;
-    _sentAtTextPainter.text = sentAtTextSpan;
+  Brightness get brightness => _brightness;
+  set brightness(Brightness value) {
+    if (value == _brightness) return;
+    _brightness = value;
     markNeedsLayout();
+    markNeedsSemanticsUpdate();
+    markNeedsPaint();
   }
 
   TextDirection get textDirection => _textDirection;
@@ -129,9 +124,16 @@ class TimestampedChatMessageRenderObject extends RenderBox {
     _sentAtTextPainter.textDirection = value;
   }
 
-  TextSpan get textTextSpan => TextSpan(text: _text, style: _style.copyWith(color: Colors.white));
-  TextSpan get sentAtTextSpan => TextSpan(text: _sentAt, style: _style.copyWith(color: Colors.grey));
-  TextSpan get senderTextSpan => TextSpan(text: _sender, style: _style.copyWith(color: Colors.amber));
+  TextSpan get textTextSpan => TextSpan(
+      text: _text,
+      style: TextStyle(
+        color: brightness == Brightness.light ? Colors.black : Colors.white,
+      ));
+  TextSpan get sentAtTextSpan =>
+      TextSpan(text: _sentAt, style: const TextStyle(color: Colors.grey));
+  TextSpan get senderTextSpan => TextSpan(
+      text: _sender,
+      style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold));
 
   @override
   void performLayout() {
@@ -145,7 +147,6 @@ class TimestampedChatMessageRenderObject extends RenderBox {
 
     // Sender
     _senderTextPainter.layout(maxWidth: constraints.maxWidth);
-    _senderLineWidth = _senderTextPainter.computeLineMetrics().first.width;
 
     _longestLineWidth = 0;
     for (final line in textLines) {
@@ -158,29 +159,28 @@ class TimestampedChatMessageRenderObject extends RenderBox {
 
     final sizeOfMessage = Size(_longestLineWidth, _textPainter.height);
     final lastLineWithSentAt = _lastMessageLineWidth + _sentAtLineWidth * 1.1;
-    if(textLines.length == 1) {
+    if (textLines.length == 1) {
       _sentAtFitsOnLastLine = lastLineWithSentAt < constraints.maxWidth;
     } else {
-      _sentAtFitsOnLastLine = lastLineWithSentAt < min(_longestLineWidth, constraints.maxWidth);
+      _sentAtFitsOnLastLine =
+          lastLineWithSentAt < min(_longestLineWidth, constraints.maxWidth);
     }
 
     late Size computedSize;
-    if(!_sentAtFitsOnLastLine) {
+    if (!_sentAtFitsOnLastLine) {
       computedSize = Size(
         sizeOfMessage.width,
-        sizeOfMessage.height + _sentAtTextPainter.height + _senderTextPainter.height,
+        sizeOfMessage.height +
+            _sentAtTextPainter.height +
+            _senderTextPainter.height,
       );
     } else {
       if (textLines.length == 1) {
-        computedSize = Size(
-            lastLineWithSentAt,
-            sizeOfMessage.height + _senderTextPainter.height
-        );
+        computedSize = Size(lastLineWithSentAt,
+            sizeOfMessage.height + _senderTextPainter.height);
       } else {
-        computedSize = Size(
-            _longestLineWidth,
-            sizeOfMessage.height + _senderTextPainter.height
-        );
+        computedSize = Size(_longestLineWidth,
+            sizeOfMessage.height + _senderTextPainter.height);
       }
     }
     size = constraints.constrain(computedSize);
@@ -199,15 +199,18 @@ class TimestampedChatMessageRenderObject extends RenderBox {
     _textPainter.paint(context.canvas, messageOffset);
 
     late Offset sentAtOffset;
-    if(_sentAtFitsOnLastLine) {
+    if (_sentAtFitsOnLastLine) {
       sentAtOffset = Offset(
         offset.dx + (size.width - _sentAtLineWidth),
-        offset.dy + (_lineHeight * (_numMessageLines - 1) + _senderTextPainter.height),
+        offset.dy +
+            (_lineHeight * (_numMessageLines - 1) + _senderTextPainter.height),
       );
     } else {
       sentAtOffset = Offset(
         offset.dx + (size.width - _sentAtLineWidth),
-        offset.dy + (_lineHeight * _numMessageLines),
+        offset.dy +
+            (_lineHeight * _numMessageLines + _senderTextPainter.height) +
+            3,
       );
     }
 
