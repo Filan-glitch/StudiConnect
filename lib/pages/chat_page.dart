@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:studiconnect/controllers/messages.dart';
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/group.dart';
+import 'package:studiconnect/models/group_parameter.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/widgets/chat_bubble.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
@@ -88,7 +89,14 @@ class _ChatPageState extends State<ChatPage> {
               leading: const Icon(Icons.info),
               title: const Text('Gruppeninformationen'),
               onTap: () {
-                Navigator.pushNamed(context, '/group-info', arguments: group);
+                Navigator.pushNamed(
+                  context,
+                  '/group-info',
+                  arguments: GroupLookupParameters(
+                    groupID: group.id,
+                    source: GroupSource.myGroups,
+                  ),
+                );
               },
             ),
             if (state.user?.id == group.creator?.id)
@@ -107,17 +115,15 @@ class _ChatPageState extends State<ChatPage> {
               ListTile(
                 leading: const Icon(Icons.edit),
                 title: const Text('Gruppe bearbeiten'),
-                onTap: () async {
-                  final updatedGroup = await Navigator.pushNamed(
-                      context, '/create-and-edit-group',
-                      arguments: group);
-
-                  // If the group data is updated, update the state
-                  if (updatedGroup != null) {
-                    setState(() {
-                      group = updatedGroup as Group;
-                    });
-                  }
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    '/create-and-edit-group',
+                    arguments: GroupLookupParameters(
+                      groupID: group.id,
+                      source: GroupSource.myGroups,
+                    ),
+                  );
                 },
               ),
             if (members.contains(state.user?.id) &&

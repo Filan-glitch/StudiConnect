@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:studiconnect/constants.dart';
 import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/models/group.dart';
+import 'package:studiconnect/models/group_parameter.dart';
 import 'package:studiconnect/models/user.dart';
+import 'package:studiconnect/models/user_parameter.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 
 class JoinGroupRequestListItem extends StatefulWidget {
   const JoinGroupRequestListItem(
@@ -46,7 +49,18 @@ class _JoinGroupRequestListItemState extends State<JoinGroupRequestListItem> {
         ],
       ),
       onTap: () {
-        Navigator.pushNamed(context, '/user-info', arguments: widget.user);
+        Navigator.pushNamed(
+          context,
+          '/user-info',
+          arguments: UserLookupParameters(
+            userID: widget.user.id,
+            source: UserSource.joinGroupRequest,
+            groupLookupParameters: GroupLookupParameters(
+              groupID: widget.group.id,
+              source: GroupSource.myGroups,
+            ),
+          ),
+        );
       },
     );
   }

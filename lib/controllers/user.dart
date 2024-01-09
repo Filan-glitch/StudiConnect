@@ -51,7 +51,7 @@ Future<bool> loadUserInfo() async {
     return false;
   }
 
-// backup messages for groups
+  // backup messages for groups
   if (store.state.user?.groups != null) {
     result.groups = result.groups?.map((group) {
       final messages = store.state.user?.groups
@@ -156,7 +156,7 @@ Future<void> deleteAccount(String credential) async {
   );
   navigatorKey.currentState!.pushNamedAndRemoveUntil(
     '/welcome',
-        (route) => false,
+    (route) => false,
   );
 }
 
@@ -218,7 +218,8 @@ Future<void> deleteProfileImage() async {
     ),
   );
 
-  await DefaultCacheManager().removeFile("$backendURL/api/group/${store.state.user?.id}/image");
+  await DefaultCacheManager()
+      .removeFile("$backendURL/api/group/${store.state.user?.id}/image");
 
   showToast(
       "Profilbild erfolgreich gelöscht. Evtl. liegt das Bild noch im Cache.");

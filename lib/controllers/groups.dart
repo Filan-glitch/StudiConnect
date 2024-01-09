@@ -88,8 +88,9 @@ Future<bool> updateGroup(String id, String title, String description,
 
   // update groups of user
   User currentUser = store.state.user!;
-  currentUser.groups =
-      currentUser.groups!.map((e) => e.id == id ? group : e).toList();
+  currentUser.groups = currentUser.groups!
+      .map((e) => e.id == id ? group.update(messages: e.messages) : e)
+      .toList();
   store.dispatch(Action(ActionTypes.setUser, payload: currentUser));
 
   return true;
@@ -184,8 +185,9 @@ Future<void> addMember(String id, String userID) async {
 
   // update groups of user
   User currentUser = store.state.user!;
-  currentUser.groups =
-      currentUser.groups!.map((e) => e.id == id ? group : e).toList();
+  currentUser.groups = currentUser.groups!
+      .map((e) => e.id == id ? group.update(messages: e.messages) : e)
+      .toList();
   store.dispatch(Action(ActionTypes.setUser, payload: currentUser));
 
   return;
@@ -217,8 +219,9 @@ Future<bool> removeMember(String id, String userID) async {
 
   // update groups of user
   User currentUser = store.state.user!;
-  currentUser.groups =
-      currentUser.groups!.map((e) => e.id == id ? group : e).toList();
+  currentUser.groups = currentUser.groups!
+      .map((e) => e.id == id ? group.update(messages: e.messages) : e)
+      .toList();
   store.dispatch(Action(ActionTypes.setUser, payload: currentUser));
 
   return true;
@@ -250,8 +253,9 @@ Future<bool> removeJoinRequest(String groupID, String userID) async {
 
   // update groups of user
   User currentUser = store.state.user!;
-  currentUser.groups =
-      currentUser.groups!.map((e) => e.id == groupID ? group : e).toList();
+  currentUser.groups = currentUser.groups!
+      .map((e) => e.id == groupID ? group.update(messages: e.messages) : e)
+      .toList();
   store.dispatch(Action(ActionTypes.setUser, payload: currentUser));
 
   return true;

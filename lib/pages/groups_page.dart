@@ -68,7 +68,9 @@ class _GroupsPageState extends State<GroupsPage> {
                           ElevatedButton(
                             onPressed: () {
                               Navigator.pushNamed(
-                                  context, '/create-and-edit-group');
+                                context,
+                                '/create-and-edit-group',
+                              );
                             },
                             child: const Text("Gruppe erstellen"),
                           ),

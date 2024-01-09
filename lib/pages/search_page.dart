@@ -6,9 +6,12 @@ import 'package:share_plus/share_plus.dart';
 import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/group.dart';
+import 'package:studiconnect/models/group_parameter.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
+import 'package:studiconnect/models/redux/actions.dart' as redux;
+import 'package:studiconnect/models/redux/store.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -44,6 +47,13 @@ class _SearchPageState extends State<SearchPage> {
     _delayQueryTimer = Timer(
       const Duration(seconds: 1),
       _loadSearchResults,
+    );
+
+    store.dispatch(
+      redux.Action(
+        redux.ActionTypes.updateSearchResults,
+        payload: <Group>[],
+      ),
     );
   }
 
@@ -220,8 +230,14 @@ class _SearchPageState extends State<SearchPage> {
                         ],
                       ),
                       onTap: () {
-                        Navigator.pushNamed(context, '/group-info',
-                            arguments: group);
+                        Navigator.pushNamed(
+                          context,
+                          '/group-info',
+                          arguments: GroupLookupParameters(
+                            groupID: group.id,
+                            source: GroupSource.searchedGroups,
+                          ),
+                        );
                       },
                     ),
                   );

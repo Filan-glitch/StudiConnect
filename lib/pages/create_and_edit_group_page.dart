@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geocoding/geocoding.dart' as geo;
@@ -6,9 +7,9 @@ import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/dialogs/select_location_dialog.dart';
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/group.dart';
+import 'package:studiconnect/models/group_parameter.dart';
+import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
-import 'package:studiconnect/models/redux/actions.dart' as redux;
-import 'package:studiconnect/models/redux/store.dart';
 
 class CreateAndEditGroupPage extends StatefulWidget {
   const CreateAndEditGroupPage({super.key});
@@ -23,7 +24,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
   late final TextEditingController _groupDescriptionController;
 
   LatLng? _selectedLocation;
-  Group? group;
+  GroupLookupParameters? groupParams;
 
   @override
   void initState() {
@@ -31,14 +32,20 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
     _groupTitleController = TextEditingController();
     _groupModuleController = TextEditingController();
     _groupDescriptionController = TextEditingController();
+
     Future.delayed(Duration.zero, () {
       setState(() {
-        group = ModalRoute.of(context)!.settings.arguments as Group?;
-        if (group != null) {
-          _groupTitleController.text = group!.title ?? "";
-          _groupModuleController.text = group!.module ?? "";
-          _groupDescriptionController.text = group!.description ?? "";
-          _selectedLocation = LatLng(group!.lat ?? 0.0, group!.lon ?? 0.0);
+        groupParams = ModalRoute.of(context)!.settings.arguments
+            as GroupLookupParameters?;
+        if (groupParams?.group != null) {
+          _groupTitleController.text = groupParams!.group!.title ?? "";
+          _groupModuleController.text = groupParams!.group!.module ?? "";
+          _groupDescriptionController.text =
+              groupParams!.group!.description ?? "";
+          _selectedLocation = LatLng(
+            groupParams!.group!.lat ?? 0.0,
+            groupParams!.group!.lon ?? 0.0,
+          );
         }
       });
     });
@@ -54,52 +61,59 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
 
   @override
   Widget build(BuildContext context) {
-    return PageWrapper(
-      padding: const EdgeInsets.only(top: 20.0),
-      title: group?.id == null ? "Gruppe erstellen" : "Gruppe bearbeiten",
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20, bottom: 30.0),
-              child: TextField(
-                controller: _groupTitleController,
-                decoration: const InputDecoration(
-                  labelText: "Titel",
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20, bottom: 30.0),
-              child: TextField(
-                controller: _groupModuleController,
-                decoration: const InputDecoration(
-                  labelText: "Modul",
-                ),
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 30.0),
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: TextButton(
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0.0),
-                        ),
+    return StoreConnector<AppState, AppState>(
+        converter: (store) => store.state,
+        builder: (context, state) {
+          Group? group = groupParams?.group;
+          return PageWrapper(
+            padding: const EdgeInsets.only(top: 20.0),
+            title: group?.id == null ? "Gruppe erstellen" : "Gruppe bearbeiten",
+            body: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 20, right: 20, bottom: 30.0),
+                    child: TextField(
+                      controller: _groupTitleController,
+                      decoration: const InputDecoration(
+                        labelText: "Titel",
                       ),
                     ),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => SelectLocationDialog(
-                          onLocationSelected: (location) {
-                            setState(() {
-                              _selectedLocation = location;
-                            });
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 20, right: 20, bottom: 30.0),
+                    child: TextField(
+                      controller: _groupModuleController,
+                      decoration: const InputDecoration(
+                        labelText: "Modul",
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 20.0, right: 20.0, bottom: 30.0),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: TextButton(
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0.0),
+                              ),
+                            ),
+                          ),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => SelectLocationDialog(
+                                onLocationSelected: (location) {
+                                  setState(() {
+                                    _selectedLocation = location;
+                                  });
 
                             Navigator.of(context).pop();
                           },
@@ -136,8 +150,10 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                                   if (snapshot.hasData) {
                                     geo.Placemark location = snapshot.data![0];
                                     return SizedBox(
-                                      width: MediaQuery.of(context).size.width -
-                                          150,
+                                      width: MediaQuery.of(context)
+                                        .size
+                                        .width
+                                        - 150,
                                       child: Text(
                                         '${location.street}\n${location.locality}',
                                         style: TextStyle(
@@ -208,7 +224,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
-                          Theme.of(context).colorScheme.background,
+                            Theme.of(context).colorScheme.background,
                           side: const BorderSide(
                             color: Colors.red,
                             width: 2.0,
@@ -226,7 +242,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                     child: ElevatedButton.icon(
                       onPressed: () async {
                         if (group == null) {
-                          createGroup(
+                          bool successful = await createGroup(
                             _groupTitleController.text,
                             _groupDescriptionController.text,
                             _groupModuleController.text,
@@ -234,10 +250,10 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                             _selectedLocation?.longitude ?? 0.0,
                           );
 
-                          Navigator.of(context).pop();
+                          if(!successful) return;
                         } else {
                           bool successful = await updateGroup(
-                            group!.id,
+                            group.id,
                             _groupTitleController.text,
                             _groupDescriptionController.text,
                             _groupModuleController.text,
@@ -245,26 +261,17 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                             _selectedLocation?.longitude ?? 0.0,
                           );
 
-                          if (!successful) {
-                            return;
-                          }
+                          if(!successful) return;
 
-                          var updatedGroup = group!.update(
+                          var updatedGroup = group.update(
                             title: _groupTitleController.text,
                             module: _groupModuleController.text,
                             description: _groupDescriptionController.text,
                             lat: _selectedLocation?.latitude,
                             lon: _selectedLocation?.longitude,
                           );
-
-                          // Update the group data in store
-                          store.dispatch(redux.Action(
-                              redux.ActionTypes.updateGroup,
-                              payload: updatedGroup));
-
-                          // Pop the page and pass the updated group data
-                          navigatorKey.currentState!.pop(updatedGroup);
                         }
+                        navigatorKey.currentState!.pop();
                       },
                       icon: const Icon(Icons.done),
                       label: const Padding(
@@ -282,11 +289,9 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                         onPressed: () async {
                           bool successful = await deleteGroup(group!.id);
 
-                          if (!successful) {
-                            return;
-                          }
+                          if (!successful) return;
 
-                          navigatorKey.currentState!.pushNamedAndRemoveUntil(
+                          Navigator.of(context).pushNamedAndRemoveUntil(
                             '/home',
                                 (route) => false,
                           );
