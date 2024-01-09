@@ -37,14 +37,15 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
       setState(() {
         groupParams = ModalRoute.of(context)!.settings.arguments
             as GroupLookupParameters?;
-        if (groupParams?.group != null) {
-          _groupTitleController.text = groupParams!.group!.title ?? "";
-          _groupModuleController.text = groupParams!.group!.module ?? "";
+        Group? group = groupParams?.getGroup(context);
+        if (group != null) {
+          _groupTitleController.text = group.title ?? "";
+          _groupModuleController.text = group.module ?? "";
           _groupDescriptionController.text =
-              groupParams!.group!.description ?? "";
+              group.description ?? "";
           _selectedLocation = LatLng(
-            groupParams!.group!.lat ?? 0.0,
-            groupParams!.group!.lon ?? 0.0,
+            group.lat ?? 0.0,
+            group.lon ?? 0.0,
           );
         }
       });
@@ -64,7 +65,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (context, state) {
-          Group? group = groupParams?.group;
+          Group? group = groupParams?.getGroup(context);
           return PageWrapper(
             padding: const EdgeInsets.only(top: 20.0),
             title: group?.id == null ? "Gruppe erstellen" : "Gruppe bearbeiten",

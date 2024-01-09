@@ -37,7 +37,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (context, state) {
-          final group = groupParams?.group;
+          final group = groupParams?.getGroup(context);
           if (group == null) return Container();
 
           final members = (group.members ?? []).map((e) => e.id).toList();

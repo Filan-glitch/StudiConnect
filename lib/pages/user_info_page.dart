@@ -16,7 +16,7 @@ class UserInfoPage extends StatelessWidget {
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (context, state) {
-          User? user = userParams.user;
+          User? user = userParams.getUser(context);
 
           if (user == null) {
             return const PageWrapper(
