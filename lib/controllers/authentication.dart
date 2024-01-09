@@ -51,7 +51,6 @@ Future<void> loadCredentials() async {
 }
 
 Future<bool?> signInWithGoogle() async {
-  log("Signing in with Google");
   Map? result = await firebase.signInWithGoogle();
   String? idToken = result?["idToken"];
   bool? isNewUser = result?["newUser"];

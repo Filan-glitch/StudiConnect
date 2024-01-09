@@ -127,17 +127,18 @@ Future<void> updateProfile(
 
 Future<void> deleteAccount(String credential) async {
   try {
+    if (store.state.authProviderType == "email") {
+      await firebase.deleteEmailAccount(credential);
+    } else if (store.state.authProviderType == "google") {
+      await firebase.deleteGoogleAccount();
+    }
+
     await runApiService(
       apiCall: () => service.deleteAccount(),
       shouldRethrow: true,
     );
-    await Future.wait([
-      storage.deleteCredentials(),
-      if (store.state.authProviderType == "email")
-        firebase.deleteEmailAccount(credential),
-      if (store.state.authProviderType == "google")
-        firebase.deleteGoogleAccount(),
-    ]);
+
+    await storage.deleteCredentials();
   } on ApiException catch (e) {
     showToast(e.message);
     rethrow;

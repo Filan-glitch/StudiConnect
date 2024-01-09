@@ -43,7 +43,14 @@ Future<Map?> signInWithGoogle() async {
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
   log("Requesting Google account sing in");
-  final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
+  final GoogleSignInAccount? googleSignInAccount;
+  try {
+    googleSignInAccount = await googleSignIn.signIn();
+  } catch (e) {
+    logWarning(e.toString());
+    showToast("Es ist ein Fehler beim Anmelden aufgetreten");
+    rethrow;
+  }
 
   if (googleSignInAccount != null) {
     log("Google account sign in successful");
