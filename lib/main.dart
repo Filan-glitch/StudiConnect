@@ -68,7 +68,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log("Building...");
     return StoreProvider(
       store: store,
       child: OKToast(

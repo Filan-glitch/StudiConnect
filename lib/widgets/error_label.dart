@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:studiconnect/services/logger_provider.dart';
 
 class ErrorLabel extends StatelessWidget {
   const ErrorLabel({super.key, required this.errorMessageNotifier});
@@ -8,7 +7,6 @@ class ErrorLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log("Building ErrorLabel...");
     return ValueListenableBuilder<String>(
       valueListenable: errorMessageNotifier,
       builder: (context, value, child) {

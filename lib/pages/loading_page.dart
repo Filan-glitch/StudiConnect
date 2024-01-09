@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:studiconnect/services/logger_provider.dart';
 
 class LoadingPage extends StatelessWidget {
   const LoadingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    log("Building LoadingPage...");
     return Scaffold(
       body: Center(
         child: Column(

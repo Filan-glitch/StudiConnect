@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,6 @@ import 'package:studiconnect/pages/search_page.dart';
 import 'package:studiconnect/models/redux/actions.dart' as redux;
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/models/redux/store.dart';
-import 'package:studiconnect/services/logger_provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -37,7 +35,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    log("Iniatilizing HomePage...");
     super.initState();
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
     Connectivity().checkConnectivity().then(_onConnectivityChanged);
@@ -48,14 +45,12 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    log("Disposing HomePage...");
     subscription.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    log("Building HomePage...");
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       builder: (context, state) {

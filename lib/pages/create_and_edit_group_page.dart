@@ -9,7 +9,6 @@ import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/group.dart';
 import 'package:studiconnect/models/group_parameter.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
-import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
 class CreateAndEditGroupPage extends StatefulWidget {
@@ -29,7 +28,6 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
 
   @override
   void initState() {
-    log("Initializing CreateAndEditGroupPage...");
     super.initState();
     _groupTitleController = TextEditingController();
     _groupModuleController = TextEditingController();
@@ -55,7 +53,6 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
 
   @override
   void dispose() {
-    log("Disposing CreateAndEditGroupPage...");
     _groupTitleController.dispose();
     _groupModuleController.dispose();
     _groupDescriptionController.dispose();
@@ -64,7 +61,6 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
 
   @override
   Widget build(BuildContext context) {
-    log("Building CreateAndEditGroupPage...");
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (context, state) {
@@ -100,7 +96,10 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                     padding: const EdgeInsets.only(
                         left: 20.0, right: 20.0, bottom: 30.0),
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width,
                       child: TextButton(
                           style: ButtonStyle(
                             shape: MaterialStateProperty.all<
@@ -113,15 +112,16 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                           onPressed: () {
                             showDialog(
                               context: context,
-                              builder: (context) => SelectLocationDialog(
-                                onLocationSelected: (location) {
-                                  setState(() {
-                                    _selectedLocation = location;
-                                  });
+                              builder: (context) =>
+                                  SelectLocationDialog(
+                                    onLocationSelected: (location) {
+                                      setState(() {
+                                        _selectedLocation = location;
+                                      });
 
-                                  Navigator.of(context).pop();
-                                },
-                              ),
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
                             );
                           },
                           child: Row(
@@ -137,7 +137,8 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                                     Text(
                                       "Treffpunkt auswählen",
                                       style: TextStyle(
-                                        color: Theme.of(context)
+                                        color: Theme
+                                            .of(context)
                                             .textTheme
                                             .labelSmall
                                             ?.color,
@@ -152,17 +153,20 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                                       ),
                                       builder: (context, snapshot) {
                                         if (snapshot.hasData) {
-                                          geo.Placemark location =
-                                              snapshot.data![0];
+                                          geo.Placemark location = snapshot
+                                              .data![0];
                                           return SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width -
-                                                150,
+                                            width: MediaQuery
+                                                .of(context)
+                                                .size
+                                                .width
+                                                - 150,
                                             child: Text(
-                                              '${location.street}\n${location.locality}',
+                                              '${location.street}\n${location
+                                                  .locality}',
                                               style: TextStyle(
-                                                color: Theme.of(context)
+                                                color: Theme
+                                                    .of(context)
                                                     .textTheme
                                                     .bodySmall
                                                     ?.color,
@@ -230,7 +234,10 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
-                                    Theme.of(context).colorScheme.background,
+                                Theme
+                                    .of(context)
+                                    .colorScheme
+                                    .background,
                                 side: const BorderSide(
                                   color: Colors.red,
                                   width: 2.0,
@@ -248,15 +255,17 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                           child: ElevatedButton.icon(
                             onPressed: () async {
                               if (group == null) {
-                                await createGroup(
+                                bool successful = await createGroup(
                                   _groupTitleController.text,
                                   _groupDescriptionController.text,
                                   _groupModuleController.text,
                                   _selectedLocation?.latitude ?? 0.0,
                                   _selectedLocation?.longitude ?? 0.0,
                                 );
+
+                                if (!successful) return;
                               } else {
-                                await updateGroup(
+                                bool successful = await updateGroup(
                                   group.id,
                                   _groupTitleController.text,
                                   _groupDescriptionController.text,
@@ -264,13 +273,25 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                                   _selectedLocation?.latitude ?? 0.0,
                                   _selectedLocation?.longitude ?? 0.0,
                                 );
+
+                                if (!successful) return;
+
+                                group.update(
+                                  title: _groupTitleController.text,
+                                  module: _groupModuleController.text,
+                                  description: _groupDescriptionController.text,
+                                  lat: _selectedLocation?.latitude,
+                                  lon: _selectedLocation?.longitude,
+                                );
                               }
                               navigatorKey.currentState!.pop();
                             },
                             icon: const Icon(Icons.done),
                             label: const Padding(
                               padding: EdgeInsets.symmetric(vertical: 5.0),
-                              child: Text("Gruppe speichern"),
+                              child: Text(
+                                  "Gruppe speichern"
+                              ),
                             ),
                           ),
                         ),
@@ -278,16 +299,23 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton.icon(
-                              onPressed: () {
-                                deleteGroup(group!.id);
-                                Navigator.of(context).pushNamedAndRemoveUntil(
+                              onPressed: () async {
+                                bool successful = await deleteGroup(group!.id);
+
+                                if (!successful) return;
+
+                                navigatorKey.currentState!
+                                    .pushNamedAndRemoveUntil(
                                   '/home',
-                                  (route) => false,
+                                      (route) => false,
                                 );
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
-                                    Theme.of(context).colorScheme.background,
+                                Theme
+                                    .of(context)
+                                    .colorScheme
+                                    .background,
                                 side: const BorderSide(
                                   color: Colors.red,
                                   width: 2.0,
@@ -309,6 +337,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
               ),
             ),
           );
-        });
+        }
+    );
   }
 }

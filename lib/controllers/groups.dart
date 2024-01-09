@@ -9,6 +9,7 @@ import 'package:studiconnect/models/redux/store.dart';
 import 'package:studiconnect/models/user.dart';
 import 'package:studiconnect/services/graphql/search.dart' as search_service;
 import 'package:studiconnect/services/graphql/group.dart' as service;
+import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/services/rest/group_image.dart' as rest_service;
 import 'package:studiconnect/controllers/api.dart';
 import 'package:studiconnect/constants.dart';
@@ -24,14 +25,14 @@ Future<void> searchGroups(String module, int radius) async {
   );
 
   if (result == null) {
-    showToast("Die Suche konnte nicht durchgeführt werden.");
+    log("searchGroups: result was null");
     return;
   }
 
   store.dispatch(Action(ActionTypes.updateSearchResults, payload: result));
 }
 
-Future<void> createGroup(String title, String description, String module,
+Future<bool> createGroup(String title, String description, String module,
     double lat, double lon) async {
   String? id = await runApiService(
     apiCall: () => service.createGroup(title, description, module, lat, lon),
@@ -39,8 +40,8 @@ Future<void> createGroup(String title, String description, String module,
   );
 
   if (id == null) {
-    showToast("Die Gruppe konnte nicht erstellt werden.");
-    return;
+    log("createGroup: id was null");
+    return false;
   }
 
   Group? group = await runApiService(
@@ -49,30 +50,32 @@ Future<void> createGroup(String title, String description, String module,
   );
 
   if (group == null) {
-    showToast("Die Gruppeninformationen konnte nicht geladen werden.");
-    return;
+    log("createGroup: group was null");
+    return false;
   }
 
   // update groups of user
   User currentUser = store.state.user!;
   currentUser.groups!.add(group);
   store.dispatch(Action(ActionTypes.setUser, payload: currentUser));
+
+  return true;
 }
 
-Future<void> updateGroup(String id, String title, String description,
+Future<bool> updateGroup(String id, String title, String description,
     String module, double lat, double lon) async {
   try {
     await runApiService(
       apiCall: () =>
           service.updateGroup(id, title, description, module, lat, lon),
-      parser: (result) => null,
+      shouldRethrow: true,
     );
   } on ApiException catch (e) {
     showToast(e.message);
-    return;
+    return false;
   } catch (e) {
     showToast("Die Gruppe konnte nicht aktualisiert werden.");
-    return;
+    return false;
   }
 
   Group? group = await runApiService(
@@ -82,7 +85,7 @@ Future<void> updateGroup(String id, String title, String description,
 
   if (group == null) {
     showToast("Die Gruppeninformationen konnte nicht geladen werden.");
-    return;
+    return false;
   }
 
   // update groups of user
@@ -91,69 +94,78 @@ Future<void> updateGroup(String id, String title, String description,
       .map((e) => e.id == id ? group.update(messages: e.messages) : e)
       .toList();
   store.dispatch(Action(ActionTypes.setUser, payload: currentUser));
+
+  return true;
 }
 
-Future<void> deleteGroup(String id) async {
+Future<bool> deleteGroup(String id) async {
   try {
     await runApiService(
       apiCall: () => service.deleteGroup(id),
-      parser: (result) => null,
+      shouldRethrow: true,
     );
   } on ApiException catch (e) {
     showToast(e.message);
-    return;
+    return false;
   } catch (e) {
     showToast("Die Gruppe konnte nicht gelöscht werden.");
-    return;
+    return false;
   }
 
   // update groups of user
   User currentUser = store.state.user!;
   currentUser.groups!.removeWhere((group) => group.id == id);
   store.dispatch(Action(ActionTypes.setUser, payload: currentUser));
+
+  return true;
 }
 
-Future<void> joinGroup(String id) async {
+Future<bool> joinGroup(String id) async {
   try {
     await runApiService(
       apiCall: () => service.joinGroup(id),
-      parser: (result) => null,
+      shouldRethrow: true,
     );
   } on ApiException catch (e) {
     showToast(e.message);
-    return;
+    return false;
   } catch (e) {
     showToast("Die Gruppe konnte nicht beigetreten werden.");
-    return;
+    return false;
   }
 
   showToast("Anfrage wurde gesendet");
+  return true;
 }
 
-Future<void> leaveGroup(String id) async {
+Future<bool> leaveGroup(String id) async {
   try {
     await runApiService(
       apiCall: () => service.removeMember(id, store.state.user?.id ?? ''),
-      parser: (result) => null,
-    ).then((value) {
-      // update groups of user
-      User currentUser = store.state.user!;
-      currentUser.groups!.removeWhere((group) => group.id == id);
-
-      store.dispatch(Action(ActionTypes.setUser, payload: currentUser));
-    });
+      shouldRethrow: true,
+    );
   } on ApiException catch (e) {
     showToast(e.message);
+    return false;
   } catch (e) {
     showToast("Die Gruppe konnte nicht verlassen werden.");
+    return false;
   }
+
+  // update groups of user
+  User currentUser = store.state.user!;
+  currentUser.groups!.removeWhere((group) => group.id == id);
+
+  store.dispatch(Action(ActionTypes.setUser, payload: currentUser));
+
+  return true;
 }
 
 Future<void> addMember(String id, String userID) async {
   try {
     await runApiService(
       apiCall: () => service.addMember(id, userID),
-      parser: (result) => null,
+      shouldRethrow: true,
     );
   } on ApiException catch (e) {
     showToast(e.message);
@@ -169,7 +181,7 @@ Future<void> addMember(String id, String userID) async {
   );
 
   if (group == null) {
-    showToast("Die Gruppeninformationen konnte nicht geladen werden.");
+    showToast("Die Gruppeninformationen konnte nicht geladen werden. Starte bitte die App neu.");
     return;
   }
 
@@ -179,20 +191,22 @@ Future<void> addMember(String id, String userID) async {
       .map((e) => e.id == id ? group.update(messages: e.messages) : e)
       .toList();
   store.dispatch(Action(ActionTypes.setUser, payload: currentUser));
+
+  return;
 }
 
-Future<void> removeMember(String id, String userID) async {
+Future<bool> removeMember(String id, String userID) async {
   try {
     await runApiService(
       apiCall: () => service.removeMember(id, userID),
-      parser: (result) => null,
+      shouldRethrow: true,
     );
   } on ApiException catch (e) {
     showToast(e.message);
-    return;
+    return false;
   } catch (e) {
     showToast("Das Mitglied konnte nicht entfernt werden.");
-    return;
+    return false;
   }
 
   Group? group = await runApiService(
@@ -201,8 +215,8 @@ Future<void> removeMember(String id, String userID) async {
   );
 
   if (group == null) {
-    showToast("Die Gruppeninformationen konnte nicht geladen werden.");
-    return;
+    showToast("Die Gruppeninformationen konnte nicht geladen werden. Starte bitte die App neu.");
+    return true;
   }
 
   // update groups of user
@@ -211,9 +225,11 @@ Future<void> removeMember(String id, String userID) async {
       .map((e) => e.id == id ? group.update(messages: e.messages) : e)
       .toList();
   store.dispatch(Action(ActionTypes.setUser, payload: currentUser));
+
+  return true;
 }
 
-Future<void> removeJoinRequest(String groupID, String userID) async {
+Future<bool> removeJoinRequest(String groupID, String userID) async {
   try {
     await runApiService(
       apiCall: () => service.removeJoinRequest(groupID, userID),
@@ -221,10 +237,10 @@ Future<void> removeJoinRequest(String groupID, String userID) async {
     );
   } on ApiException catch (e) {
     showToast(e.message);
-    return;
+    return false;
   } catch (e) {
     showToast("Die Anfrage konnte nicht entfernt werden.");
-    return;
+    return false;
   }
 
   Group? group = await runApiService(
@@ -233,8 +249,8 @@ Future<void> removeJoinRequest(String groupID, String userID) async {
   );
 
   if (group == null) {
-    showToast("Die Gruppeninformationen konnte nicht geladen werden.");
-    return;
+    showToast("Die Gruppeninformationen konnte nicht geladen werden. Starte bitte die App neu.");
+    return true;
   }
 
   // update groups of user
@@ -243,28 +259,30 @@ Future<void> removeJoinRequest(String groupID, String userID) async {
       .map((e) => e.id == groupID ? group.update(messages: e.messages) : e)
       .toList();
   store.dispatch(Action(ActionTypes.setUser, payload: currentUser));
+
+  return true;
 }
 
-Future<void> uploadGroupImage(String id, XFile file) async {
+Future<bool> uploadGroupImage(String id, XFile file) async {
   Uint8List content;
   try {
     content = await file.readAsBytes();
   } catch (e) {
     showToast("Das Bild war fehlerhaft.");
-    return;
+    return false;
   }
 
   try {
     await runRestApi(
       apiCall: () => rest_service.uploadGroupImage(id, content),
-      parser: (result) => null,
+      shouldRethrow: true,
     );
   } on ApiException catch (e) {
     showToast(e.message);
-    return;
+    return false;
   } catch (e) {
     showToast("Das Bild konnte nicht hochgeladen werden.");
-    return;
+    return false;
   }
 
   // update groups of user
@@ -282,19 +300,21 @@ Future<void> uploadGroupImage(String id, XFile file) async {
   await DefaultCacheManager().downloadFile("$backendURL/api/group/$id/image");
 
   showToast("Profilbild erfolgreich hochgeladen.");
+  return true;
 }
 
-Future<void> deleteGroupImage(String id) async {
+Future<bool> deleteGroupImage(String id) async {
   try {
     await runRestApi(
         apiCall: () => rest_service.deleteGroupImage(id),
-        parser: (result) => null);
+        shouldRethrow: true,
+    );
   } on ApiException catch (e) {
     showToast(e.message);
-    return;
+    return false;
   } catch (e) {
     showToast("Das Bild konnte nicht gelöscht werden.");
-    return;
+    return false;
   }
 
   store.dispatch(
@@ -319,4 +339,6 @@ Future<void> deleteGroupImage(String id) async {
 
   showToast(
       "Profilbild erfolgreich gelöscht. Evtl. liegt das Bild noch im Cache.");
+
+  return true;
 }

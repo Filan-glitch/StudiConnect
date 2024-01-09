@@ -1,9 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:studiconnect/main.dart';
-import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/avatar_picture.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
@@ -13,12 +11,38 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log("Building ProfilePage...");
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       builder: (context, state) {
         return PageWrapper(
+          title: 'Profil',
           type: PageType.complex,
+          menuActions: [
+            ListTile(
+              leading: const Icon(Icons.edit),
+              title: const Text('Profil bearbeiten'),
+              onTap: () {
+                navigatorKey.currentState!.pop();
+                navigatorKey.currentState!.pushNamed('/edit-profile');
+              },
+            ),
+            ListTile(
+                leading: const Icon(Icons.share),
+                title: const Text('Studiconnect weiterempfehlen'),
+                onTap: () {
+                  navigatorKey.currentState!.pop();
+                  Share.share(
+                      'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=de.studiconnect.app');
+                }),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Einstellungen'),
+              onTap: () {
+                navigatorKey.currentState!.pop();
+                navigatorKey.currentState!.pushNamed('/settings');
+              },
+            ),
+          ],
           body: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,33 +159,6 @@ class ProfilePage extends StatelessWidget {
               ],
             ),
           ),
-          menuActions: [
-            ListTile(
-              leading: const Icon(Icons.edit),
-              title: const Text('Profil bearbeiten'),
-              onTap: () {
-                navigatorKey.currentState!.pop();
-                navigatorKey.currentState!.pushNamed('/edit-profile');
-              },
-            ),
-            ListTile(
-                leading: const Icon(Icons.share),
-                title: const Text('Studiconnect weiterempfehlen'),
-                onTap: () {
-                  navigatorKey.currentState!.pop();
-                  Share.share(
-                      'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=de.studiconnect.app');
-                }),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Einstellungen'),
-              onTap: () {
-                navigatorKey.currentState!.pop();
-                navigatorKey.currentState!.pushNamed('/settings');
-              },
-            ),
-          ],
-          title: 'Profil',
         );
       },
     );

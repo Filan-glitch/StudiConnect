@@ -4,11 +4,9 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:oktoast/oktoast.dart';
-
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/pages/loading_page.dart';
 import 'package:studiconnect/pages/no_connectivity_page.dart';
-import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/action_menu.dart';
 import 'package:studiconnect/models/redux/actions.dart' as redux;
 import 'package:studiconnect/models/redux/store.dart';
@@ -65,7 +63,6 @@ class _PageWrapperState extends State<PageWrapper> {
 
   @override
   void initState() {
-    log("Initializing PageWrapper...");
     super.initState();
     Connectivity().checkConnectivity().then(_onConnectivityChanged);
     subscription =
@@ -74,14 +71,12 @@ class _PageWrapperState extends State<PageWrapper> {
 
   @override
   void dispose() {
-    log("Disposing PageWrapper...");
     subscription.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    log("Building PageWrapper...");
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       builder: (context, state) {

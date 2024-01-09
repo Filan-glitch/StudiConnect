@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:studiconnect/controllers/authentication.dart';
-import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
 import '../widgets/error_label.dart';
@@ -16,7 +15,6 @@ class PasswordChangePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log("Building PasswordChangePage...");
     return PageWrapper(
         title: "Passwort ändern",
         body: SingleChildScrollView(
@@ -109,6 +107,7 @@ class PasswordChangePage extends StatelessWidget {
                 ],
             ),
           ),
-        ));
+        )
+    );
   }
 }

@@ -62,21 +62,13 @@ class _LocationDisplayState extends State<LocationDisplay> {
 
   @override
   void initState() {
-    log("Initializing LocationDisplay...");
     super.initState();
     _errorMessage();
     _getAddress();
   }
 
   @override
-  void dispose() {
-    log("Disposing LocationDisplay...");
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    log("Building LocationDisplay...");
     return Row(
       children: [
         Icon(

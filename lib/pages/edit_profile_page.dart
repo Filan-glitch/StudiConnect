@@ -9,9 +9,8 @@ import 'package:studiconnect/models/redux/store.dart';
 import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/location_display.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
-
-import '../controllers/user.dart';
-import '../services/gps.dart';
+import 'package:studiconnect/controllers/user.dart';
+import 'package:studiconnect/services/gps.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key});
@@ -36,7 +35,6 @@ class _EditProfilePage extends State<EditProfilePage> {
 
   @override
   void initState() {
-    log("Iniatilizing EditProfilePage...");
     super.initState();
     _usernameController = TextEditingController.fromValue(
       TextEditingValue(
@@ -106,7 +104,6 @@ class _EditProfilePage extends State<EditProfilePage> {
 
   @override
   void dispose() {
-    log("Disposing EditProfilePage...");
     _usernameController.dispose();
     _majorController.dispose();
     _universityController.dispose();
@@ -118,7 +115,6 @@ class _EditProfilePage extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    log("Building EditProfilePage...");
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       builder: (context, state) {
@@ -275,6 +271,8 @@ class _EditProfilePage extends State<EditProfilePage> {
                           child: ElevatedButton.icon(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
+                                navigatorKey.currentState!.pop();
+
                                 updateProfile(
                                   _usernameController.text,
                                   _universityController.text,
@@ -285,8 +283,6 @@ class _EditProfilePage extends State<EditProfilePage> {
                                   _mobileController.text,
                                   _discordController.text,
                                 );
-
-                                navigatorKey.currentState!.pop();
                               }
                             },
                             icon: const Icon(Icons.done),

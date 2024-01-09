@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:studiconnect/constants.dart';
 import 'package:studiconnect/models/redux/store.dart';
 import 'package:studiconnect/models/redux/actions.dart' as redux;
-import 'package:studiconnect/services/logger_provider.dart';
 
 enum Type { user, group }
 
@@ -26,22 +25,8 @@ class AvatarPicture extends StatefulWidget {
 }
 
 class _AvatarPictureState extends State<AvatarPicture> {
-
-  @override
-  void initState() {
-    log("Initializing AvatarPicture...");
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    log("Disposing AvatarPicture...");
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    log("Building AvatarPicture...");
     return ClipOval(
       clipper: _AvatarPictureClipper(),
       clipBehavior: Clip.antiAliasWithSaveLayer,

@@ -1,3 +1,4 @@
+import 'package:oktoast/oktoast.dart';
 import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/services/graphql/errors/api_exception.dart';
 import 'package:studiconnect/models/redux/store.dart';
@@ -5,8 +6,9 @@ import 'package:studiconnect/models/redux/actions.dart' as redux;
 
 Future<T?> runApiService<T>({
   required Future<Map<String, dynamic>?> Function() apiCall,
-  required T Function(Map<String, dynamic> parser) parser,
+  T Function(Map<String, dynamic> parser)? parser,
   bool showLoading = true,
+  bool shouldRethrow = false,
 }) async {
   // Loading Screen
   if (showLoading) {
@@ -28,8 +30,10 @@ Future<T?> runApiService<T>({
       store.dispatch(redux.Action(redux.ActionTypes.stopTask));
     }
 
-    if(parser == ((result) => null)) {
+    if(shouldRethrow) {
       rethrow;
+    } else {
+      showToast(e.message);
     }
 
     return null;
@@ -37,7 +41,7 @@ Future<T?> runApiService<T>({
 
   // Parsing
   T? parsed;
-  if (response != null) {
+  if (response != null && parser != null) {
     try {
       log("Starting Parsing");
       parsed = parser(response);
@@ -50,8 +54,10 @@ Future<T?> runApiService<T>({
         store.dispatch(redux.Action(redux.ActionTypes.stopTask));
       }
 
-      if(parser == ((result) => null)) {
+      if(shouldRethrow) {
         rethrow;
+      } else {
+        showToast(e.toString());
       }
 
       return null;
@@ -68,8 +74,9 @@ Future<T?> runApiService<T>({
 
 Future<T?> runRestApi<T>({
   required Future<dynamic> Function() apiCall,
-  required T Function(dynamic parser) parser,
+  T Function(dynamic parser)? parser,
   bool showLoading = true,
+  bool shouldRethrow = false,
 }) async {
   // Loading Screen
   if (showLoading) {
@@ -91,8 +98,10 @@ Future<T?> runRestApi<T>({
       store.dispatch(redux.Action(redux.ActionTypes.stopTask));
     }
 
-    if(parser == ((result) => null)) {
+    if(shouldRethrow) {
       rethrow;
+    } else {
+      showToast(e.message);
     }
 
     return null;
@@ -100,7 +109,7 @@ Future<T?> runRestApi<T>({
 
   // Parsing
   T? parsed;
-  if (response != null) {
+  if (response != null && parser != null) {
     try {
       log("Starting Parsing");
       parsed = parser(response);
@@ -113,8 +122,10 @@ Future<T?> runRestApi<T>({
         store.dispatch(redux.Action(redux.ActionTypes.stopTask));
       }
 
-      if(parser == ((result) => null)) {
+      if(shouldRethrow) {
         rethrow;
+      } else {
+        showToast(e.toString());
       }
 
       return null;
