@@ -145,7 +145,6 @@ class _ChatPageState extends State<ChatPage> {
           ],
           body: Column(
             children: [
-              const SizedBox(height: 10),
               Expanded(
                 child: ListView.builder(
                   controller: _scrollController,
@@ -185,7 +184,7 @@ class _ChatPageState extends State<ChatPage> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.primary,
                   boxShadow: [
@@ -199,12 +198,22 @@ class _ChatPageState extends State<ChatPage> {
                 child: Row(
                   children: [
                     Expanded(
-                      child: TextField(
-                        controller: _messageController,
-                        decoration: const InputDecoration(
-                          hintText: "Nachricht",
-                          hintStyle: TextStyle(color: Colors.white),
-                          border: InputBorder.none,
+                      child: Center(
+                        child: TextField(
+                          controller: _messageController,
+                          cursorColor: Colors.white,
+                          cursorRadius: const Radius.circular(10),
+                          cursorWidth: 1,
+                          cursorHeight: 25,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: 5,
+                          minLines: 1,
+                          textInputAction: TextInputAction.newline,
+                          decoration: const InputDecoration(
+                            hintText: "Nachricht",
+                            hintStyle: TextStyle(color: Colors.white),
+                            border: InputBorder.none,
+                          ),
                         ),
                       ),
                     ),
