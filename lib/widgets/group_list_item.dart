@@ -22,7 +22,7 @@ class GroupListItem extends StatelessWidget {
       leading: AvatarPicture(
         id: group.id,
         type: Type.group,
-        radius: 15,
+        radius: 20,
         loadingCircleStrokeWidth: 1.5,
       ),
       title: Text(group.title ?? "Gruppe ${group.id}"),

@@ -43,6 +43,7 @@ class _AvatarPictureState extends State<AvatarPicture> {
   Widget build(BuildContext context) {
     log("Building AvatarPicture...");
     return ClipOval(
+      clipper: _AvatarPictureClipper(),
       clipBehavior: Clip.antiAliasWithSaveLayer,
       child: CachedNetworkImage(
         width: 2 * (widget.radius ?? 10),
@@ -85,4 +86,17 @@ class _AvatarPictureState extends State<AvatarPicture> {
       ),
     );
   }
+}
+
+class _AvatarPictureClipper extends CustomClipper<Rect> {
+  @override
+  Rect getClip(Size size) {
+    return Rect.fromCircle(
+      center: Offset(size.width / 2, size.height / 2),
+      radius: size.width / 2,
+    );
+  }
+
+  @override
+  bool shouldReclip(_AvatarPictureClipper oldClipper) => false;
 }
