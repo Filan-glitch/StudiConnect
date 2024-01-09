@@ -89,8 +89,8 @@ class _ChatPageState extends State<ChatPage> {
               leading: const Icon(Icons.info),
               title: const Text('Gruppeninformationen'),
               onTap: () {
-                Navigator.pushNamed(
-                  context,
+                navigatorKey.currentState!.pop();
+                navigatorKey.currentState!.pushNamed(
                   '/group-info',
                   arguments: GroupLookupParameters(
                     groupID: group.id,
@@ -104,8 +104,8 @@ class _ChatPageState extends State<ChatPage> {
                 leading: const Icon(Icons.group_add),
                 title: const Text('Beitrittsanfragen'),
                 onTap: () {
-                  Navigator.pushNamed(
-                    context,
+                  navigatorKey.currentState!.pop();
+                  navigatorKey.currentState!.pushNamed(
                     '/join-group-requests',
                     arguments: group.id,
                   );
@@ -116,8 +116,8 @@ class _ChatPageState extends State<ChatPage> {
                 leading: const Icon(Icons.edit),
                 title: const Text('Gruppe bearbeiten'),
                 onTap: () {
-                  Navigator.pushNamed(
-                    context,
+                  navigatorKey.currentState!.pop();
+                  navigatorKey.currentState!.pushNamed(
                     '/create-and-edit-group',
                     arguments: GroupLookupParameters(
                       groupID: group.id,
@@ -135,6 +135,7 @@ class _ChatPageState extends State<ChatPage> {
                   bool successful = await leaveGroup(group.id);
 
                   if (!successful) return;
+
 
                   navigatorKey.currentState!.pushNamedAndRemoveUntil(
                     '/home',
