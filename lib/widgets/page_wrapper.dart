@@ -7,7 +7,6 @@ import 'package:oktoast/oktoast.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/pages/loading_page.dart';
 import 'package:studiconnect/pages/no_connectivity_page.dart';
-import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/action_menu.dart';
 import 'package:studiconnect/models/redux/actions.dart' as redux;
 import 'package:studiconnect/models/redux/store.dart';

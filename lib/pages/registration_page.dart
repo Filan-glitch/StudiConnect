@@ -7,7 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:studiconnect/controllers/authentication.dart';
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
-import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/error_label.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 

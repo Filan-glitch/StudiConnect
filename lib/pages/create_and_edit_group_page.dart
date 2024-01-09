@@ -6,7 +6,6 @@ import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/dialogs/select_location_dialog.dart';
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/group.dart';
-import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 import 'package:studiconnect/models/redux/actions.dart' as redux;
 import 'package:studiconnect/models/redux/store.dart';

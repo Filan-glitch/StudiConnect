@@ -1,7 +1,5 @@
-import 'package:graphql/client.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/redux/actions.dart';
 import 'package:studiconnect/models/redux/store.dart';

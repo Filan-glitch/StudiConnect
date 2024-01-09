@@ -4,7 +4,6 @@ import 'package:studiconnect/constants.dart';
 import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/models/group.dart';
 import 'package:studiconnect/models/user.dart';
-import 'package:studiconnect/services/logger_provider.dart';
 
 class JoinGroupRequestListItem extends StatefulWidget {
   const JoinGroupRequestListItem(

@@ -9,7 +9,6 @@ import 'package:studiconnect/widgets/chat_bubble.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:studiconnect/controllers/groups.dart';
-import 'package:studiconnect/services/logger_provider.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
