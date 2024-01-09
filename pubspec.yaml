@@ -6,7 +6,7 @@ publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.1.5 <4.0.0"
+  sdk: ">=3.2.3 <4.0.0"
 
 dependencies:
   flutter:
@@ -17,7 +17,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_core: ^2.21.0
   firebase_auth: ^4.12.1
-  firebase_crashlytics: ^3.4.3
+  firebase_crashlytics: ^3.4.9
   google_fonts: ^5.1.0
   flutter_redux: ^0.10.0
   http: ^1.1.0
@@ -45,6 +45,8 @@ dependencies:
   connectivity_plus: ^5.0.2
   flutter_secure_storage: ^9.0.0
   share_plus: ^7.2.1
+  flutter_native_splash: ^2.3.9
+  flutter_cache_manager: ^3.3.1
   web_socket_channel: ^2.4.0
 
 dev_dependencies:

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yaml/yaml.dart';
 import 'package:studiconnect/controllers/authentication.dart';
@@ -11,6 +12,7 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log("Building SettingsPage...");
     return PageWrapper(
       title: "Einstellungen",
       showLoading: false,
@@ -107,8 +109,8 @@ class SettingsPage extends StatelessWidget {
               ListTile(
                 leading: Icon(Icons.logout, color: Colors.red.withOpacity(0.7)),
                 title: const Text("Abmelden"),
-                onTap: () {
-                  signOut();
+                onTap: () async {
+                  await signOut();
                 },
               ),
             ],

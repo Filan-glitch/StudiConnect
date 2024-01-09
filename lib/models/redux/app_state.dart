@@ -3,15 +3,12 @@ import 'package:studiconnect/models/user.dart';
 
 class AppState {
   int runningTasks = 0;
-
-  bool setupDone = false;
-  bool get loading => runningTasks > 0;
-
   bool connected = true;
   String? sessionID;
   String? authProviderType;
   User? user;
   bool profileImageAvailable = false;
-
   List<Group> searchResults = [];
+
+  bool get loading => runningTasks > 0;
 }

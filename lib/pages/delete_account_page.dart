@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:studiconnect/controllers/user.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
 class DeleteAccountPage extends StatelessWidget {
@@ -11,6 +12,7 @@ class DeleteAccountPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log("Building DeleteAccountPage...");
     return PageWrapper(
       title: "Konto löschen",
       body: StoreConnector<AppState, AppState>(

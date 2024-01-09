@@ -3,6 +3,8 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:studiconnect/dialogs/remove_member_dialog.dart';
 import 'package:studiconnect/controllers/groups.dart';
+import 'package:studiconnect/main.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/avatar_picture.dart';
 import 'package:studiconnect/widgets/location_display.dart';
 import 'package:studiconnect/models/group.dart';
@@ -10,8 +12,6 @@ import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
 class GroupInfoPage extends StatefulWidget {
-  static const routeName = '/group-info';
-
   const GroupInfoPage({super.key});
 
   @override
@@ -23,6 +23,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
 
   @override
   void initState() {
+    log("Iniatilizing GroupInfoPage...");
     super.initState();
     Future.delayed(Duration.zero, () {
       setState(() {
@@ -32,7 +33,14 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
   }
 
   @override
+  void dispose() {
+    log("Disposing GroupInfoPage...");
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    log("Building GroupInfoPage...");
     final members = (group?.members ?? []).map((e) => e.id).toList();
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
@@ -45,8 +53,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                   leading: const Icon(Icons.group_add),
                   title: const Text('Beitrittsanfragen'),
                   onTap: () {
-                    Navigator.pushNamed(
-                      context,
+                    navigatorKey.currentState!.pushNamed(
                       '/join-group-requests',
                       arguments: group?.id ?? "",
                     );
@@ -57,8 +64,8 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                   leading: const Icon(Icons.edit),
                   title: const Text('Gruppe bearbeiten'),
                   onTap: () async {
-                    final updatedGroup = await Navigator.pushNamed(
-                        context, '/create-and-edit-group',
+                    final updatedGroup = await navigatorKey.currentState!.pushNamed(
+                        '/create-and-edit-group',
                         arguments: group);
 
                     // If the group data is updated, update the state
@@ -75,7 +82,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                   title: const Text('Gruppe verlassen'),
                   onTap: () {
                     leaveGroup(group!.id);
-                    Navigator.of(context).pushNamedAndRemoveUntil(
+                    navigatorKey.currentState!.pushNamedAndRemoveUntil(
                       '/home',
                       (route) => false,
                     );
@@ -87,7 +94,8 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                   title: const Text('Gruppe beitreten'),
                   onTap: () {
                     joinGroup(group!.id);
-                    Navigator.of(context).pushNamedAndRemoveUntil(
+                    navigatorKey.currentState!.pop();
+                    navigatorKey.currentState!.pushNamedAndRemoveUntil(
                       '/home',
                       (route) => false,
                     );
@@ -97,7 +105,8 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                 leading: const Icon(Icons.settings),
                 title: const Text('Einstellungen'),
                 onTap: () {
-                  Navigator.pushNamed(context, '/settings');
+                  navigatorKey.currentState!.pop();
+                  navigatorKey.currentState!.pushNamed('/settings');
                 },
               ),
             ],

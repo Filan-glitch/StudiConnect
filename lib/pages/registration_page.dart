@@ -4,10 +4,10 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:auth_buttons/auth_buttons.dart'
     show AuthButtonStyle, EmailAuthButton;
 import 'package:google_fonts/google_fonts.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:studiconnect/controllers/authentication.dart';
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/error_label.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
@@ -19,26 +19,39 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _passwordRepeatController =
-      TextEditingController();
+  late final TextEditingController _emailController;
+  late final TextEditingController _passwordController;
+  late final TextEditingController _passwordRepeatController;
+  late final ValueNotifier<String> _errorMessageNotifier;
 
   bool _isObscure = true;
   bool _isObscureRepeat = true;
   bool _emailButtonLoading = false;
-  final ValueNotifier<String> _errorMessageNotifier = ValueNotifier("");
+
+
+  @override
+  void initState() {
+    log("Iniatilizing RegisterPage...");
+    super.initState();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+    _passwordRepeatController = TextEditingController();
+    _errorMessageNotifier = ValueNotifier("");
+  }
 
   @override
   void dispose() {
+    log("Disposing RegisterPage...");
     _emailController.dispose();
     _passwordController.dispose();
     _passwordRepeatController.dispose();
+    _errorMessageNotifier.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    log("Building RegisterPage...");
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (BuildContext context, AppState state) {
@@ -177,7 +190,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         });
                         return;
                       } catch (e) {
-                        showToast(e.toString());
+                        _errorMessageNotifier.value = "Ein unbekannter Fehler ist aufgetreten.";
                         setState(() {
                           _emailButtonLoading = false;
                         });

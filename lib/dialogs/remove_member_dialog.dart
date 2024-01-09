@@ -3,6 +3,7 @@ import 'package:studiconnect/dialogs/dialog_wrapper.dart';
 
 import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/models/user.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 
 class RemoveMemberDialog extends StatelessWidget {
   const RemoveMemberDialog({
@@ -16,6 +17,7 @@ class RemoveMemberDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log("Building RemoveMemberDialog...");
     return DialogWrapper(
       children: [
         Text('Möchtest du ${user.username} wirklich entfernen?'),

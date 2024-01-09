@@ -5,7 +5,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:auth_buttons/auth_buttons.dart'
     show AuthButtonStyle, EmailAuthButton;
 import 'package:studiconnect/controllers/authentication.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
+
+import '../widgets/error_label.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,20 +18,33 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  late final TextEditingController _emailController;
+  late final TextEditingController _passwordController;
+  late final ValueNotifier<String> _errorMessageNotifier;
+
   bool _emailButtonLoading = false;
-  String _errorMessage = "";
+
+  @override
+  void initState() {
+    log("Iniatilizing LoginPage...");
+    super.initState();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+    _errorMessageNotifier = ValueNotifier("");
+  }
 
   @override
   void dispose() {
+    log("Disposing LoginPage...");
     _emailController.dispose();
     _passwordController.dispose();
+    _errorMessageNotifier.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    log("Building LoginPage...");
     return PageWrapper(
         type: PageType.simple,
         title: "Anmelden",
@@ -67,17 +83,10 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               // Error Label, invisible if no error
-              Visibility(
-                visible: _errorMessage.isNotEmpty,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
-                  child: Text(
-                    _errorMessage,
-                    style: const TextStyle(
-                      color: Colors.red,
-                      fontSize: 14,
-                    ),
-                  ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5.0),
+                child: ErrorLabel(
+                  errorMessageNotifier: _errorMessageNotifier,
                 ),
               ),
               const SizedBox(height: 30),
@@ -87,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
 
                   if(_emailController.text.isEmpty || _passwordController.text.isEmpty) {
                     setState(() {
-                      _errorMessage = "Bitte fülle alle Felder aus.";
+                      _errorMessageNotifier.value = "Bitte fülle alle Felder aus.";
                     });
                     return;
                   }
@@ -118,13 +127,13 @@ class _LoginPageState extends State<LoginPage> {
                     };
 
                     setState(() {
-                      _errorMessage = errorMessages[e.code] ?? "${e.code}: ${e.message}";
+                      _errorMessageNotifier.value = errorMessages[e.code] ?? "${e.code}: ${e.message}";
                       _emailButtonLoading = false;
                     });
                     return;
                   } catch (e) {
                     setState(() {
-                      _errorMessage = "Ein Fehler ist aufgetreten.";
+                      _errorMessageNotifier.value = "Ein unbekannter Fehler ist aufgetreten.";
                       _emailButtonLoading = false;
                     });
                     return;
