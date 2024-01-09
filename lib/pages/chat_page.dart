@@ -1,13 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:studiconnect/controllers/messages.dart';
 import 'package:studiconnect/models/group.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:studiconnect/constants.dart';
 import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/widgets/timestamped_chat_message.dart';
 
@@ -107,21 +105,6 @@ class _ChatPageState extends State<ChatPage> {
                   );
                 },
               ),
-            ListTile(
-                leading: const Icon(Icons.share),
-                title: const Text('Studiconnect weiterempfehlen'),
-                onTap: () {
-                  Share.share(
-                      'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=$appID');
-                }),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Einstellungen'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/settings');
-              },
-            )
           ],
           body: Column(
             children: [
