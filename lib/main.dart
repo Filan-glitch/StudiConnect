@@ -42,11 +42,15 @@ Future<void> main() async {
   );
 
   FlutterError.onError = (errorDetails) {
+    if (errorDetails.library == 'image resource service' &&
+        errorDetails.exception.toString().contains('404')) {
+      log('Suppressed cachedNetworkImage Exception');
+      return;
+    }
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
   };
 
-  PlatformDispatcher.instance.onError = (error, stack)
-  {
+  PlatformDispatcher.instance.onError = (error, stack) {
     FirebaseCrashlytics.instance.recordError(error, stack);
     return true;
   };
@@ -97,7 +101,8 @@ class MyApp extends StatelessWidget {
             '/settings': (context) => const SettingsPage(),
             '/delete-account': (context) => DeleteAccountPage(),
             '/update-password': (context) => PasswordChangePage(),
-            '/create-and-edit-group': (context) => const CreateAndEditGroupPage(),
+            '/create-and-edit-group': (context) =>
+                const CreateAndEditGroupPage(),
             '/group-info': (context) => const GroupInfoPage(),
             '/join-group-requests': (context) => const JoinGroupRequestsPage(),
             '/user-info': (context) => const UserInfoPage(),
