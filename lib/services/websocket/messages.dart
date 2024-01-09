@@ -9,10 +9,9 @@ import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 Future<WebSocketSink?> subscribeToMessages(
-    String groupID,
-    void Function(Map<String, dynamic> data) onMessage
-    ) async
-{
+  String groupID,
+  void Function(Map<String, dynamic> data) onMessage,
+) async {
   log("Subscribing to messages with session:  '${store.state.sessionID}' and group: '$groupID'");
   WebSocketChannel channel =
       IOWebSocketChannel.connect(Uri.parse('$wsURL/socket'), headers: {
@@ -26,13 +25,15 @@ Future<WebSocketSink?> subscribeToMessages(
       onMessage(data);
     } catch (e) {
       logWarning(e.toString());
-      showToast("Eine Nachricht konnte nicht empfangen werden.", dismissOtherToast: true);
+      showToast("Eine Nachricht konnte nicht empfangen werden.",
+          dismissOtherToast: true);
     }
   });
 
   await channel.ready;
   if (channel.closeCode != null) {
-    showToast("Neue Nachrichten können nicht empfangen werden.", dismissOtherToast: true);
+    showToast("Neue Nachrichten können nicht empfangen werden.",
+        dismissOtherToast: true);
     return null;
   }
 
