@@ -5,7 +5,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:studiconnect/services/logger_provider.dart';
 
 class LocationDisplay extends StatefulWidget {
-  final LatLng position;
+  final LatLng? position;
   final bool? serviceEnabled;
   final LocationPermission? permission;
 
@@ -21,13 +21,17 @@ class _LocationDisplayState extends State<LocationDisplay> {
 
   Future<void> _getAddress() async {
     try {
-      final List<geo.Placemark> placemarks = await geo.placemarkFromCoordinates(
-          widget.position.latitude, widget.position.longitude);
-      final geo.Placemark place = placemarks[0];
-      setState(() {
-        _address =
-        '${place.street ?? ""}, ${place.postalCode ?? ""} ${place.locality ?? ""}';
-      });
+      if (widget.position != null) {
+        log("Getting address for ${widget.position}");
+        final List<geo.Placemark> placemarks = await geo.placemarkFromCoordinates(
+            widget.position!.latitude, widget.position!.longitude);
+        final geo.Placemark place = placemarks[0];
+        log("Got address: $place");
+        setState(() {
+          _address =
+          '${place.street ?? ""}, ${place.postalCode ?? ""} ${place.locality ?? ""}';
+        });
+      }
     } catch (e) {
       logWarning(e.toString());
       setState(() {
@@ -36,7 +40,7 @@ class _LocationDisplayState extends State<LocationDisplay> {
     }
   }
 
-  Future<void> _errorMessage() async {
+  void _errorMessage() {
     if (widget.serviceEnabled != null) {
       if (!widget.serviceEnabled!) {
         setState(() {

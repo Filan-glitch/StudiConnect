@@ -72,7 +72,8 @@ class _EditProfilePage extends State<EditProfilePage> {
     _locationKey = UniqueKey();
 
     determinePosition().then(
-      (value) async {
+      (value) {
+        log("Got current position: $value, setting state...");
         setState(() {
           _selectedLocation = LatLng(value.latitude, value.longitude);
         });
@@ -216,7 +217,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                     ),
                     child: LocationDisplay(
                       key: _locationKey,
-                      position: _selectedLocation ?? const LatLng(0, 0),
+                      position: _selectedLocation,
                       serviceEnabled: _serviceEnabled,
                       permission: _permission,
                     ),

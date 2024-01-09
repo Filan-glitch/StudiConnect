@@ -54,5 +54,7 @@ Future<Position> determinePosition() async {
   // When we reach here, permissions are granted and we can
   // continue accessing the position of the device.
   log("Getting current position");
-  return await Geolocator.getCurrentPosition();
+  var position = await Geolocator.getCurrentPosition();
+  log("Got current position: $position");
+  return position;
 }
