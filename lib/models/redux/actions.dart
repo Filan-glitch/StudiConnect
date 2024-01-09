@@ -2,6 +2,7 @@ enum ActionTypes {
   clear,
   startTask,
   stopTask,
+  setupDone,
   setUser,
   updateUser,
   updateGroup,

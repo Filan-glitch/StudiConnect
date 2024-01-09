@@ -5,6 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:studiconnect/pages/chat_page.dart';
+import 'package:studiconnect/models/redux/actions.dart' as redux;
 import 'package:studiconnect/pages/join_group_requests_page.dart';
 import 'package:studiconnect/pages/password_change_page.dart';
 import 'package:studiconnect/pages/user_info_page.dart';
@@ -31,7 +32,13 @@ Future<void> main() async {
   );
 
   // setup
-  loadCredentials();
+  Future.wait([
+    loadCredentials(),
+  ]).then((value) {
+    store.dispatch(redux.Action(
+      redux.ActionTypes.setupDone,
+    ));
+  });
 
   if (kDebugMode) {
     //await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
