@@ -9,7 +9,8 @@ import 'package:studiconnect/services/graphql/messages.dart' as service;
 import 'package:studiconnect/services/websocket/messages.dart' as websocket;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-Future<void> getMessages(String groupID, int page) async {
+Future<int> getMessages(String groupID, int page, bool replace) async {
+  log("load");
   List<Message>? result = await runApiService(
     apiCall: () => service.getMessages(groupID, page),
     parser: (result) {
@@ -31,12 +32,27 @@ Future<void> getMessages(String groupID, int page) async {
     //   '/welcome',
     //   (route) => false,
     // );
+    return 0;
   }
 
   User user = store.state.user!;
-  user.groups!.map(
-    (group) => group.id == groupID ? group.update(messages: result) : group,
-  );
+
+  if (replace) {
+    user.groups = user.groups!
+        .map(
+          (group) =>
+              group.id == groupID ? group.update(messages: result) : group,
+        )
+        .toList();
+  } else {
+    user.groups = user.groups!
+        .map(
+          (group) => group.id == groupID
+              ? group.update(messages: [...group.messages!, ...result])
+              : group,
+        )
+        .toList();
+  }
 
   store.dispatch(
     Action(
@@ -44,6 +60,8 @@ Future<void> getMessages(String groupID, int page) async {
       payload: user,
     ),
   );
+
+  return result.length;
 }
 
 Future<void> sendMessage(String groupID, String content) async {
@@ -54,7 +72,8 @@ Future<void> sendMessage(String groupID, String content) async {
   );
 }
 
-Future<WebSocketSink?> subscribeToMessages(String groupID) async {
+Future<WebSocketSink?> subscribeToMessages(
+    String groupID, void Function() onMessage) async {
   log("sub $groupID");
   WebSocketSink? sink = await websocket.subscribeToMessages(groupID, (data) {
     Message message = Message.fromApi(data);
@@ -62,11 +81,13 @@ Future<WebSocketSink?> subscribeToMessages(String groupID) async {
     log("new message: ${message.content}");
 
     User user = store.state.user!;
-    user.groups!.map(
-      (group) => group.id == groupID
-          ? group.update(messages: [...group.messages!, message])
-          : group,
-    );
+    user.groups = user.groups!
+        .map(
+          (group) => group.id == groupID
+              ? group.update(messages: [message, ...group.messages!])
+              : group,
+        )
+        .toList();
 
     store.dispatch(
       Action(
@@ -74,6 +95,8 @@ Future<WebSocketSink?> subscribeToMessages(String groupID) async {
         payload: user,
       ),
     );
+
+    onMessage();
   });
 
   return sink;

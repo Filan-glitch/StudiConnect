@@ -3,12 +3,12 @@ import 'package:studiconnect/models/user.dart';
 
 class Message {
   final String id;
-  final String? content;
+  String? content;
   final User? sender;
   final Group? group;
   final DateTime? sendAt;
 
-  const Message({
+  Message({
     required this.id,
     this.content,
     this.sender,

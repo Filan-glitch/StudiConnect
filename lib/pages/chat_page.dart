@@ -1,6 +1,9 @@
-import 'package:flutter/gestures.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:studiconnect/controllers/messages.dart';
 import 'package:studiconnect/models/group.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
@@ -18,9 +21,13 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final TextEditingController _messageController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   String? groupID;
   WebSocketSink? sink;
+
+  int _lastLoadedPage = 0;
+  bool _finishedLoading = false;
 
   @override
   void initState() {
@@ -29,9 +36,21 @@ class _ChatPageState extends State<ChatPage> {
     Future.delayed(Duration.zero, () {
       setState(() {
         groupID = ModalRoute.of(context)!.settings.arguments as String;
-        subscribeToMessages(groupID!).then((value) => sink = value);
-        getMessages(groupID!, 1);
+        subscribeToMessages(groupID!, _scrollToBottom)
+            .then((value) => sink = value);
+        getMessages(groupID!, 0, true).then((amount) {
+          _scrollToBottom();
+          _finishedLoading = amount < 20;
+        });
       });
+    });
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels < 100 && !_finishedLoading) {
+        _lastLoadedPage++;
+        getMessages(groupID!, _lastLoadedPage, false)
+            .then((amount) => _finishedLoading = amount < 20);
+      }
     });
   }
 
@@ -39,6 +58,14 @@ class _ChatPageState extends State<ChatPage> {
   void dispose() {
     sink?.close();
     super.dispose();
+  }
+
+  void _scrollToBottom() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeOut,
+    );
   }
 
   @override
@@ -53,7 +80,9 @@ class _ChatPageState extends State<ChatPage> {
         } catch (e) {
           return Container();
         }
-        final members = (group.members ?? []).map((member) => member.id).toList();
+        final members =
+            (group.members ?? []).map((member) => member.id).toList();
+
         return PageWrapper(
           title: group.title ?? "",
           menuActions: [
@@ -93,7 +122,8 @@ class _ChatPageState extends State<ChatPage> {
                   }
                 },
               ),
-            if (members.contains(state.user?.id) && group.creator?.id != state.user?.id)
+            if (members.contains(state.user?.id) &&
+                group.creator?.id != state.user?.id)
               ListTile(
                 leading: const Icon(Icons.exit_to_app),
                 title: const Text('Gruppe verlassen'),
@@ -101,48 +131,95 @@ class _ChatPageState extends State<ChatPage> {
                   leaveGroup(group.id);
                   Navigator.of(context).pushNamedAndRemoveUntil(
                     '/home',
-                        (route) => false,
+                    (route) => false,
                   );
                 },
               ),
           ],
           body: Column(
             children: [
+              const SizedBox(height: 10),
               Expanded(
-                child: ListView(
-                  dragStartBehavior: DragStartBehavior.down,
-                  children: (group.messages ?? [])
-                    .map((message) => SizedBox(
-                      width: 220,
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 5,
-                        ),
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: message.sender?.id == state.user?.id
-                          ? Theme.of(context).primaryColor
-                          : Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 10,
-                            offset: const Offset(0, 5),
+                child: ListView.builder(
+                  controller: _scrollController,
+                  itemCount: group.messages?.length ?? 0,
+                  itemBuilder: (context, idx) {
+                    if (group.messages == null) return Container();
+
+                    final message =
+                        group.messages![group.messages!.length - idx - 1];
+
+                    final prevMessage = idx == 0
+                        ? null
+                        : group.messages![group.messages!.length - idx];
+
+                    bool isDifferentDay = message.sendAt?.year !=
+                            prevMessage?.sendAt?.year ||
+                        message.sendAt?.month != prevMessage?.sendAt?.month ||
+                        message.sendAt?.day != prevMessage?.sendAt?.day;
+
+                    return Column(
+                      children: [
+                        if (idx == 0 || isDifferentDay)
+                          Container(
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 10,
+                            ),
+                            child: Text(
+                              DateFormat("dd.MM.yyyy")
+                                  .format(message.sendAt ?? DateTime(1970)),
+                            ),
                           ),
-                        ],
-                      ),
-                      child: TimestampedChatMessage(
-                        sender: message.sender?.username ?? "",
-                        sentAt: "${message.sendAt?.hour ?? "??"}:${message.sendAt?.minute ?? "??"}",
-                        text: message.content ?? "",
-                        style: const TextStyle(
-                          color: Colors.amber
+                        Align(
+                          alignment: message.sender?.id == state.user?.id
+                              ? Alignment.centerRight
+                              : Alignment.centerLeft,
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.5,
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 10,
+                            ),
+                            padding: const EdgeInsets.all(10),
+                            decoration: message.sender?.id == state.user?.id
+                                ? BoxDecoration(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(0),
+                                    ),
+                                  )
+                                : BoxDecoration(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .background,
+                                    border: Border.all(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      width: 2,
+                                    ),
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(0),
+                                      bottomRight: Radius.circular(10),
+                                    ),
+                                  ),
+                            child: TimestampedChatMessage(
+                              sender: message.sender?.username ?? "",
+                              sentAt: DateFormat("HH:mm")
+                                  .format(message.sendAt ?? DateTime(1970)),
+                              text: message.content ?? "",
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  )).toList(),
+                      ],
+                    );
+                  },
                 ),
               ),
               Container(
@@ -170,12 +247,11 @@ class _ChatPageState extends State<ChatPage> {
                     ),
                     IconButton(
                       onPressed: () async {
-                        if (_messageController.text.isEmpty) return;
                         try {
                           sendMessage(group.id, _messageController.text);
                           setState(() {});
                         } catch (e) {
-                          print(e);
+                          log(e.toString());
                         }
                         _messageController.clear();
                       },
