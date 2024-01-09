@@ -7,8 +7,6 @@ import 'package:studiconnect/widgets/page_wrapper.dart';
 class UserInfoPage extends StatelessWidget {
   const UserInfoPage({super.key});
 
-  static const routeName = '/user-info';
-
   @override
   Widget build(BuildContext context) {
     log("Building UserInfoPage...");

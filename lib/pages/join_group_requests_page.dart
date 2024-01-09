@@ -9,8 +9,6 @@ import 'package:studiconnect/widgets/page_wrapper.dart';
 class JoinGroupRequestsPage extends StatelessWidget {
   const JoinGroupRequestsPage({super.key});
 
-  static const routeName = '/join-group-requests';
-
   @override
   Widget build(BuildContext context) {
     log("Building JoinGroupRequestsPage...");

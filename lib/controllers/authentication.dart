@@ -6,6 +6,7 @@ import 'package:studiconnect/models/redux/actions.dart';
 import 'package:studiconnect/models/redux/store.dart';
 import 'package:studiconnect/services/firebase/authentication.dart' as firebase;
 import 'package:studiconnect/services/graphql/authentication.dart' as service;
+import 'package:studiconnect/services/graphql/errors/api_exception.dart';
 import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/services/storage/credentials.dart' as storage;
 import 'package:studiconnect/controllers/api.dart';
@@ -238,10 +239,16 @@ Future<void> signOut() async {
   await firebase.signOut();
 
   log("Calling API to sign out");
-  await runApiService(
-    apiCall: () => service.logout(),
-    parser: (result) => null,
-  );
+  try {
+    await runApiService(
+      apiCall: () => service.logout(),
+      parser: (result) => null,
+    );
+  } on ApiException catch (e) {
+    //TODO: Ensure that the user is logged out even if the API call fails
+  } catch (e) {
+    //TODO: Same here
+  }
 
   log("Clearing credentials");
   store.dispatch(

@@ -172,10 +172,10 @@ class _ChatPageState extends State<ChatPage> {
                       onPressed: () async {
                         if (_messageController.text.isEmpty) return;
                         try {
-                          sendMessage(group.id, _messageController.text);
+                          await sendMessage(group.id, _messageController.text);
                           setState(() {});
                         } catch (e) {
-                          print(e);
+                          return;
                         }
                         _messageController.clear();
                       },

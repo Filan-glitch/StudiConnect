@@ -13,8 +13,6 @@ import 'package:studiconnect/models/redux/store.dart';
 class CreateAndEditGroupPage extends StatefulWidget {
   const CreateAndEditGroupPage({super.key});
 
-  static const routeName = '/create-and-edit-group';
-
   @override
   State<CreateAndEditGroupPage> createState() => _CreateAndEditGroupPageState();
 }

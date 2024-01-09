@@ -7,7 +7,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:studiconnect/pages/chat_page.dart';
-import 'package:studiconnect/models/redux/actions.dart' as redux;
 import 'package:studiconnect/pages/join_group_requests_page.dart';
 import 'package:studiconnect/pages/password_change_page.dart';
 import 'package:studiconnect/pages/user_info_page.dart';
@@ -98,12 +97,10 @@ class MyApp extends StatelessWidget {
             '/settings': (context) => const SettingsPage(),
             '/delete-account': (context) => DeleteAccountPage(),
             '/update-password': (context) => PasswordChangePage(),
-            CreateAndEditGroupPage.routeName: (context) =>
-                const CreateAndEditGroupPage(),
-            GroupInfoPage.routeName: (context) => const GroupInfoPage(),
-            JoinGroupRequestsPage.routeName: (context) =>
-                const JoinGroupRequestsPage(),
-            UserInfoPage.routeName: (context) => const UserInfoPage(),
+            '/create-and-edit-group': (context) => const CreateAndEditGroupPage(),
+            '/group-info': (context) => const GroupInfoPage(),
+            '/join-group-requests': (context) => const JoinGroupRequestsPage(),
+            '/user-info': (context) => const UserInfoPage(),
           },
         ),
       ),

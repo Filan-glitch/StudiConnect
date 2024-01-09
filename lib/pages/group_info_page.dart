@@ -12,8 +12,6 @@ import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
 class GroupInfoPage extends StatefulWidget {
-  static const routeName = '/group-info';
-
   const GroupInfoPage({super.key});
 
   @override
