@@ -247,6 +247,7 @@ class _ChatPageState extends State<ChatPage> {
                     ),
                     IconButton(
                       onPressed: () async {
+                        if (_messageController.text.isEmpty) return;
                         try {
                           sendMessage(group.id, _messageController.text);
                           setState(() {});
