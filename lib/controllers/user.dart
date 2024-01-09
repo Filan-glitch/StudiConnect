@@ -47,6 +47,16 @@ Future<bool> loadUserInfo() async {
     return false;
   }
 
+// backup messages for groups
+  if (store.state.user?.groups != null) {
+    result.groups = result.groups?.map((group) {
+      final messages = store.state.user?.groups
+          ?.firstWhere((element) => element.id == group.id, orElse: () => group)
+          .messages;
+      return group.update(messages: messages);
+    }).toList();
+  }
+
   store.dispatch(
     Action(
       ActionTypes.setUser,
