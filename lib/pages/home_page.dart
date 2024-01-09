@@ -41,10 +41,10 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
     Connectivity().checkConnectivity().then(_onConnectivityChanged);
-    subscription = Connectivity().onConnectivityChanged.listen(_onConnectivityChanged);
+    subscription =
+        Connectivity().onConnectivityChanged.listen(_onConnectivityChanged);
     setState(() {});
   }
-
 
   @override
   void dispose() {
@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> {
         }
         late Widget page;
 
-        if(_selectedPage == 0) {
+        if (_selectedPage == 0) {
           page = const GroupsPage();
         } else if (_selectedPage == 1) {
           page = const SearchPage();
@@ -74,20 +74,23 @@ class _HomePageState extends State<HomePage> {
 
         return Scaffold(
           extendBody: true,
-          bottomNavigationBar: (!state.loading) ? CurvedNavigationBar(
-            backgroundColor: Colors.transparent,
-            color: Theme.of(context).colorScheme.primary,
-            items: const <Widget>[
-              Icon(Icons.group, size: 30, color: Colors.white),
-              Icon(Icons.search, size: 30, color: Colors.white),
-              Icon(Icons.person, size: 30, color: Colors.white),
-            ],
-            onTap: (index) {
-              setState(() {
-                _selectedPage = index;
-              });
-            },
-          ) : null,
+          bottomNavigationBar: (!state.loading)
+              ? CurvedNavigationBar(
+                  backgroundColor: Colors.transparent,
+                  color: Theme.of(context).colorScheme.primary,
+                  index: _selectedPage,
+                  items: const <Widget>[
+                    Icon(Icons.group, size: 30, color: Colors.white),
+                    Icon(Icons.search, size: 30, color: Colors.white),
+                    Icon(Icons.person, size: 30, color: Colors.white),
+                  ],
+                  onTap: (index) {
+                    setState(() {
+                      _selectedPage = index;
+                    });
+                  },
+                )
+              : null,
           body: page,
         );
       },

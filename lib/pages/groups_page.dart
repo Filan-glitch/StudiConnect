@@ -17,7 +17,6 @@ class GroupsPage extends StatefulWidget {
 }
 
 class _GroupsPageState extends State<GroupsPage> {
-
   @override
   void initState() {
     log("Iniatilizing GroupsPage...");
@@ -56,7 +55,9 @@ class _GroupsPageState extends State<GroupsPage> {
                           ElevatedButton(
                             onPressed: () {
                               Navigator.pushNamed(
-                                  context, '/create-and-edit-group');
+                                context,
+                                '/create-and-edit-group',
+                              );
                             },
                             child: const Text("Gruppe erstellen"),
                           ),

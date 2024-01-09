@@ -6,7 +6,6 @@ ThemeData darkTheme = ThemeData(
   fontFamily: GoogleFonts.roboto().fontFamily,
   colorScheme: const ColorScheme.dark(
     primary: Color(0xff3e3699),
-    secondary: Color(0xff0032bb),
     error: Colors.red,
   ),
   appBarTheme: const AppBarTheme(
