@@ -75,7 +75,6 @@ class _EditProfilePage extends State<EditProfilePage> {
       (value) async {
         setState(() {
           _selectedLocation = LatLng(value.latitude, value.longitude);
-          _locationKey = UniqueKey();
         });
       },
       onError: (error) {

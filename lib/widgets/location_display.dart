@@ -29,7 +29,7 @@ class _LocationDisplayState extends State<LocationDisplay> {
         '${place.street ?? ""}, ${place.postalCode ?? ""} ${place.locality ?? ""}';
       });
     } catch (e) {
-      log(e.toString());
+      logWarning(e.toString());
       setState(() {
         _address = 'Keine Adresse gefunden';
       });
