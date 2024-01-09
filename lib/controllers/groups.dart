@@ -32,7 +32,7 @@ Future<void> searchGroups(String module, int radius) async {
   store.dispatch(Action(ActionTypes.updateSearchResults, payload: result));
 }
 
-Future<void> createGroup(String title, String description, String module,
+Future<bool> createGroup(String title, String description, String module,
     double lat, double lon) async {
   String? id = await runApiService(
     apiCall: () => service.createGroup(title, description, module, lat, lon),
@@ -41,7 +41,7 @@ Future<void> createGroup(String title, String description, String module,
 
   if (id == null) {
     log("createGroup: id was null");
-    return;
+    return false;
   }
 
   Group? group = await runApiService(
@@ -51,13 +51,15 @@ Future<void> createGroup(String title, String description, String module,
 
   if (group == null) {
     log("createGroup: group was null");
-    return;
+    return false;
   }
 
   // update groups of user
   User currentUser = store.state.user!;
   currentUser.groups!.add(group);
   store.dispatch(Action(ActionTypes.setUser, payload: currentUser));
+
+  return true;
 }
 
 Future<bool> updateGroup(String id, String title, String description,

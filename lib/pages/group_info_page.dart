@@ -6,7 +6,6 @@ import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/group_parameter.dart';
 import 'package:studiconnect/models/user_parameter.dart';
-import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/avatar_picture.dart';
 import 'package:studiconnect/widgets/location_display.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
@@ -73,7 +72,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                   leading: const Icon(Icons.exit_to_app),
                   title: const Text('Gruppe verlassen'),
                   onTap: () async {
-                    bool successful = await leaveGroup(group!.id);
+                    bool successful = await leaveGroup(group.id);
 
                     if (!successful) {
                       return;
@@ -90,7 +89,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                   leading: const Icon(Icons.person_add),
                   title: const Text('Gruppe beitreten'),
                   onTap: () async {
-                    bool successful = await joinGroup(group!.id);
+                    bool successful = await joinGroup(group.id);
 
                     if (!successful) {
                       return;

@@ -96,7 +96,10 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                     padding: const EdgeInsets.only(
                         left: 20.0, right: 20.0, bottom: 30.0),
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width,
                       child: TextButton(
                           style: ButtonStyle(
                             shape: MaterialStateProperty.all<
@@ -109,216 +112,232 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                           onPressed: () {
                             showDialog(
                               context: context,
-                              builder: (context) => SelectLocationDialog(
-                                onLocationSelected: (location) {
-                                  setState(() {
-                                    _selectedLocation = location;
-                                  });
+                              builder: (context) =>
+                                  SelectLocationDialog(
+                                    onLocationSelected: (location) {
+                                      setState(() {
+                                        _selectedLocation = location;
+                                      });
 
-                            Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                            );
                           },
-                        ),
-                      );
-                    },
-                    child: Row(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(right: 20.0),
-                          child: Icon(Icons.location_on),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (_selectedLocation == null)
-                              Text(
-                                "Treffpunkt auswählen",
-                                style: TextStyle(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .labelSmall
-                                      ?.color,
-                                  fontSize: 16.0,
-                                ),
+                          child: Row(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.only(right: 20.0),
+                                child: Icon(Icons.location_on),
                               ),
-                            if (_selectedLocation != null)
-                              FutureBuilder(
-                                future: geo.placemarkFromCoordinates(
-                                  _selectedLocation!.latitude,
-                                  _selectedLocation!.longitude,
-                                ),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    geo.Placemark location = snapshot.data![0];
-                                    return SizedBox(
-                                      width: MediaQuery.of(context)
-                                        .size
-                                        .width
-                                        - 150,
-                                      child: Text(
-                                        '${location.street}\n${location.locality}',
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall
-                                              ?.color,
-                                          fontSize: 16.0,
-                                        ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (_selectedLocation == null)
+                                    Text(
+                                      "Treffpunkt auswählen",
+                                      style: TextStyle(
+                                        color: Theme
+                                            .of(context)
+                                            .textTheme
+                                            .labelSmall
+                                            ?.color,
+                                        fontSize: 16.0,
                                       ),
-                                    );
-                                  } else {
-                                    return Container();
-                                  }
-                                },
+                                    ),
+                                  if (_selectedLocation != null)
+                                    FutureBuilder(
+                                      future: geo.placemarkFromCoordinates(
+                                        _selectedLocation!.latitude,
+                                        _selectedLocation!.longitude,
+                                      ),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          geo.Placemark location = snapshot
+                                              .data![0];
+                                          return SizedBox(
+                                            width: MediaQuery
+                                                .of(context)
+                                                .size
+                                                .width
+                                                - 150,
+                                            child: Text(
+                                              '${location.street}\n${location
+                                                  .locality}',
+                                              style: TextStyle(
+                                                color: Theme
+                                                    .of(context)
+                                                    .textTheme
+                                                    .bodySmall
+                                                    ?.color,
+                                                fontSize: 16.0,
+                                              ),
+                                            ),
+                                          );
+                                        } else {
+                                          return Container();
+                                        }
+                                      },
+                                    ),
+                                ],
                               ),
-                          ],
-                        ),
-                      ],
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20, bottom: 30.0),
-              child: TextField(
-                keyboardType: TextInputType.multiline,
-                minLines: 5,
-                maxLines: null,
-                controller: _groupDescriptionController,
-                decoration: const InputDecoration(
-                  labelText: "Beschreibung",
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: Column(
-                children: [
-                  // save button
-                  if (group?.id != null)
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          final ImagePicker picker = ImagePicker();
-                          picker
-                              .pickImage(source: ImageSource.gallery)
-                              .then((value) {
-                            if (value != null) {
-                              uploadGroupImage(group?.id ?? "", value);
-                            }
-                          });
-                        },
-                        icon: const Icon(Icons.upload),
-                        label: const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 5.0),
-                          child: Text("Gruppenbild hochladen"),
-                        ),
-                      ),
+                            ],
+                          )),
                     ),
-                  if (group?.imageExists ?? false)
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          deleteGroupImage(group?.id ?? "");
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                            Theme.of(context).colorScheme.background,
-                          side: const BorderSide(
-                            color: Colors.red,
-                            width: 2.0,
-                          ),
-                        ),
-                        icon: const Icon(Icons.delete),
-                        label: const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 5.0),
-                          child: Text("Bild löschen"),
-                        ),
-                      ),
-                    ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      onPressed: () async {
-                        if (group == null) {
-                          bool successful = await createGroup(
-                            _groupTitleController.text,
-                            _groupDescriptionController.text,
-                            _groupModuleController.text,
-                            _selectedLocation?.latitude ?? 0.0,
-                            _selectedLocation?.longitude ?? 0.0,
-                          );
-
-                          if(!successful) return;
-                        } else {
-                          bool successful = await updateGroup(
-                            group.id,
-                            _groupTitleController.text,
-                            _groupDescriptionController.text,
-                            _groupModuleController.text,
-                            _selectedLocation?.latitude ?? 0.0,
-                            _selectedLocation?.longitude ?? 0.0,
-                          );
-
-                          if(!successful) return;
-
-                          var updatedGroup = group.update(
-                            title: _groupTitleController.text,
-                            module: _groupModuleController.text,
-                            description: _groupDescriptionController.text,
-                            lat: _selectedLocation?.latitude,
-                            lon: _selectedLocation?.longitude,
-                          );
-                        }
-                        navigatorKey.currentState!.pop();
-                      },
-                      icon: const Icon(Icons.done),
-                      label: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 5.0),
-                        child: Text(
-                          "Gruppe speichern"
-                        ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 20, right: 20, bottom: 30.0),
+                    child: TextField(
+                      keyboardType: TextInputType.multiline,
+                      minLines: 5,
+                      maxLines: null,
+                      controller: _groupDescriptionController,
+                      decoration: const InputDecoration(
+                        labelText: "Beschreibung",
+                        border: OutlineInputBorder(),
                       ),
                     ),
                   ),
-                  if (group?.id != null)
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: () async {
-                          bool successful = await deleteGroup(group!.id);
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                    child: Column(
+                      children: [
+                        // save button
+                        if (group?.id != null)
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                final ImagePicker picker = ImagePicker();
+                                picker
+                                    .pickImage(source: ImageSource.gallery)
+                                    .then((value) {
+                                  if (value != null) {
+                                    uploadGroupImage(group?.id ?? "", value);
+                                  }
+                                });
+                              },
+                              icon: const Icon(Icons.upload),
+                              label: const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 5.0),
+                                child: Text("Gruppenbild hochladen"),
+                              ),
+                            ),
+                          ),
+                        if (group?.imageExists ?? false)
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                deleteGroupImage(group?.id ?? "");
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                Theme
+                                    .of(context)
+                                    .colorScheme
+                                    .background,
+                                side: const BorderSide(
+                                  color: Colors.red,
+                                  width: 2.0,
+                                ),
+                              ),
+                              icon: const Icon(Icons.delete),
+                              label: const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 5.0),
+                                child: Text("Bild löschen"),
+                              ),
+                            ),
+                          ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
+                            onPressed: () async {
+                              if (group == null) {
+                                bool successful = await createGroup(
+                                  _groupTitleController.text,
+                                  _groupDescriptionController.text,
+                                  _groupModuleController.text,
+                                  _selectedLocation?.latitude ?? 0.0,
+                                  _selectedLocation?.longitude ?? 0.0,
+                                );
 
-                          if (!successful) return;
+                                if (!successful) return;
+                              } else {
+                                bool successful = await updateGroup(
+                                  group.id,
+                                  _groupTitleController.text,
+                                  _groupDescriptionController.text,
+                                  _groupModuleController.text,
+                                  _selectedLocation?.latitude ?? 0.0,
+                                  _selectedLocation?.longitude ?? 0.0,
+                                );
 
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                            '/home',
-                                (route) => false,
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                          Theme.of(context).colorScheme.background,
-                          side: const BorderSide(
-                            color: Colors.red,
-                            width: 2.0,
+                                if (!successful) return;
+
+                                group.update(
+                                  title: _groupTitleController.text,
+                                  module: _groupModuleController.text,
+                                  description: _groupDescriptionController.text,
+                                  lat: _selectedLocation?.latitude,
+                                  lon: _selectedLocation?.longitude,
+                                );
+                              }
+                              navigatorKey.currentState!.pop();
+                            },
+                            icon: const Icon(Icons.done),
+                            label: const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 5.0),
+                              child: Text(
+                                  "Gruppe speichern"
+                              ),
+                            ),
                           ),
                         ),
-                        icon: const Icon(Icons.delete),
-                        label: const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 5.0),
-                          child: Text(
-                            "Gruppe löschen",
+                        if (group?.id != null)
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton.icon(
+                              onPressed: () async {
+                                bool successful = await deleteGroup(group!.id);
+
+                                if (!successful) return;
+
+                                navigatorKey.currentState!
+                                    .pushNamedAndRemoveUntil(
+                                  '/home',
+                                      (route) => false,
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                Theme
+                                    .of(context)
+                                    .colorScheme
+                                    .background,
+                                side: const BorderSide(
+                                  color: Colors.red,
+                                  width: 2.0,
+                                ),
+                              ),
+                              icon: const Icon(Icons.delete),
+                              label: const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 5.0),
+                                child: Text(
+                                  "Gruppe löschen",
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
+                      ],
                     ),
+                  ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
+          );
+        }
     );
   }
 }
