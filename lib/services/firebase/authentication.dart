@@ -78,6 +78,39 @@ Future<Map?> signInWithGoogle() async {
   };
 }
 
+Future<AuthCredential> reauthenticateWithGoogle() async {
+  log("Reauthenticating with Google");
+  final GoogleSignIn googleSignIn = GoogleSignIn();
+
+  log("Requesting Google account sing in");
+  final GoogleSignInAccount? googleSignInAccount;
+  try {
+    googleSignInAccount = await googleSignIn.signIn();
+  } catch (e) {
+    logWarning(e.toString());
+    showToast("Es ist ein Fehler beim Anmelden aufgetreten");
+    rethrow;
+  }
+
+  if (googleSignInAccount != null) {
+    log("Google account sign in successful");
+    final GoogleSignInAuthentication googleSignInAuthentication =
+        await googleSignInAccount.authentication;
+
+    log("Getting credentials from Google");
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleSignInAuthentication.accessToken,
+      idToken: googleSignInAuthentication.idToken,
+    );
+    log("Got credentials from Google");
+
+    return credential;
+  } else {
+    log("Google account sign in failed");
+    throw Exception("Google account sign in failed");
+  }
+}
+
 Future<void> signOut() async {
   log("Signing out");
   if (FirebaseAuth.instance.currentUser == null) {
@@ -119,7 +152,7 @@ Future<void> deleteEmailAccount(String password) async {
 Future<void> deleteGoogleAccount() async {
   log("Reauthenticating user");
   await FirebaseAuth.instance.currentUser
-      ?.reauthenticateWithProvider(GoogleAuthProvider());
+      ?.reauthenticateWithCredential(await reauthenticateWithGoogle());
   log("Reauthenticated user");
 
   log("Deleting Google account from Firebase");

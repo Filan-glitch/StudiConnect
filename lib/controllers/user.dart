@@ -11,6 +11,7 @@ import 'package:studiconnect/models/user.dart';
 import 'package:studiconnect/controllers/api.dart';
 import 'package:studiconnect/services/graphql/errors/api_exception.dart';
 import 'package:studiconnect/services/graphql/user.dart' as service;
+import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/services/rest/profile_image.dart' as rest_service;
 import 'package:studiconnect/services/storage/credentials.dart' as storage;
 import 'package:studiconnect/services/firebase/authentication.dart' as firebase;
@@ -127,18 +128,19 @@ Future<void> updateProfile(
 
 Future<void> deleteAccount(String credential) async {
   try {
+    log("Deleting account from Firebase");
     if (store.state.authProviderType == "email") {
       await firebase.deleteEmailAccount(credential);
     } else if (store.state.authProviderType == "google") {
       await firebase.deleteGoogleAccount();
     }
 
+    log("Deleting account from API");
     await runApiService(
       apiCall: () => service.deleteAccount(),
       shouldRethrow: true,
     );
 
-    await storage.deleteCredentials();
   } on ApiException catch (e) {
     showToast(e.message);
     rethrow;
@@ -149,10 +151,14 @@ Future<void> deleteAccount(String credential) async {
     rethrow;
   }
 
+  log("Deleting credentials from storage");
+  await storage.deleteCredentials();
+
+  showToast("Account erfolgreich gelöscht.");
+
   store.dispatch(
     Action(
-      ActionTypes.updateSessionID,
-      payload: null,
+      ActionTypes.clear,
     ),
   );
   navigatorKey.currentState!.pushNamedAndRemoveUntil(
