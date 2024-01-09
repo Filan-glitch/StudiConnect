@@ -4,7 +4,6 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:studiconnect/dialogs/dialog_wrapper.dart';
-import 'package:studiconnect/services/logger_provider.dart';
 
 class SelectLocationDialog extends StatefulWidget {
   const SelectLocationDialog({required this.onLocationSelected, super.key});
@@ -57,7 +56,6 @@ class _SelectLocationDialogState extends State<SelectLocationDialog> {
 
   @override
   void initState() {
-    log("Iniatilizing SelectLocationDialog...");
     super.initState();
 
     setupLocation();
@@ -65,14 +63,12 @@ class _SelectLocationDialogState extends State<SelectLocationDialog> {
 
   @override
   void dispose() {
-    log("Disposing SelectLocationDialog...");
     _locationSubscription.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    log("Building SelectLocationDialog...");
     return DialogWrapper(
       isDefaultDialog: false,
       children: [

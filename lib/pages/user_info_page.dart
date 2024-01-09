@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/avatar_picture.dart';
 import 'package:studiconnect/models/user.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
@@ -9,7 +8,6 @@ class UserInfoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log("Building UserInfoPage...");
     final user = ModalRoute.of(context)!.settings.arguments as User;
     return PageWrapper(
       title: 'Nutzerinformationen',

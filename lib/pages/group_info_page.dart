@@ -4,7 +4,6 @@ import 'package:latlong2/latlong.dart';
 import 'package:studiconnect/dialogs/remove_member_dialog.dart';
 import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/main.dart';
-import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/avatar_picture.dart';
 import 'package:studiconnect/widgets/location_display.dart';
 import 'package:studiconnect/models/group.dart';
@@ -23,7 +22,6 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
 
   @override
   void initState() {
-    log("Iniatilizing GroupInfoPage...");
     super.initState();
     Future.delayed(Duration.zero, () {
       setState(() {
@@ -33,14 +31,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
   }
 
   @override
-  void dispose() {
-    log("Disposing GroupInfoPage...");
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    log("Building GroupInfoPage...");
     final members = (group?.members ?? []).map((e) => e.id).toList();
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
@@ -80,8 +71,13 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                 ListTile(
                   leading: const Icon(Icons.exit_to_app),
                   title: const Text('Gruppe verlassen'),
-                  onTap: () {
-                    leaveGroup(group!.id);
+                  onTap: () async {
+                    bool successful = await leaveGroup(group!.id);
+
+                    if (!successful) {
+                      return;
+                    }
+
                     navigatorKey.currentState!.pushNamedAndRemoveUntil(
                       '/home',
                       (route) => false,
@@ -92,8 +88,13 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                 ListTile(
                   leading: const Icon(Icons.person_add),
                   title: const Text('Gruppe beitreten'),
-                  onTap: () {
-                    joinGroup(group!.id);
+                  onTap: () async {
+                    bool successful = await joinGroup(group!.id);
+
+                    if (!successful) {
+                      return;
+                    }
+
                     navigatorKey.currentState!.pop();
                     navigatorKey.currentState!.pushNamedAndRemoveUntil(
                       '/home',

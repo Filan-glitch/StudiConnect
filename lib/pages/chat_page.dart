@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:intl/intl.dart';
 import 'package:studiconnect/controllers/messages.dart';
+import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/group.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/widgets/chat_bubble.dart';
@@ -125,9 +126,12 @@ class _ChatPageState extends State<ChatPage> {
               ListTile(
                 leading: const Icon(Icons.exit_to_app),
                 title: const Text('Gruppe verlassen'),
-                onTap: () {
-                  leaveGroup(group.id);
-                  Navigator.of(context).pushNamedAndRemoveUntil(
+                onTap: () async {
+                  bool successful = await leaveGroup(group.id);
+
+                  if (!successful) return;
+
+                  navigatorKey.currentState!.pushNamedAndRemoveUntil(
                     '/home',
                     (route) => false,
                   );
@@ -202,14 +206,16 @@ class _ChatPageState extends State<ChatPage> {
                     IconButton(
                       onPressed: () async {
                         if (_messageController.text.isEmpty) return;
-                        try {
-                          await sendMessage(group.id, _messageController.text);
-                          setState(() {});
-                        } catch (e) {
-                          logWarning(e.toString());
-                          return;
-                        }
+
+                        bool successful = await sendMessage(group.id, _messageController.text);
+
+                        if (!successful) return;
+
+                        _scrollToBottom();
+
                         _messageController.clear();
+
+                        setState(() {});
                       },
                       icon: const Icon(
                         Icons.send,

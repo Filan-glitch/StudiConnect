@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:studiconnect/services/logger_provider.dart';
 
 class DialogWrapper extends StatelessWidget {
   const DialogWrapper({
@@ -16,7 +15,6 @@ class DialogWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log("Building DialogWrapper...");
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
       child: SimpleDialog(

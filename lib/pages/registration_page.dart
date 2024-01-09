@@ -31,7 +31,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   void initState() {
-    log("Iniatilizing RegisterPage...");
     super.initState();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
@@ -41,7 +40,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   void dispose() {
-    log("Disposing RegisterPage...");
     _emailController.dispose();
     _passwordController.dispose();
     _passwordRepeatController.dispose();
@@ -51,7 +49,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    log("Building RegisterPage...");
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (BuildContext context, AppState state) {

@@ -4,6 +4,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/dialogs/select_location_dialog.dart';
+import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/group.dart';
 import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
@@ -27,7 +28,6 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
 
   @override
   void initState() {
-    log("Iniatilizing CreateAndEditGroupPage...");
     super.initState();
     _groupTitleController = TextEditingController();
     _groupModuleController = TextEditingController();
@@ -47,7 +47,6 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
 
   @override
   void dispose() {
-    log("Disposing CreateAndEditGroupPage...");
     _groupTitleController.dispose();
     _groupModuleController.dispose();
     _groupDescriptionController.dispose();
@@ -56,7 +55,6 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
 
   @override
   Widget build(BuildContext context) {
-    log("Building CreateAndEditGroupPage...");
     return PageWrapper(
       padding: const EdgeInsets.only(top: 20.0),
       title: group?.id == null ? "Gruppe erstellen" : "Gruppe bearbeiten",
@@ -227,7 +225,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
-                      onPressed: () {
+                      onPressed: () async {
                         if (group == null) {
                           createGroup(
                             _groupTitleController.text,
@@ -239,7 +237,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
 
                           Navigator.of(context).pop();
                         } else {
-                          updateGroup(
+                          bool successful = await updateGroup(
                             group!.id,
                             _groupTitleController.text,
                             _groupDescriptionController.text,
@@ -247,6 +245,10 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                             _selectedLocation?.latitude ?? 0.0,
                             _selectedLocation?.longitude ?? 0.0,
                           );
+
+                          if (!successful) {
+                            return;
+                          }
 
                           var updatedGroup = group!.update(
                             title: _groupTitleController.text,
@@ -262,7 +264,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                               payload: updatedGroup));
 
                           // Pop the page and pass the updated group data
-                          Navigator.of(context).pop(updatedGroup);
+                          navigatorKey.currentState!.pop(updatedGroup);
                         }
                       },
                       icon: const Icon(Icons.done),
@@ -278,9 +280,14 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
-                        onPressed: () {
-                          deleteGroup(group!.id);
-                          Navigator.of(context).pushNamedAndRemoveUntil(
+                        onPressed: () async {
+                          bool successful = await deleteGroup(group!.id);
+
+                          if (!successful) {
+                            return;
+                          }
+
+                          navigatorKey.currentState!.pushNamedAndRemoveUntil(
                             '/home',
                                 (route) => false,
                           );

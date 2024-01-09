@@ -19,22 +19,8 @@ class JoinGroupRequestListItem extends StatefulWidget {
 }
 
 class _JoinGroupRequestListItemState extends State<JoinGroupRequestListItem> {
-
-  @override
-  void initState() {
-    log("Initializing JoinGroupRequestListItem...");
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    log("Disposing JoinGroupRequestListItem...");
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    log("Building JoinGroupRequestListItem...");
     return ListTile(
       leading: CircleAvatar(
         backgroundImage: NetworkImage(

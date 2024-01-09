@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:image_picker/image_picker.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -13,8 +14,7 @@ import 'package:studiconnect/services/graphql/user.dart' as service;
 import 'package:studiconnect/services/rest/profile_image.dart' as rest_service;
 import 'package:studiconnect/services/storage/credentials.dart' as storage;
 import 'package:studiconnect/services/firebase/authentication.dart' as firebase;
-
-import '../constants.dart';
+import 'package:studiconnect/constants.dart';
 
 Future<bool> loadUserInfo() async {
   Map<String, String> credentials = await storage.loadCredentials();
@@ -105,10 +105,10 @@ Future<void> updateProfile(
             mobile,
             discord,
           ),
-      parser: (result) => result["updateProfile"]["id"] as String);
+      parser: (result) => result["updateProfile"]["id"] as String
+  );
 
   if (id == null) {
-    showToast("Dein Profil konnte nicht aktualisiert werden. Du wirdst nun ausgeloggt.");
     store.dispatch(
       Action(
         ActionTypes.updateSessionID,
@@ -127,11 +127,11 @@ Future<void> updateProfile(
 
 Future<void> deleteAccount(String credential) async {
   try {
+    await runApiService(
+      apiCall: () => service.deleteAccount(),
+      shouldRethrow: true,
+    );
     await Future.wait([
-      runApiService(
-        apiCall: () => service.deleteAccount(),
-        parser: (result) => null,
-      ),
       storage.deleteCredentials(),
       if (store.state.authProviderType == "email")
         firebase.deleteEmailAccount(credential),
@@ -140,10 +140,12 @@ Future<void> deleteAccount(String credential) async {
     ]);
   } on ApiException catch (e) {
     showToast(e.message);
-    return;
+    rethrow;
+  } on FirebaseAuthException {
+    rethrow;
   } catch (e) {
-    showToast("Dein Account konnte nicht gelöscht werden.");
-    return;
+    showToast(e.toString());
+    rethrow;
   }
 
   store.dispatch(
@@ -170,16 +172,8 @@ Future<void> uploadProfileImage(XFile file) async {
   try {
     await runRestApi(
         apiCall: () => rest_service.uploadProfileImage(content),
-        parser: (result) => null)
-        .then((value) async {
-      store.dispatch(
-        Action(
-          ActionTypes.setProfileImageAvailable,
-          payload: true,
-        ),
-      );
-      showToast("Profilbild erfolgreich hochgeladen.");
-    });
+        shouldRethrow: true
+    );
   } on ApiException catch (e) {
     showToast(e.message);
     return;
@@ -188,6 +182,15 @@ Future<void> uploadProfileImage(XFile file) async {
     return;
   }
 
+  store.dispatch(
+    Action(
+      ActionTypes.setProfileImageAvailable,
+      payload: true,
+    ),
+  );
+
+  showToast("Profilbild erfolgreich hochgeladen.");
+
   await DefaultCacheManager().removeFile(
       "$backendURL/api/group/${store.state.user?.id}/image");
   await DefaultCacheManager().downloadFile(
@@ -195,9 +198,18 @@ Future<void> uploadProfileImage(XFile file) async {
 }
 
 Future<void> deleteProfileImage() async {
-  await runRestApi(
-      apiCall: () => rest_service.deleteProfileImage(),
-      parser: (result) => null);
+  try {
+    await runRestApi(
+        apiCall: () => rest_service.deleteProfileImage(),
+        shouldRethrow: true
+    );
+  } on ApiException catch (e) {
+    showToast(e.message);
+    return;
+  } catch (e) {
+    showToast(e.toString());
+    return;
+  }
 
   store.dispatch(
     Action(
