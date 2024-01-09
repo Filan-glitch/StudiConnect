@@ -13,8 +13,8 @@ class GroupListItem extends StatelessWidget {
       onTap: () {
         Navigator.pushNamed(
           context,
-          '/group-info',
-          arguments: group,
+          '/chat',
+          arguments: group.id,
         );
       },
       leading: AvatarPicture(
