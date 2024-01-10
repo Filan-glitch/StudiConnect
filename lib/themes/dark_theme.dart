@@ -11,7 +11,6 @@ ThemeData darkTheme = ThemeData(
   appBarTheme: const AppBarTheme(
     backgroundColor: Color(0xff3e3699),
   ),
-  scaffoldBackgroundColor: const Color.fromARGB(255, 11, 4, 33),
   textTheme: GoogleFonts.robotoTextTheme()
       .apply(bodyColor: Colors.white, displayColor: Colors.white),
   elevatedButtonTheme: ElevatedButtonThemeData(

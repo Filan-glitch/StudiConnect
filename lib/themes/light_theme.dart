@@ -11,7 +11,6 @@ ThemeData lightTheme = ThemeData(
   appBarTheme: const AppBarTheme(
     backgroundColor: Color(0xff584cd7),
   ),
-  scaffoldBackgroundColor: const Color.fromARGB(255, 255, 255, 255),
   textTheme: GoogleFonts.robotoTextTheme().apply(
     bodyColor: Colors.black,
     displayColor: Colors.black,
