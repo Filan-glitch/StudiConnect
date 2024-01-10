@@ -29,6 +29,9 @@ class _WelcomePageState extends State<WelcomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final double _screenWidth = MediaQuery.of(context).size.width;
+    final double _screenHeight = MediaQuery.of(context).size.height;
+
     return PageWrapper(
       type: PageType.empty,
       title: 'Willkommen',
@@ -39,23 +42,24 @@ class _WelcomePageState extends State<WelcomePage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Image.asset(
-                    'assets/icons/icon.png',
-                    width: 200,
+                  Padding(
+                    padding: EdgeInsets.only(bottom: _screenHeight * 0.05),
+                    child: Image.asset(
+                      'assets/icons/icon.png',
+                      width: _screenWidth * 0.5,
+                    ),
                   ),
-                  const SizedBox(height: 50),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 40),
-                    child: Text(
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: _screenWidth * 0.1, vertical: _screenHeight * 0.025),
+                    child: const Text(
                       'Willkommen bei StudiConnect',
                       style:
                           TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  const SizedBox(height: 100),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    padding: EdgeInsets.symmetric(horizontal: _screenWidth * 0.1, vertical: _screenHeight * 0.02),
                     child: RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(
@@ -147,7 +151,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   ),
                   const SizedBox(height: 5),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    padding: EdgeInsets.only(left: _screenWidth * 0.1, right: _screenWidth * 0.1, bottom: _screenHeight * 0.07),
                     child: RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(
@@ -167,7 +171,6 @@ class _WelcomePageState extends State<WelcomePage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 100),
                 ],
               ),
             );

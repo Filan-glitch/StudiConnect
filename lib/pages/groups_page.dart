@@ -68,16 +68,20 @@ class _GroupsPageState extends State<GroupsPage> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text('Du bist noch keiner Gruppe beigetreten'),
+                            const Center(
+                              child: Text('Du bist noch keiner Gruppe beigetreten'),
+                            ),
                             const SizedBox(height: 50),
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  '/create-and-edit-group',
-                                );
-                              },
-                              child: const Text('Gruppe erstellen'),
+                            Center(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/create-and-edit-group',
+                                  );
+                                },
+                                child: const Text('Gruppe erstellen'),
+                              ),
                             ),
                           ],
                         ),

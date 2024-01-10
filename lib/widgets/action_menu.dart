@@ -12,10 +12,12 @@ class ActionMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double _width = MediaQuery.of(context).size.width;
+    final double _height = MediaQuery.of(context).size.height;
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
       child: Container(
-        height: children.length * 56 + 70,
+        height: children.length * _height * 0.1,
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(30),
@@ -30,10 +32,10 @@ class ActionMenu extends StatelessWidget {
           color: Theme.of(context).colorScheme.background,
         ),
         child: Padding(
-          padding: const EdgeInsets.only(
-            top: 20.0,
-            left: 15.0,
-            right: 15.0,
+          padding: EdgeInsets.only(
+            top: _height * 0.02,
+            left: _width * 0.04,
+            right: _width * 0.04,
           ),
           child: Column(
             children: [
@@ -41,19 +43,16 @@ class ActionMenu extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 10.0),
                 child: Text(
                   title,
-                  style: const TextStyle(
-                    fontSize: 25.5,
+                  style: TextStyle(
+                    fontSize: _width * 0.065,
                   ),
                 ),
               ),
               Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: children
-                  ),
+                child: ListView(
+                  children: children,
                 ),
               ),
-              const SizedBox(height: 10.0),
             ],
           ),
         )

@@ -259,10 +259,15 @@ class _EditProfilePage extends State<EditProfilePage> {
                                   width: 2.0,
                                 ),
                               ),
-                              icon: const Icon(Icons.delete),
+                              icon: const Icon(Icons.delete_forever_outlined, color: Colors.red),
                               label: const Padding(
                                 padding: EdgeInsets.symmetric(vertical: 5.0),
-                                child: Text('Profilbild löschen'),
+                                child: Text(
+                                  'Profilbild löschen',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -309,7 +314,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                             ),
                           ),
                         const SizedBox(
-                          height: 30.0,
+                          height: 50.0,
                         ),
                         SizedBox(
                           width: double.infinity,

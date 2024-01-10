@@ -244,12 +244,17 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                                   width: 2.0,
                                 ),
                               ),
-                              icon: const Icon(Icons.delete),
+                              icon: const Icon(Icons.delete_forever_outlined, color: Colors.red),
                               label: const Padding(
                                 padding: EdgeInsets.symmetric(vertical: 5.0),
-                                child: Text('Bild löschen'),
+                                child: Text(
+                                  'Gruppenbild löschen',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                ),
                               ),
                             ),
+                          ),
                           ),
                         SizedBox(
                           width: double.infinity,
@@ -296,6 +301,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                             ),
                           ),
                         ),
+                        const SizedBox(height: 50.0),
                         if (group?.id != null)
                           SizedBox(
                             width: double.infinity,
@@ -322,11 +328,14 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                                   width: 2.0,
                                 ),
                               ),
-                              icon: const Icon(Icons.delete),
+                              icon: const Icon(Icons.warning_amber_rounded, color: Colors.red),
                               label: const Padding(
                                 padding: EdgeInsets.symmetric(vertical: 5.0),
                                 child: Text(
                                   'Gruppe löschen',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                  ),
                                 ),
                               ),
                             ),
