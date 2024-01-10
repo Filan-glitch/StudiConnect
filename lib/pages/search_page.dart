@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/main.dart';
@@ -21,7 +20,6 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  late final DateFormat _formatter;
   late final TextEditingController _moduleInputController;
   late double _radius;
   late Timer _delayQueryTimer;
@@ -44,7 +42,6 @@ class _SearchPageState extends State<SearchPage> {
     super.initState();
     _radius = 10;
     _moduleInputController = TextEditingController();
-    _formatter = DateFormat('dd.MM.yyyy');
     _delayQueryTimer = Timer(
       const Duration(seconds: 1),
       _loadSearchResults,
@@ -213,7 +210,19 @@ class _SearchPageState extends State<SearchPage> {
                             ),
                           ),
                           Text(
-                            'Erstellt an ${_formatter.format(group.createdAt!)}',
+                            'Modul: ${group.module ?? ""}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            'Studiengang: ${group.creator?.major ?? ""}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            'Hochschule: ${group.creator?.university ?? ""}',
                             style: const TextStyle(
                               color: Colors.white,
                             ),
