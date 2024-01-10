@@ -7,7 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:studiconnect/controllers/authentication.dart';
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
-import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:studiconnect/constants.dart';
@@ -24,20 +23,12 @@ class _WelcomePageState extends State<WelcomePage> {
 
   @override
   void initState() {
-    log("Iniatilizing WelcomePage...");
     super.initState();
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
   }
 
   @override
-  void dispose() {
-    log("Disposing WelcomePage...");
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    log("Building WelcomePage...");
     return PageWrapper(
       type: PageType.empty,
       title: "Willkommen",

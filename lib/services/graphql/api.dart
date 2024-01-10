@@ -1,12 +1,9 @@
-import 'dart:developer';
-
-import 'package:flutter/foundation.dart';
 import 'package:graphql/client.dart';
-
 import 'package:studiconnect/constants.dart';
 import 'package:studiconnect/models/redux/store.dart';
 import 'package:studiconnect/services/graphql/errors/api_exception.dart';
 import 'package:studiconnect/services/graphql/errors/connection_error.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/services/rest/api.dart';
 
 /// Implementations for GraphQL API queries & mutations.
@@ -44,7 +41,7 @@ class GraphQL {
     try {
       result = await (await _getClient()).query(options);
     } catch (e) {
-      if (kDebugMode) log(e.toString());
+      logWarning(e.toString());
 
       throw ApiException();
     }
@@ -72,7 +69,7 @@ class GraphQL {
     try {
       result = await (await _getClient()).mutate(options);
     } catch (e) {
-      if (kDebugMode) log(e.toString());
+      logWarning(e.toString());
 
       throw ApiException();
     }
@@ -99,7 +96,7 @@ class GraphQL {
       }
     }
 
-    if (kDebugMode) log(customMessage ?? "no msg");
+    log(customMessage ?? "no msg");
 
     processHttpStatusCodes(statusCode, customMessage: customMessage);
 

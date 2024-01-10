@@ -1,18 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:studiconnect/controllers/user.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
-import 'package:studiconnect/services/logger_provider.dart';
+import 'package:studiconnect/widgets/error_label.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
 class DeleteAccountPage extends StatelessWidget {
   DeleteAccountPage({super.key});
 
   final TextEditingController _passwordController = TextEditingController();
+  final ValueNotifier<String> _errorMessageNotifier = ValueNotifier("");
 
   @override
   Widget build(BuildContext context) {
-    log("Building DeleteAccountPage...");
     return PageWrapper(
       title: "Konto löschen",
       body: StoreConnector<AppState, AppState>(
@@ -51,6 +52,12 @@ class DeleteAccountPage extends StatelessWidget {
                       ),
                     ),
                   ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: ErrorLabel(
+                      errorMessageNotifier: _errorMessageNotifier,
+                    ),
+                  ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.background,
@@ -59,8 +66,25 @@ class DeleteAccountPage extends StatelessWidget {
                         width: 2.0,
                       ),
                     ),
-                    onPressed: () {
-                      deleteAccount(_passwordController.text);
+                    onPressed: () async {
+                      try {
+                        await deleteAccount(_passwordController.text);
+                      } on FirebaseAuthException catch (e) {
+                        final errorMessages = {
+                          'wrong-password': "Das Passwort ist falsch.",
+                          'user-disabled': "Dieser Nutzer wurde deaktiviert.",
+                          'too-many-requests': "Zu viele Anfragen. Bitte versuche es später erneut.",
+                          'operation-not-allowed': "Diese Anmeldung ist nicht erlaubt.",
+                          'network-request-failed': "Keine Internetverbindung.",
+                          'invalid-credential': "Die Anmeldeinformationen sind ungültig.",
+                        };
+
+                        _errorMessageNotifier.value = errorMessages[e.code] ?? "${e.code}: ${e.message}";
+                        return;
+                      } catch (e) {
+                        _errorMessageNotifier.value = "Ein unbekannter Fehler ist aufgetreten.";
+                        return;
+                      }
                     },
                     child: const Text(
                       "Konto löschen",

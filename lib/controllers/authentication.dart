@@ -1,6 +1,5 @@
 import 'package:oktoast/oktoast.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/redux/actions.dart';
 import 'package:studiconnect/models/redux/store.dart';
@@ -52,14 +51,12 @@ Future<void> loadCredentials() async {
 }
 
 Future<bool?> signInWithGoogle() async {
-  log("Signing in with Google");
   Map? result = await firebase.signInWithGoogle();
   String? idToken = result?["idToken"];
   bool? isNewUser = result?["newUser"];
 
   if (idToken == null) {
     log("Google sign in failed");
-    showToast("Anmeldung mit Google fehlgeschlagen");
     return null;
   }
 
@@ -71,7 +68,6 @@ Future<bool?> signInWithGoogle() async {
 
   if (session == null) {
     log("API call failed");
-    showToast("Anmeldung mit Google fehlgeschlagen");
     return null;
   }
 
@@ -108,7 +104,6 @@ Future<void> signInWithEmailAndPassword(String email, String password) async {
 
   if (idToken == null) {
     log("Email sign in failed");
-    showToast("Anmeldung mit E-Mail fehlgeschlagen");
     return;
   }
 
@@ -120,7 +115,6 @@ Future<void> signInWithEmailAndPassword(String email, String password) async {
 
   if (session == null) {
     log("API call failed");
-    showToast("Anmeldung mit E-Mail fehlgeschlagen");
     return;
   }
 
@@ -154,8 +148,7 @@ Future<void> signUpWithEmailAndPassword(String email, String password) async {
   String? idToken = await firebase.signUpWithEmailAndPassword(email, password);
 
   if (idToken == null) {
-    log("Email sign up failed");
-    showToast("Registrierung fehlgeschlagen");
+    logWarning("Email sign up failed");
     return;
   }
 
@@ -166,8 +159,7 @@ Future<void> signUpWithEmailAndPassword(String email, String password) async {
   );
 
   if (session == null) {
-    log("API call failed");
-    showToast("Registrierung fehlgeschlagen");
+    logWarning("API call failed");
     return;
   }
 
@@ -205,7 +197,6 @@ Future<void> signInAsGuest() async {
 
   if (session == null) {
     log("API call failed");
-    showToast("Anmeldung fehlgeschlagen");
     return;
   }
 
@@ -235,20 +226,24 @@ Future<void> signInAsGuest() async {
 }
 
 Future<void> signOut() async {
-  log("Signing out");
-  await firebase.signOut();
-
   log("Calling API to sign out");
   try {
     await runApiService(
       apiCall: () => service.logout(),
-      parser: (result) => null,
+      shouldRethrow: true,
     );
   } on ApiException catch (e) {
     //TODO: Ensure that the user is logged out even if the API call fails
+    showToast(e.message);
+    return;
   } catch (e) {
     //TODO: Same here
+    showToast(e.toString());
+    return;
   }
+
+  log("Signing out");
+  await firebase.signOut();
 
   log("Clearing credentials");
   store.dispatch(

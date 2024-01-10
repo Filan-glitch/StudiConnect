@@ -6,7 +6,6 @@ import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/group_parameter.dart';
 import 'package:studiconnect/models/user_parameter.dart';
-import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/avatar_picture.dart';
 import 'package:studiconnect/widgets/location_display.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
@@ -24,7 +23,6 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
 
   @override
   void initState() {
-    log("Initializing GroupInfoPage...");
     super.initState();
     Future.delayed(Duration.zero, () {
       setState(() {
@@ -35,18 +33,11 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
   }
 
   @override
-  void dispose() {
-    log("Disposing GroupInfoPage...");
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    log("Building GroupInfoPage...");
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (context, state) {
-          final group = groupParams?.group;
+          final group = groupParams?.getGroup(context);
           if (group == null) return Container();
 
           final members = (group.members ?? []).map((e) => e.id).toList();
@@ -80,8 +71,13 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                 ListTile(
                   leading: const Icon(Icons.exit_to_app),
                   title: const Text('Gruppe verlassen'),
-                  onTap: () {
-                    leaveGroup(group.id);
+                  onTap: () async {
+                    bool successful = await leaveGroup(group.id);
+
+                    if (!successful) {
+                      return;
+                    }
+
                     navigatorKey.currentState!.pushNamedAndRemoveUntil(
                       '/home',
                       (route) => false,
@@ -92,8 +88,13 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                 ListTile(
                   leading: const Icon(Icons.person_add),
                   title: const Text('Gruppe beitreten'),
-                  onTap: () {
-                    joinGroup(group.id);
+                  onTap: () async {
+                    bool successful = await joinGroup(group.id);
+
+                    if (!successful) {
+                      return;
+                    }
+
                     navigatorKey.currentState!.pop();
                     navigatorKey.currentState!.pushNamedAndRemoveUntil(
                       '/home',

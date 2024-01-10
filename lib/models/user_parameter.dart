@@ -1,5 +1,8 @@
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:studiconnect/models/group_parameter.dart';
-import 'package:studiconnect/models/redux/store.dart';
+import 'package:studiconnect/models/redux/app_state.dart';
+import 'package:flutter/material.dart';
+import 'package:redux/redux.dart';
 import 'package:studiconnect/models/user.dart';
 
 enum UserSource {
@@ -19,15 +22,16 @@ class UserLookupParameters {
     this.groupLookupParameters,
   });
 
-  User? get user {
+  User? getUser(BuildContext context) {
+    Store<AppState> store = StoreProvider.of<AppState>(context);
     switch (source) {
       case UserSource.me:
         return store.state.user;
       case UserSource.groupMember:
-        return groupLookupParameters?.group?.members
+        return groupLookupParameters?.getGroup(context)?.members
             ?.firstWhere((user) => user.id == userID);
       case UserSource.joinGroupRequest:
-        return groupLookupParameters?.group?.joinRequests
+        return groupLookupParameters?.getGroup(context)?.joinRequests
             ?.firstWhere((user) => user.id == userID);
     }
   }
