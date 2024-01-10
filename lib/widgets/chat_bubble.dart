@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:studiconnect/models/message.dart';
 import 'package:studiconnect/models/redux/store.dart';
-import 'package:studiconnect/render_objects/timestamped_chat_message.dart';
+import 'package:studiconnect/widgets/timestamped_chat_message.dart';
 
 class ChatBubble extends StatelessWidget {
   const ChatBubble({

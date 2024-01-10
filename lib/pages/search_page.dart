@@ -38,7 +38,6 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   void initState() {
-    log("Iniatilizing SearchPage...");
     super.initState();
     _radius = 10;
     _moduleInputController = TextEditingController();
@@ -57,7 +56,6 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   void dispose() {
-    log("Disposing SearchPage...");
     _moduleInputController.dispose();
     _delayQueryTimer.cancel();
     super.dispose();
@@ -65,7 +63,6 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    log("Building SearchPage...");
     return PageWrapper(
       title: 'Suche',
       type: PageType.complex,
@@ -179,6 +176,7 @@ class _SearchPageState extends State<SearchPage> {
               onRefresh: () async {
                 _loadSearchResults();
               },
+              backgroundColor: Theme.of(context).progressIndicatorTheme.refreshBackgroundColor,
               child: ListView.builder(
                 itemCount: state.searchResults.length,
                 padding: EdgeInsets.zero,

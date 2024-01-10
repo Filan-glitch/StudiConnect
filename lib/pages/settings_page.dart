@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:studiconnect/services/logger_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yaml/yaml.dart';
 import 'package:studiconnect/controllers/authentication.dart';
@@ -12,7 +11,6 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log("Building SettingsPage...");
     return PageWrapper(
       title: "Einstellungen",
       showLoading: false,

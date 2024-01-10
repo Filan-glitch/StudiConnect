@@ -1,9 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:intl/intl.dart';
 import 'package:studiconnect/controllers/messages.dart';
+import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/group.dart';
 import 'package:studiconnect/models/group_parameter.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
@@ -90,8 +89,8 @@ class _ChatPageState extends State<ChatPage> {
               leading: const Icon(Icons.info),
               title: const Text('Gruppeninformationen'),
               onTap: () {
-                Navigator.pushNamed(
-                  context,
+                navigatorKey.currentState!.pop();
+                navigatorKey.currentState!.pushNamed(
                   '/group-info',
                   arguments: GroupLookupParameters(
                     groupID: group.id,
@@ -105,8 +104,8 @@ class _ChatPageState extends State<ChatPage> {
                 leading: const Icon(Icons.group_add),
                 title: const Text('Beitrittsanfragen'),
                 onTap: () {
-                  Navigator.pushNamed(
-                    context,
+                  navigatorKey.currentState!.pop();
+                  navigatorKey.currentState!.pushNamed(
                     '/join-group-requests',
                     arguments: group.id,
                   );
@@ -117,8 +116,8 @@ class _ChatPageState extends State<ChatPage> {
                 leading: const Icon(Icons.edit),
                 title: const Text('Gruppe bearbeiten'),
                 onTap: () {
-                  Navigator.pushNamed(
-                    context,
+                  navigatorKey.currentState!.pop();
+                  navigatorKey.currentState!.pushNamed(
                     '/create-and-edit-group',
                     arguments: GroupLookupParameters(
                       groupID: group.id,
@@ -132,9 +131,13 @@ class _ChatPageState extends State<ChatPage> {
               ListTile(
                 leading: const Icon(Icons.exit_to_app),
                 title: const Text('Gruppe verlassen'),
-                onTap: () {
-                  leaveGroup(group.id);
-                  Navigator.of(context).pushNamedAndRemoveUntil(
+                onTap: () async {
+                  bool successful = await leaveGroup(group.id);
+
+                  if (!successful) return;
+
+
+                  navigatorKey.currentState!.pushNamedAndRemoveUntil(
                     '/home',
                     (route) => false,
                   );
@@ -143,7 +146,6 @@ class _ChatPageState extends State<ChatPage> {
           ],
           body: Column(
             children: [
-              const SizedBox(height: 10),
               Expanded(
                 child: ListView.builder(
                   controller: _scrollController,
@@ -183,7 +185,7 @@ class _ChatPageState extends State<ChatPage> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.primary,
                   boxShadow: [
@@ -197,26 +199,38 @@ class _ChatPageState extends State<ChatPage> {
                 child: Row(
                   children: [
                     Expanded(
-                      child: TextField(
-                        controller: _messageController,
-                        decoration: const InputDecoration(
-                          hintText: "Nachricht",
-                          hintStyle: TextStyle(color: Colors.white),
-                          border: InputBorder.none,
+                      child: Center(
+                        child: TextField(
+                          controller: _messageController,
+                          cursorColor: Colors.white,
+                          cursorRadius: const Radius.circular(10),
+                          cursorWidth: 1,
+                          cursorHeight: 25,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: 5,
+                          minLines: 1,
+                          textInputAction: TextInputAction.newline,
+                          decoration: const InputDecoration(
+                            hintText: "Nachricht",
+                            hintStyle: TextStyle(color: Colors.white),
+                            border: InputBorder.none,
+                          ),
                         ),
                       ),
                     ),
                     IconButton(
                       onPressed: () async {
                         if (_messageController.text.isEmpty) return;
-                        try {
-                          await sendMessage(group.id, _messageController.text);
-                          setState(() {});
-                        } catch (e) {
-                          log(e.toString());
-                          return;
-                        }
+
+                        bool successful = await sendMessage(group.id, _messageController.text);
+
+                        if (!successful) return;
+
+                        _scrollToBottom();
+
                         _messageController.clear();
+
+                        setState(() {});
                       },
                       icon: const Icon(
                         Icons.send,

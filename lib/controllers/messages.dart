@@ -69,20 +69,22 @@ Future<int> getMessages(String groupID, int page, bool replace) async {
   return result.length;
 }
 
-Future<void> sendMessage(String groupID, String content) async {
+Future<bool> sendMessage(String groupID, String content) async {
   try {
     log("Calling API to send message");
     await runApiService(
       apiCall: () => service.sendMessage(groupID, content),
-      parser: (result) => null,
       showLoading: false,
+      shouldRethrow: true,
     );
     log("Message sent successfully");
-  } on ApiException catch (e) {
+  } on ApiException {
     //TODO: Auf unterschiedliche Fehler passend reagieren
     showToast("Nachricht konnte nicht gesendet werden. Versuche es erneut.");
-    rethrow;
+    return false;
   }
+
+  return true;
 }
 
 Future<WebSocketSink?> subscribeToMessages(

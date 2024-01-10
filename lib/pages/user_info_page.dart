@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/models/user_parameter.dart';
-import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/avatar_picture.dart';
 import 'package:studiconnect/models/user.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
@@ -12,13 +11,12 @@ class UserInfoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log("Building UserInfoPage...");
     final userParams =
         ModalRoute.of(context)!.settings.arguments as UserLookupParameters;
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (context, state) {
-          User? user = userParams.user;
+          User? user = userParams.getUser(context);
 
           if (user == null) {
             return const PageWrapper(
