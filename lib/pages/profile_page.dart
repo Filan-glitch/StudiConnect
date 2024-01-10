@@ -44,6 +44,7 @@ class ProfilePage extends StatelessWidget {
             ),
           ],
           body: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -154,6 +155,7 @@ class ProfilePage extends StatelessWidget {
                         fontSize: 15,
                       ),
                     ),
+                    const SizedBox(height: 85),
                   ],
                 ),
               ],
