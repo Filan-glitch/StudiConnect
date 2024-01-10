@@ -5,6 +5,7 @@ import 'package:studiconnect/controllers/messages.dart';
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/group.dart';
 import 'package:studiconnect/models/group_parameter.dart';
+import 'package:studiconnect/models/menu_action.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/widgets/chat_bubble.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
@@ -85,9 +86,9 @@ class _ChatPageState extends State<ChatPage> {
         return PageWrapper(
           title: group.title ?? '',
           menuActions: [
-            ListTile(
-              leading: const Icon(Icons.info),
-              title: const Text('Gruppeninformationen'),
+            MenuAction(
+              icon: Icons.info,
+              title: 'Gruppeninformationen',
               onTap: () {
                 navigatorKey.currentState!.pop();
                 navigatorKey.currentState!.pushNamed(
@@ -100,9 +101,9 @@ class _ChatPageState extends State<ChatPage> {
               },
             ),
             if (state.user?.id == group.creator?.id)
-              ListTile(
-                leading: const Icon(Icons.group_add),
-                title: const Text('Beitrittsanfragen'),
+              MenuAction(
+                icon: Icons.group_add,
+                title: 'Beitrittsanfragen',
                 onTap: () {
                   navigatorKey.currentState!.pop();
                   navigatorKey.currentState!.pushNamed(
@@ -112,9 +113,9 @@ class _ChatPageState extends State<ChatPage> {
                 },
               ),
             if (state.user?.id == group.creator?.id)
-              ListTile(
-                leading: const Icon(Icons.edit),
-                title: const Text('Gruppe bearbeiten'),
+              MenuAction(
+                icon: Icons.edit,
+                title: 'Gruppe bearbeiten',
                 onTap: () {
                   navigatorKey.currentState!.pop();
                   navigatorKey.currentState!.pushNamed(
@@ -128,9 +129,9 @@ class _ChatPageState extends State<ChatPage> {
               ),
             if (members.contains(state.user?.id) &&
                 group.creator?.id != state.user?.id)
-              ListTile(
-                leading: const Icon(Icons.exit_to_app),
-                title: const Text('Gruppe verlassen'),
+              MenuAction(
+                icon: Icons.exit_to_app,
+                title: 'Gruppe verlassen',
                 onTap: () async {
                   final bool successful = await leaveGroup(group.id);
 

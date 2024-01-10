@@ -10,6 +10,7 @@ import 'package:studiconnect/pages/no_connectivity_page.dart';
 import 'package:studiconnect/widgets/action_menu.dart';
 import 'package:studiconnect/models/redux/actions.dart' as redux;
 import 'package:studiconnect/models/redux/store.dart';
+import 'package:studiconnect/models/menu_action.dart';
 
 enum PageType {
   empty,
@@ -39,7 +40,7 @@ class PageWrapper extends StatefulWidget {
   final Widget? bottomNavigationBar;
   final List<Widget> headerControls;
   final String title;
-  final List<Widget> menuActions;
+  final List<MenuAction> menuActions;
   final PageType type;
   final EdgeInsets padding;
   final bool overrideLoadingScreen;
@@ -229,7 +230,6 @@ class _PageWrapperState extends State<PageWrapper> {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      constraints: const BoxConstraints(maxWidth: 400.0),
       builder: (context) => ActionMenu(
         children: widget.menuActions,
       ),

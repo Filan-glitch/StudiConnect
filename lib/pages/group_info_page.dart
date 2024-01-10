@@ -5,6 +5,7 @@ import 'package:studiconnect/dialogs/remove_member_dialog.dart';
 import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/group_parameter.dart';
+import 'package:studiconnect/models/menu_action.dart';
 import 'package:studiconnect/models/user_parameter.dart';
 import 'package:studiconnect/widgets/avatar_picture.dart';
 import 'package:studiconnect/widgets/location_display.dart';
@@ -45,9 +46,9 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
             title: 'Gruppenbeschreibung',
             menuActions: [
               if (state.user?.id == group.creator?.id)
-                ListTile(
-                  leading: const Icon(Icons.group_add),
-                  title: const Text('Beitrittsanfragen'),
+                MenuAction(
+                  icon: Icons.group_add,
+                  title: 'Beitrittsanfragen',
                   onTap: () {
                     navigatorKey.currentState!.pushNamed(
                       '/join-group-requests',
@@ -56,9 +57,9 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                   },
                 ),
               if (state.user?.id == group.creator?.id)
-                ListTile(
-                  leading: const Icon(Icons.edit),
-                  title: const Text('Gruppe bearbeiten'),
+                MenuAction(
+                  icon: Icons.edit,
+                  title: 'Gruppe bearbeiten',
                   onTap: () async {
                     await navigatorKey.currentState!.pushNamed(
                       '/create-and-edit-group',
@@ -68,9 +69,9 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                 ),
               if (members.contains(state.user?.id) &&
                   group.creator?.id != state.user?.id)
-                ListTile(
-                  leading: const Icon(Icons.exit_to_app),
-                  title: const Text('Gruppe verlassen'),
+                MenuAction(
+                  icon: Icons.exit_to_app,
+                  title: 'Gruppe verlassen',
                   onTap: () async {
                     final bool successful = await leaveGroup(group.id);
 
@@ -85,9 +86,9 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                   },
                 ),
               if (!members.contains(state.user?.id))
-                ListTile(
-                  leading: const Icon(Icons.person_add),
-                  title: const Text('Gruppe beitreten'),
+                MenuAction(
+                  icon: Icons.person_add,
+                  title: 'Gruppe beitreten',
                   onTap: () async {
                     final bool successful = await joinGroup(group.id);
 
@@ -102,9 +103,9 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                     );
                   },
                 ),
-              ListTile(
-                leading: const Icon(Icons.settings),
-                title: const Text('Einstellungen'),
+              MenuAction(
+                icon: Icons.settings,
+                title: 'Einstellungen',
                 onTap: () {
                   navigatorKey.currentState!.pop();
                   navigatorKey.currentState!.pushNamed('/settings');

@@ -6,6 +6,7 @@ import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/group.dart';
 import 'package:studiconnect/models/group_parameter.dart';
+import 'package:studiconnect/models/menu_action.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
@@ -121,17 +122,17 @@ class _SearchPageState extends State<SearchPage> {
         ),
       ],
       menuActions: [
-        ListTile(
-            leading: const Icon(Icons.share),
-            title: const Text('Studiconnect weiterempfehlen'),
+        MenuAction(
+            icon: Icons.share,
+            title: 'Studiconnect weiterempfehlen',
             onTap: () {
               navigatorKey.currentState!.pop();
               Share.share(
                   'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=de.studiconnect.app');
             }),
-        ListTile(
-          leading: const Icon(Icons.settings),
-          title: const Text('Einstellungen'),
+        MenuAction(
+          icon: Icons.settings,
+          title: 'Einstellungen',
           onTap: () {
             navigatorKey.currentState!.pop();
             navigatorKey.currentState!.pushNamed('/settings');
