@@ -48,7 +48,7 @@ class ChatBubble extends StatelessWidget {
                 ),
               ),
         child: TimestampedChatMessage(
-          sender: message.sender?.username ?? "",
+          sender: isOwnMessage ? "" : message.sender?.username ?? "",
           sentAt: DateFormat("HH:mm").format(message.sendAt ?? DateTime(1970)),
           text: message.content ?? "",
           brightness:
