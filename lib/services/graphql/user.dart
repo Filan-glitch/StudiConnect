@@ -31,6 +31,7 @@ Future<Map<String, dynamic>?> loadMyUserInfo(String id) async {
             creator {
               id
               username
+              email
               university
               major
               bio
@@ -40,6 +41,7 @@ Future<Map<String, dynamic>?> loadMyUserInfo(String id) async {
             members {
               id
               username
+              email
               university
               major
               bio
@@ -49,6 +51,7 @@ Future<Map<String, dynamic>?> loadMyUserInfo(String id) async {
             joinRequests {
               id
               username
+              email
               university
               major
               bio

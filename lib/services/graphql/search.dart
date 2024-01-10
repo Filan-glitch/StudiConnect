@@ -19,10 +19,22 @@ Future<Map<String, dynamic>?> searchGroups(
           creator {
             id
             username
+            email
+            university
+            major
+            bio
+            mobile
+            discord
           }
           members {
             id
             username
+            email
+            university
+            major
+            bio
+            mobile
+            discord
           }
           lat
           lon
