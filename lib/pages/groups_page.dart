@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:studiconnect/constants.dart';
+import 'package:studiconnect/controllers/user.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/widgets/group_list_item.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
@@ -49,47 +50,58 @@ class _GroupsPageState extends State<GroupsPage> {
       ],
       body: Padding(
         padding: const EdgeInsets.only(bottom: 100),
-        child: StoreConnector<AppState, AppState>(
-            converter: (store) => store.state,
-            builder: (context, state) {
-              if ((state.user?.groups ?? []).isEmpty) {
-                return LayoutBuilder(
-                  builder: (context, constraints) => SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        minHeight: constraints.maxHeight,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text("Du bist noch keiner Gruppe beigetreten"),
-                          const SizedBox(height: 50),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.pushNamed(
-                                context,
-                                '/create-and-edit-group',
-                              );
-                            },
-                            child: const Text("Gruppe erstellen"),
-                          ),
-                        ],
+        child: RefreshIndicator(
+          onRefresh: () async {
+            await loadUserInfo();
+          },
+          child: StoreConnector<AppState, AppState>(
+              converter: (store) => store.state,
+              builder: (context, state) {
+                if ((state.user?.groups ?? []).isEmpty) {
+                  return LayoutBuilder(
+                    builder: (context, constraints) => SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: constraints.maxHeight,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text("Du bist noch keiner Gruppe beigetreten"),
+                            const SizedBox(height: 50),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  '/create-and-edit-group',
+                                );
+                              },
+                              child: const Text("Gruppe erstellen"),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
+                  );
+                }
+
+                return ListView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: state.user?.groups?.length ?? 0,
+                  itemBuilder: (context, index) {
+                    final group = state.user!.groups![index];
+                    return GroupListItem(
+                      group: group,
+                    );
+                  },
                 );
               }
-
-              return SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: (state.user?.groups ?? [])
-                      .map((group) => GroupListItem(group: group))
-                      .toList(),
-                ),
-              );
-            }),
+          ),
+          backgroundColor: Theme.of(context).progressIndicatorTheme.refreshBackgroundColor,
+          semanticsLabel: 'Gruppen werden geladen',
+          triggerMode: RefreshIndicatorTriggerMode.onEdge,
+        ),
       ),
     );
   }

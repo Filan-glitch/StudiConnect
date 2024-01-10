@@ -179,6 +179,7 @@ class _SearchPageState extends State<SearchPage> {
               onRefresh: () async {
                 _loadSearchResults();
               },
+              backgroundColor: Theme.of(context).progressIndicatorTheme.refreshBackgroundColor,
               child: ListView.builder(
                 itemCount: state.searchResults.length,
                 padding: EdgeInsets.zero,

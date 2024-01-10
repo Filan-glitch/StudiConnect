@@ -3,9 +3,11 @@ import 'package:google_fonts/google_fonts.dart';
 
 ThemeData darkTheme = ThemeData(
   useMaterial3: true,
+  brightness: Brightness.dark,
   fontFamily: GoogleFonts.roboto().fontFamily,
   colorScheme: const ColorScheme.dark(
     primary: Color(0xff3e3699),
+
     error: Colors.red,
   ),
   appBarTheme: const AppBarTheme(
@@ -31,5 +33,9 @@ ThemeData darkTheme = ThemeData(
         ),
       ),
     ),
+  ),
+  progressIndicatorTheme: const ProgressIndicatorThemeData(
+    refreshBackgroundColor: Color(0x492787), // Should be little bit darker than primary color
+    color: Color(0xff3e3699),
   ),
 );
