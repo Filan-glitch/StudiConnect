@@ -1,5 +1,53 @@
 include: package:flutter_lints/flutter.yaml
 
+analyzer:
+  strong-mode:
+    implicit-casts: false
+    implicit-dynamic: false
+  errors:
+    unused_local_variable: error
+    unused_element: info
+    unused_field: info
+
 linter:
   rules:
-
+    - avoid_empty_else
+    - prefer_const_constructors
+    - prefer_const_literals_to_create_immutables
+    - prefer_final_locals
+    - avoid_relative_lib_imports
+    - avoid_returning_null_for_void
+    - avoid_unused_constructor_parameters
+    - prefer_typing_uninitialized_variables
+    - prefer_void_to_null
+    - sort_pub_dependencies
+    - avoid_classes_with_only_static_members
+    - avoid_null_checks_in_equality_operators
+    - avoid_shadowing_type_parameters
+    - avoid_types_as_parameter_names
+    - avoid_web_libraries_in_flutter
+    - camel_case_types
+    - constant_identifier_names
+    - control_flow_in_finally
+    - empty_catches
+    - empty_constructor_bodies
+    - hash_and_equals
+    - implementation_imports
+    - library_names
+    - non_constant_identifier_names
+    - prefer_adjacent_string_concatenation
+    - prefer_collection_literals
+    - prefer_conditional_assignment
+    - prefer_contains
+    - prefer_equal_for_default_values
+    - prefer_is_not_empty
+    - prefer_iterable_whereType
+    - prefer_single_quotes
+    - public_member_api_docs
+    - slash_for_doc_comments
+    - type_annotate_public_apis
+    - type_init_formals
+    - unnecessary_brace_in_string_interps
+    - unnecessary_getters_setters
+    - use_key_in_widget_constructors
+    - use_rethrow_when_possible
