@@ -7,5 +7,5 @@ class ConnectionException extends ApiException {
   });
 
   static const String defaultMessage =
-      "Es konnte keine Verbindung zum Server hergestellt werden.";
+      'Es konnte keine Verbindung zum Server hergestellt werden.';
 }

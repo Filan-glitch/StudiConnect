@@ -14,8 +14,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  cupertino_icons: ^1.0.2
   curved_navigation_bar: ^1.0.3
+  cupertino_icons: ^1.0.2
   oktoast: ^3.4.0
 
   logger: ^2.0.2+1

@@ -6,5 +6,5 @@ class UnauthorizedException extends ApiException {
     super.code = 401,
   });
 
-  static const String defaultMessage = "Bitte melden Sie sich erneut an.";
+  static const String defaultMessage = 'Bitte melden Sie sich erneut an.';
 }

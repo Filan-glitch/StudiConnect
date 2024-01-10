@@ -6,9 +6,9 @@ Future<Map<String, dynamic>?> searchGroups(
   String module,
   int radius,
 ) async {
-  return GraphQL.query(
+  return query(
     QueryOptions(
-      document: gql("""
+      document: gql('''
       query SearchGroups(\$module: String!, \$radius: Int!) {
         searchGroups(module: \$module, radius: \$radius) {
           id
@@ -40,7 +40,7 @@ Future<Map<String, dynamic>?> searchGroups(
           lon
         }
       }
-"""),
+'''),
       variables: <String, dynamic>{
         'module': module,
         'radius': radius,

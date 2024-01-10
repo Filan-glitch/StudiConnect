@@ -14,7 +14,7 @@ class ChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isOwnMessage = message.sender?.id == store.state.user?.id;
+    final bool isOwnMessage = message.sender?.id == store.state.user?.id;
     return Align(
       alignment: isOwnMessage ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
@@ -48,9 +48,9 @@ class ChatBubble extends StatelessWidget {
                 ),
               ),
         child: TimestampedChatMessage(
-          sender: isOwnMessage ? "" : message.sender?.username ?? "",
-          sentAt: DateFormat("HH:mm").format(message.sendAt ?? DateTime(1970)),
-          text: message.content ?? "",
+          sender: isOwnMessage ? '' : message.sender?.username ?? '',
+          sentAt: DateFormat('HH:mm').format(message.sendAt ?? DateTime(1970)),
+          text: message.content ?? '',
           brightness:
               isOwnMessage ? Brightness.dark : Theme.of(context).brightness,
         ),

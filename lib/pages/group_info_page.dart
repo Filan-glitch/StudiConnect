@@ -42,7 +42,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
 
           final members = (group.members ?? []).map((e) => e.id).toList();
           return PageWrapper(
-            title: "Gruppenbeschreibung",
+            title: 'Gruppenbeschreibung',
             menuActions: [
               if (state.user?.id == group.creator?.id)
                 ListTile(
@@ -72,7 +72,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                   leading: const Icon(Icons.exit_to_app),
                   title: const Text('Gruppe verlassen'),
                   onTap: () async {
-                    bool successful = await leaveGroup(group.id);
+                    final bool successful = await leaveGroup(group.id);
 
                     if (!successful) {
                       return;
@@ -89,7 +89,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                   leading: const Icon(Icons.person_add),
                   title: const Text('Gruppe beitreten'),
                   onTap: () async {
-                    bool successful = await joinGroup(group.id);
+                    final bool successful = await joinGroup(group.id);
 
                     if (!successful) {
                       return;
@@ -127,7 +127,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                 ),
                 Center(
                   child: Text(
-                    group.title ?? "",
+                    group.title ?? '',
                     style: const TextStyle(
                       fontSize: 16,
                     ),
@@ -152,7 +152,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                           ),
                         ),
                         Text(
-                          group.module ?? "",
+                          group.module ?? '',
                           style: const TextStyle(
                             fontSize: 16,
                           ),
@@ -170,7 +170,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                           ),
                         ),
                         Text(
-                          group.description ?? "",
+                          group.description ?? '',
                           style: const TextStyle(
                             fontSize: 16,
                           ),
@@ -196,7 +196,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                         Padding(
                           padding: const EdgeInsets.only(top: 20, bottom: 10),
                           child: Text(
-                            "${group.members?.length ?? 0} Mitglieder",
+                            '${group.members?.length ?? 0} Mitglieder',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -228,7 +228,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                                   // NamedRoute pushen
                                   Navigator.pushNamed(
                                     context,
-                                    "/user-info",
+                                    '/user-info',
                                     arguments: UserLookupParameters(
                                       userID: user.id,
                                       source: UserSource.groupMember,
@@ -243,7 +243,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                                   loadingCircleStrokeWidth: 3.5,
                                 ),
                                 title: Text(
-                                  "${user.username ?? "Unbekannt"} ${user.id == group.creator?.id ? "(Gruppenleiter)" : ""}",
+                                  '${user.username ?? 'Unbekannt'} ${user.id == group.creator?.id ? '(Gruppenleiter)' : ''}',
                                 ),
                               );
                             },

@@ -37,7 +37,7 @@ class Group {
       description: data['description'],
       module: data['module'],
       creator:
-          data.containsKey("creator") ? User.fromApi(data['creator']) : null,
+          data.containsKey('creator') ? User.fromApi(data['creator']) : null,
       members: ((data['members'] ?? []) as List<dynamic>)
           .map((e) => User.fromApi(e))
           .toList(),
@@ -45,7 +45,7 @@ class Group {
           .map((e) => User.fromApi(e))
           .toList(),
       // parse date
-      createdAt: data.containsKey("createdAt")
+      createdAt: data.containsKey('createdAt')
           ? DateTime.parse(data['createdAt'])
           : null,
       lat: data['lat'],

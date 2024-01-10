@@ -169,7 +169,7 @@ class TimestampedChatMessageRenderObject extends RenderBox {
           lastLineWithSentAt < min(_longestLineWidth, constraints.maxWidth);
     }
 
-    double senderHeight = _sender.isEmpty ? 0 : _senderTextPainter.height;
+    final double senderHeight = _sender.isEmpty ? 0 : _senderTextPainter.height;
     late Size computedSize;
     if (!_sentAtFitsOnLastLine) {
       computedSize = Size(
@@ -192,7 +192,7 @@ class TimestampedChatMessageRenderObject extends RenderBox {
   void paint(PaintingContext context, Offset offset) {
     _senderTextPainter.paint(context.canvas, offset);
 
-    double senderHeight = _sender.isEmpty ? 0 : _senderTextPainter.height;
+    final double senderHeight = _sender.isEmpty ? 0 : _senderTextPainter.height;
 
     late Offset messageOffset;
     messageOffset = Offset(

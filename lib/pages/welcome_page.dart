@@ -31,7 +31,7 @@ class _WelcomePageState extends State<WelcomePage> {
   Widget build(BuildContext context) {
     return PageWrapper(
       type: PageType.empty,
-      title: "Willkommen",
+      title: 'Willkommen',
       body: StoreConnector<AppState, AppState>(
           converter: (store) => store.state,
           builder: (context, state) {
@@ -40,7 +40,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Image.asset(
-                    "assets/icons/icon.png",
+                    'assets/icons/icon.png',
                     width: 200,
                   ),
                   const SizedBox(height: 50),
@@ -105,9 +105,9 @@ class _WelcomePageState extends State<WelcomePage> {
                         ? ThemeMode.light
                         : ThemeMode.dark,
                     onPressed: () {
-                      Navigator.pushNamed(context, "/register");
+                      Navigator.pushNamed(context, '/register');
                     },
-                    text: "Konto erstellen",
+                    text: 'Konto erstellen',
                     style: AuthButtonStyle(
                       textStyle: TextStyle(
                           fontFamily: GoogleFonts.roboto().fontFamily,
@@ -121,7 +121,7 @@ class _WelcomePageState extends State<WelcomePage> {
                         _googleButtonLoading = true;
                       });
 
-                      bool? isNewUser = await signInWithGoogle();
+                      final bool? isNewUser = await signInWithGoogle();
 
                       setState(() {
                         _googleButtonLoading = false;
@@ -135,7 +135,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     themeMode: Theme.of(context).brightness == Brightness.light
                         ? ThemeMode.light
                         : ThemeMode.dark,
-                    text: "Mit Google anmelden",
+                    text: 'Mit Google anmelden',
                     style: AuthButtonStyle(
                       textStyle: TextStyle(
                         fontFamily: GoogleFonts.roboto().fontFamily,
@@ -161,7 +161,7 @@ class _WelcomePageState extends State<WelcomePage> {
                               style: const TextStyle(color: Colors.blue),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  Navigator.pushNamed(context, "/login");
+                                  Navigator.pushNamed(context, '/login');
                                 }),
                         ],
                       ),

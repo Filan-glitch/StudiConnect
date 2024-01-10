@@ -7,44 +7,44 @@ import 'package:studiconnect/services/graphql/errors/unauthorized_error.dart';
 import 'package:studiconnect/services/logger_provider.dart';
 
 void processHttpStatusCodes(int statusCode, {String? customMessage}) {
-  log("HTTP Status Code: $statusCode");
+  log('HTTP Status Code: $statusCode');
   if (statusCode < 100) {
-    log("Informational status code");
+    log('Informational status code');
     throw ConnectionException(code: statusCode);
   } else if (statusCode == 401) {
-    log("Operation was unauthorized");
+    log('Operation was unauthorized');
     throw UnauthorizedException(
       code: statusCode,
       message: customMessage ?? UnauthorizedException.defaultMessage,
     );
   } else if (statusCode == 403) {
-    log("Operation was forbidden");
+    log('Operation was forbidden');
     throw ForbiddenException(
       code: statusCode,
       message: customMessage ?? ForbiddenException.defaultMessage,
     );
   } else if (statusCode == 404) {
-    log("Ressource was not found");
+    log('Ressource was not found');
     throw NotFoundException(
       code: statusCode,
       message: customMessage ?? NotFoundException.defaultMessage,
     );
   } else if (statusCode == 502 || statusCode == 504) {
-    log("Gateway connection error");
+    log('Gateway connection error');
     throw ConnectionException(code: statusCode);
   } else if (statusCode >= 500) {
-    log("Internal server error");
+    log('Internal server error');
     throw InternalServerException(
       code: statusCode,
       message: customMessage ?? InternalServerException.defaultMessage,
     );
   } else if (statusCode >= 400) {
-    log("Input error");
+    log('Input error');
     throw InputException(
       code: statusCode,
       message: customMessage ?? InputException.defaultMessage,
     );
   } else {
-    log("Unhandeled status code, should consider adding it to the list of handeled status codes");
+    log('Unhandeled status code, should consider adding it to the list of handeled status codes');
   }
 }

@@ -6,5 +6,5 @@ class InputException extends ApiException {
     super.code = 400,
   });
 
-  static const String defaultMessage = "Die Eingabe ist ungültig.";
+  static const String defaultMessage = 'Die Eingabe ist ungültig.';
 }

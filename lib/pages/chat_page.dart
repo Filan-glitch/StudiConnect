@@ -83,7 +83,7 @@ class _ChatPageState extends State<ChatPage> {
             (group.members ?? []).map((member) => member.id).toList();
 
         return PageWrapper(
-          title: group.title ?? "",
+          title: group.title ?? '',
           menuActions: [
             ListTile(
               leading: const Icon(Icons.info),
@@ -132,7 +132,7 @@ class _ChatPageState extends State<ChatPage> {
                 leading: const Icon(Icons.exit_to_app),
                 title: const Text('Gruppe verlassen'),
                 onTap: () async {
-                  bool successful = await leaveGroup(group.id);
+                  final bool successful = await leaveGroup(group.id);
 
                   if (!successful) return;
 
@@ -160,7 +160,7 @@ class _ChatPageState extends State<ChatPage> {
                         ? null
                         : group.messages![group.messages!.length - idx];
 
-                    bool isDifferentDay = message.sendAt?.year !=
+                    final bool isDifferentDay = message.sendAt?.year !=
                             prevMessage?.sendAt?.year ||
                         message.sendAt?.month != prevMessage?.sendAt?.month ||
                         message.sendAt?.day != prevMessage?.sendAt?.day;
@@ -174,7 +174,7 @@ class _ChatPageState extends State<ChatPage> {
                               vertical: 10,
                             ),
                             child: Text(
-                              DateFormat("dd.MM.yyyy")
+                              DateFormat('dd.MM.yyyy')
                                   .format(message.sendAt ?? DateTime(1970)),
                             ),
                           ),
@@ -211,7 +211,7 @@ class _ChatPageState extends State<ChatPage> {
                           minLines: 1,
                           textInputAction: TextInputAction.newline,
                           decoration: const InputDecoration(
-                            hintText: "Nachricht",
+                            hintText: 'Nachricht',
                             hintStyle: TextStyle(color: Colors.white),
                             border: InputBorder.none,
                           ),
@@ -222,7 +222,7 @@ class _ChatPageState extends State<ChatPage> {
                       onPressed: () async {
                         if (_messageController.text.isEmpty) return;
 
-                        bool successful = await sendMessage(group.id, _messageController.text);
+                        final bool successful = await sendMessage(group.id, _messageController.text);
 
                         if (!successful) return;
 

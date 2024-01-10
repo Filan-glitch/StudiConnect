@@ -20,10 +20,10 @@ class Message {
     return Message(
       id: data['id'],
       content: data['content'],
-      sender: data.containsKey("sender") ? User.fromApi(data['sender']) : null,
-      group: data.containsKey("group") ? Group.fromApi(data['group']) : null,
+      sender: data.containsKey('sender') ? User.fromApi(data['sender']) : null,
+      group: data.containsKey('group') ? Group.fromApi(data['group']) : null,
       sendAt:
-          data.containsKey("sendAt") ? DateTime.parse(data['sendAt']) : null,
+          data.containsKey('sendAt') ? DateTime.parse(data['sendAt']) : null,
     );
   }
 }

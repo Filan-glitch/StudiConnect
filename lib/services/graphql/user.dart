@@ -3,9 +3,9 @@ import 'package:graphql/client.dart';
 import 'package:studiconnect/services/graphql/api.dart';
 
 Future<Map<String, dynamic>?> loadMyUserInfo(String id) async {
-  return GraphQL.query(
+  return query(
     QueryOptions(
-      document: gql("""
+      document: gql('''
       query LoadMyUserInfo(\$id: ID!) {
         user(id: \$id) {
           id
@@ -61,7 +61,7 @@ Future<Map<String, dynamic>?> loadMyUserInfo(String id) async {
           }
         }
       }
-"""),
+'''),
       variables: <String, dynamic>{
         'id': id,
       },
@@ -70,9 +70,9 @@ Future<Map<String, dynamic>?> loadMyUserInfo(String id) async {
 }
 
 Future<Map<String, dynamic>?> loadUserInfo(String id) async {
-  return GraphQL.query(
+  return query(
     QueryOptions(
-      document: gql("""
+      document: gql('''
       query LoadUserInfo(\$id: ID!) {
         user(id: \$id) {
           id
@@ -86,7 +86,7 @@ Future<Map<String, dynamic>?> loadUserInfo(String id) async {
           discord
         }
       }
-"""),
+'''),
       variables: <String, dynamic>{
         'id': id,
       },
@@ -104,9 +104,9 @@ Future<Map<String, dynamic>?> updateProfile(
   String mobile,
   String discord,
 ) {
-  return GraphQL.mutate(
+  return mutate(
     MutationOptions(
-      document: gql("""
+      document: gql('''
       mutation UpdateProfile(\$username: String!, \$university: String!, \$major: String!, \$lat: Float!, \$lon: Float!, \$bio: String!, \$mobile: String!, \$discord: String!) {
         updateProfile(
           username: \$username,
@@ -121,7 +121,7 @@ Future<Map<String, dynamic>?> updateProfile(
           id
         }
       }
-"""),
+'''),
       variables: <String, dynamic>{
         'username': username,
         'university': university,
@@ -137,13 +137,13 @@ Future<Map<String, dynamic>?> updateProfile(
 }
 
 Future<Map<String, dynamic>?> deleteAccount() {
-  return GraphQL.mutate(
+  return mutate(
     MutationOptions(
-      document: gql("""
+      document: gql('''
       mutation DeleteAccount {
         deleteAccount
       }
-"""),
+'''),
     ),
   );
 }

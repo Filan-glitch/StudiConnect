@@ -25,11 +25,11 @@ class _JoinGroupRequestListItemState extends State<JoinGroupRequestListItem> {
     return ListTile(
       leading: CircleAvatar(
         backgroundImage: NetworkImage(
-          "$backendURL/api/user/${widget.user.id}/image",
+          '$backendURL/api/user/${widget.user.id}/image',
         ),
       ),
-      title: Text(widget.user.username ?? "Unbekannt"),
-      subtitle: Text(widget.user.university ?? ""),
+      title: Text(widget.user.username ?? 'Unbekannt'),
+      subtitle: Text(widget.user.university ?? ''),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

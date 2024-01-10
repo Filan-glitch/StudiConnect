@@ -13,26 +13,26 @@ Future<WebSocketSink?> subscribeToMessages(
   void Function(Map<String, dynamic> data) onMessage,
 ) async {
   log("Subscribing to messages with session:  '${store.state.sessionID}' and group: '$groupID'");
-  WebSocketChannel channel =
+  final WebSocketChannel channel =
       IOWebSocketChannel.connect(Uri.parse('$wsURL/socket'), headers: {
-    "session": store.state.sessionID,
-    "group": groupID,
+    'session': store.state.sessionID,
+    'group': groupID,
   });
 
   channel.stream.listen((event) {
     try {
-      Map<String, dynamic> data = jsonDecode(event);
+      final Map<String, dynamic> data = jsonDecode(event);
       onMessage(data);
     } catch (e) {
       logWarning(e.toString());
-      showToast("Eine Nachricht konnte nicht empfangen werden.",
+      showToast('Eine Nachricht konnte nicht empfangen werden.',
           dismissOtherToast: true);
     }
   });
 
   await channel.ready;
   if (channel.closeCode != null) {
-    showToast("Neue Nachrichten können nicht empfangen werden.",
+    showToast('Neue Nachrichten können nicht empfangen werden.',
         dismissOtherToast: true);
     return null;
   }

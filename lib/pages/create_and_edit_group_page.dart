@@ -37,12 +37,12 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
       setState(() {
         groupParams = ModalRoute.of(context)!.settings.arguments
             as GroupLookupParameters?;
-        Group? group = groupParams?.getGroup(context);
+        final Group? group = groupParams?.getGroup(context);
         if (group != null) {
-          _groupTitleController.text = group.title ?? "";
-          _groupModuleController.text = group.module ?? "";
+          _groupTitleController.text = group.title ?? '';
+          _groupModuleController.text = group.module ?? '';
           _groupDescriptionController.text =
-              group.description ?? "";
+              group.description ?? '';
           _selectedLocation = LatLng(
             group.lat ?? 0.0,
             group.lon ?? 0.0,
@@ -65,10 +65,10 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (context, state) {
-          Group? group = groupParams?.getGroup(context);
+          final Group? group = groupParams?.getGroup(context);
           return PageWrapper(
             padding: const EdgeInsets.only(top: 20.0),
-            title: group?.id == null ? "Gruppe erstellen" : "Gruppe bearbeiten",
+            title: group?.id == null ? 'Gruppe erstellen' : 'Gruppe bearbeiten',
             body: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,7 +79,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                     child: TextField(
                       controller: _groupTitleController,
                       decoration: const InputDecoration(
-                        labelText: "Titel",
+                        labelText: 'Titel',
                       ),
                     ),
                   ),
@@ -89,7 +89,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                     child: TextField(
                       controller: _groupModuleController,
                       decoration: const InputDecoration(
-                        labelText: "Modul",
+                        labelText: 'Modul',
                       ),
                     ),
                   ),
@@ -136,7 +136,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                                 children: [
                                   if (_selectedLocation == null)
                                     Text(
-                                      "Treffpunkt auswählen",
+                                      'Treffpunkt auswählen',
                                       style: TextStyle(
                                         color: Theme
                                             .of(context)
@@ -154,7 +154,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                                       ),
                                       builder: (context, snapshot) {
                                         if (snapshot.hasData) {
-                                          geo.Placemark location = snapshot
+                                          final geo.Placemark location = snapshot
                                               .data![0];
                                           return SizedBox(
                                             width: MediaQuery
@@ -195,7 +195,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                       maxLines: null,
                       controller: _groupDescriptionController,
                       decoration: const InputDecoration(
-                        labelText: "Beschreibung",
+                        labelText: 'Beschreibung',
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -215,14 +215,14 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                                     .pickImage(source: ImageSource.gallery)
                                     .then((value) {
                                   if (value != null) {
-                                    uploadGroupImage(group?.id ?? "", value);
+                                    uploadGroupImage(group?.id ?? '', value);
                                   }
                                 });
                               },
                               icon: const Icon(Icons.upload),
                               label: const Padding(
                                 padding: EdgeInsets.symmetric(vertical: 5.0),
-                                child: Text("Gruppenbild hochladen"),
+                                child: Text('Gruppenbild hochladen'),
                               ),
                             ),
                           ),
@@ -231,7 +231,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                             width: double.infinity,
                             child: ElevatedButton.icon(
                               onPressed: () {
-                                deleteGroupImage(group?.id ?? "");
+                                deleteGroupImage(group?.id ?? '');
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
@@ -247,7 +247,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                               icon: const Icon(Icons.delete),
                               label: const Padding(
                                 padding: EdgeInsets.symmetric(vertical: 5.0),
-                                child: Text("Bild löschen"),
+                                child: Text('Bild löschen'),
                               ),
                             ),
                           ),
@@ -256,7 +256,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                           child: ElevatedButton.icon(
                             onPressed: () async {
                               if (group == null) {
-                                bool successful = await createGroup(
+                                final bool successful = await createGroup(
                                   _groupTitleController.text,
                                   _groupDescriptionController.text,
                                   _groupModuleController.text,
@@ -266,7 +266,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
 
                                 if (!successful) return;
                               } else {
-                                bool successful = await updateGroup(
+                                final bool successful = await updateGroup(
                                   group.id,
                                   _groupTitleController.text,
                                   _groupDescriptionController.text,
@@ -291,7 +291,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                             label: const Padding(
                               padding: EdgeInsets.symmetric(vertical: 5.0),
                               child: Text(
-                                  "Gruppe speichern"
+                                  'Gruppe speichern'
                               ),
                             ),
                           ),
@@ -301,7 +301,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                             width: double.infinity,
                             child: ElevatedButton.icon(
                               onPressed: () async {
-                                bool successful = await deleteGroup(group!.id);
+                                final bool successful = await deleteGroup(group!.id);
 
                                 if (!successful) return;
 
@@ -326,7 +326,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                               label: const Padding(
                                 padding: EdgeInsets.symmetric(vertical: 5.0),
                                 child: Text(
-                                  "Gruppe löschen",
+                                  'Gruppe löschen',
                                 ),
                               ),
                             ),

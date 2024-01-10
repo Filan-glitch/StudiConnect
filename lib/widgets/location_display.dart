@@ -22,14 +22,14 @@ class _LocationDisplayState extends State<LocationDisplay> {
   Future<void> _getAddress() async {
     try {
       if (widget.position != null) {
-        log("Getting address for ${widget.position}");
+        log('Getting address for ${widget.position}');
         final List<geo.Placemark> placemarks = await geo.placemarkFromCoordinates(
             widget.position!.latitude, widget.position!.longitude);
         final geo.Placemark place = placemarks[0];
-        log("Got address: $place");
+        log('Got address: $place');
         setState(() {
           _address =
-          '${place.street ?? ""}, ${place.postalCode ?? ""} ${place.locality ?? ""}';
+          '${place.street ?? ''}, ${place.postalCode ?? ''} ${place.locality ?? ''}';
         });
       }
     } catch (e) {

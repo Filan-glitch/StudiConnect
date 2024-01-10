@@ -23,7 +23,7 @@ class UserLookupParameters {
   });
 
   User? getUser(BuildContext context) {
-    Store<AppState> store = StoreProvider.of<AppState>(context);
+    final Store<AppState> store = StoreProvider.of<AppState>(context);
     switch (source) {
       case UserSource.me:
         return store.state.user;

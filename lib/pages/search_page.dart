@@ -25,8 +25,8 @@ class _SearchPageState extends State<SearchPage> {
   late Timer _delayQueryTimer;
 
   void _loadSearchResults() {
-    log("Loading search results...");
-    String module = _moduleInputController.text;
+    log('Loading search results...');
+    final String module = _moduleInputController.text;
 
     if (module.isEmpty) {
       _delayQueryTimer.cancel();
@@ -79,7 +79,7 @@ class _SearchPageState extends State<SearchPage> {
           },
           style: const TextStyle(color: Colors.white),
           decoration: const InputDecoration(
-            labelText: "Modul",
+            labelText: 'Modul',
             labelStyle: TextStyle(color: Colors.white),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.white),
@@ -93,7 +93,7 @@ class _SearchPageState extends State<SearchPage> {
           padding: const EdgeInsets.only(top: 20.0),
           child: Row(
             children: [
-              const Text("Radius:", style: TextStyle(color: Colors.white)),
+              const Text('Radius:', style: TextStyle(color: Colors.white)),
               Expanded(
                 child: Slider(
                   inactiveColor: Colors.white,
@@ -114,7 +114,7 @@ class _SearchPageState extends State<SearchPage> {
                   },
                 ),
               ),
-              Text("${_radius.toInt()} km",
+              Text('${_radius.toInt()} km',
                   style: const TextStyle(color: Colors.white)),
             ],
           ),
@@ -164,7 +164,7 @@ class _SearchPageState extends State<SearchPage> {
                         minHeight: constraints.maxHeight,
                       ),
                       child: const Center(
-                        child: Text("Keine Ergebnisse"),
+                        child: Text('Keine Ergebnisse'),
                       ),
                     ),
                   ),
@@ -181,7 +181,7 @@ class _SearchPageState extends State<SearchPage> {
                 itemCount: state.searchResults.length,
                 padding: EdgeInsets.zero,
                 itemBuilder: (context, index) {
-                  Group group = state.searchResults[index];
+                  final Group group = state.searchResults[index];
                   return Container(
                     margin: const EdgeInsets.only(bottom: 20.0),
                     padding: const EdgeInsets.symmetric(
@@ -208,19 +208,19 @@ class _SearchPageState extends State<SearchPage> {
                             ),
                           ),
                           Text(
-                            'Modul: ${group.module ?? ""}',
+                            'Modul: ${group.module ?? ''}',
                             style: const TextStyle(
                               color: Colors.white,
                             ),
                           ),
                           Text(
-                            'Studiengang: ${group.creator?.major ?? ""}',
+                            'Studiengang: ${group.creator?.major ?? ''}',
                             style: const TextStyle(
                               color: Colors.white,
                             ),
                           ),
                           Text(
-                            'Hochschule: ${group.creator?.university ?? ""}',
+                            'Hochschule: ${group.creator?.university ?? ''}',
                             style: const TextStyle(
                               color: Colors.white,
                             ),

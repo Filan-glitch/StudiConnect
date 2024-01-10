@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class ActionMenu extends StatelessWidget {
   const ActionMenu({
     required this.children,
-    this.title = "Aktionen",
+    this.title = 'Aktionen',
     super.key,
   });
   final List<Widget> children;

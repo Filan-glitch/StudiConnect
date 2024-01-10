@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
-    _errorMessageNotifier = ValueNotifier("");
+    _errorMessageNotifier = ValueNotifier('');
   }
 
   @override
@@ -41,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
-        title: "Anmelden",
+        title: 'Anmelden',
         type: PageType.simple,
         body: Center(
           child: Column(
@@ -91,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
 
                   if(_emailController.text.isEmpty || _passwordController.text.isEmpty) {
                     setState(() {
-                      _errorMessageNotifier.value = "Bitte fülle alle Felder aus.";
+                      _errorMessageNotifier.value = 'Bitte fülle alle Felder aus.';
                     });
                     return;
                   }
@@ -107,28 +107,28 @@ class _LoginPageState extends State<LoginPage> {
                     );
                   } on FirebaseAuthException catch (e) {
                     final errorMessages = {
-                      'user-not-found': "Es existiert kein Nutzer mit dieser E-Mail.",
-                      'wrong-password': "Das Passwort ist falsch.",
-                      'invalid-email': "Die E-Mail ist ungültig.",
-                      'user-disabled': "Dieser Nutzer wurde deaktiviert.",
-                      'too-many-requests': "Zu viele Anfragen. Bitte versuche es später erneut.",
-                      'operation-not-allowed': "Diese Anmeldung ist nicht erlaubt.",
-                      'network-request-failed': "Keine Internetverbindung.",
-                      'invalid-credential': "Die Anmeldeinformationen sind ungültig.",
-                      'account-exists-with-different-credential': "Es existiert bereits ein Nutzer mit dieser E-Mail und einer anderen Anmeldemethode.",
-                      'invalid-verification-code': "Der Verifizierungscode ist ungültig.",
-                      'invalid-verification-id': "Die Verifizierungs-ID ist ungültig.",
-                      'invalid-action-code': "Der Aktionscode ist ungültig.",
+                      'user-not-found': 'Es existiert kein Nutzer mit dieser E-Mail.',
+                      'wrong-password': 'Das Passwort ist falsch.',
+                      'invalid-email': 'Die E-Mail ist ungültig.',
+                      'user-disabled': 'Dieser Nutzer wurde deaktiviert.',
+                      'too-many-requests': 'Zu viele Anfragen. Bitte versuche es später erneut.',
+                      'operation-not-allowed': 'Diese Anmeldung ist nicht erlaubt.',
+                      'network-request-failed': 'Keine Internetverbindung.',
+                      'invalid-credential': 'Die Anmeldeinformationen sind ungültig.',
+                      'account-exists-with-different-credential': 'Es existiert bereits ein Nutzer mit dieser E-Mail und einer anderen Anmeldemethode.',
+                      'invalid-verification-code': 'Der Verifizierungscode ist ungültig.',
+                      'invalid-verification-id': 'Die Verifizierungs-ID ist ungültig.',
+                      'invalid-action-code': 'Der Aktionscode ist ungültig.',
                     };
 
                     setState(() {
-                      _errorMessageNotifier.value = errorMessages[e.code] ?? "${e.code}: ${e.message}";
+                      _errorMessageNotifier.value = errorMessages[e.code] ?? '${e.code}: ${e.message}';
                       _emailButtonLoading = false;
                     });
                     return;
                   } catch (e) {
                     setState(() {
-                      _errorMessageNotifier.value = "Ein unbekannter Fehler ist aufgetreten.";
+                      _errorMessageNotifier.value = 'Ein unbekannter Fehler ist aufgetreten.';
                       _emailButtonLoading = false;
                     });
                     return;
@@ -139,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                   });
                 },
                 isLoading: _emailButtonLoading,
-                text: "Mit E-Mail anmelden",
+                text: 'Mit E-Mail anmelden',
                 themeMode: Theme.of(context).brightness == Brightness.light
                     ? ThemeMode.light
                     : ThemeMode.dark,

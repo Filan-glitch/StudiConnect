@@ -119,19 +119,19 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "E-Mail: ${state.user?.email ?? '-'}",
+                      'E-Mail: ${state.user?.email ?? '-'}',
                       style: const TextStyle(
                         fontSize: 15,
                       ),
                     ),
                     Text(
-                      "Tel: ${state.user?.mobile ?? '-'}",
+                      'Tel: ${state.user?.mobile ?? '-'}',
                       style: const TextStyle(
                         fontSize: 15,
                       ),
                     ),
                     Text(
-                      "Discord: ${state.user?.discord ?? '-'}",
+                      'Discord: ${state.user?.discord ?? '-'}',
                       style: const TextStyle(
                         fontSize: 15,
                       ),

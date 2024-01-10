@@ -18,19 +18,19 @@ import 'package:studiconnect/services/firebase/authentication.dart' as firebase;
 import 'package:studiconnect/constants.dart';
 
 Future<bool> loadUserInfo() async {
-  Map<String, String> credentials = await storage.loadCredentials();
+  final Map<String, String> credentials = await storage.loadCredentials();
 
   if (credentials.isEmpty) {
     return false;
   }
 
-  String userID = credentials["userID"]!;
+  final String userID = credentials['userID']!;
 
-  User? result = await runApiService(
+  final User? result = await runApiService(
     apiCall: () => service.loadMyUserInfo(userID),
     parser: (result) {
-      User u = User.fromApi(
-        result["user"],
+      final User u = User.fromApi(
+        result['user'],
       );
       return u;
     },
@@ -69,7 +69,7 @@ Future<bool> loadUserInfo() async {
     ),
   );
 
-  String? authProviderType = await storage.loadAuthProviderType();
+  final String? authProviderType = await storage.loadAuthProviderType();
   store.dispatch(
     Action(
       ActionTypes.updateAuthProviderType,
@@ -95,7 +95,7 @@ Future<void> updateProfile(
   String mobile,
   String discord,
 ) async {
-  String? id = await runApiService(
+  final String? id = await runApiService(
       apiCall: () => service.updateProfile(
             username,
             university,
@@ -106,7 +106,7 @@ Future<void> updateProfile(
             mobile,
             discord,
           ),
-      parser: (result) => result["updateProfile"]["id"] as String
+      parser: (result) => result['updateProfile']['id'] as String
   );
 
   if (id == null) {
@@ -128,14 +128,14 @@ Future<void> updateProfile(
 
 Future<void> deleteAccount(String credential) async {
   try {
-    log("Deleting account from Firebase");
-    if (store.state.authProviderType == "email") {
+    log('Deleting account from Firebase');
+    if (store.state.authProviderType == 'email') {
       await firebase.deleteEmailAccount(credential);
-    } else if (store.state.authProviderType == "google") {
+    } else if (store.state.authProviderType == 'google') {
       await firebase.deleteGoogleAccount();
     }
 
-    log("Deleting account from API");
+    log('Deleting account from API');
     await runApiService(
       apiCall: () => service.deleteAccount(),
       shouldRethrow: true,
@@ -151,10 +151,10 @@ Future<void> deleteAccount(String credential) async {
     rethrow;
   }
 
-  log("Deleting credentials from storage");
+  log('Deleting credentials from storage');
   await storage.deleteCredentials();
 
-  showToast("Account erfolgreich gelöscht.");
+  showToast('Account erfolgreich gelöscht.');
 
   store.dispatch(
     Action(
@@ -172,7 +172,7 @@ Future<void> uploadProfileImage(XFile file) async {
   try {
     content = await file.readAsBytes();
   } catch (e) {
-    showToast("Das Bild war fehlerhaft.");
+    showToast('Das Bild war fehlerhaft.');
     return;
   }
 
@@ -196,12 +196,12 @@ Future<void> uploadProfileImage(XFile file) async {
     ),
   );
 
-  showToast("Profilbild erfolgreich hochgeladen.");
+  showToast('Profilbild erfolgreich hochgeladen.');
 
   await DefaultCacheManager().removeFile(
-      "$backendURL/api/group/${store.state.user?.id}/image");
+      '$backendURL/api/group/${store.state.user?.id}/image');
   await DefaultCacheManager().downloadFile(
-      "$backendURL/api/group/${store.state.user?.id}/image");
+      '$backendURL/api/group/${store.state.user?.id}/image');
 }
 
 Future<void> deleteProfileImage() async {
@@ -226,8 +226,8 @@ Future<void> deleteProfileImage() async {
   );
 
   await DefaultCacheManager()
-      .removeFile("$backendURL/api/group/${store.state.user?.id}/image");
+      .removeFile('$backendURL/api/group/${store.state.user?.id}/image');
 
   showToast(
-      "Profilbild erfolgreich gelöscht. Evtl. liegt das Bild noch im Cache.");
+      'Profilbild erfolgreich gelöscht. Evtl. liegt das Bild noch im Cache.');
 }

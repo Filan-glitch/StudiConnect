@@ -11,12 +11,12 @@ class PasswordChangePage extends StatelessWidget {
   final TextEditingController _oldPasswordController = TextEditingController();
   final TextEditingController _newPasswordController = TextEditingController();
   final TextEditingController _newPasswordRepeatController = TextEditingController();
-  final ValueNotifier<String> _errorMessageNotifier = ValueNotifier("");
+  final ValueNotifier<String> _errorMessageNotifier = ValueNotifier('');
 
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
-        title: "Passwort ändern",
+        title: 'Passwort ändern',
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.only(
@@ -71,15 +71,15 @@ class PasswordChangePage extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () async {
                       if(_oldPasswordController.text.isEmpty || _newPasswordController.text.isEmpty || _newPasswordRepeatController.text.isEmpty) {
-                        _errorMessageNotifier.value = "Bitte fülle alle Felder aus.";
+                        _errorMessageNotifier.value = 'Bitte fülle alle Felder aus.';
                         return;
                       }
                       if (_newPasswordController.text != _newPasswordRepeatController.text) {
-                        _errorMessageNotifier.value = "Die Passwörter stimmen nicht überein.";
+                        _errorMessageNotifier.value = 'Die Passwörter stimmen nicht überein.';
                         return;
                       }
                       if (_oldPasswordController.text == _newPasswordController.text) {
-                        _errorMessageNotifier.value = "Das neue Passwort darf nicht mit dem alten Passwort übereinstimmen.";
+                        _errorMessageNotifier.value = 'Das neue Passwort darf nicht mit dem alten Passwort übereinstimmen.';
                         return;
                       }
 
@@ -90,19 +90,19 @@ class PasswordChangePage extends StatelessWidget {
                         );
                       } on FirebaseAuthException catch (e) {
                         final errorMessages = {
-                          'user-not-found': "Das Konto existiert nicht mehr.",
-                          'user-disabled': "Das Konto ist deaktiviert.",
-                          'too-many-requests': "Zu viele Anfragen. Bitte versuche es später erneut.",
-                          'operation-not-allowed': "Diese Anmeldung ist nicht erlaubt.",
-                          'network-request-failed': "Keine Internetverbindung.",
-                          'invalid-credential': "Das alte Passwort ist ungültig.",
+                          'user-not-found': 'Das Konto existiert nicht mehr.',
+                          'user-disabled': 'Das Konto ist deaktiviert.',
+                          'too-many-requests': 'Zu viele Anfragen. Bitte versuche es später erneut.',
+                          'operation-not-allowed': 'Diese Anmeldung ist nicht erlaubt.',
+                          'network-request-failed': 'Keine Internetverbindung.',
+                          'invalid-credential': 'Das alte Passwort ist ungültig.',
                         };
-                        _errorMessageNotifier.value = errorMessages[e.code] ?? "${e.code}: ${e.message}";
+                        _errorMessageNotifier.value = errorMessages[e.code] ?? '${e.code}: ${e.message}';
                       } catch (e) {
-                        _errorMessageNotifier.value = "Ein unbekannter Fehler ist aufgetreten.";
+                        _errorMessageNotifier.value = 'Ein unbekannter Fehler ist aufgetreten.';
                       }
                     },
-                    child: const Text("Passwort ändern"),
+                    child: const Text('Passwort ändern'),
                   ),
                 ],
             ),

@@ -38,32 +38,32 @@ class _EditProfilePage extends State<EditProfilePage> {
     super.initState();
     _usernameController = TextEditingController.fromValue(
       TextEditingValue(
-        text: store.state.user?.username ?? "",
+        text: store.state.user?.username ?? '',
       ),
     );
     _majorController = TextEditingController.fromValue(
       TextEditingValue(
-        text: store.state.user?.major ?? "",
+        text: store.state.user?.major ?? '',
       ),
     );
     _universityController = TextEditingController.fromValue(
       TextEditingValue(
-        text: store.state.user?.university ?? "",
+        text: store.state.user?.university ?? '',
       ),
     );
     _bioController = TextEditingController.fromValue(
       TextEditingValue(
-        text: store.state.user?.bio ?? "",
+        text: store.state.user?.bio ?? '',
       ),
     );
     _mobileController = TextEditingController.fromValue(
       TextEditingValue(
-        text: store.state.user?.mobile ?? "",
+        text: store.state.user?.mobile ?? '',
       ),
     );
     _discordController = TextEditingController.fromValue(
       TextEditingValue(
-        text: store.state.user?.discord ?? "",
+        text: store.state.user?.discord ?? '',
       ),
     );
     _formKey = GlobalKey<FormState>();
@@ -71,7 +71,7 @@ class _EditProfilePage extends State<EditProfilePage> {
 
     determinePosition().then(
       (value) {
-        log("Got current position: $value, setting state...");
+        log('Got current position: $value, setting state...');
         setState(() {
           _locationKey = UniqueKey();
           _selectedLocation = LatLng(value.latitude, value.longitude);
@@ -80,16 +80,16 @@ class _EditProfilePage extends State<EditProfilePage> {
       onError: (error) {
         _locationKey = UniqueKey();
         _selectedLocation = const LatLng(0, 0);
-        if (error.toString() == "Location services are disabled.") {
+        if (error.toString() == 'Location services are disabled.') {
           setState(() {
             _serviceEnabled = false;
           });
-        } else if (error.toString() == "Location permissions are denied") {
+        } else if (error.toString() == 'Location permissions are denied') {
           setState(() {
             _permission = LocationPermission.denied;
           });
         } else if (error.toString() ==
-            "Location permissions are permanently denied, we cannot request permissions.") {
+            'Location permissions are permanently denied, we cannot request permissions.') {
           setState(() {
             _permission = LocationPermission.deniedForever;
           });
@@ -119,7 +119,7 @@ class _EditProfilePage extends State<EditProfilePage> {
       converter: (store) => store.state,
       builder: (context, state) {
         return PageWrapper(
-          title: "Profil bearbeiten",
+          title: 'Profil bearbeiten',
           body: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.symmetric(
@@ -135,35 +135,35 @@ class _EditProfilePage extends State<EditProfilePage> {
                         TextFormField(
                           controller: _usernameController,
                           decoration: const InputDecoration(
-                            labelText: "Name",
+                            labelText: 'Name',
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Bitte gib einen Namen ein";
+                              return 'Bitte gib einen Namen ein';
                             }
                             return null;
                           },
                         ),
                         TextFormField(
                           decoration: const InputDecoration(
-                            labelText: "Studiengang",
+                            labelText: 'Studiengang',
                           ),
                           controller: _majorController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Bitte gib einen Studiengang ein";
+                              return 'Bitte gib einen Studiengang ein';
                             }
                             return null;
                           },
                         ),
                         TextFormField(
                           decoration: const InputDecoration(
-                            labelText: "Universität",
+                            labelText: 'Universität',
                           ),
                           controller: _universityController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Bitte gib eine Universität ein";
+                              return 'Bitte gib eine Universität ein';
                             }
                             return null;
                           },
@@ -174,12 +174,12 @@ class _EditProfilePage extends State<EditProfilePage> {
                           minLines: 5,
                           maxLines: null,
                           decoration: const InputDecoration(
-                            labelText: "Über mich",
+                            labelText: 'Über mich',
                             border: OutlineInputBorder(),
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Bitte gib etwas über dich ein";
+                              return 'Bitte gib etwas über dich ein';
                             }
                             return null;
                           },
@@ -187,7 +187,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                         TextFormField(
                           controller: _mobileController,
                           decoration: const InputDecoration(
-                            labelText: "Telefonnummer",
+                            labelText: 'Telefonnummer',
                           ),
                           validator: (value) => null,
                           keyboardType: TextInputType.phone,
@@ -195,7 +195,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                         TextFormField(
                           controller: _discordController,
                           decoration: const InputDecoration(
-                            labelText: "Discord",
+                            labelText: 'Discord',
                           ),
                           validator: (value) => null,
                         ),
@@ -240,7 +240,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                             icon: const Icon(Icons.upload),
                             label: const Padding(
                               padding: EdgeInsets.symmetric(vertical: 5.0),
-                              child: Text("Profilbild hochladen"),
+                              child: Text('Profilbild hochladen'),
                             ),
                           ),
                         ),
@@ -262,7 +262,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                               icon: const Icon(Icons.delete),
                               label: const Padding(
                                 padding: EdgeInsets.symmetric(vertical: 5.0),
-                                child: Text("Profilbild löschen"),
+                                child: Text('Profilbild löschen'),
                               ),
                             ),
                           ),
@@ -288,11 +288,11 @@ class _EditProfilePage extends State<EditProfilePage> {
                             icon: const Icon(Icons.done),
                             label: const Padding(
                               padding: EdgeInsets.symmetric(vertical: 5.0),
-                              child: Text("Profil speichern"),
+                              child: Text('Profil speichern'),
                             ),
                           ),
                         ),
-                        if (state.authProviderType == "email")
+                        if (state.authProviderType == 'email')
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton.icon(
@@ -304,7 +304,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                               icon: const Icon(Icons.lock),
                               label: const Padding(
                                 padding: EdgeInsets.symmetric(vertical: 5.0),
-                                child: Text("Passwort ändern"),
+                                child: Text('Passwort ändern'),
                               ),
                             ),
                           ),
@@ -328,7 +328,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                               );
                             },
                             label: const Text(
-                              "Konto löschen",
+                              'Konto löschen',
                               style: TextStyle(
                                 color: Colors.red,
                               ),

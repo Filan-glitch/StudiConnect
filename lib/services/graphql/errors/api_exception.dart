@@ -3,7 +3,7 @@ class ApiException implements Exception {
   final int? code;
 
   static const String defaultMessage =
-      "Es ist ein unbekannter Fehler aufgetreten.";
+      'Es ist ein unbekannter Fehler aufgetreten.';
 
   ApiException({
     this.message = defaultMessage,

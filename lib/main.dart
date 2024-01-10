@@ -28,15 +28,15 @@ import 'package:studiconnect/pages/welcome_page.dart';
 import 'package:studiconnect/pages/delete_account_page.dart';
 
 Future<void> main() async {
-  log("Starting...");
-  log("Running in ${kDebugMode ? "debug" : "release"} mode");
-  log("Running on ${defaultTargetPlatform.toString().split('.').last}");
+  log('Starting...');
+  log('Running in ${kDebugMode ? 'debug' : 'release'} mode');
+  log('Running on ${defaultTargetPlatform.toString().split('.').last}');
 
-  log("Initializing Widgets Binding...");
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  log('Initializing Widgets Binding...');
+  final WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  log("Initializing Firebase...");
+  log('Initializing Firebase...');
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -55,7 +55,7 @@ Future<void> main() async {
     return true;
   };
   // setup
-  log("Setting up...");
+  log('Setting up...');
   loadCredentials();
 
   runApp(const MyApp());

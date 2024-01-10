@@ -35,7 +35,7 @@ class RemoveMemberDialog extends StatelessWidget {
             ),
             TextButton(
               onPressed: () async {
-                bool successful = await removeMember(groupID, user.id);
+                final bool successful = await removeMember(groupID, user.id);
 
                 if (!successful) return;
 
