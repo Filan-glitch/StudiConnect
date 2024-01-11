@@ -12,18 +12,18 @@ import 'package:studiconnect/controllers/api.dart';
 import 'package:studiconnect/controllers/user.dart';
 
 Future<void> loadCredentials() async {
-  log("Loading credentials from storage");
-  Map<String, String> credentials = await storage.loadCredentials();
-  log("Loaded credentials from storage");
+  log('Loading credentials from storage');
+  final Map<String, String> credentials = await storage.loadCredentials();
+  log('Loaded credentials from storage');
 
-  if (!credentials.containsKey("sessionID")) {
-    log("No credentials found");
+  if (!credentials.containsKey('sessionID')) {
+    log('No credentials found');
     FlutterNativeSplash.remove();
     return;
   }
 
-  log("Session found");
-  String sessionID = credentials["sessionID"]!;
+  log('Session found');
+  final String sessionID = credentials['sessionID']!;
 
   store.dispatch(
     Action(
@@ -32,17 +32,17 @@ Future<void> loadCredentials() async {
     ),
   );
 
-  log("Loading user info");
-  bool success = await loadUserInfo();
+  log('Loading user info');
+  final bool success = await loadUserInfo();
 
   if (!success) {
-    log("User info could not be loaded");
+    log('User info could not be loaded');
     FlutterNativeSplash.remove();
     return;
   }
-  log("User info loaded");
+  log('User info loaded');
 
-  log("Navigating to home screen");
+  log('Navigating to home screen');
   navigatorKey.currentState!.pushNamedAndRemoveUntil(
     '/home',
     (route) => false,
@@ -51,29 +51,29 @@ Future<void> loadCredentials() async {
 }
 
 Future<bool?> signInWithGoogle() async {
-  Map? result = await firebase.signInWithGoogle();
-  String? idToken = result?["idToken"];
-  bool? isNewUser = result?["newUser"];
+  final Map? result = await firebase.signInWithGoogle();
+  final String? idToken = result?['idToken'];
+  final bool? isNewUser = result?['newUser'];
 
   if (idToken == null) {
-    log("Google sign in failed");
+    log('Google sign in failed');
     return null;
   }
 
-  log("Calling API to sign in with Google");
-  Map<String, dynamic>? session = await runApiService(
+  log('Calling API to sign in with Google');
+  final Map<String, dynamic>? session = await runApiService(
     apiCall: () => service.login(idToken),
-    parser: (result) => result["login"],
+    parser: (result) => result['login'],
   );
 
   if (session == null) {
-    log("API call failed");
+    log('API call failed');
     return null;
   }
 
-  log("API call successful");
-  String sessionID = session["sessionID"];
-  String userID = session["user"];
+  log('API call successful');
+  final String sessionID = session['sessionID'];
+  final String userID = session['user'];
 
   store.dispatch(
     Action(
@@ -82,14 +82,14 @@ Future<bool?> signInWithGoogle() async {
     ),
   );
 
-  log("Saving credentials");
-  await storage.saveAuthProviderType("google");
+  log('Saving credentials');
+  await storage.saveAuthProviderType('google');
   await storage.saveCredentials(userID, sessionID);
 
-  log("Loading user info");
+  log('Loading user info');
   loadUserInfo();
 
-  log("Navigating to home screen");
+  log('Navigating to home screen');
   navigatorKey.currentState!.pushNamedAndRemoveUntil(
     '/home',
     (route) => false,
@@ -99,28 +99,28 @@ Future<bool?> signInWithGoogle() async {
 }
 
 Future<void> signInWithEmailAndPassword(String email, String password) async {
-  log("Signing in with email and password");
-  String? idToken = await firebase.signInWithEmailAndPassword(email, password);
+  log('Signing in with email and password');
+  final String? idToken = await firebase.signInWithEmailAndPassword(email, password);
 
   if (idToken == null) {
-    log("Email sign in failed");
+    log('Email sign in failed');
     return;
   }
 
-  log("Calling API to sign in with email and password");
-  Map<String, dynamic>? session = await runApiService(
+  log('Calling API to sign in with email and password');
+  final Map<String, dynamic>? session = await runApiService(
     apiCall: () => service.login(idToken),
-    parser: (result) => result["login"],
+    parser: (result) => result['login'],
   );
 
   if (session == null) {
-    log("API call failed");
+    log('API call failed');
     return;
   }
 
-  log("API call successful");
-  String sessionID = session["sessionID"];
-  String userID = session["user"];
+  log('API call successful');
+  final String sessionID = session['sessionID'];
+  final String userID = session['user'];
 
   store.dispatch(
     Action(
@@ -129,14 +129,14 @@ Future<void> signInWithEmailAndPassword(String email, String password) async {
     ),
   );
 
-  log("Saving credentials");
-  await storage.saveAuthProviderType("email");
+  log('Saving credentials');
+  await storage.saveAuthProviderType('email');
   await storage.saveCredentials(userID, sessionID);
 
-  log("Loading user info");
+  log('Loading user info');
   loadUserInfo();
 
-  log("Navigating to home screen");
+  log('Navigating to home screen');
   navigatorKey.currentState!.pushNamedAndRemoveUntil(
     '/home',
     (route) => false,
@@ -144,28 +144,28 @@ Future<void> signInWithEmailAndPassword(String email, String password) async {
 }
 
 Future<void> signUpWithEmailAndPassword(String email, String password) async {
-  log("Signing up with email and password");
-  String? idToken = await firebase.signUpWithEmailAndPassword(email, password);
+  log('Signing up with email and password');
+  final String? idToken = await firebase.signUpWithEmailAndPassword(email, password);
 
   if (idToken == null) {
-    logWarning("Email sign up failed");
+    logWarning('Email sign up failed');
     return;
   }
 
-  log("Calling API to sign up with email and password");
-  Map<String, dynamic>? session = await runApiService(
+  log('Calling API to sign up with email and password');
+  final Map<String, dynamic>? session = await runApiService(
     apiCall: () => service.login(idToken),
-    parser: (result) => result["login"],
+    parser: (result) => result['login'],
   );
 
   if (session == null) {
-    logWarning("API call failed");
+    logWarning('API call failed');
     return;
   }
 
-  log("API call successful");
-  String sessionID = session["sessionID"];
-  String userID = session["user"];
+  log('API call successful');
+  final String sessionID = session['sessionID'];
+  final String userID = session['user'];
 
   store.dispatch(
     Action(
@@ -174,14 +174,14 @@ Future<void> signUpWithEmailAndPassword(String email, String password) async {
     ),
   );
 
-  log("Saving credentials");
-  await storage.saveAuthProviderType("email");
+  log('Saving credentials');
+  await storage.saveAuthProviderType('email');
   await storage.saveCredentials(userID, sessionID);
 
-  log("Loading user info");
+  log('Loading user info');
   loadUserInfo();
 
-  log("Navigating to home screen");
+  log('Navigating to home screen');
   navigatorKey.currentState!.pushNamedAndRemoveUntil(
     '/home',
     (route) => false,
@@ -189,20 +189,20 @@ Future<void> signUpWithEmailAndPassword(String email, String password) async {
 }
 
 Future<void> signInAsGuest() async {
-  log("Signing in as guest");
-  Map<String, dynamic>? session = await runApiService(
+  log('Signing in as guest');
+  final Map<String, dynamic>? session = await runApiService(
     apiCall: () => service.loginAsGuest(),
-    parser: (result) => result["loginAsGuest"],
+    parser: (result) => result['loginAsGuest'],
   );
 
   if (session == null) {
-    log("API call failed");
+    log('API call failed');
     return;
   }
 
-  log("API call successful");
-  String sessionID = session["sessionID"];
-  String userID = session["user"];
+  log('API call successful');
+  final String sessionID = session['sessionID'];
+  final String userID = session['user'];
 
   store.dispatch(
     Action(
@@ -211,14 +211,14 @@ Future<void> signInAsGuest() async {
     ),
   );
 
-  log("Saving credentials");
-  await storage.saveAuthProviderType("guest");
+  log('Saving credentials');
+  await storage.saveAuthProviderType('guest');
   await storage.saveCredentials(userID, sessionID);
 
-  log("Loading user info");
+  log('Loading user info');
   loadUserInfo();
 
-  log("Navigating to home screen");
+  log('Navigating to home screen');
   navigatorKey.currentState!.pushNamedAndRemoveUntil(
     '/home',
     (route) => false,
@@ -226,7 +226,7 @@ Future<void> signInAsGuest() async {
 }
 
 Future<void> signOut() async {
-  log("Calling API to sign out");
+  log('Calling API to sign out');
   try {
     await runApiService(
       apiCall: () => service.logout(),
@@ -242,10 +242,10 @@ Future<void> signOut() async {
     return;
   }
 
-  log("Signing out");
+  log('Signing out');
   await firebase.signOut();
 
-  log("Clearing credentials");
+  log('Clearing credentials');
   store.dispatch(
     Action(
       ActionTypes.clear,
@@ -253,7 +253,7 @@ Future<void> signOut() async {
   );
   storage.deleteCredentials();
 
-  log("Navigating to welcome screen");
+  log('Navigating to welcome screen');
   navigatorKey.currentState!.pushNamedAndRemoveUntil(
     '/welcome',
     (route) => false,
@@ -261,13 +261,13 @@ Future<void> signOut() async {
 }
 
 Future<void> triggerPasswordReset(String email) async {
-  log("Triggering password reset");
+  log('Triggering password reset');
   await firebase.sendPasswordResetEmail(email);
-  showToast("Ein Link zum Zurücksetzen des Passworts wurde an Ihre E-Mail gesendet.");
+  showToast('Ein Link zum Zurücksetzen des Passworts wurde an Ihre E-Mail gesendet.');
 }
 
 Future<void> updatePassword(String oldPassword, String newPassword) async {
-  log("Updating password");
+  log('Updating password');
   await firebase.updatePassword(oldPassword, newPassword);
-  showToast("Passwort erfolgreich aktualisiert");
+  showToast('Passwort erfolgreich aktualisiert');
 }

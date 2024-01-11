@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:auth_buttons/auth_buttons.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -29,37 +31,41 @@ class _WelcomePageState extends State<WelcomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final double _screenWidth = MediaQuery.of(context).size.width;
+    final double _screenHeight = MediaQuery.of(context).size.height;
+
     return PageWrapper(
       type: PageType.empty,
-      title: "Willkommen",
+      title: 'Willkommen',
       body: StoreConnector<AppState, AppState>(
           converter: (store) => store.state,
           builder: (context, state) {
             return Center(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    "assets/icons/icon.png",
-                    width: 200,
+                  Padding(
+                    padding: EdgeInsets.only(top: _screenHeight * 0.05, bottom: _screenHeight * 0.05),
+                    child: Image.asset(
+                      'assets/icons/icon.png',
+                      width: min(_screenWidth * 0.45, 300),
+                    ),
                   ),
-                  const SizedBox(height: 50),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 40),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: _screenWidth * 0.1, vertical: _screenHeight * 0.025),
                     child: Text(
                       'Willkommen bei StudiConnect',
                       style:
-                          TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: _screenHeight * 0.045, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  const SizedBox(height: 100),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    padding: EdgeInsets.symmetric(horizontal: _screenWidth * 0.1, vertical: _screenHeight * 0.02),
                     child: RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(
-                        style: Theme.of(context).textTheme.bodyLarge,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: _screenHeight * 0.02),
                         children: <TextSpan>[
                           const TextSpan(
                             text: 'Mit deiner Anmeldung stimmst du unseren ',
@@ -99,29 +105,29 @@ class _WelcomePageState extends State<WelcomePage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 5),
                   EmailAuthButton(
                     themeMode: Theme.of(context).brightness == Brightness.light
                         ? ThemeMode.light
                         : ThemeMode.dark,
                     onPressed: () {
-                      Navigator.pushNamed(context, "/register");
+                      Navigator.pushNamed(context, '/register');
                     },
-                    text: "Konto erstellen",
+                    text: 'Konto erstellen',
                     style: AuthButtonStyle(
                       textStyle: TextStyle(
-                          fontFamily: GoogleFonts.roboto().fontFamily,
-                          color: Theme.of(context).textTheme.labelSmall?.color),
+                        fontSize: _screenHeight * 0.02,
+                        fontFamily: GoogleFonts.roboto().fontFamily,
+                        color: Theme.of(context).textTheme.labelSmall?.color
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 5),
                   GoogleAuthButton(
                     onPressed: () async {
                       setState(() {
                         _googleButtonLoading = true;
                       });
 
-                      bool? isNewUser = await signInWithGoogle();
+                      final bool? isNewUser = await signInWithGoogle();
 
                       setState(() {
                         _googleButtonLoading = false;
@@ -135,9 +141,10 @@ class _WelcomePageState extends State<WelcomePage> {
                     themeMode: Theme.of(context).brightness == Brightness.light
                         ? ThemeMode.light
                         : ThemeMode.dark,
-                    text: "Mit Google anmelden",
+                    text: 'Mit Google anmelden',
                     style: AuthButtonStyle(
                       textStyle: TextStyle(
+                        fontSize: _screenHeight * 0.02,
                         fontFamily: GoogleFonts.roboto().fontFamily,
                         color: Theme.of(context).brightness == Brightness.light
                             ? Colors.black
@@ -145,13 +152,12 @@ class _WelcomePageState extends State<WelcomePage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 5),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    padding: EdgeInsets.only(left: _screenWidth * 0.1, right: _screenWidth * 0.1, bottom: _screenHeight * 0.07),
                     child: RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(
-                        style: Theme.of(context).textTheme.bodyLarge,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: _screenHeight * 0.02),
                         children: <TextSpan>[
                           const TextSpan(
                             text: 'Du hast bereits ein Konto? ',
@@ -161,13 +167,12 @@ class _WelcomePageState extends State<WelcomePage> {
                               style: const TextStyle(color: Colors.blue),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  Navigator.pushNamed(context, "/login");
+                                  Navigator.pushNamed(context, '/login');
                                 }),
                         ],
                       ),
                     ),
                   ),
-                  const SizedBox(height: 100),
                 ],
               ),
             );

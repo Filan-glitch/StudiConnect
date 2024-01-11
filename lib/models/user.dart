@@ -27,7 +27,7 @@ class User {
     this.groups,
   });
 
-  update({
+  void update({
     String? id,
     String? email,
     String? username,

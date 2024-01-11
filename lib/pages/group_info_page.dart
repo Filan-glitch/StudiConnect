@@ -5,6 +5,7 @@ import 'package:studiconnect/dialogs/remove_member_dialog.dart';
 import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/group_parameter.dart';
+import 'package:studiconnect/models/menu_action.dart';
 import 'package:studiconnect/models/user_parameter.dart';
 import 'package:studiconnect/widgets/avatar_picture.dart';
 import 'package:studiconnect/widgets/location_display.dart';
@@ -42,12 +43,12 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
 
           final members = (group.members ?? []).map((e) => e.id).toList();
           return PageWrapper(
-            title: "Gruppenbeschreibung",
+            title: 'Gruppenbeschreibung',
             menuActions: [
               if (state.user?.id == group.creator?.id)
-                ListTile(
-                  leading: const Icon(Icons.group_add),
-                  title: const Text('Beitrittsanfragen'),
+                MenuAction(
+                  icon: Icons.group_add,
+                  title: 'Beitrittsanfragen',
                   onTap: () {
                     navigatorKey.currentState!.pushNamed(
                       '/join-group-requests',
@@ -56,9 +57,9 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                   },
                 ),
               if (state.user?.id == group.creator?.id)
-                ListTile(
-                  leading: const Icon(Icons.edit),
-                  title: const Text('Gruppe bearbeiten'),
+                MenuAction(
+                  icon: Icons.edit,
+                  title: 'Gruppe bearbeiten',
                   onTap: () async {
                     await navigatorKey.currentState!.pushNamed(
                       '/create-and-edit-group',
@@ -68,11 +69,11 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                 ),
               if (members.contains(state.user?.id) &&
                   group.creator?.id != state.user?.id)
-                ListTile(
-                  leading: const Icon(Icons.exit_to_app),
-                  title: const Text('Gruppe verlassen'),
+                MenuAction(
+                  icon: Icons.exit_to_app,
+                  title: 'Gruppe verlassen',
                   onTap: () async {
-                    bool successful = await leaveGroup(group.id);
+                    final bool successful = await leaveGroup(group.id);
 
                     if (!successful) {
                       return;
@@ -85,11 +86,11 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                   },
                 ),
               if (!members.contains(state.user?.id))
-                ListTile(
-                  leading: const Icon(Icons.person_add),
-                  title: const Text('Gruppe beitreten'),
+                MenuAction(
+                  icon: Icons.person_add,
+                  title: 'Gruppe beitreten',
                   onTap: () async {
-                    bool successful = await joinGroup(group.id);
+                    final bool successful = await joinGroup(group.id);
 
                     if (!successful) {
                       return;
@@ -102,9 +103,9 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                     );
                   },
                 ),
-              ListTile(
-                leading: const Icon(Icons.settings),
-                title: const Text('Einstellungen'),
+              MenuAction(
+                icon: Icons.settings,
+                title: 'Einstellungen',
                 onTap: () {
                   navigatorKey.currentState!.pop();
                   navigatorKey.currentState!.pushNamed('/settings');
@@ -127,7 +128,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                 ),
                 Center(
                   child: Text(
-                    group.title ?? "",
+                    group.title ?? '',
                     style: const TextStyle(
                       fontSize: 16,
                     ),
@@ -152,7 +153,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                           ),
                         ),
                         Text(
-                          group.module ?? "",
+                          group.module ?? '',
                           style: const TextStyle(
                             fontSize: 16,
                           ),
@@ -170,7 +171,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                           ),
                         ),
                         Text(
-                          group.description ?? "",
+                          group.description ?? '',
                           style: const TextStyle(
                             fontSize: 16,
                           ),
@@ -187,16 +188,19 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                             ),
                           ),
                         ),
-                        LocationDisplay(
-                          position: LatLng(
-                            group.lat ?? 0,
-                            group.lon ?? 0,
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width - 60,
+                          child: LocationDisplay(
+                            position: LatLng(
+                              group.lat ?? 0,
+                              group.lon ?? 0,
+                            ),
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 20, bottom: 10),
                           child: Text(
-                            "${group.members?.length ?? 0} Mitglieder",
+                            '${group.members?.length ?? 0} Mitglieder',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -228,7 +232,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                                   // NamedRoute pushen
                                   Navigator.pushNamed(
                                     context,
-                                    "/user-info",
+                                    '/user-info',
                                     arguments: UserLookupParameters(
                                       userID: user.id,
                                       source: UserSource.groupMember,
@@ -243,7 +247,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                                   loadingCircleStrokeWidth: 3.5,
                                 ),
                                 title: Text(
-                                  "${user.username ?? "Unbekannt"} ${user.id == group.creator?.id ? "(Gruppenleiter)" : ""}",
+                                  '${user.username ?? 'Unbekannt'} ${user.id == group.creator?.id ? '(Gruppenleiter)' : ''}',
                                 ),
                               );
                             },

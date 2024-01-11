@@ -7,5 +7,5 @@ class InternalServerException extends ApiException {
   });
 
   static const String defaultMessage =
-      "Auf dem Server ist ein Fehler aufgetreten.";
+      'Auf dem Server ist ein Fehler aufgetreten.';
 }

@@ -12,21 +12,21 @@ Future<T?> runApiService<T>({
 }) async {
   // Loading Screen
   if (showLoading) {
-    log("Starting Loading Screen");
+    log('Starting Loading Screen');
     store.dispatch(redux.Action(redux.ActionTypes.startTask));
   }
 
   // API Call
   final Map<String, dynamic>? response;
   try {
-    log("Starting API Call");
+    log('Starting API Call');
     response = await apiCall();
-    log("API Call Finished");
+    log('API Call Finished');
   } on ApiException catch (e) {
-    logWarning("API Exception ${e.code}: ${e.message}");
+    logWarning('API Exception ${e.code}: ${e.message}');
 
     if (showLoading) {
-      log("Stopping Loading Screen");
+      log('Stopping Loading Screen');
       store.dispatch(redux.Action(redux.ActionTypes.stopTask));
     }
 
@@ -43,14 +43,14 @@ Future<T?> runApiService<T>({
   T? parsed;
   if (response != null && parser != null) {
     try {
-      log("Starting Parsing");
+      log('Starting Parsing');
       parsed = parser(response);
-      log("Parsing Finished");
+      log('Parsing Finished');
     } catch (e) {
       logWarning(e.toString());
 
       if (showLoading) {
-        log("Stopping Loading Screen");
+        log('Stopping Loading Screen');
         store.dispatch(redux.Action(redux.ActionTypes.stopTask));
       }
 
@@ -65,7 +65,7 @@ Future<T?> runApiService<T>({
   }
 
   if (showLoading) {
-    log("Stopping Loading Screen");
+    log('Stopping Loading Screen');
     store.dispatch(redux.Action(redux.ActionTypes.stopTask));
   }
 
@@ -80,21 +80,21 @@ Future<T?> runRestApi<T>({
 }) async {
   // Loading Screen
   if (showLoading) {
-    log("Starting Loading Screen");
+    log('Starting Loading Screen');
     store.dispatch(redux.Action(redux.ActionTypes.startTask));
   }
 
   // API Call
   final Map<String, dynamic>? response;
   try {
-    log("Starting API Call");
+    log('Starting API Call');
     response = await apiCall();
-    log("API Call Finished");
+    log('API Call Finished');
   } on ApiException catch (e) {
-    logWarning("API Exception ${e.code}: ${e.message}");
+    logWarning('API Exception ${e.code}: ${e.message}');
 
     if (showLoading) {
-      log("Stopping Loading Screen");
+      log('Stopping Loading Screen');
       store.dispatch(redux.Action(redux.ActionTypes.stopTask));
     }
 
@@ -111,14 +111,14 @@ Future<T?> runRestApi<T>({
   T? parsed;
   if (response != null && parser != null) {
     try {
-      log("Starting Parsing");
+      log('Starting Parsing');
       parsed = parser(response);
-      log("Parsing Finished");
+      log('Parsing Finished');
     } catch (e) {
       logWarning(e.toString());
 
       if (showLoading) {
-        log("Stopping Loading Screen");
+        log('Stopping Loading Screen');
         store.dispatch(redux.Action(redux.ActionTypes.stopTask));
       }
 
@@ -133,7 +133,7 @@ Future<T?> runRestApi<T>({
   }
 
   if (showLoading) {
-    log("Stopping Loading Screen");
+    log('Stopping Loading Screen');
     store.dispatch(redux.Action(redux.ActionTypes.stopTask));
   }
 

@@ -7,5 +7,5 @@ class ForbiddenException extends ApiException {
   });
 
   static const String defaultMessage =
-      "Sie haben keine Berechtigung für diese Aktion.";
+      'Sie haben keine Berechtigung für diese Aktion.';
 }

@@ -7,6 +7,7 @@ import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/widgets/group_list_item.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 import 'package:studiconnect/main.dart';
+import 'package:studiconnect/models/menu_action.dart';
 
 class GroupsPage extends StatefulWidget {
   const GroupsPage({super.key});
@@ -22,26 +23,26 @@ class _GroupsPageState extends State<GroupsPage> {
       title: 'Gruppen',
       type: PageType.complex,
       menuActions: [
-        ListTile(
-          leading: const Icon(Icons.add),
-          title: const Text('Gruppe erstellen'),
+        MenuAction(
+          icon: Icons.add,
+          title: 'Gruppe erstellen',
           onTap: () {
             navigatorKey.currentState!.pop();
             navigatorKey.currentState!.pushNamed('/create-and-edit-group');
             setState(() {});
           },
         ),
-        ListTile(
-            leading: const Icon(Icons.share),
-            title: const Text('Studiconnect weiterempfehlen'),
+        MenuAction(
+            icon: Icons.share,
+            title: 'Studiconnect weiterempfehlen',
             onTap: () {
               navigatorKey.currentState!.pop();
               Share.share(
                   'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=$appID');
             }),
-        ListTile(
-          leading: const Icon(Icons.settings),
-          title: const Text('Einstellungen'),
+        MenuAction(
+          icon: Icons.settings,
+          title: 'Einstellungen',
           onTap: () {
             navigatorKey.currentState!.pop();
             navigatorKey.currentState!.pushNamed('/settings');
@@ -68,16 +69,20 @@ class _GroupsPageState extends State<GroupsPage> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text("Du bist noch keiner Gruppe beigetreten"),
+                            const Center(
+                              child: Text('Du bist noch keiner Gruppe beigetreten'),
+                            ),
                             const SizedBox(height: 50),
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  '/create-and-edit-group',
-                                );
-                              },
-                              child: const Text("Gruppe erstellen"),
+                            Center(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/create-and-edit-group',
+                                  );
+                                },
+                                child: const Text('Gruppe erstellen'),
+                              ),
                             ),
                           ],
                         ),

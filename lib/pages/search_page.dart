@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/group.dart';
 import 'package:studiconnect/models/group_parameter.dart';
+import 'package:studiconnect/models/menu_action.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
@@ -21,14 +21,14 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  late final DateFormat _formatter;
   late final TextEditingController _moduleInputController;
   late double _radius;
   late Timer _delayQueryTimer;
+  String? _error;
 
   void _loadSearchResults() {
-    log("Loading search results...");
-    String module = _moduleInputController.text;
+    log('Loading search results...');
+    final String module = _moduleInputController.text;
 
     if (module.isEmpty) {
       _delayQueryTimer.cancel();
@@ -43,10 +43,18 @@ class _SearchPageState extends State<SearchPage> {
     super.initState();
     _radius = 10;
     _moduleInputController = TextEditingController();
-    _formatter = DateFormat('dd.MM.yyyy');
     _delayQueryTimer = Timer(
       const Duration(seconds: 1),
-      _loadSearchResults,
+        () {
+          if (StoreProvider.of<AppState>(context).state.user?.lat == null ||
+            StoreProvider.of<AppState>(context).state.user?.lon == null) {
+            setState(() {
+              _error = 'Bitte bearbeite dein Profil und gib deinen Standort an.';
+            });
+            return;
+          }
+          _loadSearchResults;
+        }
     );
 
     store.dispatch(
@@ -77,12 +85,21 @@ class _SearchPageState extends State<SearchPage> {
             _delayQueryTimer.cancel();
             _delayQueryTimer = Timer(
               const Duration(seconds: 1),
-              _loadSearchResults,
+              () {
+                if (StoreProvider.of<AppState>(context).state.user?.lat == null ||
+                    StoreProvider.of<AppState>(context).state.user?.lon == null) {
+                  setState(() {
+                    _error = 'Bitte bearbeite dein Profil und gib deinen Standort an.';
+                  });
+                  return;
+                }
+                _loadSearchResults();
+              },
             );
           },
           style: const TextStyle(color: Colors.white),
           decoration: const InputDecoration(
-            labelText: "Modul",
+            labelText: 'Modul',
             labelStyle: TextStyle(color: Colors.white),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.white),
@@ -96,7 +113,7 @@ class _SearchPageState extends State<SearchPage> {
           padding: const EdgeInsets.only(top: 20.0),
           child: Row(
             children: [
-              const Text("Radius:", style: TextStyle(color: Colors.white)),
+              const Text('Radius:', style: TextStyle(color: Colors.white)),
               Expanded(
                 child: Slider(
                   inactiveColor: Colors.white,
@@ -112,29 +129,38 @@ class _SearchPageState extends State<SearchPage> {
                     _delayQueryTimer.cancel();
                     _delayQueryTimer = Timer(
                       const Duration(seconds: 1),
-                      _loadSearchResults,
+                        () {
+                          if (StoreProvider.of<AppState>(context).state.user?.lat == null ||
+                              StoreProvider.of<AppState>(context).state.user?.lon == null) {
+                            setState(() {
+                              _error = 'Bitte bearbeite dein Profil und gib deinen Standort an.';
+                            });
+                            return;
+                          }
+                          _loadSearchResults;
+                        }
                     );
                   },
                 ),
               ),
-              Text("${_radius.toInt()} km",
+              Text('${_radius.toInt()} km',
                   style: const TextStyle(color: Colors.white)),
             ],
           ),
         ),
       ],
       menuActions: [
-        ListTile(
-            leading: const Icon(Icons.share),
-            title: const Text('Studiconnect weiterempfehlen'),
+        MenuAction(
+            icon: Icons.share,
+            title: 'Studiconnect weiterempfehlen',
             onTap: () {
               navigatorKey.currentState!.pop();
               Share.share(
                   'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=de.studiconnect.app');
             }),
-        ListTile(
-          leading: const Icon(Icons.settings),
-          title: const Text('Einstellungen'),
+        MenuAction(
+          icon: Icons.settings,
+          title: 'Einstellungen',
           onTap: () {
             navigatorKey.currentState!.pop();
             navigatorKey.currentState!.pushNamed('/settings');
@@ -166,8 +192,8 @@ class _SearchPageState extends State<SearchPage> {
                       constraints: BoxConstraints(
                         minHeight: constraints.maxHeight,
                       ),
-                      child: const Center(
-                        child: Text("Keine Ergebnisse"),
+                      child: Center(
+                        child: Text(_error ?? 'Keine Ergebnisse'),
                       ),
                     ),
                   ),
@@ -184,7 +210,7 @@ class _SearchPageState extends State<SearchPage> {
                 itemCount: state.searchResults.length,
                 padding: EdgeInsets.zero,
                 itemBuilder: (context, index) {
-                  Group group = state.searchResults[index];
+                  final Group group = state.searchResults[index];
                   return Container(
                     margin: const EdgeInsets.only(bottom: 20.0),
                     padding: const EdgeInsets.symmetric(
@@ -211,7 +237,19 @@ class _SearchPageState extends State<SearchPage> {
                             ),
                           ),
                           Text(
-                            'Erstellt an ${_formatter.format(group.createdAt!)}',
+                            'Modul: ${group.module ?? ''}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            'Studiengang: ${group.creator?.major ?? ''}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            'Hochschule: ${group.creator?.university ?? ''}',
                             style: const TextStyle(
                               color: Colors.white,
                             ),

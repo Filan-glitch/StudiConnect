@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:studiconnect/main.dart';
+import 'package:studiconnect/models/menu_action.dart';
 import 'package:studiconnect/widgets/avatar_picture.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
@@ -18,25 +19,25 @@ class ProfilePage extends StatelessWidget {
           title: 'Profil',
           type: PageType.complex,
           menuActions: [
-            ListTile(
-              leading: const Icon(Icons.edit),
-              title: const Text('Profil bearbeiten'),
+            MenuAction(
+              icon: Icons.edit,
+              title: 'Profil bearbeiten',
               onTap: () {
                 navigatorKey.currentState!.pop();
                 navigatorKey.currentState!.pushNamed('/edit-profile');
               },
             ),
-            ListTile(
-                leading: const Icon(Icons.share),
-                title: const Text('Studiconnect weiterempfehlen'),
+            MenuAction(
+                icon: Icons.share,
+                title: 'Studiconnect weiterempfehlen',
                 onTap: () {
                   navigatorKey.currentState!.pop();
                   Share.share(
                       'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=de.studiconnect.app');
                 }),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Einstellungen'),
+            MenuAction(
+              icon: Icons.settings,
+              title: 'Einstellungen',
               onTap: () {
                 navigatorKey.currentState!.pop();
                 navigatorKey.currentState!.pushNamed('/settings');
@@ -44,6 +45,7 @@ class ProfilePage extends StatelessWidget {
             ),
           ],
           body: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -119,19 +121,19 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "E-Mail: ${state.user?.email ?? '-'}",
+                      'E-Mail: ${state.user?.email ?? '-'}',
                       style: const TextStyle(
                         fontSize: 15,
                       ),
                     ),
                     Text(
-                      "Tel: ${state.user?.mobile ?? '-'}",
+                      'Tel: ${state.user?.mobile ?? '-'}',
                       style: const TextStyle(
                         fontSize: 15,
                       ),
                     ),
                     Text(
-                      "Discord: ${state.user?.discord ?? '-'}",
+                      'Discord: ${state.user?.discord ?? '-'}',
                       style: const TextStyle(
                         fontSize: 15,
                       ),
@@ -154,6 +156,7 @@ class ProfilePage extends StatelessWidget {
                         fontSize: 15,
                       ),
                     ),
+                    const SizedBox(height: 85),
                   ],
                 ),
               ],

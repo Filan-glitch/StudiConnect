@@ -23,8 +23,8 @@ class GroupListItem extends StatelessWidget {
         radius: 20,
         loadingCircleStrokeWidth: 1.5,
       ),
-      title: Text(group.title ?? "Gruppe ${group.id}"),
-      subtitle: Text(group.description ?? "Keine Beschreibung"),
+      title: Text(group.title ?? 'Gruppe ${group.id}'),
+      subtitle: Text(group.description ?? 'Keine Beschreibung'),
     );
   }
 }

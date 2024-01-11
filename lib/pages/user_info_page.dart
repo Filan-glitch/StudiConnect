@@ -16,7 +16,7 @@ class UserInfoPage extends StatelessWidget {
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (context, state) {
-          User? user = userParams.getUser(context);
+          final User? user = userParams.getUser(context);
 
           if (user == null) {
             return const PageWrapper(
@@ -119,19 +119,19 @@ class UserInfoPage extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            "E-Mail: ${user.email ?? '-'}",
+                            'E-Mail: ${user.email ?? '-'}',
                             style: const TextStyle(
                               fontSize: 15,
                             ),
                           ),
                           Text(
-                            "Tel: ${user.mobile ?? '-'}",
+                            'Tel: ${user.mobile ?? '-'}',
                             style: const TextStyle(
                               fontSize: 15,
                             ),
                           ),
                           Text(
-                            "Discord: ${user.discord ?? '-'}",
+                            'Discord: ${user.discord ?? '-'}',
                             style: const TextStyle(
                               fontSize: 15,
                             ),

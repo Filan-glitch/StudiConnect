@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class DialogWrapper extends StatelessWidget {
   const DialogWrapper({
-    this.title = "Stundenplan",
+    this.title = 'Stundenplan',
     this.children,
     this.isDefaultDialog = true,
     super.key,

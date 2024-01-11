@@ -7,5 +7,5 @@ class NotFoundException extends ApiException {
   });
 
   static const String defaultMessage =
-      "Die angeforderte Ressource wurde nicht gefunden.";
+      'Die angeforderte Ressource wurde nicht gefunden.';
 }

@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:studiconnect/dialogs/select_location_dialog.dart';
+import 'package:studiconnect/main.dart';
 import 'package:studiconnect/services/logger_provider.dart';
 
 class LocationDisplay extends StatefulWidget {
   final LatLng? position;
   final bool? serviceEnabled;
   final LocationPermission? permission;
+  final LocationAccuracyStatus? accuracyStatus;
+  final bool? error;
 
-  const LocationDisplay({super.key, required this.position, this.serviceEnabled, this.permission});
+  const LocationDisplay({super.key, required this.position, this.serviceEnabled, this.permission, this.accuracyStatus, this.error});
 
   @override
   State<LocationDisplay> createState() => _LocationDisplayState();
@@ -18,18 +22,19 @@ class LocationDisplay extends StatefulWidget {
 class _LocationDisplayState extends State<LocationDisplay> {
   String? _address;
   String? _error;
+  LatLng? _manualPosition;
 
   Future<void> _getAddress() async {
     try {
       if (widget.position != null) {
-        log("Getting address for ${widget.position}");
+        log('Getting address for ${widget.position}');
         final List<geo.Placemark> placemarks = await geo.placemarkFromCoordinates(
             widget.position!.latitude, widget.position!.longitude);
         final geo.Placemark place = placemarks[0];
-        log("Got address: $place");
+        log('Got address: $place');
         setState(() {
           _address =
-          '${place.street ?? ""}, ${place.postalCode ?? ""} ${place.locality ?? ""}';
+          '${place.street ?? ''}\n${place.postalCode ?? ''} ${place.locality ?? ''}';
         });
       }
     } catch (e) {
@@ -44,19 +49,27 @@ class _LocationDisplayState extends State<LocationDisplay> {
     if (widget.serviceEnabled != null) {
       if (!widget.serviceEnabled!) {
         setState(() {
-          _error = 'Standortdienste sind deaktiviert';
+          _error = 'Standortdienste sind deaktiviert.';
         });
+        return;
       }
-      else if (widget.permission == LocationPermission.denied) {
-        setState(() {
-          _error = 'Standortberechtigung wiederholt verweigert';
-        });
-      }
-      else if (widget.permission == LocationPermission.deniedForever) {
-        setState(() {
-          _error = 'Standortberechtigung verweigert, bitte in den Einstellungen ändern';
-        });
-      }
+    }
+    if (widget.permission == LocationPermission.denied) {
+      setState(() {
+        _error = 'Standortberechtigung wiederholt verweigert.';
+      });
+    } else if (widget.permission == LocationPermission.deniedForever) {
+      setState(() {
+        _error = 'Standortberechtigung permanent verweigert.';
+      });
+    } else if (widget.accuracyStatus != null && widget.accuracyStatus != LocationAccuracyStatus.precise) {
+      setState(() {
+        _error = 'Standortgenauigkeit ist nicht hoch genug.';
+      });
+    } else if (widget.error != null && widget.error!) {
+      setState(() {
+        _error = 'Standort konnte nicht ermittelt werden.';
+      });
     }
   }
 
@@ -69,20 +82,103 @@ class _LocationDisplayState extends State<LocationDisplay> {
 
   @override
   Widget build(BuildContext context) {
+    if(_error != null) {
+      return GestureDetector(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (context) =>
+                  SelectLocationDialog(
+                    onLocationSelected: (pos) {
+                      setState(() {
+                        _manualPosition = pos;
+                      });
+
+                      navigatorKey.currentState!.pop();
+                    },
+                  ),
+            );
+          },
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 20.0),
+                child: Icon(
+                  Icons.location_on,
+                  color: Theme.of(context).textTheme.bodySmall?.color,
+                  size: 20.0,
+                ),
+              ),
+              Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (_manualPosition == null)
+                        Text(
+                          '$_error Bitte klicke hier, um einen Standort auszuwählen.',
+                          style: TextStyle(
+                            color: Theme
+                                .of(context)
+                                .textTheme
+                                .labelSmall
+                                ?.color,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                      if (_manualPosition != null)
+                        FutureBuilder(
+                          future: geo.placemarkFromCoordinates(
+                            _manualPosition!.latitude,
+                            _manualPosition!.longitude,
+                          ),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              final geo.Placemark location = snapshot
+                                  .data![0];
+                              return Text(
+                                '${location.street ?? ''}\n${location.postalCode ?? ''} ${location.locality ?? ''}',
+                                style: TextStyle(
+                                  color: Theme
+                                      .of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.color,
+                                  fontSize: 16.0,
+                                ),
+                              );
+                            } else {
+                              return Container();
+                            }
+                          },
+                        ),
+                    ],
+                  ),
+              ),
+            ],
+          )
+      );
+    }
     return Row(
       children: [
         Icon(
           Icons.location_on,
           color: Theme.of(context).textTheme.bodySmall?.color,
-          size: 16.0,
+          size: 20.0,
         ),
-        Text(
-          _error ?? _address ?? 'Adresse wird geladen...',
-          style: TextStyle(
-            color: Theme.of(context).textTheme.bodySmall?.color,
-            fontSize: 16.0,
+        const SizedBox(width: 5),
+        Expanded(
+          child: Text(
+            _address ?? 'Adresse wird geladen...',
+            style: TextStyle(
+              color: Theme
+                  .of(context)
+                  .textTheme
+                  .bodySmall
+                  ?.color,
+              fontSize: 16.0,
+            ),
           ),
-        )
+        ),
       ]
     );
   }

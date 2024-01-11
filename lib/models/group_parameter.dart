@@ -19,7 +19,7 @@ class GroupLookupParameters {
   });
 
   Group? getGroup(BuildContext context) {
-  Store<AppState> store = StoreProvider.of<AppState>(context);
+  final Store<AppState> store = StoreProvider.of<AppState>(context);
     switch (source) {
       case GroupSource.myGroups:
         return store.state.user?.groups

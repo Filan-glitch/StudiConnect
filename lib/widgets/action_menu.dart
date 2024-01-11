@@ -1,13 +1,14 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:studiconnect/models/menu_action.dart';
 
 class ActionMenu extends StatelessWidget {
   const ActionMenu({
     required this.children,
-    this.title = "Aktionen",
+    this.title = 'Aktionen',
     super.key,
   });
-  final List<Widget> children;
+  final List<MenuAction> children;
   final String title;
 
   @override
@@ -38,7 +39,7 @@ class ActionMenu extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
+                padding: const EdgeInsets.only(bottom: 10),
                 child: Text(
                   title,
                   style: const TextStyle(
@@ -47,13 +48,22 @@ class ActionMenu extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: children
-                  ),
+                child: ListView(
+                  children: children.map((MenuAction action) {
+                    return ListTile(
+                      leading: Icon(
+                        action.icon,
+                      ),
+                      title: Text(
+                        action.title,
+                      ),
+                      onTap: () {
+                        action.onTap();
+                      },
+                    );
+                  }).toList(),
                 ),
               ),
-              const SizedBox(height: 10.0),
             ],
           ),
         )

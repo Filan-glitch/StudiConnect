@@ -34,7 +34,7 @@ class _RegisterPageState extends State<RegisterPage> {
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     _passwordRepeatController = TextEditingController();
-    _errorMessageNotifier = ValueNotifier("");
+    _errorMessageNotifier = ValueNotifier('');
   }
 
   @override
@@ -52,7 +52,7 @@ class _RegisterPageState extends State<RegisterPage> {
         converter: (store) => store.state,
         builder: (BuildContext context, AppState state) {
           return PageWrapper(
-            title: "Registrieren",
+            title: 'Registrieren',
             type: PageType.simple,
             body: Center(
               child: Column(
@@ -149,12 +149,12 @@ class _RegisterPageState extends State<RegisterPage> {
                       if(_emailButtonLoading) return;
 
                       if(_emailController.text.isEmpty || _passwordController.text.isEmpty || _passwordRepeatController.text.isEmpty) {
-                        _errorMessageNotifier.value = "Bitte füllen Sie alle Felder aus.";
+                        _errorMessageNotifier.value = 'Bitte füllen Sie alle Felder aus.';
                         return;
                       }
 
                       if (_passwordController.text != _passwordRepeatController.text) {
-                        _errorMessageNotifier.value = "Die Passwörter stimmen nicht überein.";
+                        _errorMessageNotifier.value = 'Die Passwörter stimmen nicht überein.';
                         return;
                       }
 
@@ -170,23 +170,23 @@ class _RegisterPageState extends State<RegisterPage> {
                         );
                       } on FirebaseAuthException catch (e) {
                         final errorMessages = {
-                          "invalid-email": "Die E-Mail Adresse ist ungültig.",
-                          "email-already-in-use": "Die E-Mail Adresse wird bereits verwendet.",
-                          "weak-password": "Das Passwort ist zu schwach.",
-                          "channel-error": "Ein Fehler ist aufgetreten.",
-                          "too-many-requests": "Zu viele Anfragen. Bitte versuchen Sie es später erneut.",
-                          "operation-not-allowed": "Die Registrierung ist nicht erlaubt.",
-                          "network-request-failed": "Keine Internetverbindung.",
+                          'invalid-email': 'Die E-Mail Adresse ist ungültig.',
+                          'email-already-in-use': 'Die E-Mail Adresse wird bereits verwendet.',
+                          'weak-password': 'Das Passwort ist zu schwach.',
+                          'channel-error': 'Ein Fehler ist aufgetreten.',
+                          'too-many-requests': 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.',
+                          'operation-not-allowed': 'Die Registrierung ist nicht erlaubt.',
+                          'network-request-failed': 'Keine Internetverbindung.',
                         };
 
-                        _errorMessageNotifier.value = errorMessages[e.code] ?? "${e.code}: ${e.message}";
+                        _errorMessageNotifier.value = errorMessages[e.code] ?? '${e.code}: ${e.message}';
 
                         setState(() {
                           _emailButtonLoading = false;
                         });
                         return;
                       } catch (e) {
-                        _errorMessageNotifier.value = "Ein unbekannter Fehler ist aufgetreten.";
+                        _errorMessageNotifier.value = 'Ein unbekannter Fehler ist aufgetreten.';
                         setState(() {
                           _emailButtonLoading = false;
                         });
@@ -199,7 +199,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                       navigatorKey.currentState!.pushNamed('/edit-profile');
                     },
-                    text: "Konto erstellen",
+                    text: 'Konto erstellen',
                     isLoading: _emailButtonLoading,
                     style: AuthButtonStyle(
                       textStyle: TextStyle(
