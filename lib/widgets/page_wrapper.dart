@@ -35,25 +35,6 @@ enum PageType {
 /// It displays a Scaffold with an AppBar, body, and bottom navigation bar.
 /// The AppBar contains the title and an optional action menu.
 /// The body contains the main content of the page, wrapped in a Container with padding.
-///
-/// The [title] parameter is required and represents the title of the page.
-///
-/// The [body] parameter is required and represents the main content of the page.
-///
-/// The [bottomNavigationBar] parameter is optional and represents the bottom navigation bar of the page.
-///
-/// The [menuActions] parameter is optional and defaults to an empty list. It represents the actions in the action menu.
-///
-/// The [headerControls] parameter is optional and defaults to an empty list. It represents the controls in the header of the page.
-///
-/// The [type] parameter is optional and defaults to PageType.simple. It represents the type of the page.
-///
-/// The [padding] parameter is optional and defaults to EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0).
-/// It represents the padding of the main content of the page.
-///
-/// The [overrideLoadingScreen] parameter is optional and defaults to false. If set to true, the loading screen will be overridden.
-///
-/// The [showLoading] parameter is optional and defaults to true. If set to false, the loading screen will not be shown.
 class PageWrapper extends StatefulWidget {
   /// The const constructor of the [PageWrapper] widget.
   const PageWrapper({

@@ -25,6 +25,8 @@ import 'package:studiconnect/widgets/page_wrapper.dart';
 /// If the user is not a member of the group, they have the option to join the group.
 /// If the user is the creator of the group, they have the option to edit the group or manage join requests.
 class GroupInfoPage extends StatefulWidget {
+
+  /// Creates a [GroupInfoPage] widget.
   const GroupInfoPage({super.key});
 
   @override

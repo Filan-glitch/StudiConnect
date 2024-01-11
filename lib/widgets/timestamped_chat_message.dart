@@ -64,8 +64,6 @@ class TimestampedChatMessage extends LeafRenderObjectWidget {
 ///
 /// This class is a [RenderBox] that takes the sender, the time the message was sent,
 /// the text of the message, the text direction, and the brightness as input.
-///
-/// The [sender], [sentAt], [text], [textDirection], and [brightness] parameters are required.
 class TimestampedChatMessageRenderObject extends RenderBox {
 
   /// Creates a new instance of [TimestampedChatMessageRenderObject].

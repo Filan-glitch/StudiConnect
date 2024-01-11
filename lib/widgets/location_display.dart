@@ -15,12 +15,6 @@ import 'package:studiconnect/services/logger_provider.dart';
 ///
 /// This widget is a stateful widget that takes a latitude and longitude as input
 /// and displays the corresponding address using the geocoding package.
-///
-/// The [position] parameter is required and represents the latitude and longitude of the location.
-/// The [serviceEnabled] parameter is optional and represents if the location service is enabled.
-/// The [permission] parameter is optional and represents the location permission status.
-/// The [accuracyStatus] parameter is optional and represents the location accuracy status.
-/// The [error] parameter is optional and represents if there is an error in getting the location.
 class LocationDisplay extends StatefulWidget {
   /// The latitude and longitude of the location.
   final LatLng? position;
@@ -37,7 +31,7 @@ class LocationDisplay extends StatefulWidget {
   /// The error status.
   final bool? error;
 
-  /// Creates a LocationDisplay.
+  /// Creates a [LocationDisplay].
   ///
   /// The [position] parameter must not be null.
   const LocationDisplay({super.key, required this.position, this.serviceEnabled, this.permission, this.accuracyStatus, this.error});

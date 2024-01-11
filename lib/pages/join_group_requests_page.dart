@@ -14,6 +14,8 @@ import 'package:studiconnect/widgets/join_group_request_list_item.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
 class JoinGroupRequestsPage extends StatelessWidget {
+
+  /// Creates a [JoinGroupRequestsPage] widget.
   const JoinGroupRequestsPage({super.key});
 
   @override

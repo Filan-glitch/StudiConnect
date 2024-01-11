@@ -24,6 +24,8 @@ import 'package:studiconnect/models/redux/store.dart';
 /// and a slider to set the search radius.
 /// The search results are displayed as a list of groups.
 class SearchPage extends StatefulWidget {
+
+  /// Creates a [SearchPage] widget.
   const SearchPage({super.key});
 
   @override

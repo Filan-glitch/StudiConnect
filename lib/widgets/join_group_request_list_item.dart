@@ -16,15 +16,15 @@ import 'package:studiconnect/models/user_parameter.dart';
 /// This widget is a stateful widget that takes a user and a group as input
 /// and displays a ListTile with the user's avatar, username, university,
 /// and two action buttons for accepting or rejecting the join request.
-///
-/// The [user] parameter is required and should be an instance of the User model.
-///
-/// The [group] parameter is required and should be an instance of the Group model.
 class JoinGroupRequestListItem extends StatefulWidget {
+  /// Creates a [JoinGroupRequestListItem].
   const JoinGroupRequestListItem(
       {super.key, required this.user, required this.group});
 
+  /// The user who sent the join request.
   final User user;
+
+  /// The group that the user wants to join.
   final Group group;
 
   @override

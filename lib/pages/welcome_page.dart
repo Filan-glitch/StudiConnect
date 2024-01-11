@@ -23,6 +23,8 @@ import 'package:studiconnect/constants.dart';
 /// as well as a link to the login page.
 /// The user is also presented with the terms of service and privacy policy.
 class WelcomePage extends StatefulWidget {
+
+  /// Creates a [WelcomePage] widget.
   const WelcomePage({super.key});
 
   @override

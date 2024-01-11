@@ -15,10 +15,14 @@ import 'package:studiconnect/widgets/error_label.dart';
 /// The page contains a text field for the user to enter their email,
 /// as well as a button to trigger the password reset.
 class PasswordResetPage extends StatelessWidget {
+
+  /// Creates a [PasswordResetPage] widget.
   PasswordResetPage({super.key});
 
   /// The controller for the email text field.
   final TextEditingController _emailController = TextEditingController();
+
+  /// The notifier for the error message.
   final ValueNotifier<String> _errorMessageNotifier = ValueNotifier('');
 
   @override

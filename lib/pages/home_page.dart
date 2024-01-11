@@ -22,6 +22,8 @@ import 'package:studiconnect/models/redux/store.dart';
 /// The page contains a bottom navigation bar with three items: Groups, Search, and Profile.
 /// The user can switch between the three pages by tapping on the corresponding item in the navigation bar.
 class HomePage extends StatefulWidget {
+
+  /// Creates a [HomePage] widget.
   const HomePage({super.key});
 
   @override

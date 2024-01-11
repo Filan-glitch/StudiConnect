@@ -16,6 +16,8 @@ import 'package:studiconnect/widgets/page_wrapper.dart';
 /// The page contains a text field for the user to enter their password (if necessary),
 /// and a button to confirm the deletion of the account.
 class DeleteAccountPage extends StatelessWidget {
+
+  /// Creates a [DeleteAccountPage] widget.
   DeleteAccountPage({super.key});
 
   /// The controller for the password text field.

@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 /// The page contains a centered CircularProgressIndicator and a text message "Bitte warten...".
 /// The CircularProgressIndicator uses the primary color of the current theme.
 class LoadingPage extends StatelessWidget {
+
+  /// Creates a [LoadingPage] widget.
   const LoadingPage({super.key});
 
   @override

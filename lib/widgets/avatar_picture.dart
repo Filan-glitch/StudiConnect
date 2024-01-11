@@ -2,6 +2,7 @@
 ///
 /// {@category WIDGETS}
 library widgets.avatar_picture;
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:studiconnect/constants.dart';
@@ -9,26 +10,33 @@ import 'package:studiconnect/models/redux/store.dart';
 import 'package:studiconnect/models/redux/actions.dart' as redux;
 
 /// Enum for specifying the type of avatar.
-enum Type { user, group }
+enum Type {
+  /// The avatar is for a user.
+  user,
+
+  /// The avatar is for a group.
+  group
+}
 
 /// A widget that displays an avatar picture.
 ///
 /// This widget is a stateful widget that takes an id, type, radius, and loadingCircleStrokeWidth as input
 /// and displays an avatar picture using the CachedNetworkImage package.
-///
-/// The [id] parameter is optional and represents the id of the user or group.
-///
-/// The [type] parameter is required and should be either Type.user or Type.group.
-///
-/// The [radius] parameter is optional and represents the radius of the avatar picture.
-///
-/// The [loadingCircleStrokeWidth] parameter is optional and represents the stroke width of the loading circle.
 class AvatarPicture extends StatefulWidget {
+
+  /// The id of the user or group.
   final String? id;
+
+  /// The type of the avatar.
   final Type type;
+
+  /// The radius of the avatar.
   final double? radius;
+
+  /// The width of the loading circle.
   final double? loadingCircleStrokeWidth;
 
+  /// Creates an [AvatarPicture] widget.
   const AvatarPicture({
     super.key,
     this.id,

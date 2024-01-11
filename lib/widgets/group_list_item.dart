@@ -2,6 +2,7 @@
 ///
 /// {@category WIDGETS}
 library widgets.group_list_item;
+
 import 'package:flutter/material.dart';
 import 'package:studiconnect/widgets/avatar_picture.dart';
 import 'package:studiconnect/models/group.dart';
@@ -10,14 +11,11 @@ import 'package:studiconnect/models/group.dart';
 ///
 /// This widget is a stateless widget that takes a group as input
 /// and displays a ListTile with the group's avatar, title, and description.
-///
-/// The [group] parameter is required and should be an instance of the Group model.
 class GroupListItem extends StatelessWidget {
+  /// The group to be displayed.
   final Group group;
 
   /// Creates a GroupListItem.
-  ///
-  /// The [group] parameter must not be null.
   const GroupListItem({super.key, required this.group});
 
   @override

@@ -19,6 +19,8 @@ import 'package:studiconnect/models/menu_action.dart';
 /// The page contains a list of the user's groups, each represented by a [GroupListItem].
 /// If the user is not a member of any groups, they are presented with the option to create a group.
 class GroupsPage extends StatefulWidget {
+
+  /// Creates a [GroupsPage] widget.
   const GroupsPage({super.key});
 
   @override

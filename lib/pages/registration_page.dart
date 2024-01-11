@@ -20,6 +20,8 @@ import 'package:studiconnect/widgets/page_wrapper.dart';
 /// The page contains text fields for the user to enter their email and password,
 /// as well as a button to confirm the registration.
 class RegisterPage extends StatefulWidget {
+
+  /// Creates a [RegisterPage] widget.
   const RegisterPage({super.key});
 
   @override

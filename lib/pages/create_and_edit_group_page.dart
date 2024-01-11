@@ -22,6 +22,8 @@ import 'package:studiconnect/widgets/page_wrapper.dart';
 /// as well as a button to select the group's location.
 /// If a group is passed as an argument to the page, the fields are pre-filled with the group's data.
 class CreateAndEditGroupPage extends StatefulWidget {
+
+  /// Creates a [CreateAndEditGroupPage] widget.
   const CreateAndEditGroupPage({super.key});
 
   @override

@@ -12,7 +12,14 @@ import 'package:studiconnect/widgets/avatar_picture.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
+/// A widget that represents the profile page.
+///
+/// This widget is a stateless widget that displays the user's profile information.
+/// The profile page contains an avatar picture, the user's username, major, university, contact information, and bio.
+/// The profile page also has a menu with actions to edit the profile, share the app, and go to the settings page.
 class ProfilePage extends StatelessWidget {
+
+  /// Creates a [ProfilePage] widget.
   const ProfilePage({super.key});
 
   @override

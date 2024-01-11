@@ -23,6 +23,8 @@ import 'package:studiconnect/services/gps.dart';
 /// as well as a button to select the user's location.
 /// The fields are pre-filled with the user's current data.
 class EditProfilePage extends StatefulWidget {
+
+  /// Creates an [EditProfilePage] widget.
   const EditProfilePage({super.key});
 
   @override

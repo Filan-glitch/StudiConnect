@@ -14,6 +14,8 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:studiconnect/controllers/groups.dart';
 
 class ChatPage extends StatefulWidget {
+
+  /// Creates a [ChatPage] widget.
   const ChatPage({super.key});
 
   @override

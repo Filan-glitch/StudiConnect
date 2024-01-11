@@ -18,6 +18,8 @@ import 'package:studiconnect/widgets/error_label.dart';
 /// The page contains text fields for the user to enter their email and password,
 /// as well as buttons to log in with email or Google.
 class LoginPage extends StatefulWidget {
+
+  /// Creates a [LoginPage] widget.
   const LoginPage({super.key});
 
   @override

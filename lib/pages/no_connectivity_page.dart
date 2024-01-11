@@ -10,15 +10,10 @@ import 'package:flutter/material.dart';
 /// The page contains an icon and messages informing the user that there is no internet connection
 /// and asking them to check their connection and try again.
 class NoConnectivityPage extends StatelessWidget {
-  /// Creates a NoConnectivityPage widget.
-  ///
-  /// The [key] parameter is optional and represents the key for the widget.
+
+  /// Creates a [NoConnectivityPage] widget.
   const NoConnectivityPage({super.key});
 
-  /// Builds the widget tree for the NoConnectivityPage.
-  ///
-  /// The [context] parameter is required and represents the build context.
-  /// Returns a Scaffold widget that contains the page content.
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -16,6 +16,8 @@ import 'package:studiconnect/widgets/page_wrapper.dart';
 /// The page contains options to view licenses, terms of use, privacy policy, and imprint,
 /// as well as an option to log out.
 class SettingsPage extends StatelessWidget {
+
+  /// Creates a [SettingsPage] widget.
   const SettingsPage({super.key});
 
   @override

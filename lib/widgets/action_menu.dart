@@ -2,6 +2,7 @@
 ///
 /// {@category WIDGETS}
 library widgets.action_menu;
+
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:studiconnect/models/menu_action.dart';
@@ -10,13 +11,9 @@ import 'package:studiconnect/models/menu_action.dart';
 ///
 /// This widget is a stateless widget that takes a list of child widgets
 /// and a title as input and displays them in a menu with a blurred background.
-///
-/// The [children] parameter is required and should contain the list of widgets
-/// that will be displayed in the menu.
-///
-/// The [title] parameter is optional and defaults to "Aktionen". It represents
-/// the title that will be displayed at the top of the menu.
 class ActionMenu extends StatelessWidget {
+
+  /// Creates an [ActionMenu] widget.
   const ActionMenu({
     required this.children,
     this.title = 'Aktionen',

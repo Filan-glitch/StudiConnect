@@ -15,6 +15,8 @@ import 'package:studiconnect/widgets/page_wrapper.dart';
 ///
 /// The page contains the user's avatar, username, major, university, contact information, and bio.
 class UserInfoPage extends StatelessWidget {
+
+  /// Creates a [UserInfoPage] widget.
   const UserInfoPage({super.key});
 
   @override
