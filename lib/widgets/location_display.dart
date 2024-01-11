@@ -29,7 +29,7 @@ class _LocationDisplayState extends State<LocationDisplay> {
         log('Got address: $place');
         setState(() {
           _address =
-          '${place.street ?? ''}, ${place.postalCode ?? ''} ${place.locality ?? ''}';
+          '${place.street ?? ''}\n ${place.postalCode ?? ''} ${place.locality ?? ''}';
         });
       }
     } catch (e) {

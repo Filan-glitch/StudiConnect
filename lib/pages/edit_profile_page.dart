@@ -213,11 +213,14 @@ class _EditProfilePage extends State<EditProfilePage> {
                     padding: const EdgeInsets.only(
                       top: 20.0,
                     ),
-                    child: LocationDisplay(
-                      key: _locationKey,
-                      position: _selectedLocation,
-                      serviceEnabled: _serviceEnabled,
-                      permission: _permission,
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width - 60,
+                      child: LocationDisplay(
+                        key: _locationKey,
+                        position: _selectedLocation,
+                        serviceEnabled: _serviceEnabled,
+                        permission: _permission,
+                      ),
                     ),
                   ),
                   Padding(

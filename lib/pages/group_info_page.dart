@@ -188,10 +188,13 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                             ),
                           ),
                         ),
-                        LocationDisplay(
-                          position: LatLng(
-                            group.lat ?? 0,
-                            group.lon ?? 0,
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width - 60,
+                          child: LocationDisplay(
+                            position: LatLng(
+                              group.lat ?? 0,
+                              group.lon ?? 0,
+                            ),
                           ),
                         ),
                         Padding(
