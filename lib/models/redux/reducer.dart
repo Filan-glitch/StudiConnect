@@ -1,6 +1,22 @@
+/// This library is part of the Redux state management system. It contains the [appReducer] function.
+///
+/// {@category REDUX}
+library models.redux.reducer;
 import 'package:studiconnect/models/redux/actions.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 
+/// A function that reduces the application state based on the provided action.
+///
+/// This function takes the current state of the application and an action as input,
+/// and returns the new state of the application after applying the action.
+///
+/// The [state] parameter is required and represents the current state of the application.
+///
+/// The [action] parameter is required and represents the action to be applied.
+///
+/// If the action is not an instance of the [Action] class, the function returns the current state without any changes.
+///
+/// Depending on the type of the action, the function updates the corresponding property of the state.
 AppState appReducer(AppState state, dynamic action) {
   if (action is! Action) return state;
 

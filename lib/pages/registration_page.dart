@@ -1,3 +1,8 @@
+/// This library contains the RegisterPage widget.
+///
+/// {@category PAGES}
+library pages.register_page;
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -10,21 +15,41 @@ import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/widgets/error_label.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
+/// A StatefulWidget that provides the user with the option to register.
+///
+/// The page contains text fields for the user to enter their email and password,
+/// as well as a button to confirm the registration.
 class RegisterPage extends StatefulWidget {
+
+  /// Creates a [RegisterPage] widget.
   const RegisterPage({super.key});
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
+/// The state for the [RegisterPage] widget.
+///
+/// This class contains the logic for handling the user's input and registering.
 class _RegisterPageState extends State<RegisterPage> {
+  /// The controller for the email text field.
   late final TextEditingController _emailController;
+
+  /// The controller for the password text field.
   late final TextEditingController _passwordController;
+
+  /// The controller for the password repeat text field.
   late final TextEditingController _passwordRepeatController;
+
   late final ValueNotifier<String> _errorMessageNotifier;
 
+  /// Whether the password field is currently obscured.
   bool _isObscure = true;
+
+  /// Whether the password repeat field is currently obscured.
   bool _isObscureRepeat = true;
+
+  /// Whether the email registration button is currently loading.
   bool _emailButtonLoading = false;
 
 

@@ -1,3 +1,8 @@
+/// This library contains the GroupInfoPage widget.
+///
+/// {@category PAGES}
+library pages.group_info_page;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:latlong2/latlong.dart';
@@ -12,13 +17,25 @@ import 'package:studiconnect/widgets/location_display.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
+/// A StatefulWidget that displays information about a group.
+///
+/// The page contains the group's avatar, title, module, description, and location,
+/// as well as a list of the group's members.
+/// If the user is a member of the group, they have the option to leave the group.
+/// If the user is not a member of the group, they have the option to join the group.
+/// If the user is the creator of the group, they have the option to edit the group or manage join requests.
 class GroupInfoPage extends StatefulWidget {
+
+  /// Creates a [GroupInfoPage] widget.
   const GroupInfoPage({super.key});
 
   @override
   State<GroupInfoPage> createState() => _GroupInfoPageState();
 }
 
+/// The state for the [GroupInfoPage] widget.
+///
+/// This class contains the logic for handling the user's interactions with the page.
 class _GroupInfoPageState extends State<GroupInfoPage> {
   GroupLookupParameters? groupParams;
 

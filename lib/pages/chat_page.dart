@@ -1,3 +1,8 @@
+/// This library contains the ChatPage widget.
+///
+/// {@category PAGES}
+library pages.chat_page;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:intl/intl.dart';
@@ -13,7 +18,14 @@ import 'package:studiconnect/widgets/page_wrapper.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:studiconnect/controllers/groups.dart';
 
+/// A widget that represents the chat page.
+///
+/// This widget is a stateful widget that displays the chat interface for a specific group.
+/// The chat page contains a list of messages, a text field to input new messages, and a send button to send the messages.
+/// The chat page also has a menu with actions to view group information, handle join requests, edit the group, and leave the group.
 class ChatPage extends StatefulWidget {
+
+  /// Creates a [ChatPage] widget.
   const ChatPage({super.key});
 
   @override
@@ -29,6 +41,18 @@ class _ChatPageState extends State<ChatPage> {
 
   int _lastLoadedPage = 0;
   bool _finishedLoading = false;
+
+  void _scrollToBottom() {
+    log('Scrolled to bottom');
+    Future.delayed(
+      const Duration(milliseconds: 100),
+          () => _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 50),
+        curve: Curves.bounceIn,
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -59,18 +83,6 @@ class _ChatPageState extends State<ChatPage> {
   void dispose() {
     sink?.close();
     super.dispose();
-  }
-
-  void _scrollToBottom() {
-    log('Scrolled to bottom');
-    Future.delayed(
-      const Duration(milliseconds: 100),
-      () => _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 50),
-        curve: Curves.bounceIn,
-      ),
-    );
   }
 
   @override

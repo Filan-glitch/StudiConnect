@@ -1,3 +1,8 @@
+/// This library contains the SearchPage widget.
+///
+/// {@category PAGES}
+library pages.search_page;
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -13,19 +18,36 @@ import 'package:studiconnect/widgets/page_wrapper.dart';
 import 'package:studiconnect/models/redux/actions.dart' as redux;
 import 'package:studiconnect/models/redux/store.dart';
 
+/// A StatefulWidget that allows the user to search for groups.
+///
+/// The page contains a text field for the user to enter the module they are interested in,
+/// and a slider to set the search radius.
+/// The search results are displayed as a list of groups.
 class SearchPage extends StatefulWidget {
+
+  /// Creates a [SearchPage] widget.
   const SearchPage({super.key});
 
   @override
   State<SearchPage> createState() => _SearchPageState();
 }
 
+/// The state for the [SearchPage] widget.
+///
+/// This class contains the logic for handling the user's input and performing the search.
 class _SearchPageState extends State<SearchPage> {
+  /// The controller for the module input text field.
   late final TextEditingController _moduleInputController;
+
+  /// The radius of the search, in kilometers.
   late double _radius;
+
+  /// A timer that delays the search query to avoid unnecessary requests while the user is typing.
   late Timer _delayQueryTimer;
+
   String? _error;
 
+  /// Loads the search results based on the current module input and search radius.
   void _loadSearchResults() {
     log('Loading search results...');
     final String module = _moduleInputController.text;
@@ -149,6 +171,7 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ),
       ],
+      /// The menu actions include the option to navigate to the settings page.
       menuActions: [
         MenuAction(
             icon: Icons.share,

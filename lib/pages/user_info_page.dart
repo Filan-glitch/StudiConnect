@@ -1,3 +1,8 @@
+/// This library contains the UserInfoPage widget.
+///
+/// {@category PAGES}
+library pages.user_info_page;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
@@ -6,7 +11,12 @@ import 'package:studiconnect/widgets/avatar_picture.dart';
 import 'package:studiconnect/models/user.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
+/// A StatelessWidget that displays information about a user.
+///
+/// The page contains the user's avatar, username, major, university, contact information, and bio.
 class UserInfoPage extends StatelessWidget {
+
+  /// Creates a [UserInfoPage] widget.
   const UserInfoPage({super.key});
 
   @override

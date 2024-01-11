@@ -22,4 +22,7 @@ linter:
     - prefer_single_quotes
     - type_annotate_public_apis
     - use_key_in_widget_constructors
+    - package_api_docs
+    - public_member_api_docs
+    - dangling_library_doc_comments
     - sort_pub_dependencies: false

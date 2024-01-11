@@ -1,3 +1,8 @@
+/// This library contains the LoginPage widget.
+///
+/// {@category PAGES}
+library pages.login_page;
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -8,18 +13,32 @@ import 'package:studiconnect/controllers/authentication.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 import 'package:studiconnect/widgets/error_label.dart';
 
+/// A StatefulWidget that provides the user with the option to log in.
+///
+/// The page contains text fields for the user to enter their email and password,
+/// as well as buttons to log in with email or Google.
 class LoginPage extends StatefulWidget {
+
+  /// Creates a [LoginPage] widget.
   const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
+/// The state for the [LoginPage] widget.
+///
+/// This class contains the logic for handling the user's input and logging in.
 class _LoginPageState extends State<LoginPage> {
+  /// The controller for the email text field.
   late final TextEditingController _emailController;
+
+  /// The controller for the password text field.
   late final TextEditingController _passwordController;
+
   late final ValueNotifier<String> _errorMessageNotifier;
 
+  /// Whether the email login button is currently loading.
   bool _emailButtonLoading = false;
 
   @override

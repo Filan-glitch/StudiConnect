@@ -1,3 +1,8 @@
+/// This library contains the SettingsPage widget.
+///
+/// {@category PAGES}
+library pages.settings_page;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -6,7 +11,13 @@ import 'package:studiconnect/controllers/authentication.dart';
 import 'package:studiconnect/constants.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
+/// A StatelessWidget that displays the settings page.
+///
+/// The page contains options to view licenses, terms of use, privacy policy, and imprint,
+/// as well as an option to log out.
 class SettingsPage extends StatelessWidget {
+
+  /// Creates a [SettingsPage] widget.
   const SettingsPage({super.key});
 
   @override

@@ -1,15 +1,28 @@
+/// This file contains the [ChatBubble] widget.
+///
+/// {@category WIDGETS}
+library widgets.chat_bubble;
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:studiconnect/models/message.dart';
 import 'package:studiconnect/models/redux/store.dart';
 import 'package:studiconnect/widgets/timestamped_chat_message.dart';
 
+/// A widget that represents a chat bubble.
+///
+/// This widget is a stateless widget that takes a message as input and displays it in a chat bubble.
+/// The chat bubble is aligned to the right if the message is sent by the current user, and to the left otherwise.
+/// The chat bubble contains a [TimestampedChatMessage] widget that displays the sender, the time the message was sent, and the text of the message.
 class ChatBubble extends StatelessWidget {
+
+  /// Creates a [ChatBubble] widget.
   const ChatBubble({
     super.key,
     required this.message,
   });
 
+  /// The message to be displayed.
   final Message message;
 
   @override

@@ -1,8 +1,16 @@
+/// This library provides authentication services for the application using Firebase.
+///
+/// {@category SERVICES}
+library services.firebase.authentication;
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:studiconnect/services/logger_provider.dart';
 
+/// Signs in a user with the provided email and password.
+///
+/// Returns a Future that completes with the user's ID token if the sign in was successful.
 Future<String?> signInWithEmailAndPassword(
     String email, String password) async {
   log('Signing in with email and password');
@@ -19,6 +27,9 @@ Future<String?> signInWithEmailAndPassword(
   return userCredential.user?.getIdToken();
 }
 
+/// Signs up a user with the provided email and password.
+///
+/// Returns a Future that completes with the user's ID token if the sign up was successful.
 Future<String?> signUpWithEmailAndPassword(
     String email, String password) async {
   log('Signing up with email and password');
@@ -35,6 +46,9 @@ Future<String?> signUpWithEmailAndPassword(
   return userCredential.user?.getIdToken();
 }
 
+/// Signs in a user with Google.
+///
+/// Returns a Future that completes with the user's ID token if the sign in was successful.
 Future<Map?> signInWithGoogle() async {
   log('Signing in with Google');
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -78,6 +92,9 @@ Future<Map?> signInWithGoogle() async {
   };
 }
 
+/// Reauthenticates the current user with Google.
+///
+/// Returns a Future that completes with the user's ID token if the reauthentication was successful.
 Future<AuthCredential> reauthenticateWithGoogle() async {
   log('Reauthenticating with Google');
   final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -111,6 +128,13 @@ Future<AuthCredential> reauthenticateWithGoogle() async {
   }
 }
 
+/// Signs out the current user.
+///
+/// If no user is signed in, nothing happens.
+///
+/// Returns a Future that completes when the sign out is finished.
+///
+/// The user is signed out from Firebase and Google.
 Future<void> signOut() async {
   log('Signing out');
   if (FirebaseAuth.instance.currentUser == null) {
@@ -123,12 +147,18 @@ Future<void> signOut() async {
   log('Signed out');
 }
 
+/// Sends a password reset email to the user.
+///
+/// The user can use the link in the email to reset their password.
 Future<void> sendPasswordResetEmail(String email) async {
   log('Sending password reset email');
   await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
   log('Sent password reset email');
 }
 
+/// Deletes the current user's email account.
+///
+/// The user must reauthenticate with their password before the account can be deleted.
 Future<void> deleteEmailAccount(String password) async {
   try {
     log('Reauthenticating user');
@@ -149,6 +179,9 @@ Future<void> deleteEmailAccount(String password) async {
   }
 }
 
+/// Deletes the current user's google auth account
+///
+/// The user must reauthenticate with their google account before the account can be deleted.
 Future<void> deleteGoogleAccount() async {
   log('Reauthenticating user');
   await FirebaseAuth.instance.currentUser
@@ -160,6 +193,9 @@ Future<void> deleteGoogleAccount() async {
   log('Deleted Google account from Firebase');
 }
 
+/// Updates the current user's password.
+///
+/// The user must reauthenticate with their current password before the password can be updated.
 Future<void> updatePassword(String oldPassword, String newPassword) async {
   try {
     log('Reauthenticating user');

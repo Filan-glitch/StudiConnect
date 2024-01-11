@@ -52,9 +52,8 @@ dependencies:
   flutter_native_splash: ^2.3.9
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
   flutter_lints: ^3.0.0
+  dartdoc: ^6.3.0
 
 flutter:
   uses-material-design: true

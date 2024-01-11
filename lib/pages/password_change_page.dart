@@ -1,16 +1,34 @@
+/// This library contains the PasswordChangePage widget.
+///
+/// {@category PAGES}
+library pages.password_change_page;
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:studiconnect/controllers/authentication.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
+import 'package:studiconnect/widgets/error_label.dart';
 
-import '../widgets/error_label.dart';
-
+/// A StatelessWidget that provides the user with the option to change their password.
+///
+/// The page contains three text fields for the user to enter their old password,
+/// their new password and their new password again, as well as a button to trigger
+/// the password change.
 class PasswordChangePage extends StatelessWidget {
+
+  /// Creates a [PasswordChangePage] widget.
   PasswordChangePage({super.key});
 
+  /// The controller for the old password text field.
   final TextEditingController _oldPasswordController = TextEditingController();
+
+  /// The controller for the new password text field.
   final TextEditingController _newPasswordController = TextEditingController();
+
+  /// The controller for the new password repeat text field.
   final TextEditingController _newPasswordRepeatController = TextEditingController();
+
+  /// The notifier for the error message.
   final ValueNotifier<String> _errorMessageNotifier = ValueNotifier('');
 
   @override

@@ -1,5 +1,9 @@
-import 'dart:math';
+/// This library contains the WelcomePage widget.
+///
+/// {@category PAGES}
+library pages.welcome_page;
 
+import 'dart:math';
 import 'package:auth_buttons/auth_buttons.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -13,19 +17,31 @@ import 'package:studiconnect/widgets/page_wrapper.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:studiconnect/constants.dart';
 
+/// A StatefulWidget that provides the user with the option to register or log in.
+///
+/// The page contains buttons to register with email or Google,
+/// as well as a link to the login page.
+/// The user is also presented with the terms of service and privacy policy.
 class WelcomePage extends StatefulWidget {
+
+  /// Creates a [WelcomePage] widget.
   const WelcomePage({super.key});
 
   @override
   State<WelcomePage> createState() => _WelcomePageState();
 }
 
+/// The state for the [WelcomePage] widget.
+///
+/// This class contains the logic for handling the user's interactions with the page.
 class _WelcomePageState extends State<WelcomePage> {
+  /// Whether the Google login button is currently loading.
   bool _googleButtonLoading = false;
 
   @override
   void initState() {
     super.initState();
+    /// Sets the system UI overlay style to dark.
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
   }
 

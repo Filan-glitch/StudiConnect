@@ -1,20 +1,56 @@
+/// This library contains the model for a [Group].
+///
+/// {@category MODELS}
+library models.group;
+
 import 'package:studiconnect/models/message.dart';
 import 'package:studiconnect/models/user.dart';
 
+/// A class that represents a group.
+///
+/// This class contains all the information about a group, including its ID, title, description,
+/// module, creator, members, join requests, creation date, and location.
 class Group {
+
+  /// The group's ID.
   final String id;
+
+  /// The group's title.
   final String? title;
+
+  /// The group's description.
   final String? description;
+
+  /// The group's module.
   final String? module;
+
+  /// The group's creator.
   final User? creator;
+
+  /// The group's members.
   final List<User>? members;
+
+  /// The group's join requests.
   final List<User>? joinRequests;
+
+  /// The group's creation date.
   final DateTime? createdAt;
+
+  /// The group's latitude.
   final double? lat;
+
+  /// The group's longitude.
   final double? lon;
+
+  /// The boolean value indicating whether the group has an image.
   final bool imageExists;
+
+  /// The group's messages.
   final List<Message>? messages;
 
+  /// Constructor for the [Group] class.
+  ///
+  /// Takes in the required and optional parameters and initializes the group with these values.
   const Group({
     required this.id,
     this.title,
@@ -30,6 +66,9 @@ class Group {
     this.messages,
   });
 
+  /// A factory constructor that creates a new instance of the [Group] class from a map.
+  ///
+  /// The [data] parameter is required and represents the map from which the group is created.
   factory Group.fromApi(Map<String, dynamic> data) {
     return Group(
       id: data['id'],
@@ -55,6 +94,11 @@ class Group {
     );
   }
 
+  /// A method that updates the properties of the group.
+  ///
+  /// The [id], [title], [description], [module], [creator], [members], [joinRequests], [createdAt],
+  /// [lat], [lon], and [imageExists] parameters are optional and represent the new values of the corresponding properties.
+  /// If a parameter is not provided, the corresponding property will not be updated.
   Group update({
     String? id,
     String? title,

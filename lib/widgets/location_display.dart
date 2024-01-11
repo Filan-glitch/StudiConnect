@@ -1,3 +1,8 @@
+/// This library contains the [LocationDisplay] widget.
+///
+/// {@category WIDGETS}
+library widgets.location_display;
+
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:geolocator/geolocator.dart';
@@ -6,24 +11,47 @@ import 'package:studiconnect/dialogs/select_location_dialog.dart';
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/services/logger_provider.dart';
 
+/// A widget that displays a location's address.
+///
+/// This widget is a stateful widget that takes a latitude and longitude as input
+/// and displays the corresponding address using the geocoding package.
 class LocationDisplay extends StatefulWidget {
+  /// The latitude and longitude of the location.
   final LatLng? position;
+
+  /// The location service status.
   final bool? serviceEnabled;
+
+  /// The location permission status.
   final LocationPermission? permission;
+
+  /// The location accuracy status.
   final LocationAccuracyStatus? accuracyStatus;
+
+  /// The error status.
   final bool? error;
 
+  /// Creates a [LocationDisplay].
+  ///
+  /// The [position] parameter must not be null.
   const LocationDisplay({super.key, required this.position, this.serviceEnabled, this.permission, this.accuracyStatus, this.error});
 
   @override
   State<LocationDisplay> createState() => _LocationDisplayState();
 }
 
+/// The state class for the LocationDisplay widget.
+///
+/// This class builds the widget and handles the state changes.
 class _LocationDisplayState extends State<LocationDisplay> {
   String? _address;
   String? _error;
   LatLng? _manualPosition;
 
+  /// A method that gets the address from the latitude and longitude.
+  ///
+  /// This method uses the geocoding package to get the address from the latitude and longitude.
+  /// If the address is not found, it sets the address to 'Keine Adresse gefunden'.
   Future<void> _getAddress() async {
     try {
       if (widget.position != null) {
@@ -45,6 +73,9 @@ class _LocationDisplayState extends State<LocationDisplay> {
     }
   }
 
+  /// A method that sets the error message based on the location service status and permission.
+  ///
+  /// This method checks the location service status and permission and sets the error message accordingly.
   void _errorMessage() {
     if (widget.serviceEnabled != null) {
       if (!widget.serviceEnabled!) {

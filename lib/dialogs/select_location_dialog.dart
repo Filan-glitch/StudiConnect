@@ -1,3 +1,8 @@
+/// This library contains the [SelectLocationDialog] widget.
+///
+/// {@category DIALOGS}
+library dialogs.select_location_dialog;
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -5,15 +10,28 @@ import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:studiconnect/dialogs/dialog_wrapper.dart';
 
+/// A widget that represents a dialog for selecting a location on a map.
+///
+/// This widget is a stateful widget that takes a function as input,
+/// which is called when a location is selected on the map.
+///
+/// The [onLocationSelected] parameter is required and represents the function
+/// that is called when a location is selected on the map.
 class SelectLocationDialog extends StatefulWidget {
+  /// The const constructor of the [SelectLocationDialog] widget.
   const SelectLocationDialog({required this.onLocationSelected, super.key});
 
+  /// The function that is called when a location is selected on the map.
   final void Function(LatLng location) onLocationSelected;
 
   @override
   State<SelectLocationDialog> createState() => _SelectLocationDialogState();
 }
 
+/// The state for the [SelectLocationDialog] widget.
+///
+/// This class defines the state for the [SelectLocationDialog] widget. It includes
+/// the selected location, the current location, and the location service.
 class _SelectLocationDialogState extends State<SelectLocationDialog> {
   LatLng? _selectedLocation;
   LatLng? _currentLocation;
@@ -21,6 +39,10 @@ class _SelectLocationDialogState extends State<SelectLocationDialog> {
 
   late final StreamSubscription<LocationData> _locationSubscription;
 
+  /// Sets up the location service.
+  ///
+  /// This method initializes the location service and requests the necessary permissions.
+  /// It also starts listening for location updates.
   void setupLocation() async {
     location = Location();
 

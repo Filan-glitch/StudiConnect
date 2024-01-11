@@ -1,3 +1,7 @@
+/// This library contains the functions for user.
+///
+/// {@category CONTROLLERS}
+library controllers.user;
 import 'dart:typed_data';
 
 import 'package:firebase_auth/firebase_auth.dart' hide User;
@@ -17,9 +21,13 @@ import 'package:studiconnect/services/storage/credentials.dart' as storage;
 import 'package:studiconnect/services/firebase/authentication.dart' as firebase;
 import 'package:studiconnect/constants.dart';
 
+/// Loads the user information from the storage and updates the state.
+///
+/// Returns a boolean indicating whether the operation was successful.
 Future<bool> loadUserInfo() async {
   final Map<String, String> credentials = await storage.loadCredentials();
 
+  // If there are no credentials, return false
   if (credentials.isEmpty) {
     return false;
   }
@@ -36,6 +44,7 @@ Future<bool> loadUserInfo() async {
     },
   );
 
+  // If the result is null, update the session ID in the state and navigate to the welcome page
   if (result == null) {
     store.dispatch(
       Action(
@@ -85,6 +94,9 @@ Future<bool> loadUserInfo() async {
   return true;
 }
 
+/// Updates the user profile with the provided information.
+///
+/// The [username], [university], [major], [lat], [lon], [bio], [mobile], and [discord] parameters are required and represent the new values of the corresponding properties of the user.
 Future<void> updateProfile(
   String username,
   String university,
@@ -109,6 +121,7 @@ Future<void> updateProfile(
       parser: (result) => result['updateProfile']['id'] as String
   );
 
+  // If the ID is null, update the session ID in the state and navigate to the welcome page
   if (id == null) {
     store.dispatch(
       Action(
@@ -123,9 +136,13 @@ Future<void> updateProfile(
     return;
   }
 
+  // Load the user information
   await loadUserInfo();
 }
 
+/// Deletes the user account.
+///
+/// The [credential] parameter is required and represents the credential of the user.
 Future<void> deleteAccount(String credential) async {
   try {
     log('Deleting account from Firebase');
@@ -156,6 +173,7 @@ Future<void> deleteAccount(String credential) async {
 
   showToast('Account erfolgreich gelöscht.');
 
+  // Update the session ID in the state and navigate to the welcome page
   store.dispatch(
     Action(
       ActionTypes.clear,
@@ -167,6 +185,9 @@ Future<void> deleteAccount(String credential) async {
   );
 }
 
+/// Uploads the provided profile image.
+///
+/// The [file] parameter is required and represents the image file to be uploaded.
 Future<void> uploadProfileImage(XFile file) async {
   Uint8List content;
   try {
@@ -189,6 +210,7 @@ Future<void> uploadProfileImage(XFile file) async {
     return;
   }
 
+  // Update the profile image availability in the state
   store.dispatch(
     Action(
       ActionTypes.setProfileImageAvailable,
@@ -204,6 +226,7 @@ Future<void> uploadProfileImage(XFile file) async {
       '$backendURL/api/group/${store.state.user?.id}/image');
 }
 
+/// Deletes the profile image.
 Future<void> deleteProfileImage() async {
   try {
     await runRestApi(
@@ -218,6 +241,7 @@ Future<void> deleteProfileImage() async {
     return;
   }
 
+  // Update the profile image availability in the state
   store.dispatch(
     Action(
       ActionTypes.setProfileImageAvailable,

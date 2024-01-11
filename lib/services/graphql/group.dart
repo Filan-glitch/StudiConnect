@@ -1,7 +1,15 @@
+/// This library contains all the GraphQL queries and mutations for the group entity.
+///
+/// {@category SERVICES}
+library services.graphql.group;
 import 'package:graphql/client.dart';
-
 import 'package:studiconnect/services/graphql/api.dart';
 
+/// Fetches the information of a group by its ID.
+///
+/// The [id] parameter is required and represents the ID of the group.
+/// Returns a Future that completes with a Map if the request was successful.
+/// The Map contains the group's information.
 Future<Map<String, dynamic>?> loadGroupInfo(String id) async {
   return query(
     QueryOptions(
@@ -56,6 +64,11 @@ Future<Map<String, dynamic>?> loadGroupInfo(String id) async {
   );
 }
 
+/// Creates a new group with the provided information.
+///
+/// The [title], [description], [module], [lat], and [lon] parameters are required.
+/// Returns a Future that completes with a Map if the request was successful.
+/// The Map contains the ID of the newly created group.
 Future<Map<String, dynamic>?> createGroup(
   String title,
   String description,
@@ -83,6 +96,11 @@ Future<Map<String, dynamic>?> createGroup(
   );
 }
 
+/// Updates the information of a group by its ID.
+///
+/// The [id], [title], [description], [module], [lat], and [lon] parameters are required.
+/// Returns a Future that completes with a Map if the request was successful.
+/// The Map contains the ID of the updated group.
 Future<Map<String, dynamic>?> updateGroup(
   String id,
   String title,
@@ -112,6 +130,11 @@ Future<Map<String, dynamic>?> updateGroup(
   );
 }
 
+/// Deletes a group by its ID.
+///
+/// The [id] parameter is required and represents the ID of the group.
+/// Returns a Future that completes with a Map if the request was successful.
+/// The Map is empty.
 Future<Map<String, dynamic>?> deleteGroup(
   String id,
 ) async {
@@ -129,6 +152,11 @@ Future<Map<String, dynamic>?> deleteGroup(
   );
 }
 
+/// Sends a join group request for a group by its ID.
+///
+/// The [id] parameter is required and represents the ID of the group.
+/// Returns a Future that completes with a Map if the request was successful.
+/// The Map is empty.
 Future<Map<String, dynamic>?> joinGroup(
   String id,
 ) async {
@@ -146,6 +174,11 @@ Future<Map<String, dynamic>?> joinGroup(
   );
 }
 
+/// Adds a member to a group.
+///
+/// The [id] and [user] parameters are required and represent the ID of the group and the user.
+/// Returns a Future that completes with a Map if the request was successful.
+/// The Map is empty.
 Future<Map<String, dynamic>?> addMember(String id, String user) async {
   return mutate(
     MutationOptions(
@@ -162,6 +195,11 @@ Future<Map<String, dynamic>?> addMember(String id, String user) async {
   );
 }
 
+/// Removes a member from a group.
+///
+/// The [id] and [user] parameters are required and represent the ID of the group and the user.
+/// Returns a Future that completes with a Map if the request was successful.
+/// The Map is empty.
 Future<Map<String, dynamic>?> removeMember(String id, String user) async {
   return mutate(
     MutationOptions(
@@ -178,6 +216,11 @@ Future<Map<String, dynamic>?> removeMember(String id, String user) async {
   );
 }
 
+/// Removes a join request from a group.
+///
+/// The [groupID] and [userID] parameters are required and represent the ID of the group and the user.
+/// Returns a Future that completes with a Map if the request was successful.
+/// The Map is empty.
 Future<Map<String, dynamic>?> removeJoinRequest(
     String groupID, String userID) async {
   return mutate(

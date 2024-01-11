@@ -1,5 +1,9 @@
-import 'dart:typed_data';
+/// This library contains functions for groups.
+///
+/// {@category CONTROLLERS}
+library controllers.groups;
 
+import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -16,6 +20,11 @@ import 'package:studiconnect/constants.dart';
 
 import '../services/graphql/errors/api_exception.dart';
 
+/// Searches for groups based on the provided module and radius.
+///
+/// The [module] parameter is required and represents the module to search for.
+///
+/// The [radius] parameter is required and represents the radius of the search.
 Future<void> searchGroups(String module, int radius) async {
   final List<Group>? result = await runApiService(
     apiCall: () => search_service.searchGroups(module, radius),
@@ -32,6 +41,9 @@ Future<void> searchGroups(String module, int radius) async {
   store.dispatch(Action(ActionTypes.updateSearchResults, payload: result));
 }
 
+/// Creates a new group with the provided title, description, module, latitude, and longitude.
+///
+/// The [title], [description], [module], [lat], and [lon] parameters are required and represent the corresponding properties of the new group.
 Future<bool> createGroup(String title, String description, String module,
     double lat, double lon) async {
   final String? id = await runApiService(
@@ -62,6 +74,9 @@ Future<bool> createGroup(String title, String description, String module,
   return true;
 }
 
+/// Updates the group with the provided ID, title, description, module, latitude, and longitude.
+///
+/// The [id], [title], [description], [module], [lat], and [lon] parameters are required and represent the new values of the corresponding properties of the group.
 Future<bool> updateGroup(String id, String title, String description,
     String module, double lat, double lon) async {
   try {
@@ -98,6 +113,9 @@ Future<bool> updateGroup(String id, String title, String description,
   return true;
 }
 
+/// Deletes the group with the provided ID.
+///
+/// The [id] parameter is required and represents the ID of the group to be deleted.
 Future<bool> deleteGroup(String id) async {
   try {
     await runApiService(
@@ -120,6 +138,9 @@ Future<bool> deleteGroup(String id) async {
   return true;
 }
 
+/// Sends a request to join the group with the provided ID.
+///
+/// The [id] parameter is required and represents the ID of the group to join.
 Future<bool> joinGroup(String id) async {
   try {
     await runApiService(
@@ -138,6 +159,9 @@ Future<bool> joinGroup(String id) async {
   return true;
 }
 
+/// Leaves the group with the provided ID.
+///
+/// The [id] parameter is required and represents the ID of the group to leave.
 Future<bool> leaveGroup(String id) async {
   try {
     await runApiService(
@@ -161,6 +185,9 @@ Future<bool> leaveGroup(String id) async {
   return true;
 }
 
+/// Adds a member to the group with the provided ID.
+///
+/// The [id] and [userID] parameters are required and represent the ID of the group and the ID of the user to add, respectively.
 Future<void> addMember(String id, String userID) async {
   try {
     await runApiService(
@@ -195,6 +222,9 @@ Future<void> addMember(String id, String userID) async {
   return;
 }
 
+/// Removes a member from the group with the provided ID.
+///
+/// The [id] and [userID] parameters are required and represent the ID of the group and the ID of the user to remove, respectively.
 Future<bool> removeMember(String id, String userID) async {
   try {
     await runApiService(
@@ -229,6 +259,9 @@ Future<bool> removeMember(String id, String userID) async {
   return true;
 }
 
+/// Removes a join request from the group with the provided ID.
+///
+/// The [groupID] and [userID] parameters are required and represent the ID of the group and the ID of the user whose join request is to be removed, respectively.
 Future<bool> removeJoinRequest(String groupID, String userID) async {
   try {
     await runApiService(
@@ -263,6 +296,12 @@ Future<bool> removeJoinRequest(String groupID, String userID) async {
   return true;
 }
 
+/// Uploads an image for the group with the provided ID.
+///
+/// This function reads the image file, sends a REST API request to the server to upload the image,
+/// and updates the group to indicate that the image exists.
+///
+/// Returns a Future that completes with a boolean indicating whether the upload was successful.
 Future<bool> uploadGroupImage(String id, XFile file) async {
   Uint8List content;
   try {
@@ -303,6 +342,12 @@ Future<bool> uploadGroupImage(String id, XFile file) async {
   return true;
 }
 
+/// Deletes the group image for the group with the provided ID.
+///
+/// This function sends a REST API request to the server to delete the group image.
+/// The server responds with a status indicating whether the deletion was successful.
+///
+/// Returns a Future that completes with a boolean indicating whether the deletion was successful.
 Future<bool> deleteGroupImage(String id) async {
   try {
     await runRestApi(
