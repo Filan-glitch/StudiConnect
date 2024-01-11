@@ -10,38 +10,42 @@ import 'package:studiconnect/models/user.dart';
 ///
 /// This class contains all the information about a group, including its ID, title, description,
 /// module, creator, members, join requests, creation date, and location.
-///
-/// The [id] parameter is required and represents the ID of the group.
-///
-/// The [title] parameter is optional and represents the title of the group.
-///
-/// The [description] parameter is optional and represents the description of the group.
-///
-/// The [module] parameter is optional and represents the module of the group.
-///
-/// The [creator] parameter is optional and represents the creator of the group.
-///
-/// The [members] parameter is optional and represents the members of the group.
-///
-/// The [joinRequests] parameter is optional and represents the join requests of the group.
-///
-/// The [createdAt] parameter is optional and represents the creation date of the group.
-///
-/// The [lat] and [lon] parameters are optional and represent the latitude and longitude of the group.
-///
-/// The [imageExists] parameter is optional and represents whether the group has an image.
 class Group {
+
+  /// The group's ID.
   final String id;
+
+  /// The group's title.
   final String? title;
+
+  /// The group's description.
   final String? description;
+
+  /// The group's module.
   final String? module;
+
+  /// The group's creator.
   final User? creator;
+
+  /// The group's members.
   final List<User>? members;
+
+  /// The group's join requests.
   final List<User>? joinRequests;
+
+  /// The group's creation date.
   final DateTime? createdAt;
+
+  /// The group's latitude.
   final double? lat;
+
+  /// The group's longitude.
   final double? lon;
+
+  /// The boolean value indicating whether the group has an image.
   final bool imageExists;
+
+  /// The group's messages.
   final List<Message>? messages;
 
   /// Constructor for the [Group] class.

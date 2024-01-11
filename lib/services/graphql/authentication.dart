@@ -32,6 +32,12 @@ Future<Map<String, dynamic>?> login(String idToken) async {
 }
 
 
+/// Logs in a user as a guest.
+///
+/// This function sends a GraphQL mutation to the server to log in a user as a guest.
+/// The server responds with a session ID and the user data if the login was successful.
+/// Returns a Future that completes with a Map if the login was successful.
+/// The Map contains the session ID and the user data.
 Future<Map<String, dynamic>?> loginAsGuest() async {
   return mutate(
     MutationOptions(

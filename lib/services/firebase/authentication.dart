@@ -10,7 +10,6 @@ import 'package:studiconnect/services/logger_provider.dart';
 
 /// Signs in a user with the provided email and password.
 ///
-/// The [email] and [password] parameters are required.
 /// Returns a Future that completes with the user's ID token if the sign in was successful.
 Future<String?> signInWithEmailAndPassword(
     String email, String password) async {
@@ -30,7 +29,6 @@ Future<String?> signInWithEmailAndPassword(
 
 /// Signs up a user with the provided email and password.
 ///
-/// The [email] and [password] parameters are required.
 /// Returns a Future that completes with the user's ID token if the sign up was successful.
 Future<String?> signUpWithEmailAndPassword(
     String email, String password) async {
@@ -94,6 +92,9 @@ Future<Map?> signInWithGoogle() async {
   };
 }
 
+/// Reauthenticates the current user with Google.
+///
+/// Returns a Future that completes with the user's ID token if the reauthentication was successful.
 Future<AuthCredential> reauthenticateWithGoogle() async {
   log('Reauthenticating with Google');
   final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -128,6 +129,12 @@ Future<AuthCredential> reauthenticateWithGoogle() async {
 }
 
 /// Signs out the current user.
+///
+/// If no user is signed in, nothing happens.
+///
+/// Returns a Future that completes when the sign out is finished.
+///
+/// The user is signed out from Firebase and Google.
 Future<void> signOut() async {
   log('Signing out');
   if (FirebaseAuth.instance.currentUser == null) {
@@ -142,7 +149,7 @@ Future<void> signOut() async {
 
 /// Sends a password reset email to the user.
 ///
-/// The [email] parameter is required.
+/// The user can use the link in the email to reset their password.
 Future<void> sendPasswordResetEmail(String email) async {
   log('Sending password reset email');
   await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
@@ -151,7 +158,7 @@ Future<void> sendPasswordResetEmail(String email) async {
 
 /// Deletes the current user's email account.
 ///
-/// The [password] parameter is required.
+/// The user must reauthenticate with their password before the account can be deleted.
 Future<void> deleteEmailAccount(String password) async {
   try {
     log('Reauthenticating user');
@@ -172,7 +179,9 @@ Future<void> deleteEmailAccount(String password) async {
   }
 }
 
-/// Deletes the current user's Google account.
+/// Deletes the current user's google auth account
+///
+/// The user must reauthenticate with their google account before the account can be deleted.
 Future<void> deleteGoogleAccount() async {
   log('Reauthenticating user');
   await FirebaseAuth.instance.currentUser
@@ -186,7 +195,7 @@ Future<void> deleteGoogleAccount() async {
 
 /// Updates the current user's password.
 ///
-/// The [oldPassword] and [newPassword] parameters are required.
+/// The user must reauthenticate with their current password before the password can be updated.
 Future<void> updatePassword(String oldPassword, String newPassword) async {
   try {
     log('Reauthenticating user');

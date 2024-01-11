@@ -13,11 +13,9 @@ import 'package:studiconnect/models/user.dart';
 ///
 /// This widget is a stateless widget that takes a user and a groupID as input,
 /// and displays a dialog asking the user if they really want to remove the member.
-///
-/// The [user] parameter is required and represents the user that is to be removed.
-///
-/// The [groupID] parameter is required and represents the ID of the group from which the user is to be removed.
 class RemoveMemberDialog extends StatelessWidget {
+
+  /// Creates a [RemoveMemberDialog] widget.
   const RemoveMemberDialog({
     required this.user,
     required this.groupID,

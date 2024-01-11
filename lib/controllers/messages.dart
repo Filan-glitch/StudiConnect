@@ -1,3 +1,8 @@
+/// This library contains the message controller.
+///
+/// {@category CONTROLLERS}
+library controllers.messages;
+
 import 'package:oktoast/oktoast.dart';
 import 'package:studiconnect/controllers/api.dart';
 import 'package:studiconnect/main.dart';
@@ -11,6 +16,11 @@ import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/services/websocket/messages.dart' as websocket;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+/// Fetches messages for a specific group.
+///
+/// This function sends a GraphQL query to fetch messages for a specific group.
+///
+/// Returns a [Future] that completes with the number of messages fetched.
 Future<int> getMessages(String groupID, int page, bool replace) async {
   log('Calling API to get messages');
   final List<Message>? result = await runApiService(
@@ -69,6 +79,11 @@ Future<int> getMessages(String groupID, int page, bool replace) async {
   return result.length;
 }
 
+/// Sends a message to a specific group.
+///
+/// This function sends a GraphQL mutation to send a message to a specific group.
+///
+/// Returns a [Future] that completes with a boolean indicating whether the message was sent successfully.
 Future<bool> sendMessage(String groupID, String content) async {
   try {
     log('Calling API to send message');
@@ -87,6 +102,11 @@ Future<bool> sendMessage(String groupID, String content) async {
   return true;
 }
 
+/// Subscribes to messages for a specific group.
+///
+/// This function opens a WebSocket connection to receive messages for a specific group.
+///
+/// Returns a [Future] that completes with a [WebSocketSink] representing the WebSocket connection.
 Future<WebSocketSink?> subscribeToMessages(
     String groupID, void Function() onMessage) async {
   log('Subsribing to $groupID');

@@ -2,6 +2,7 @@
 ///
 /// {@category DIALOGS}
 library dialogs.dialog_wrapper;
+
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
@@ -9,16 +10,9 @@ import 'package:flutter/material.dart';
 ///
 /// This widget is a stateless widget that takes a title and a list of child widgets as input,
 /// and displays them in a dialog with a blurred background.
-///
-/// The [title] parameter is optional and defaults to "Stundenplan". It represents
-/// the title that will be displayed at the top of the dialog.
-///
-/// The [children] parameter is optional and should contain the list of widgets
-/// that will be displayed in the dialog.
-///
-/// The [isDefaultDialog] parameter is optional and defaults to true. If set to true,
-/// the dialog will have a default padding and the title will be displayed.
 class DialogWrapper extends StatelessWidget {
+
+  /// Creates a [DialogWrapper] widget.
   const DialogWrapper({
     this.title = 'Stundenplan',
     this.children,

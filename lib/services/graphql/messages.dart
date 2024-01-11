@@ -1,6 +1,16 @@
+/// This library contains the GraphQL services for messages.
+///
+/// {@category SERVICES}
+library services.graphql.messages;
+
 import 'package:graphql/client.dart';
 import 'package:studiconnect/services/graphql/api.dart';
 
+/// Fetches messages for a specific group.
+///
+/// This function sends a GraphQL query to fetch messages for a specific group.
+///
+/// Returns a [Future] that completes with a map containing the response data.
 Future<Map<String, dynamic>?> getMessages(String groupID, int page) async {
   return query(
     QueryOptions(
@@ -25,6 +35,11 @@ Future<Map<String, dynamic>?> getMessages(String groupID, int page) async {
   );
 }
 
+/// Sends a message to a specific group.
+///
+/// This function sends a GraphQL mutation to send a message to a specific group.
+///
+/// Returns a [Future] that completes with a map containing the response data.
 Future<Map<String, dynamic>?> sendMessage(
   String groupID,
   String content,

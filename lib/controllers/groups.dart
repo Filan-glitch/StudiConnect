@@ -296,6 +296,12 @@ Future<bool> removeJoinRequest(String groupID, String userID) async {
   return true;
 }
 
+/// Uploads an image for the group with the provided ID.
+///
+/// This function reads the image file, sends a REST API request to the server to upload the image,
+/// and updates the group to indicate that the image exists.
+///
+/// Returns a Future that completes with a boolean indicating whether the upload was successful.
 Future<bool> uploadGroupImage(String id, XFile file) async {
   Uint8List content;
   try {
@@ -336,6 +342,12 @@ Future<bool> uploadGroupImage(String id, XFile file) async {
   return true;
 }
 
+/// Deletes the group image for the group with the provided ID.
+///
+/// This function sends a REST API request to the server to delete the group image.
+/// The server responds with a status indicating whether the deletion was successful.
+///
+/// Returns a Future that completes with a boolean indicating whether the deletion was successful.
 Future<bool> deleteGroupImage(String id) async {
   try {
     await runRestApi(

@@ -10,6 +10,15 @@ import 'package:studiconnect/models/redux/store.dart';
 import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/services/rest/api.dart';
 
+/// Checks if a profile image is available for the current user.
+///
+/// This function sends a GET request to the server to check if a profile image is available for the current user.
+/// The server responds with a status code, which is processed by this function.
+/// If the status code is 200, it means that a profile image is available and the function returns true.
+/// If the status code is 404, it means that a profile image is not available and the function returns false.
+/// If the status code indicates another type of error, the [processHttpStatusCodes] function is called to process the error and the function returns false.
+///
+/// Returns a [Future] that completes with a boolean indicating whether a profile image is available or not.
 Future<bool> profileImageAvailable() async {
   log('Checking if profile image is available');
   final http.Response response = await http.get(
