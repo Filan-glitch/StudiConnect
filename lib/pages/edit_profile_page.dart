@@ -21,7 +21,7 @@ class EditProfilePage extends StatefulWidget {
 
 class _EditProfilePage extends State<EditProfilePage> {
   late final GlobalKey<FormState> _formKey;
-  late final UniqueKey _locationKey;
+  late UniqueKey _locationKey;
   late final TextEditingController _usernameController;
   late final TextEditingController _majorController;
   late final TextEditingController _universityController;
@@ -75,10 +75,12 @@ class _EditProfilePage extends State<EditProfilePage> {
       (value) {
         log('Got current position: $value, setting state...');
         setState(() {
+          _locationKey = UniqueKey();
           _selectedLocation = LatLng(value.latitude, value.longitude);
         });
       },
       onError: (error) {
+        _locationKey = UniqueKey();
         _selectedLocation = const LatLng(0, 0);
         if (error.toString() == 'Location services are disabled.') {
           setState(() {

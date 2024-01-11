@@ -62,7 +62,7 @@ class _LocationDisplayState extends State<LocationDisplay> {
       setState(() {
         _error = 'Standortberechtigung permanent verweigert.';
       });
-    } else if (widget.accuracyStatus != LocationAccuracyStatus.precise) {
+    } else if (widget.accuracyStatus != null && widget.accuracyStatus != LocationAccuracyStatus.precise) {
       setState(() {
         _error = 'Standortgenauigkeit ist nicht hoch genug.';
       });
