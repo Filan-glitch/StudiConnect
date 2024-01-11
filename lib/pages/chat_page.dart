@@ -7,6 +7,7 @@ import 'package:studiconnect/models/group.dart';
 import 'package:studiconnect/models/group_parameter.dart';
 import 'package:studiconnect/models/menu_action.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/chat_bubble.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -34,7 +35,7 @@ class _ChatPageState extends State<ChatPage> {
     super.initState();
 
     Future.delayed(Duration.zero, () {
-      setState(() {
+      setState(() async {
         groupID = ModalRoute.of(context)!.settings.arguments as String;
         subscribeToMessages(groupID!, _scrollToBottom)
             .then((value) => sink = value);
@@ -61,10 +62,14 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _scrollToBottom() {
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
-      duration: const Duration(milliseconds: 200),
-      curve: Curves.easeOut,
+    log('Scrolled to bottom');
+    Future.delayed(
+      const Duration(milliseconds: 100),
+      () => _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 50),
+        curve: Curves.bounceIn,
+      ),
     );
   }
 
