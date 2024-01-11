@@ -18,7 +18,7 @@ import 'package:studiconnect/models/redux/store.dart';
 import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/themes/light_theme.dart';
 import 'package:studiconnect/themes/dark_theme.dart';
-import 'package:studiconnect/pages/registration_page.dart';
+import 'package:studiconnect/pages/register_page.dart';
 import 'package:studiconnect/pages/password_reset_page.dart';
 import 'package:studiconnect/firebase_options.dart';
 import 'package:studiconnect/pages/login_page.dart';
