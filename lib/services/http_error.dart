@@ -1,3 +1,8 @@
+/// This library contains the [ApiException] class and the [ErrorCategory] enum.
+///
+/// {@category EXCEPTIONS}
+library service.http_error;
+
 /// Represents an API exception.
 ///
 /// This class implements the [Exception] interface and provides a set of predefined exceptions

@@ -1,3 +1,8 @@
+/// This library contains the GPS service.
+///
+/// {@category SERVICES}
+library service.gps;
+
 import 'package:geolocator/geolocator.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:studiconnect/services/logger_provider.dart';

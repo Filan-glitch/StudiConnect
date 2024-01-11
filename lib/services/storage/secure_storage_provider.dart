@@ -1,3 +1,8 @@
+/// This library provides a secure storage instance for storing sensitive data.
+///
+/// {@category SERVICES}
+library services.storage.secure_storage_provider;
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 /// Returns the Android options for secure storage.
