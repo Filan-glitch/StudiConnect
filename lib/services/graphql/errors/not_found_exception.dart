@@ -10,13 +10,9 @@ import 'package:studiconnect/services/graphql/errors/api_exception.dart';
 /// This class extends the [ApiException] class and provides a custom
 /// exception type for handling not found errors. It includes a default error
 /// message and a default error code.
-///
-/// The [message] parameter is optional and defaults to a not found error message.
-/// It represents the error message associated with the exception.
-///
-/// The [code] parameter is optional and defaults to 404. It represents the error code associated
-/// with the exception.
 class NotFoundException extends ApiException {
+
+  /// The default constructor.
   NotFoundException({
     super.message = defaultMessage,
     super.code = 404,

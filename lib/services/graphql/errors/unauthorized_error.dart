@@ -10,13 +10,9 @@ import 'package:studiconnect/services/graphql/errors/api_exception.dart';
 /// This class extends the [ApiException] class and provides a custom
 /// exception type for handling unauthorized errors. It includes a default error
 /// message and a default error code.
-///
-/// The [message] parameter is optional and defaults to an unauthorized error message.
-/// It represents the error message associated with the exception.
-///
-/// The [code] parameter is optional and defaults to 401. It represents the error code associated
-/// with the exception.
 class UnauthorizedException extends ApiException {
+
+  /// The default constructor.
   UnauthorizedException({
     super.message = defaultMessage,
     super.code = 401,
