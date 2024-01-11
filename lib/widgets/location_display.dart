@@ -29,7 +29,7 @@ class _LocationDisplayState extends State<LocationDisplay> {
         log('Got address: $place');
         setState(() {
           _address =
-          '${place.street ?? ''}\n ${place.postalCode ?? ''} ${place.locality ?? ''}';
+          '${place.street ?? ''}\n${place.postalCode ?? ''} ${place.locality ?? ''}';
         });
       }
     } catch (e) {
@@ -74,8 +74,9 @@ class _LocationDisplayState extends State<LocationDisplay> {
         Icon(
           Icons.location_on,
           color: Theme.of(context).textTheme.bodySmall?.color,
-          size: 16.0,
+          size: 20.0,
         ),
+        const SizedBox(width: 5),
         Text(
           _error ?? _address ?? 'Adresse wird geladen...',
           style: TextStyle(
