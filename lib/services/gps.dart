@@ -1,4 +1,5 @@
 import 'package:geolocator/geolocator.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:studiconnect/services/logger_provider.dart';
 
 /// Determine the current position of the device.
@@ -51,10 +52,28 @@ Future<Position> determinePosition() async {
   }
   log('Location permissions are granted');
 
+  // Check if the AccuracyStatus is set to precise
+  final accuracyStatus = await Geolocator.getLocationAccuracy();
+  if (accuracyStatus != LocationAccuracyStatus.precise) {
+    log('Location accuracy is not precise, requesting settings');
+    showToast('Bitte aktiviere die hohe Standortgenauigkeit');
+    return Future.error('Location accuracy is not precise');
+  }
+
   // When we reach here, permissions are granted and we can
   // continue accessing the position of the device.
   log('Getting current position');
-  final position = await Geolocator.getCurrentPosition();
+  Position? position;
+  try {
+    position = await Geolocator.getCurrentPosition(timeLimit: const Duration(seconds: 15));
+  } on Exception catch (e) {
+    logWarning(e.toString());
+    position = await Geolocator.getLastKnownPosition();
+    if(position == null) {
+      logWarning('Could not get last known position');
+      return Future.error('Could not get last known position');
+    }
+  }
   log('Got current position: $position');
   return position;
 }

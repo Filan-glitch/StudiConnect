@@ -21,7 +21,7 @@ class EditProfilePage extends StatefulWidget {
 
 class _EditProfilePage extends State<EditProfilePage> {
   late final GlobalKey<FormState> _formKey;
-  late UniqueKey _locationKey;
+  late final UniqueKey _locationKey;
   late final TextEditingController _usernameController;
   late final TextEditingController _majorController;
   late final TextEditingController _universityController;
@@ -32,6 +32,8 @@ class _EditProfilePage extends State<EditProfilePage> {
   LatLng? _selectedLocation;
   bool? _serviceEnabled;
   LocationPermission? _permission;
+  LocationAccuracyStatus? _accuracyStatus;
+  bool? _error;
 
   @override
   void initState() {
@@ -73,12 +75,10 @@ class _EditProfilePage extends State<EditProfilePage> {
       (value) {
         log('Got current position: $value, setting state...');
         setState(() {
-          _locationKey = UniqueKey();
           _selectedLocation = LatLng(value.latitude, value.longitude);
         });
       },
       onError: (error) {
-        _locationKey = UniqueKey();
         _selectedLocation = const LatLng(0, 0);
         if (error.toString() == 'Location services are disabled.') {
           setState(() {
@@ -93,7 +93,12 @@ class _EditProfilePage extends State<EditProfilePage> {
           setState(() {
             _permission = LocationPermission.deniedForever;
           });
-        } else {
+        } else if(error.toString() == 'Location accuracy is not precise') {
+          setState(() {
+            _accuracyStatus = LocationAccuracyStatus.reduced;
+          });
+        }
+        else {
           setState(() {
             _permission = LocationPermission.unableToDetermine;
           });
@@ -213,18 +218,17 @@ class _EditProfilePage extends State<EditProfilePage> {
                     padding: const EdgeInsets.only(
                       top: 20.0,
                     ),
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width - 60,
-                      child: LocationDisplay(
-                        key: _locationKey,
-                        position: _selectedLocation,
-                        serviceEnabled: _serviceEnabled,
-                        permission: _permission,
-                      ),
+                    child: LocationDisplay(
+                      key: _locationKey,
+                      position: _selectedLocation,
+                      serviceEnabled: _serviceEnabled,
+                      permission: _permission,
+                      accuracyStatus: _accuracyStatus,
+                      error: _error,
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 10.0, bottom: 20.0),
+                    padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
                     child: Column(
                       children: [
                         SizedBox(

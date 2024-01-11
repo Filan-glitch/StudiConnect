@@ -24,6 +24,7 @@ class _SearchPageState extends State<SearchPage> {
   late final TextEditingController _moduleInputController;
   late double _radius;
   late Timer _delayQueryTimer;
+  String? _error;
 
   void _loadSearchResults() {
     log('Loading search results...');
@@ -44,7 +45,16 @@ class _SearchPageState extends State<SearchPage> {
     _moduleInputController = TextEditingController();
     _delayQueryTimer = Timer(
       const Duration(seconds: 1),
-      _loadSearchResults,
+        () {
+          if (StoreProvider.of<AppState>(context).state.user?.lat == null ||
+            StoreProvider.of<AppState>(context).state.user?.lon == null) {
+            setState(() {
+              _error = 'Bitte bearbeite dein Profil und gib deinen Standort an.';
+            });
+            return;
+          }
+          _loadSearchResults;
+        }
     );
 
     store.dispatch(
@@ -75,7 +85,16 @@ class _SearchPageState extends State<SearchPage> {
             _delayQueryTimer.cancel();
             _delayQueryTimer = Timer(
               const Duration(seconds: 1),
-              _loadSearchResults,
+              () {
+                if (StoreProvider.of<AppState>(context).state.user?.lat == null ||
+                    StoreProvider.of<AppState>(context).state.user?.lon == null) {
+                  setState(() {
+                    _error = 'Bitte bearbeite dein Profil und gib deinen Standort an.';
+                  });
+                  return;
+                }
+                _loadSearchResults();
+              },
             );
           },
           style: const TextStyle(color: Colors.white),
@@ -110,7 +129,16 @@ class _SearchPageState extends State<SearchPage> {
                     _delayQueryTimer.cancel();
                     _delayQueryTimer = Timer(
                       const Duration(seconds: 1),
-                      _loadSearchResults,
+                        () {
+                          if (StoreProvider.of<AppState>(context).state.user?.lat == null ||
+                              StoreProvider.of<AppState>(context).state.user?.lon == null) {
+                            setState(() {
+                              _error = 'Bitte bearbeite dein Profil und gib deinen Standort an.';
+                            });
+                            return;
+                          }
+                          _loadSearchResults;
+                        }
                     );
                   },
                 ),
@@ -164,8 +192,8 @@ class _SearchPageState extends State<SearchPage> {
                       constraints: BoxConstraints(
                         minHeight: constraints.maxHeight,
                       ),
-                      child: const Center(
-                        child: Text('Keine Ergebnisse'),
+                      child: Center(
+                        child: Text(_error ?? 'Keine Ergebnisse'),
                       ),
                     ),
                   ),
