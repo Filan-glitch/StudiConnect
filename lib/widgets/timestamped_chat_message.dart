@@ -1,8 +1,22 @@
+/// A chat message with a timestamp.
+///
+/// {@category WIDGETS}
+library widgets.timestamped_chat_message;
+
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 
+/// A widget that represents a chat message with a timestamp.
+///
+/// This widget is a [LeafRenderObjectWidget] that takes the sender, the time the message was sent,
+/// the text of the message, and the brightness as input.
+///
+/// The [sender], [sentAt], and [text] parameters are required.
+/// The [brightness] parameter is optional and defaults to [Brightness.light].
 class TimestampedChatMessage extends LeafRenderObjectWidget {
+
+  /// The const constructor of the [TimestampedChatMessage] widget.
   const TimestampedChatMessage({
     super.key,
     required this.sender,
@@ -11,9 +25,16 @@ class TimestampedChatMessage extends LeafRenderObjectWidget {
     this.brightness = Brightness.light,
   });
 
+  /// The sender of the message.
   final String sender;
+
+  /// The time the message was sent.
   final String sentAt;
+
+  /// The text of the message.
   final String text;
+
+  /// The brightness of the message.
   final Brightness brightness;
 
   @override
@@ -38,7 +59,16 @@ class TimestampedChatMessage extends LeafRenderObjectWidget {
   }
 }
 
+
+/// A class that represents the render object for a [TimestampedChatMessage].
+///
+/// This class is a [RenderBox] that takes the sender, the time the message was sent,
+/// the text of the message, the text direction, and the brightness as input.
+///
+/// The [sender], [sentAt], [text], [textDirection], and [brightness] parameters are required.
 class TimestampedChatMessageRenderObject extends RenderBox {
+
+  /// Creates a new instance of [TimestampedChatMessageRenderObject].
   TimestampedChatMessageRenderObject({
     required String sender,
     required String sentAt,
@@ -81,7 +111,10 @@ class TimestampedChatMessageRenderObject extends RenderBox {
   late double _sentAtLineWidth;
   late int _numMessageLines;
 
+  /// A getter of the sender of the message.
   String get sender => _sender;
+
+  /// A setter of the sender of the message.
   set sender(String value) {
     if (value == _sender) return;
     _sender = value;
@@ -90,7 +123,10 @@ class TimestampedChatMessageRenderObject extends RenderBox {
     markNeedsSemanticsUpdate();
   }
 
+  /// A getter of the text of the message.
   String get text => _text;
+
+  /// A setter of the text of the message.
   set text(String value) {
     if (value == _text) return;
     _text = value;
@@ -100,7 +136,10 @@ class TimestampedChatMessageRenderObject extends RenderBox {
     markNeedsSemanticsUpdate();
   }
 
+  /// A getter of the time the message was sent.
   String get sentAt => _sentAt;
+
+  /// A setter of the time the message was sent.
   set sentAt(String value) {
     if (value == _sentAt) return;
     _sentAt = value;
@@ -110,7 +149,10 @@ class TimestampedChatMessageRenderObject extends RenderBox {
     markNeedsSemanticsUpdate();
   }
 
+  /// A getter of the brightness of the message.
   Brightness get brightness => _brightness;
+
+  /// A setter of the brightness of the message.
   set brightness(Brightness value) {
     if (value == _brightness) return;
     _brightness = value;
@@ -119,7 +161,10 @@ class TimestampedChatMessageRenderObject extends RenderBox {
     markNeedsPaint();
   }
 
+  /// A getter of the text direction of the message.
   TextDirection get textDirection => _textDirection;
+
+  /// A setter of the text direction of the message.
   set textDirection(TextDirection value) {
     if (value == _textDirection) return;
     _textDirection = value;
@@ -127,13 +172,18 @@ class TimestampedChatMessageRenderObject extends RenderBox {
     _sentAtTextPainter.textDirection = value;
   }
 
+  /// A getter of the text span of the message.
   TextSpan get textTextSpan => TextSpan(
       text: _text,
       style: TextStyle(
         color: brightness == Brightness.light ? Colors.black : Colors.white,
       ));
+
+  /// A getter of the text span of the time the message was sent.
   TextSpan get sentAtTextSpan =>
       TextSpan(text: _sentAt, style: const TextStyle(color: Colors.grey));
+
+  /// A getter of the text span of the sender of the message.
   TextSpan get senderTextSpan => TextSpan(
       text: _sender,
       style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold));

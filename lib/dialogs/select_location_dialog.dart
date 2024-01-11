@@ -2,6 +2,7 @@
 ///
 /// {@category DIALOGS}
 library dialogs.select_location_dialog;
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -17,8 +18,10 @@ import 'package:studiconnect/dialogs/dialog_wrapper.dart';
 /// The [onLocationSelected] parameter is required and represents the function
 /// that is called when a location is selected on the map.
 class SelectLocationDialog extends StatefulWidget {
+  /// The const constructor of the [SelectLocationDialog] widget.
   const SelectLocationDialog({required this.onLocationSelected, super.key});
 
+  /// The function that is called when a location is selected on the map.
   final void Function(LatLng location) onLocationSelected;
 
   @override

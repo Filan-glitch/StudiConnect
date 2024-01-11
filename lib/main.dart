@@ -27,11 +27,17 @@ import 'package:studiconnect/pages/home_page.dart';
 import 'package:studiconnect/pages/welcome_page.dart';
 import 'package:studiconnect/pages/delete_account_page.dart';
 
+/// The main function of the application.
+///
+/// This function is responsible for initializing Firebase, setting up error handling,
+/// loading user credentials, and starting the Flutter application.
 Future<void> main() async {
+  // Log the start of the application and the mode it's running in.
   log('Starting...');
   log('Running in ${kDebugMode ? 'debug' : 'release'} mode');
   log('Running on ${defaultTargetPlatform.toString().split('.').last}');
 
+  // Initialize Widgets Binding and Firebase.
   log('Initializing Widgets Binding...');
   final WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -41,6 +47,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  // Set up error handling for Flutter and the platform.
   FlutterError.onError = (errorDetails) {
     if (errorDetails.library == 'image resource service' &&
         errorDetails.exception.toString().contains('404')) {
@@ -54,16 +61,23 @@ Future<void> main() async {
     FirebaseCrashlytics.instance.recordError(error, stack);
     return true;
   };
-  // setup
+
+  // Load user credentials and start the Flutter application.
   log('Setting up...');
   loadCredentials();
 
   runApp(const MyApp());
 }
 
+/// The global navigator key.
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
+/// The main widget of the application.
+///
+/// This widget is a [StatelessWidget] that sets up the Redux store, toast notifications,
+/// localization, navigation, and routes for the application.
 class MyApp extends StatelessWidget {
+  /// The Constructor of the [MyApp] class.
   const MyApp({super.key});
 
   @override

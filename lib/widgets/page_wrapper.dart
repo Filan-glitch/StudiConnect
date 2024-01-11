@@ -18,8 +18,13 @@ import 'package:studiconnect/models/menu_action.dart';
 
 /// Enum representing the type of page.
 enum PageType {
+  /// Represents a page with a basic empty design.
   empty,
+
+  /// Represents a page with a simple design.
   simple,
+
+  /// Represents a page with a complex design.
   complex,
 }
 
@@ -41,13 +46,16 @@ enum PageType {
 ///
 /// The [headerControls] parameter is optional and defaults to an empty list. It represents the controls in the header of the page.
 ///
-/// The [simpleDesign] parameter is optional and defaults to false. If set to true, the page will have a simple design.
+/// The [type] parameter is optional and defaults to PageType.simple. It represents the type of the page.
 ///
 /// The [padding] parameter is optional and defaults to EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0).
 /// It represents the padding of the main content of the page.
 ///
 /// The [overrideLoadingScreen] parameter is optional and defaults to false. If set to true, the loading screen will be overridden.
+///
+/// The [showLoading] parameter is optional and defaults to true. If set to false, the loading screen will not be shown.
 class PageWrapper extends StatefulWidget {
+  /// The const constructor of the [PageWrapper] widget.
   const PageWrapper({
     required this.title,
     required this.body,
@@ -65,23 +73,50 @@ class PageWrapper extends StatefulWidget {
     super.key,
   });
 
+  /// The body of the page.
   final Widget body;
+
+  /// The bottom navigation bar of the page.
   final Widget? bottomNavigationBar;
+
+  /// The controls in the header of the page to have more advanced functionality.
   final List<Widget> headerControls;
+
+  /// The title of the page.
   final String title;
+
+  /// The actions in the action menu.
   final List<MenuAction> menuActions;
+
+  /// The type of the page.
   final PageType type;
+
+  /// The padding of the main content of the page.
   final EdgeInsets padding;
+
+  /// Whether the loading screen should be overridden.
   final bool overrideLoadingScreen;
+
+  /// Whether the loading screen should be shown.
   final bool showLoading;
 
   @override
   State<PageWrapper> createState() => _PageWrapperState();
 }
 
+/// The state for the [PageWrapper] widget.
+///
+/// This class contains the logic for handling the user's interactions with the page.
+/// It includes methods for handling connectivity changes and showing the action menu.
 class _PageWrapperState extends State<PageWrapper> {
   late final StreamSubscription<ConnectivityResult> subscription;
 
+  /// Handles connectivity changes.
+  ///
+  /// This method is called when the connectivity changes.
+  /// It dispatches an action to the Redux store to update the connection state.
+  ///
+  /// The [result] parameter is required and represents the new connectivity result.
   void _onConnectivityChanged(ConnectivityResult result) {
     store.dispatch(
       redux.Action(
@@ -256,6 +291,9 @@ class _PageWrapperState extends State<PageWrapper> {
   }
 
   /// Shows the action menu.
+  ///
+  /// This method is called when the user taps on the action menu button.
+  /// It displays a modal bottom sheet with the action menu.
   void _showActionMenu(BuildContext context) {
     showModalBottomSheet(
       isScrollControlled: true,

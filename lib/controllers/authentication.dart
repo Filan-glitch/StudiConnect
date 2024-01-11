@@ -213,6 +213,11 @@ Future<void> signUpWithEmailAndPassword(String email, String password) async {
   );
 }
 
+/// Signs in a user as a guest.
+///
+/// If the sign in is successful, the function dispatches an action to update the session ID in the store,
+/// loads the user's information, navigates to the home page, and saves the user's credentials in shared preferences.
+/// If the sign in is not successful, the function shows a toast with an error message.
 Future<void> signInAsGuest() async {
   log('Signing in as guest');
   final Map<String, dynamic>? session = await runApiService(
