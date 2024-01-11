@@ -3,8 +3,6 @@
 /// {@category SERVICES}
 library services.graphql.api;
 
-import 'dart:developer';
-import 'package:flutter/foundation.dart';
 import 'package:graphql/client.dart';
 import 'package:studiconnect/constants.dart';
 import 'package:studiconnect/models/redux/store.dart';

@@ -20,7 +20,7 @@ class ApiException implements Exception {
 
   /// The default error message to be used if no custom message is provided.
   static const String defaultMessage =
-      "Es ist ein unbekannter Fehler aufgetreten.";
+      'Es ist ein unbekannter Fehler aufgetreten.';
 
   /// Creates an [ApiException].
   ///

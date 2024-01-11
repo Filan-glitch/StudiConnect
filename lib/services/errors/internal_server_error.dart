@@ -25,5 +25,5 @@ class InternalServerException extends ApiException {
   /// The default error message to be used if no custom message is provided.
   /// It indicates that an error occurred on the server.
   static const String defaultMessage =
-      "Auf dem Server ist ein Fehler aufgetreten.";
+      'Auf dem Server ist ein Fehler aufgetreten.';
 }

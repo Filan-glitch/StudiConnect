@@ -25,5 +25,5 @@ class NotFoundException extends ApiException {
   /// The default error message to be used if no custom message is provided.
   /// It indicates that the requested resource was not found.
   static const String defaultMessage =
-      "Die angeforderte Ressource wurde nicht gefunden.";
+      'Die angeforderte Ressource wurde nicht gefunden.';
 }

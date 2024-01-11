@@ -69,8 +69,9 @@ class PasswordResetPage extends StatelessWidget {
                   triggerPasswordReset(_emailController.text);
                   Navigator.pop(context);
                 },
-                child: const Text("Passwort zurücksetzen"),
+                child: const Text('Passwort zurücksetzen'),
               ),
+            ),
             ElevatedButton(
               onPressed: () async {
                 if(_emailController.text.isEmpty) {

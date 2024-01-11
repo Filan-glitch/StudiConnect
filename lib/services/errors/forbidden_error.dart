@@ -25,5 +25,5 @@ class ForbiddenException extends ApiException {
   /// The default error message to be used if no custom message is provided.
   /// It indicates that the user does not have permission for the action.
   static const String defaultMessage =
-      "Sie haben keine Berechtigung für diese Aktion.";
+      'Sie haben keine Berechtigung für diese Aktion.';
 }

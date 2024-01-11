@@ -24,5 +24,5 @@ class InputException extends ApiException {
 
   /// The default error message to be used if no custom message is provided.
   /// It indicates that the input is invalid.
-  static const String defaultMessage = "Die Eingabe ist ungültig.";
+  static const String defaultMessage = 'Die Eingabe ist ungültig.';
 }

@@ -24,5 +24,5 @@ class UnauthorizedException extends ApiException {
 
   /// The default error message to be used if no custom message is provided.
   /// It indicates that the user needs to authenticate again.
-  static const String defaultMessage = "Bitte melden Sie sich erneut an.";
+  static const String defaultMessage = 'Bitte melden Sie sich erneut an.';
 }
