@@ -3,39 +3,42 @@
 /// {@category CONTROLLERS}
 library controllers.user;
 import 'dart:typed_data';
+
+import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:image_picker/image_picker.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/redux/actions.dart';
 import 'package:studiconnect/models/redux/store.dart';
 import 'package:studiconnect/models/user.dart';
 import 'package:studiconnect/controllers/api.dart';
+import 'package:studiconnect/services/graphql/errors/api_exception.dart';
 import 'package:studiconnect/services/graphql/user.dart' as service;
+import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/services/rest/profile_image.dart' as rest_service;
 import 'package:studiconnect/services/storage/credentials.dart' as storage;
 import 'package:studiconnect/services/firebase/authentication.dart' as firebase;
+import 'package:studiconnect/constants.dart';
 
 /// Loads the user information from the storage and updates the state.
 ///
 /// Returns a boolean indicating whether the operation was successful.
 Future<bool> loadUserInfo() async {
-  // Load the credentials from the storage
-  Map<String, String> credentials = await storage.loadCredentials();
+  final Map<String, String> credentials = await storage.loadCredentials();
 
   // If there are no credentials, return false
   if (credentials.isEmpty) {
     return false;
   }
 
-  // Get the user ID from the credentials
-  String userID = credentials["userID"]!;
+  final String userID = credentials['userID']!;
 
-  // Load the user information from the API
-  User? result = await runApiService(
+  final User? result = await runApiService(
     apiCall: () => service.loadMyUserInfo(userID),
     parser: (result) {
-      User u = User.fromApi(
-        result["user"],
+      final User u = User.fromApi(
+        result['user'],
       );
       return u;
     },
@@ -58,7 +61,16 @@ Future<bool> loadUserInfo() async {
     return false;
   }
 
-  // Update the user in the state
+  // backup messages for groups
+  if (store.state.user?.groups != null) {
+    result.groups = result.groups?.map((group) {
+      final messages = store.state.user?.groups
+          ?.firstWhere((element) => element.id == group.id, orElse: () => group)
+          .messages;
+      return group.update(messages: messages);
+    }).toList();
+  }
+
   store.dispatch(
     Action(
       ActionTypes.setUser,
@@ -66,14 +78,18 @@ Future<bool> loadUserInfo() async {
     ),
   );
 
-  // Load the auth provider type from the storage and update it in the state
-  String? authProviderType = await storage.loadAuthProviderType();
+  final String? authProviderType = await storage.loadAuthProviderType();
   store.dispatch(
     Action(
       ActionTypes.updateAuthProviderType,
       payload: authProviderType,
     ),
   );
+
+  store.dispatch(Action(
+    ActionTypes.setProfileImageAvailable,
+    payload: await rest_service.profileImageAvailable(),
+  ));
 
   return true;
 }
@@ -91,8 +107,7 @@ Future<void> updateProfile(
   String mobile,
   String discord,
 ) async {
-  // Update the profile in the API
-  String? id = await runApiService(
+  final String? id = await runApiService(
       apiCall: () => service.updateProfile(
             username,
             university,
@@ -103,7 +118,8 @@ Future<void> updateProfile(
             mobile,
             discord,
           ),
-      parser: (result) => result["updateProfile"]["id"] as String);
+      parser: (result) => result['updateProfile']['id'] as String
+  );
 
   // If the ID is null, update the session ID in the state and navigate to the welcome page
   if (id == null) {
@@ -128,27 +144,41 @@ Future<void> updateProfile(
 ///
 /// The [credential] parameter is required and represents the credential of the user.
 Future<void> deleteAccount(String credential) async {
-  // Delete the account in the API, delete the credentials from the storage, and delete the account in Firebase
-  await Future.wait([
-    runApiService(
+  try {
+    log('Deleting account from Firebase');
+    if (store.state.authProviderType == 'email') {
+      await firebase.deleteEmailAccount(credential);
+    } else if (store.state.authProviderType == 'google') {
+      await firebase.deleteGoogleAccount();
+    }
+
+    log('Deleting account from API');
+    await runApiService(
       apiCall: () => service.deleteAccount(),
-      parser: (result) => null,
-    ),
-    storage.deleteCredentials(),
-    if (store.state.authProviderType == "email")
-      firebase.deleteEmailAccount(credential),
-    if (store.state.authProviderType == "google")
-      firebase.deleteGoogleAccount(),
-  ]);
+      shouldRethrow: true,
+    );
+
+  } on ApiException catch (e) {
+    showToast(e.message);
+    rethrow;
+  } on FirebaseAuthException {
+    rethrow;
+  } catch (e) {
+    showToast(e.toString());
+    rethrow;
+  }
+
+  log('Deleting credentials from storage');
+  await storage.deleteCredentials();
+
+  showToast('Account erfolgreich gelöscht.');
 
   // Update the session ID in the state and navigate to the welcome page
   store.dispatch(
     Action(
-      ActionTypes.updateSessionID,
-      payload: null,
+      ActionTypes.clear,
     ),
   );
-
   navigatorKey.currentState!.pushNamedAndRemoveUntil(
     '/welcome',
     (route) => false,
@@ -159,13 +189,26 @@ Future<void> deleteAccount(String credential) async {
 ///
 /// The [file] parameter is required and represents the image file to be uploaded.
 Future<void> uploadProfileImage(XFile file) async {
-  // Read the file content
-  Uint8List content = await file.readAsBytes();
+  Uint8List content;
+  try {
+    content = await file.readAsBytes();
+  } catch (e) {
+    showToast('Das Bild war fehlerhaft.');
+    return;
+  }
 
-  // Upload the profile image to the API
-  await runRestApi(
-      apiCall: () => rest_service.uploadProfileImage(content),
-      parser: (result) => null);
+  try {
+    await runRestApi(
+        apiCall: () => rest_service.uploadProfileImage(content),
+        shouldRethrow: true
+    );
+  } on ApiException catch (e) {
+    showToast(e.message);
+    return;
+  } catch (e) {
+    showToast(e.toString());
+    return;
+  }
 
   // Update the profile image availability in the state
   store.dispatch(
@@ -175,16 +218,28 @@ Future<void> uploadProfileImage(XFile file) async {
     ),
   );
 
-  // Show a toast message
-  showToast("Profilbild erfolgreich hochgeladen.");
+  showToast('Profilbild erfolgreich hochgeladen.');
+
+  await DefaultCacheManager().removeFile(
+      '$backendURL/api/group/${store.state.user?.id}/image');
+  await DefaultCacheManager().downloadFile(
+      '$backendURL/api/group/${store.state.user?.id}/image');
 }
 
 /// Deletes the profile image.
 Future<void> deleteProfileImage() async {
-  // Delete the profile image from the API
-  await runRestApi(
-      apiCall: () => rest_service.deleteProfileImage(),
-      parser: (result) => null);
+  try {
+    await runRestApi(
+        apiCall: () => rest_service.deleteProfileImage(),
+        shouldRethrow: true
+    );
+  } on ApiException catch (e) {
+    showToast(e.message);
+    return;
+  } catch (e) {
+    showToast(e.toString());
+    return;
+  }
 
   // Update the profile image availability in the state
   store.dispatch(
@@ -194,7 +249,9 @@ Future<void> deleteProfileImage() async {
     ),
   );
 
-  // Show a toast message
+  await DefaultCacheManager()
+      .removeFile('$backendURL/api/group/${store.state.user?.id}/image');
+
   showToast(
-      "Profilbild erfolgreich gelöscht. Evtl. liegt das Bild noch im Cache.");
+      'Profilbild erfolgreich gelöscht. Evtl. liegt das Bild noch im Cache.');
 }

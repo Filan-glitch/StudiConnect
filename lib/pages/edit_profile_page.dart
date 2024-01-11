@@ -5,14 +5,17 @@ library pages.edit_profile_page;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:studiconnect/dialogs/select_location_dialog.dart';
+import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/models/redux/store.dart';
+import 'package:studiconnect/services/logger_provider.dart';
+import 'package:studiconnect/widgets/location_display.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
-import 'package:geocoding/geocoding.dart' as geo;
 import 'package:studiconnect/controllers/user.dart';
+import 'package:studiconnect/services/gps.dart';
 
 /// A StatefulWidget that allows the user to edit their profile.
 ///
@@ -30,60 +33,104 @@ class EditProfilePage extends StatefulWidget {
 ///
 /// This class contains the logic for editing the user's profile.
 class _EditProfilePage extends State<EditProfilePage> {
-  final _formKey = GlobalKey<FormState>();
-
+  late final GlobalKey<FormState> _formKey;
+  late UniqueKey _locationKey;
   late final TextEditingController _usernameController;
   late final TextEditingController _majorController;
   late final TextEditingController _universityController;
   late final TextEditingController _bioController;
   late final TextEditingController _mobileController;
   late final TextEditingController _discordController;
-  late LatLng _selectedLocation;
+
+  LatLng? _selectedLocation;
+  bool? _serviceEnabled;
+  LocationPermission? _permission;
+  LocationAccuracyStatus? _accuracyStatus;
+  bool? _error;
 
   @override
   void initState() {
     super.initState();
-
     _usernameController = TextEditingController.fromValue(
       TextEditingValue(
-        text: store.state.user?.username ?? "",
+        text: store.state.user?.username ?? '',
       ),
     );
-
     _majorController = TextEditingController.fromValue(
       TextEditingValue(
-        text: store.state.user?.major ?? "",
+        text: store.state.user?.major ?? '',
       ),
     );
-
     _universityController = TextEditingController.fromValue(
       TextEditingValue(
-        text: store.state.user?.university ?? "",
+        text: store.state.user?.university ?? '',
       ),
     );
-
     _bioController = TextEditingController.fromValue(
       TextEditingValue(
-        text: store.state.user?.bio ?? "",
+        text: store.state.user?.bio ?? '',
       ),
     );
-
     _mobileController = TextEditingController.fromValue(
       TextEditingValue(
-        text: store.state.user?.mobile ?? "",
+        text: store.state.user?.mobile ?? '',
       ),
     );
-
     _discordController = TextEditingController.fromValue(
       TextEditingValue(
-        text: store.state.user?.discord ?? "",
+        text: store.state.user?.discord ?? '',
       ),
     );
+    _formKey = GlobalKey<FormState>();
+    _locationKey = UniqueKey();
 
-    _selectedLocation = LatLng(
-      store.state.user?.lat ?? 0.0,
-      store.state.user?.lon ?? 0.0,
+    determinePosition().then(
+      (value) {
+        log('Got current position: $value, setting state...');
+        setState(() {
+          _locationKey = UniqueKey();
+          _selectedLocation = LatLng(value.latitude, value.longitude);
+        });
+      },
+      onError: (error) {
+        _locationKey = UniqueKey();
+        _selectedLocation = const LatLng(0, 0);
+        if (error.toString() == 'Location services are disabled.') {
+          setState(() {
+            _serviceEnabled = false;
+          });
+        } else if (error.toString() == 'Location permissions are denied') {
+          setState(() {
+            _permission = LocationPermission.denied;
+          });
+        } else if (error.toString() ==
+            'Location permissions are permanently denied, we cannot request permissions.') {
+          setState(() {
+            _permission = LocationPermission.deniedForever;
+          });
+        } else if(error.toString() == 'Location accuracy is not precise') {
+          setState(() {
+            _accuracyStatus = LocationAccuracyStatus.reduced;
+          });
+        }
+        else {
+          setState(() {
+            _permission = LocationPermission.unableToDetermine;
+          });
+        }
+      },
     );
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _majorController.dispose();
+    _universityController.dispose();
+    _bioController.dispose();
+    _mobileController.dispose();
+    _discordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -92,7 +139,7 @@ class _EditProfilePage extends State<EditProfilePage> {
       converter: (store) => store.state,
       builder: (context, state) {
         return PageWrapper(
-          title: "Profil bearbeiten",
+          title: 'Profil bearbeiten',
           body: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.symmetric(
@@ -108,35 +155,35 @@ class _EditProfilePage extends State<EditProfilePage> {
                         TextFormField(
                           controller: _usernameController,
                           decoration: const InputDecoration(
-                            labelText: "Name",
+                            labelText: 'Name',
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Bitte gib einen Namen ein";
+                              return 'Bitte gib einen Namen ein';
                             }
                             return null;
                           },
                         ),
                         TextFormField(
                           decoration: const InputDecoration(
-                            labelText: "Studiengang",
+                            labelText: 'Studiengang',
                           ),
                           controller: _majorController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Bitte gib einen Studiengang ein";
+                              return 'Bitte gib einen Studiengang ein';
                             }
                             return null;
                           },
                         ),
                         TextFormField(
                           decoration: const InputDecoration(
-                            labelText: "Universität",
+                            labelText: 'Universität',
                           ),
                           controller: _universityController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Bitte gib eine Universität ein";
+                              return 'Bitte gib eine Universität ein';
                             }
                             return null;
                           },
@@ -147,12 +194,12 @@ class _EditProfilePage extends State<EditProfilePage> {
                           minLines: 5,
                           maxLines: null,
                           decoration: const InputDecoration(
-                            labelText: "Über mich",
+                            labelText: 'Über mich',
                             border: OutlineInputBorder(),
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Bitte gib etwas über dich ein";
+                              return 'Bitte gib etwas über dich ein';
                             }
                             return null;
                           },
@@ -160,7 +207,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                         TextFormField(
                           controller: _mobileController,
                           decoration: const InputDecoration(
-                            labelText: "Telefonnummer",
+                            labelText: 'Telefonnummer',
                           ),
                           validator: (value) => null,
                           keyboardType: TextInputType.phone,
@@ -168,7 +215,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                         TextFormField(
                           controller: _discordController,
                           decoration: const InputDecoration(
-                            labelText: "Discord",
+                            labelText: 'Discord',
                           ),
                           validator: (value) => null,
                         ),
@@ -186,140 +233,114 @@ class _EditProfilePage extends State<EditProfilePage> {
                     padding: const EdgeInsets.only(
                       top: 20.0,
                     ),
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: TextButton(
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0.0),
-                              ),
-                            ),
-                          ),
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => SelectLocationDialog(
-                                onLocationSelected: (location) {
-                                  setState(() {
-                                    _selectedLocation = location;
-                                  });
-
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            );
-                          },
-                          child: Row(
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.only(right: 20.0),
-                                child: Icon(Icons.location_on),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  FutureBuilder(
-                                    future: geo.placemarkFromCoordinates(
-                                      _selectedLocation.latitude,
-                                      _selectedLocation.longitude,
-                                    ),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.hasData) {
-                                        geo.Placemark location =
-                                            snapshot.data![0];
-                                        return SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width -
-                                              150,
-                                          child: Text(
-                                            '${location.street}\n${location.locality}',
-                                            style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall
-                                                  ?.color,
-                                              fontSize: 16.0,
-                                            ),
-                                          ),
-                                        );
-                                      } else {
-                                        return Container();
-                                      }
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ],
-                          )),
+                    child: LocationDisplay(
+                      key: _locationKey,
+                      position: _selectedLocation,
+                      serviceEnabled: _serviceEnabled,
+                      permission: _permission,
+                      accuracyStatus: _accuracyStatus,
+                      error: _error,
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 30.0),
-                    child: Wrap(
-                      spacing: 20.0,
-                      runSpacing: 20.0,
+                    padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+                    child: Column(
                       children: [
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              updateProfile(
-                                _usernameController.text,
-                                _universityController.text,
-                                _majorController.text,
-                                _selectedLocation.latitude,
-                                _selectedLocation.longitude,
-                                _bioController.text,
-                                _mobileController.text,
-                                _discordController.text,
-                              );
-
-                              Navigator.pop(context);
-                            }
-                          },
-                          icon: const Icon(Icons.done),
-                          label: const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 5.0),
-                            child: Text("Profil\nspeichern"),
-                          ),
-                        ),
-                        if (state.authProviderType == "email")
-                          ElevatedButton.icon(
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
                             onPressed: () {
-                              Navigator.of(context).pushNamed(
-                                '/update-password',
-                              );
+                              final ImagePicker picker = ImagePicker();
+                              picker
+                                  .pickImage(source: ImageSource.gallery)
+                                  .then((value) {
+                                if (value != null) {
+                                  uploadProfileImage(value);
+                                }
+                              });
                             },
-                            icon: const Icon(Icons.lock),
+                            icon: const Icon(Icons.upload),
                             label: const Padding(
                               padding: EdgeInsets.symmetric(vertical: 5.0),
-                              child: Text("Passwort\nändern"),
+                              child: Text('Profilbild hochladen'),
                             ),
-                          ),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            final ImagePicker picker = ImagePicker();
-                            picker
-                                .pickImage(source: ImageSource.gallery)
-                                .then((value) {
-                              if (value != null) {
-                                uploadProfileImage(value);
-                              }
-                            });
-                          },
-                          icon: const Icon(Icons.upload),
-                          label: const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 5.0),
-                            child: Text("Profilbild\nhochladen"),
                           ),
                         ),
                         if (state.profileImageAvailable)
-                          ElevatedButton.icon(
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                deleteProfileImage();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.background,
+                                side: const BorderSide(
+                                  color: Colors.red,
+                                  width: 2.0,
+                                ),
+                              ),
+                              icon: const Icon(Icons.delete_forever_outlined, color: Colors.red),
+                              label: const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 5.0),
+                                child: Text(
+                                  'Profilbild löschen',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
                             onPressed: () {
-                              deleteProfileImage();
+                              if (_formKey.currentState!.validate()) {
+                                navigatorKey.currentState!.pop();
+
+                                updateProfile(
+                                  _usernameController.text,
+                                  _universityController.text,
+                                  _majorController.text,
+                                  _selectedLocation?.latitude ?? 0,
+                                  _selectedLocation?.longitude ?? 0,
+                                  _bioController.text,
+                                  _mobileController.text,
+                                  _discordController.text,
+                                );
+                              }
                             },
+                            icon: const Icon(Icons.done),
+                            label: const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 5.0),
+                              child: Text('Profil speichern'),
+                            ),
+                          ),
+                        ),
+                        if (state.authProviderType == 'email')
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                Navigator.of(context).pushNamed(
+                                  '/update-password',
+                                );
+                              },
+                              icon: const Icon(Icons.lock),
+                              label: const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 5.0),
+                                child: Text('Passwort ändern'),
+                              ),
+                            ),
+                          ),
+                        const SizedBox(
+                          height: 50.0,
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
                                   Theme.of(context).colorScheme.background,
@@ -328,40 +349,24 @@ class _EditProfilePage extends State<EditProfilePage> {
                                 width: 2.0,
                               ),
                             ),
-                            icon: const Icon(Icons.delete),
-                            label: const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 5.0),
-                              child: Text("Profilbild\nlöschen"),
+                            onPressed: () {
+                              Navigator.of(context).pushNamed(
+                                '/delete-account',
+                              );
+                            },
+                            label: const Text(
+                              'Konto löschen',
+                              style: TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
+                            icon: const Icon(
+                              Icons.warning_amber_rounded,
+                              color: Colors.red,
                             ),
                           ),
+                        )
                       ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 40.0, bottom: 20.0),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.background,
-                          side: const BorderSide(
-                            color: Colors.red,
-                            width: 2.0,
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(
-                            '/delete-account',
-                          );
-                        },
-                        child: const Text(
-                          "Konto löschen",
-                          style: TextStyle(
-                            color: Colors.red,
-                          ),
-                        ),
-                      ),
                     ),
                   ),
                 ],

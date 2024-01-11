@@ -17,6 +17,7 @@ library models.redux.actions;
 /// - setProfileImageAvailable: Represents the action of setting the profile image availability.
 /// - setConnectionState: Represents the action of setting the connection state.
 enum ActionTypes {
+  clear,
   startTask,
   stopTask,
   setUser,

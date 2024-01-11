@@ -3,14 +3,13 @@
 /// {@category SERVICES}
 library services.rest.api;
 
-import 'package:studiconnect/models/redux/actions.dart';
-import 'package:studiconnect/models/redux/store.dart';
-import 'package:studiconnect/services/errors/input_error.dart';
-import 'package:studiconnect/services/errors/internal_server_error.dart';
-import 'package:studiconnect/services/errors/not_found_exception.dart';
-import 'package:studiconnect/services/errors/connection_error.dart';
-import 'package:studiconnect/services/errors/forbidden_error.dart';
-import 'package:studiconnect/services/errors/unauthorized_error.dart';
+import 'package:studiconnect/services/graphql/errors/input_error.dart';
+import 'package:studiconnect/services/graphql/errors/internal_server_error.dart';
+import 'package:studiconnect/services/graphql/errors/not_found_exception.dart';
+import 'package:studiconnect/services/graphql/errors/connection_error.dart';
+import 'package:studiconnect/services/graphql/errors/forbidden_error.dart';
+import 'package:studiconnect/services/graphql/errors/unauthorized_error.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 
 /// Processes HTTP status codes and throws the appropriate exception.
 ///
@@ -27,47 +26,44 @@ import 'package:studiconnect/services/errors/unauthorized_error.dart';
 /// error, it throws an exception. If the status code does not correspond to a known
 /// error, the function returns normally.
 void processHttpStatusCodes(int statusCode, {String? customMessage}) {
+  log('HTTP Status Code: $statusCode');
   if (statusCode < 100) {
-    // If the status code is less than 100, throw a ConnectionException.
-    store.dispatch(
-      Action(
-        ActionTypes.setConnectionState,
-        payload: false,
-      ),
-    );
+    log('Informational status code');
     throw ConnectionException(code: statusCode);
   } else if (statusCode == 401) {
-    // If the status code is 401, throw an UnauthorizedException.
+    log('Operation was unauthorized');
     throw UnauthorizedException(
       code: statusCode,
       message: customMessage ?? UnauthorizedException.defaultMessage,
     );
   } else if (statusCode == 403) {
-    // If the status code is 403, throw a ForbiddenException.
+    log('Operation was forbidden');
     throw ForbiddenException(
       code: statusCode,
       message: customMessage ?? ForbiddenException.defaultMessage,
     );
   } else if (statusCode == 404) {
-    // If the status code is 404, throw a NotFoundException.
+    log('Ressource was not found');
     throw NotFoundException(
       code: statusCode,
       message: customMessage ?? NotFoundException.defaultMessage,
     );
   } else if (statusCode == 502 || statusCode == 504) {
-    // If the status code is 502 or 504, throw a ConnectionException.
+    log('Gateway connection error');
     throw ConnectionException(code: statusCode);
   } else if (statusCode >= 500) {
-    // If the status code is 500 or greater, throw an InternalServerException.
+    log('Internal server error');
     throw InternalServerException(
       code: statusCode,
       message: customMessage ?? InternalServerException.defaultMessage,
     );
   } else if (statusCode >= 400) {
-    // If the status code is 400 or greater, throw an InputException.
+    log('Input error');
     throw InputException(
       code: statusCode,
       message: customMessage ?? InputException.defaultMessage,
     );
+  } else {
+    log('Unhandeled status code, should consider adding it to the list of handeled status codes');
   }
 }

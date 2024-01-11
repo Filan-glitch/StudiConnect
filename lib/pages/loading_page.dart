@@ -36,7 +36,7 @@ class LoadingPage extends StatelessWidget {
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 25.0),
               child: Text(
-                "Bitte warten...",
+                'Bitte warten...',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 30.0,

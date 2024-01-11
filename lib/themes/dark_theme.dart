@@ -16,16 +16,15 @@ import 'package:google_fonts/google_fonts.dart';
 /// Elevated buttons have a background color matching the primary color, a text color of white, and a bold, 20-point font.
 ThemeData darkTheme = ThemeData(
   useMaterial3: true,
+  brightness: Brightness.dark,
   fontFamily: GoogleFonts.roboto().fontFamily,
   colorScheme: const ColorScheme.dark(
     primary: Color(0xff3e3699),
-    secondary: Color(0xff0032bb),
     error: Colors.red,
   ),
   appBarTheme: const AppBarTheme(
     backgroundColor: Color(0xff3e3699),
   ),
-  scaffoldBackgroundColor: const Color.fromARGB(255, 11, 4, 33),
   textTheme: GoogleFonts.robotoTextTheme()
       .apply(bodyColor: Colors.white, displayColor: Colors.white),
   elevatedButtonTheme: ElevatedButtonThemeData(
@@ -45,5 +44,9 @@ ThemeData darkTheme = ThemeData(
         ),
       ),
     ),
+  ),
+  progressIndicatorTheme: const ProgressIndicatorThemeData(
+    refreshBackgroundColor: Color(0x492787), // Should be little bit darker than primary color
+    color: Color(0xff3e3699),
   ),
 );

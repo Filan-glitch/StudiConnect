@@ -34,14 +34,7 @@ class _SelectLocationDialogState extends State<SelectLocationDialog> {
   LatLng? _currentLocation;
   late Location location;
 
-  late StreamSubscription _locationSubscription;
-
-  @override
-  void initState() {
-    super.initState();
-
-    setupLocation();
-  }
+  late final StreamSubscription<LocationData> _locationSubscription;
 
   /// Sets up the location service.
   ///
@@ -71,13 +64,20 @@ class _SelectLocationDialogState extends State<SelectLocationDialog> {
 
     _locationSubscription =
         location.onLocationChanged.listen((LocationData currentLocation) async {
-      setState(() {
-        _currentLocation = LatLng(
-          currentLocation.latitude!,
-          currentLocation.longitude!,
-        );
-      });
-    });
+          setState(() {
+            _currentLocation = LatLng(
+              currentLocation.latitude!,
+              currentLocation.longitude!,
+            );
+          });
+        });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    setupLocation();
   }
 
   @override
@@ -159,7 +159,7 @@ class _SelectLocationDialogState extends State<SelectLocationDialog> {
             widget.onLocationSelected(_selectedLocation!);
           },
           child: Text(
-            "Position verwenden",
+            'Position verwenden',
             style: TextStyle(
               color: Theme.of(context).textTheme.labelSmall?.color,
               fontSize: 16.0,

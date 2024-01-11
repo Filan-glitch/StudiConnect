@@ -14,19 +14,35 @@ import 'package:studiconnect/services/graphql/api.dart';
 /// Returns a Future that completes with a Map if the login was successful.
 /// The Map contains the session ID and the user data.
 Future<Map<String, dynamic>?> login(String idToken) async {
-  return GraphQL.mutate(
+  return mutate(
     MutationOptions(
-      document: gql("""
+      document: gql('''
       mutation Login(\$token: String!) {
         login(token: \$token) {
           sessionID
           user
         }
       }
-"""),
+'''),
       variables: <String, dynamic>{
         'token': idToken,
       },
+    ),
+  );
+}
+
+
+Future<Map<String, dynamic>?> loginAsGuest() async {
+  return mutate(
+    MutationOptions(
+      document: gql('''
+      mutation Login {
+        loginAsGuest {
+          sessionID
+          user
+        }
+      }
+'''),
     ),
   );
 }
@@ -38,13 +54,13 @@ Future<Map<String, dynamic>?> login(String idToken) async {
 /// Returns a Future that completes with a Map if the logout was successful.
 /// The Map is empty.
 Future<Map<String, dynamic>?> logout() async {
-  return GraphQL.mutate(
+  return mutate(
     MutationOptions(
-      document: gql("""
+      document: gql('''
       mutation Logout {
         logout
       }
-"""),
+'''),
     ),
   );
 }

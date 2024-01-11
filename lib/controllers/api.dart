@@ -3,9 +3,9 @@
 /// {@category CONTROLLERS}
 library controllers.api;
 
-import 'dart:developer';
 import 'package:oktoast/oktoast.dart';
-import 'package:studiconnect/services/errors/api_exception.dart';
+import 'package:studiconnect/services/logger_provider.dart';
+import 'package:studiconnect/services/graphql/errors/api_exception.dart';
 import 'package:studiconnect/models/redux/store.dart';
 import 'package:studiconnect/models/redux/actions.dart' as redux;
 
@@ -23,47 +23,67 @@ import 'package:studiconnect/models/redux/actions.dart' as redux;
 /// Returns a Future that completes with the parsed result if the API call and parsing were successful. If an error occurred, the Future completes with null.
 Future<T?> runApiService<T>({
   required Future<Map<String, dynamic>?> Function() apiCall,
-  required T Function(Map<String, dynamic> parser) parser,
+  T Function(Map<String, dynamic> parser)? parser,
   bool showLoading = true,
+  bool shouldRethrow = false,
 }) async {
   // Loading Screen
   if (showLoading) {
-    store.dispatch(redux.Action(redux.ActionTypes.startTask, payload: null));
+    log('Starting Loading Screen');
+    store.dispatch(redux.Action(redux.ActionTypes.startTask));
   }
 
   // API Call
   final Map<String, dynamic>? response;
   try {
+    log('Starting API Call');
     response = await apiCall();
+    log('API Call Finished');
   } on ApiException catch (e) {
-    log("API Exception ${e.code}: ${e.message}");
+    logWarning('API Exception ${e.code}: ${e.message}');
 
     if (showLoading) {
+      log('Stopping Loading Screen');
       store.dispatch(redux.Action(redux.ActionTypes.stopTask));
     }
 
-    showToast(e.message);
+    if(shouldRethrow) {
+      rethrow;
+    } else {
+      showToast(e.message);
+    }
+
     return null;
   }
 
   // Parsing
   T? parsed;
-  if (response != null) {
+  if (response != null && parser != null) {
     try {
+      log('Starting Parsing');
       parsed = parser(response);
+      log('Parsing Finished');
     } catch (e) {
-      log(e.toString());
+      logWarning(e.toString());
+
       if (showLoading) {
+        log('Stopping Loading Screen');
         store.dispatch(redux.Action(redux.ActionTypes.stopTask));
       }
 
-      showToast("Die Daten konnten nicht verarbeitet werden.");
+      if(shouldRethrow) {
+        rethrow;
+      } else {
+        showToast(e.toString());
+      }
+
       return null;
     }
   }
 
   if (showLoading) {
-    store.dispatch(redux.Action(redux.ActionTypes.stopTask, payload: null));
+    log('Stopping Loading Screen');
+    store.dispatch(redux.Action(redux.ActionTypes.stopTask));
   }
 
   return parsed;
@@ -83,47 +103,67 @@ Future<T?> runApiService<T>({
 /// Returns a Future that completes with the parsed result if the API call and parsing were successful. If an error occurred, the Future completes with null.
 Future<T?> runRestApi<T>({
   required Future<dynamic> Function() apiCall,
-  required T Function(dynamic parser) parser,
+  T Function(dynamic parser)? parser,
   bool showLoading = true,
+  bool shouldRethrow = false,
 }) async {
   // Loading Screen
   if (showLoading) {
-    store.dispatch(redux.Action(redux.ActionTypes.startTask, payload: null));
+    log('Starting Loading Screen');
+    store.dispatch(redux.Action(redux.ActionTypes.startTask));
   }
 
   // API Call
   final Map<String, dynamic>? response;
   try {
+    log('Starting API Call');
     response = await apiCall();
+    log('API Call Finished');
   } on ApiException catch (e) {
-    log("API Exception ${e.code}: ${e.message}");
+    logWarning('API Exception ${e.code}: ${e.message}');
 
     if (showLoading) {
+      log('Stopping Loading Screen');
       store.dispatch(redux.Action(redux.ActionTypes.stopTask));
     }
 
-    showToast(e.message);
+    if(shouldRethrow) {
+      rethrow;
+    } else {
+      showToast(e.message);
+    }
+
     return null;
   }
 
   // Parsing
   T? parsed;
-  if (response != null) {
+  if (response != null && parser != null) {
     try {
+      log('Starting Parsing');
       parsed = parser(response);
+      log('Parsing Finished');
     } catch (e) {
-      log(e.toString());
+      logWarning(e.toString());
+
       if (showLoading) {
+        log('Stopping Loading Screen');
         store.dispatch(redux.Action(redux.ActionTypes.stopTask));
       }
 
-      showToast("Die Daten konnten nicht verarbeitet werden.");
+      if(shouldRethrow) {
+        rethrow;
+      } else {
+        showToast(e.toString());
+      }
+
       return null;
     }
   }
 
   if (showLoading) {
-    store.dispatch(redux.Action(redux.ActionTypes.stopTask, payload: null));
+    log('Stopping Loading Screen');
+    store.dispatch(redux.Action(redux.ActionTypes.stopTask));
   }
 
   return parsed;

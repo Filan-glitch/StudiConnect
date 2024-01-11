@@ -1,3 +1,7 @@
+/// A StatelessWidget that displays a list of join requests for a group.
+///
+/// The page contains a list of the join requests for the group, each represented by a [JoinGroupRequestListItem].
+/// If the group has no join requests, a message is displayed to the user.
 /// This library contains the JoinGroupRequestsPage widget.
 ///
 /// {@category PAGES}
@@ -9,15 +13,8 @@ import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/widgets/join_group_request_list_item.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
-/// A StatelessWidget that displays a list of join requests for a group.
-///
-/// The page contains a list of the join requests for the group, each represented by a [JoinGroupRequestListItem].
-/// If the group has no join requests, a message is displayed to the user.
 class JoinGroupRequestsPage extends StatelessWidget {
   const JoinGroupRequestsPage({super.key});
-
-  /// The route name for navigation.
-  static const routeName = '/join-group-requests';
 
   @override
   Widget build(BuildContext context) {

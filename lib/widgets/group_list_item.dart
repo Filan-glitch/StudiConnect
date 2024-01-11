@@ -28,23 +28,23 @@ class GroupListItem extends StatelessWidget {
       onTap: () {
         Navigator.pushNamed(
           context,
-          '/group-info',
-          arguments: group,
+          '/chat',
+          arguments: group.id,
         );
       },
       /// The leading widget is an AvatarPicture of the group.
       leading: AvatarPicture(
         id: group.id,
         type: Type.group,
-        radius: 15,
+        radius: 20,
         loadingCircleStrokeWidth: 1.5,
       ),
       /// The title of the ListTile is the group's title.
       /// If the group's title is null, display "Gruppe ${group.id}".
-      title: Text(group.title ?? "Gruppe ${group.id}"),
+      title: Text(group.title ?? 'Gruppe ${group.id}'),
       /// The subtitle of the ListTile is the group's description.
       /// If the group's description is null, display "Keine Beschreibung".
-      subtitle: Text(group.description ?? "Keine Beschreibung"),
+      subtitle: Text(group.description ?? 'Keine Beschreibung'),
     );
   }
 }

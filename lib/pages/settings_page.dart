@@ -21,7 +21,8 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
-      title: "Einstellungen",
+      title: 'Einstellungen',
+      showLoading: false,
       body: SizedBox(
         width: double.infinity,
         child: SingleChildScrollView(
@@ -33,18 +34,18 @@ class SettingsPage extends StatelessWidget {
                 child: SizedBox(
                   height: 100.0,
                   child: Image.asset(
-                    "assets/icons/icon.png",
+                    'assets/icons/icon.png',
                   ),
                 ),
               ),
               FutureBuilder(
-                future: rootBundle.loadString("pubspec.yaml"),
+                future: rootBundle.loadString('pubspec.yaml'),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return Text(
                       'Version: ${loadYaml(
                         snapshot.data.toString(),
-                      )["version"].split("+")[0]}',
+                      )['version'].split('+')[0]}',
                       style: const TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.bold,
@@ -64,7 +65,7 @@ class SettingsPage extends StatelessWidget {
               ),
               ListTile(
                 leading: const Icon(Icons.account_balance),
-                title: const Text("Lizenzen"),
+                title: const Text('Lizenzen'),
                 onTap: () {
                   showLicensePage(
                     context: context,
@@ -73,7 +74,7 @@ class SettingsPage extends StatelessWidget {
               ),
               ListTile(
                 leading: const Icon(Icons.error),
-                title: const Text("Nutzungsbedingungen"),
+                title: const Text('Nutzungsbedingungen'),
                 onTap: () {
                   launchUrl(
                     Uri.parse(
@@ -85,7 +86,7 @@ class SettingsPage extends StatelessWidget {
               ),
               ListTile(
                 leading: const Icon(Icons.admin_panel_settings),
-                title: const Text("Datenschutz"),
+                title: const Text('Datenschutz'),
                 onTap: () {
                   launchUrl(
                       Uri.parse(
@@ -96,7 +97,7 @@ class SettingsPage extends StatelessWidget {
               ),
               ListTile(
                 leading: const Icon(Icons.account_balance),
-                title: const Text("Impressum"),
+                title: const Text('Impressum'),
                 onTap: () {
                   launchUrl(
                     Uri.parse(
@@ -114,9 +115,9 @@ class SettingsPage extends StatelessWidget {
               ),
               ListTile(
                 leading: Icon(Icons.logout, color: Colors.red.withOpacity(0.7)),
-                title: const Text("Abmelden"),
-                onTap: () {
-                  signOut();
+                title: const Text('Abmelden'),
+                onTap: () async {
+                  await signOut();
                 },
               ),
             ],

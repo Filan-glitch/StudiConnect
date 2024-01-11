@@ -2,9 +2,11 @@
 ///
 /// {@category DIALOGS}
 library dialogs.remove_member_dialog;
+
 import 'package:flutter/material.dart';
 import 'package:studiconnect/dialogs/dialog_wrapper.dart';
 import 'package:studiconnect/controllers/groups.dart';
+import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/user.dart';
 
 /// A widget that represents a dialog for removing a member from a group.
@@ -48,9 +50,12 @@ class RemoveMemberDialog extends StatelessWidget {
               ),
             ),
             TextButton(
-              onPressed: () {
-                removeMember(groupID, user.id);
-                Navigator.of(context).pop();
+              onPressed: () async {
+                final bool successful = await removeMember(groupID, user.id);
+
+                if (!successful) return;
+
+                navigatorKey.currentState!.pop();
               },
               child: Text(
                 'Entfernen',

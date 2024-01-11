@@ -4,6 +4,7 @@
 library services.storage.credentials;
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/services/storage/secure_storage_provider.dart';
 
 /// Saves the user's credentials in secure storage.
@@ -14,9 +15,12 @@ import 'package:studiconnect/services/storage/secure_storage_provider.dart';
 /// [userID] is the unique identifier for the user.
 /// [sessionID] is the unique identifier for the current session.
 Future<void> saveCredentials(String userID, String sessionID) async {
-  FlutterSecureStorage storage = secureStorage;
-  await storage.write(key: "userID", value: userID);
-  await storage.write(key: "sessionID", value: sessionID);
+  final FlutterSecureStorage storage = secureStorage;
+  log('Saving credentials');
+  await storage.write(key: 'userID', value: userID);
+  log('Saved userID');
+  await storage.write(key: 'sessionID', value: sessionID);
+  log('Saved sessionID');
 }
 
 /// Loads the user's credentials from secure storage.
@@ -24,17 +28,22 @@ Future<void> saveCredentials(String userID, String sessionID) async {
 /// Returns a Future that completes with a Map containing the user's credentials.
 /// If the credentials are not found, the Map is empty.
 Future<Map<String, String>> loadCredentials() async {
-  FlutterSecureStorage storage = secureStorage;
-  String? userID = await storage.read(key: "userID");
-  String? sessionID = await storage.read(key: "sessionID");
+  final FlutterSecureStorage storage = secureStorage;
+  log('Loading credentials');
+  final String? userID = await storage.read(key: 'userID');
+  log('Loaded userID');
+  final String? sessionID = await storage.read(key: 'sessionID');
+  log('Loaded sessionID');
 
   if (userID == null || sessionID == null) {
+    log('Credentials not found');
     return {};
   }
 
+  log('Credentials found');
   return {
-    "userID": userID,
-    "sessionID": sessionID,
+    'userID': userID,
+    'sessionID': sessionID,
   };
 }
 
@@ -45,8 +54,10 @@ Future<Map<String, String>> loadCredentials() async {
 ///
 /// [type] is the type of the authentication provider.
 Future<void> saveAuthProviderType(String type) async {
-  FlutterSecureStorage storage = secureStorage;
-  storage.write(key: "authProviderType", value: type);
+  final FlutterSecureStorage storage = secureStorage;
+  log('Saving auth provider type');
+  storage.write(key: 'authProviderType', value: type);
+  log('Saved auth provider type');
 }
 
 /// Loads the type of the authentication provider from secure storage.
@@ -54,16 +65,23 @@ Future<void> saveAuthProviderType(String type) async {
 /// Returns a Future that completes with the type of the authentication provider.
 /// If the type is not found, the Future completes with null.
 Future<String?> loadAuthProviderType() async {
-  FlutterSecureStorage storage = secureStorage;
-  return storage.read(key: "authProviderType");
+  final FlutterSecureStorage storage = secureStorage;
+  log('Loading auth provider type');
+  final val = storage.read(key: 'authProviderType');
+  log('Loaded auth provider type');
+  return val;
 }
 
 /// Deletes the user's credentials and the type of the authentication provider from secure storage.
 ///
 /// This function does not return a value.
 Future<void> deleteCredentials() async {
-  FlutterSecureStorage storage = secureStorage;
-  await storage.delete(key: "userID");
-  await storage.delete(key: "sessionID");
-  await storage.delete(key: "authProviderType");
+  final FlutterSecureStorage storage = secureStorage;
+  log('Deleting credentials');
+  await storage.delete(key: 'userID');
+  log('Deleted userID');
+  await storage.delete(key: 'sessionID');
+  log('Deleted sessionID');
+  await storage.delete(key: 'authProviderType');
+  log('Deleted authProviderType');
 }

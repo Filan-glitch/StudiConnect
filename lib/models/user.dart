@@ -48,7 +48,7 @@ class User {
   /// The [id], [email], [username], [university], [major], [lat], [lon], [bio], [mobile],
   /// [discord], and [groups] parameters are optional and represent the new values of the corresponding properties.
   /// If a parameter is not provided, the corresponding property will not be updated.
-  update({
+  void update({
     String? id,
     String? email,
     String? username,
@@ -74,17 +74,14 @@ class User {
     this.groups = groups ?? this.groups;
   }
 
-  /// Factory constructor to create a new instance of the [User] class from a map.
-  ///
-  /// The [json] parameter is required and represents the map from which the user is created.
   User.fromApi(Map<String, dynamic> json)
       : id = json['id'],
         email = json['email'],
         username = json['username'],
         university = json['university'],
         major = json['major'],
-        lat = json['lat'],
-        lon = json['lon'],
+        lat = json['lat']?.toDouble(),
+        lon = json['lon']?.toDouble(),
         bio = json['bio'],
         mobile = json['mobile'],
         discord = json['discord'],

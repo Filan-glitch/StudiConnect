@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 /// the dialog will have a default padding and the title will be displayed.
 class DialogWrapper extends StatelessWidget {
   const DialogWrapper({
-    this.title = "Stundenplan",
+    this.title = 'Stundenplan',
     this.children,
     this.isDefaultDialog = true,
     super.key,

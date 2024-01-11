@@ -3,13 +3,16 @@
 /// {@category PAGES}
 library pages.register_page;
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:auth_buttons/auth_buttons.dart'
     show AuthButtonStyle, EmailAuthButton;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:studiconnect/controllers/authentication.dart';
+import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
+import 'package:studiconnect/widgets/error_label.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
 /// A StatefulWidget that provides the user with the option to register.
@@ -28,14 +31,15 @@ class RegisterPage extends StatefulWidget {
 /// This class contains the logic for handling the user's input and registering.
 class _RegisterPageState extends State<RegisterPage> {
   /// The controller for the email text field.
-  final TextEditingController _emailController = TextEditingController();
+  late final TextEditingController _emailController;
 
   /// The controller for the password text field.
-  final TextEditingController _passwordController = TextEditingController();
+  late final TextEditingController _passwordController;
 
   /// The controller for the password repeat text field.
-  final TextEditingController _passwordRepeatController =
-      TextEditingController();
+  late final TextEditingController _passwordRepeatController;
+
+  late final ValueNotifier<String> _errorMessageNotifier;
 
   /// Whether the password field is currently obscured.
   bool _isObscure = true;
@@ -46,11 +50,22 @@ class _RegisterPageState extends State<RegisterPage> {
   /// Whether the email registration button is currently loading.
   bool _emailButtonLoading = false;
 
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+    _passwordRepeatController = TextEditingController();
+    _errorMessageNotifier = ValueNotifier('');
+  }
+
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     _passwordRepeatController.dispose();
+    _errorMessageNotifier.dispose();
     super.dispose();
   }
 
@@ -60,8 +75,8 @@ class _RegisterPageState extends State<RegisterPage> {
         converter: (store) => store.state,
         builder: (BuildContext context, AppState state) {
           return PageWrapper(
-            title: "Registrieren",
-            type: PageType.empty,
+            title: 'Registrieren',
+            type: PageType.simple,
             body: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -79,6 +94,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: TextField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
+                      autocorrect: false,
+                      textCapitalization: TextCapitalization.none,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Email',
@@ -142,28 +159,70 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                   ),
+                  // Error Label, invisible if no error
+                  ErrorLabel(
+                      errorMessageNotifier: _errorMessageNotifier
+                  ),
                   const SizedBox(height: 30),
                   EmailAuthButton(
                     themeMode: Theme.of(context).brightness == Brightness.light
                         ? ThemeMode.light
                         : ThemeMode.dark,
-                    // TODO: set null if not valid
-                    onPressed: () {
+                    onPressed: () async {
+                      if(_emailButtonLoading) return;
+
+                      if(_emailController.text.isEmpty || _passwordController.text.isEmpty || _passwordRepeatController.text.isEmpty) {
+                        _errorMessageNotifier.value = 'Bitte füllen Sie alle Felder aus.';
+                        return;
+                      }
+
+                      if (_passwordController.text != _passwordRepeatController.text) {
+                        _errorMessageNotifier.value = 'Die Passwörter stimmen nicht überein.';
+                        return;
+                      }
+
+
                       setState(() {
                         _emailButtonLoading = true;
                       });
 
-                      signUpWithEmailAndPassword(
-                        _emailController.text,
-                        _passwordController.text,
-                      );
+                      try {
+                        await signUpWithEmailAndPassword(
+                          _emailController.text,
+                          _passwordController.text,
+                        );
+                      } on FirebaseAuthException catch (e) {
+                        final errorMessages = {
+                          'invalid-email': 'Die E-Mail Adresse ist ungültig.',
+                          'email-already-in-use': 'Die E-Mail Adresse wird bereits verwendet.',
+                          'weak-password': 'Das Passwort ist zu schwach.',
+                          'channel-error': 'Ein Fehler ist aufgetreten.',
+                          'too-many-requests': 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.',
+                          'operation-not-allowed': 'Die Registrierung ist nicht erlaubt.',
+                          'network-request-failed': 'Keine Internetverbindung.',
+                        };
+
+                        _errorMessageNotifier.value = errorMessages[e.code] ?? '${e.code}: ${e.message}';
+
+                        setState(() {
+                          _emailButtonLoading = false;
+                        });
+                        return;
+                      } catch (e) {
+                        _errorMessageNotifier.value = 'Ein unbekannter Fehler ist aufgetreten.';
+                        setState(() {
+                          _emailButtonLoading = false;
+                        });
+                        return;
+                      }
 
                       setState(() {
                         _emailButtonLoading = false;
                       });
-                      Navigator.pushNamed(context, "/further-registration");
+
+                      navigatorKey.currentState!.pushNamed('/edit-profile');
                     },
-                    text: "Konto erstellen",
+                    text: 'Konto erstellen',
                     isLoading: _emailButtonLoading,
                     style: AuthButtonStyle(
                       textStyle: TextStyle(
@@ -171,7 +230,6 @@ class _RegisterPageState extends State<RegisterPage> {
                           color: Theme.of(context).textTheme.labelSmall?.color),
                     ),
                   ),
-                  const SizedBox(height: 30),
                 ],
               ),
             ),

@@ -6,33 +6,51 @@ library pages.profile_page;
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:studiconnect/main.dart';
+import 'package:studiconnect/models/menu_action.dart';
 import 'package:studiconnect/widgets/avatar_picture.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
 
-/// A StatefulWidget that displays the user's profile.
-///
-/// The page contains the user's avatar, username, major, university, contact information, and bio,
-/// as well as options to edit the profile and navigate to the settings page.
-class ProfilePage extends StatefulWidget {
+class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
-  @override
-  State<ProfilePage> createState() => _ProfilePageState();
-}
-
-/// The state for the [ProfilePage] widget.
-///
-/// This class contains the logic for handling the user's interactions with the page.
-class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       builder: (context, state) {
         return PageWrapper(
+          title: 'Profil',
           type: PageType.complex,
+          menuActions: [
+            MenuAction(
+              icon: Icons.edit,
+              title: 'Profil bearbeiten',
+              onTap: () {
+                navigatorKey.currentState!.pop();
+                navigatorKey.currentState!.pushNamed('/edit-profile');
+              },
+            ),
+            MenuAction(
+                icon: Icons.share,
+                title: 'Studiconnect weiterempfehlen',
+                onTap: () {
+                  navigatorKey.currentState!.pop();
+                  Share.share(
+                      'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=de.studiconnect.app');
+                }),
+            MenuAction(
+              icon: Icons.settings,
+              title: 'Einstellungen',
+              onTap: () {
+                navigatorKey.currentState!.pop();
+                navigatorKey.currentState!.pushNamed('/settings');
+              },
+            ),
+          ],
           body: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -108,19 +126,19 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     Text(
-                      "E-Mail: ${state.user?.email ?? '-'}",
+                      'E-Mail: ${state.user?.email ?? '-'}',
                       style: const TextStyle(
                         fontSize: 15,
                       ),
                     ),
                     Text(
-                      "Tel: ${state.user?.mobile ?? '-'}",
+                      'Tel: ${state.user?.mobile ?? '-'}',
                       style: const TextStyle(
                         fontSize: 15,
                       ),
                     ),
                     Text(
-                      "Discord: ${state.user?.discord ?? '-'}",
+                      'Discord: ${state.user?.discord ?? '-'}',
                       style: const TextStyle(
                         fontSize: 15,
                       ),
@@ -143,38 +161,12 @@ class _ProfilePageState extends State<ProfilePage> {
                         fontSize: 15,
                       ),
                     ),
+                    const SizedBox(height: 85),
                   ],
                 ),
               ],
             ),
           ),
-          /// The menu actions include the options to edit the profile and to navigate to the settings page.
-          menuActions: [
-            ListTile(
-              leading: const Icon(Icons.edit),
-              title: const Text('Profil bearbeiten'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/edit-profile');
-              },
-            ),
-            ListTile(
-                leading: const Icon(Icons.share),
-                title: const Text('Studiconnect weiterempfehlen'),
-                onTap: () {
-                  Share.share(
-                      'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=de.studiconnect.app');
-                }),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Einstellungen'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/settings');
-              },
-            ),
-          ],
-          title: 'Profil',
         );
       },
     );

@@ -19,13 +19,11 @@ ThemeData lightTheme = ThemeData(
   fontFamily: GoogleFonts.roboto().fontFamily,
   colorScheme: const ColorScheme.light(
     primary: Color(0xff584cd7),
-    secondary: Color.fromARGB(255, 255, 205, 68),
     error: Colors.red,
   ),
   appBarTheme: const AppBarTheme(
     backgroundColor: Color(0xff584cd7),
   ),
-  scaffoldBackgroundColor: const Color.fromARGB(255, 255, 255, 255),
   textTheme: GoogleFonts.robotoTextTheme().apply(
     bodyColor: Colors.black,
     displayColor: Colors.black,

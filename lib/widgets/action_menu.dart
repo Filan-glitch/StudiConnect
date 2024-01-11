@@ -4,6 +4,7 @@
 library widgets.action_menu;
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:studiconnect/models/menu_action.dart';
 
 /// A widget that displays a menu of actions.
 ///
@@ -18,12 +19,12 @@ import 'package:flutter/material.dart';
 class ActionMenu extends StatelessWidget {
   const ActionMenu({
     required this.children,
-    this.title = "Aktionen",
+    this.title = 'Aktionen',
     super.key,
   });
 
   /// The list of widgets that will be displayed in the menu.
-  final List<Widget> children;
+  final List<MenuAction> children;
 
   /// The title that will be displayed at the top of the menu.
   final String title;
@@ -56,7 +57,7 @@ class ActionMenu extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
+                padding: const EdgeInsets.only(bottom: 10),
                 child: Text(
                   title,
                   style: const TextStyle(
@@ -65,13 +66,22 @@ class ActionMenu extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: children
-                  ),
+                child: ListView(
+                  children: children.map((MenuAction action) {
+                    return ListTile(
+                      leading: Icon(
+                        action.icon,
+                      ),
+                      title: Text(
+                        action.title,
+                      ),
+                      onTap: () {
+                        action.onTap();
+                      },
+                    );
+                  }).toList(),
                 ),
               ),
-              const SizedBox(height: 10.0),
             ],
           ),
         )

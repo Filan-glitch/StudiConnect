@@ -6,12 +6,17 @@ library pages.search_page;
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:studiconnect/controllers/groups.dart';
+import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/group.dart';
+import 'package:studiconnect/models/group_parameter.dart';
+import 'package:studiconnect/models/menu_action.dart';
 import 'package:studiconnect/models/redux/app_state.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/widgets/page_wrapper.dart';
+import 'package:studiconnect/models/redux/actions.dart' as redux;
+import 'package:studiconnect/models/redux/store.dart';
 
 /// A StatefulWidget that allows the user to search for groups.
 ///
@@ -29,26 +34,62 @@ class SearchPage extends StatefulWidget {
 ///
 /// This class contains the logic for handling the user's input and performing the search.
 class _SearchPageState extends State<SearchPage> {
-  /// The formatter for the group creation date.
-  final DateFormat formatter = DateFormat('dd.MM.yyyy');
-
   /// The controller for the module input text field.
-  final TextEditingController _moduleInputController = TextEditingController();
+  late final TextEditingController _moduleInputController;
 
   /// The radius of the search, in kilometers.
-  double _radius = 10;
+  late double _radius;
 
   /// A timer that delays the search query to avoid unnecessary requests while the user is typing.
-  late Timer _delayQueryTimer = Timer(Duration.zero, () {});
+  late Timer _delayQueryTimer;
+
+  String? _error;
 
   /// Loads the search results based on the current module input and search radius.
   void _loadSearchResults() {
-    String module = _moduleInputController.text;
+    log('Loading search results...');
+    final String module = _moduleInputController.text;
+
     if (module.isEmpty) {
+      _delayQueryTimer.cancel();
       return;
     }
 
     searchGroups(module, _radius.toInt());
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _radius = 10;
+    _moduleInputController = TextEditingController();
+    _delayQueryTimer = Timer(
+      const Duration(seconds: 1),
+        () {
+          if (StoreProvider.of<AppState>(context).state.user?.lat == null ||
+            StoreProvider.of<AppState>(context).state.user?.lon == null) {
+            setState(() {
+              _error = 'Bitte bearbeite dein Profil und gib deinen Standort an.';
+            });
+            return;
+          }
+          _loadSearchResults;
+        }
+    );
+
+    store.dispatch(
+      redux.Action(
+        redux.ActionTypes.updateSearchResults,
+        payload: <Group>[],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _moduleInputController.dispose();
+    _delayQueryTimer.cancel();
+    super.dispose();
   }
 
   @override
@@ -64,12 +105,21 @@ class _SearchPageState extends State<SearchPage> {
             _delayQueryTimer.cancel();
             _delayQueryTimer = Timer(
               const Duration(seconds: 1),
-              _loadSearchResults,
+              () {
+                if (StoreProvider.of<AppState>(context).state.user?.lat == null ||
+                    StoreProvider.of<AppState>(context).state.user?.lon == null) {
+                  setState(() {
+                    _error = 'Bitte bearbeite dein Profil und gib deinen Standort an.';
+                  });
+                  return;
+                }
+                _loadSearchResults();
+              },
             );
           },
           style: const TextStyle(color: Colors.white),
           decoration: const InputDecoration(
-            labelText: "Modul",
+            labelText: 'Modul',
             labelStyle: TextStyle(color: Colors.white),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.white),
@@ -83,7 +133,7 @@ class _SearchPageState extends State<SearchPage> {
           padding: const EdgeInsets.only(top: 20.0),
           child: Row(
             children: [
-              const Text("Radius:", style: TextStyle(color: Colors.white)),
+              const Text('Radius:', style: TextStyle(color: Colors.white)),
               Expanded(
                 child: Slider(
                   inactiveColor: Colors.white,
@@ -99,12 +149,21 @@ class _SearchPageState extends State<SearchPage> {
                     _delayQueryTimer.cancel();
                     _delayQueryTimer = Timer(
                       const Duration(seconds: 1),
-                      _loadSearchResults,
+                        () {
+                          if (StoreProvider.of<AppState>(context).state.user?.lat == null ||
+                              StoreProvider.of<AppState>(context).state.user?.lon == null) {
+                            setState(() {
+                              _error = 'Bitte bearbeite dein Profil und gib deinen Standort an.';
+                            });
+                            return;
+                          }
+                          _loadSearchResults;
+                        }
                     );
                   },
                 ),
               ),
-              Text("${_radius.toInt()} km",
+              Text('${_radius.toInt()} km',
                   style: const TextStyle(color: Colors.white)),
             ],
           ),
@@ -112,18 +171,20 @@ class _SearchPageState extends State<SearchPage> {
       ],
       /// The menu actions include the option to navigate to the settings page.
       menuActions: [
-        ListTile(
-            leading: const Icon(Icons.share),
-            title: const Text('Studiconnect weiterempfehlen'),
+        MenuAction(
+            icon: Icons.share,
+            title: 'Studiconnect weiterempfehlen',
             onTap: () {
+              navigatorKey.currentState!.pop();
               Share.share(
                   'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=de.studiconnect.app');
             }),
-        ListTile(
-          leading: const Icon(Icons.settings),
-          title: const Text('Einstellungen'),
+        MenuAction(
+          icon: Icons.settings,
+          title: 'Einstellungen',
           onTap: () {
-            Navigator.pushNamed(context, '/settings');
+            navigatorKey.currentState!.pop();
+            navigatorKey.currentState!.pushNamed('/settings');
           },
         ),
       ],
@@ -152,8 +213,8 @@ class _SearchPageState extends State<SearchPage> {
                       constraints: BoxConstraints(
                         minHeight: constraints.maxHeight,
                       ),
-                      child: const Center(
-                        child: Text("Keine Ergebnisse"),
+                      child: Center(
+                        child: Text(_error ?? 'Keine Ergebnisse'),
                       ),
                     ),
                   ),
@@ -165,11 +226,12 @@ class _SearchPageState extends State<SearchPage> {
               onRefresh: () async {
                 _loadSearchResults();
               },
+              backgroundColor: Theme.of(context).progressIndicatorTheme.refreshBackgroundColor,
               child: ListView.builder(
                 itemCount: state.searchResults.length,
                 padding: EdgeInsets.zero,
                 itemBuilder: (context, index) {
-                  Group group = state.searchResults[index];
+                  final Group group = state.searchResults[index];
                   return Container(
                     margin: const EdgeInsets.only(bottom: 20.0),
                     padding: const EdgeInsets.symmetric(
@@ -196,7 +258,19 @@ class _SearchPageState extends State<SearchPage> {
                             ),
                           ),
                           Text(
-                            'Erstellt an ${formatter.format(group.createdAt!)}',
+                            'Modul: ${group.module ?? ''}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            'Studiengang: ${group.creator?.major ?? ''}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            'Hochschule: ${group.creator?.university ?? ''}',
                             style: const TextStyle(
                               color: Colors.white,
                             ),
@@ -216,8 +290,14 @@ class _SearchPageState extends State<SearchPage> {
                         ],
                       ),
                       onTap: () {
-                        Navigator.pushNamed(context, '/group-info',
-                            arguments: group);
+                        Navigator.pushNamed(
+                          context,
+                          '/group-info',
+                          arguments: GroupLookupParameters(
+                            groupID: group.id,
+                            source: GroupSource.searchedGroups,
+                          ),
+                        );
                       },
                     ),
                   );

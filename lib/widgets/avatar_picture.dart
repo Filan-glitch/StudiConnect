@@ -47,54 +47,61 @@ class AvatarPicture extends StatefulWidget {
 class _AvatarPictureState extends State<AvatarPicture> {
   @override
   Widget build(BuildContext context) {
-    // If the avatar type is user and the id matches the current user id, set the profile image available in the store.
-    if (widget.type == Type.user && widget.id == store.state.user?.id) {
-      store.dispatch(redux.Action(
-        redux.ActionTypes.setProfileImageAvailable,
-        payload: true,
-      ));
-    }
+    return ClipOval(
+      clipper: _AvatarPictureClipper(),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      child: CachedNetworkImage(
+        width: 2 * (widget.radius ?? 10),
+        height: 2 * (widget.radius ?? 10),
+        fit: BoxFit.cover,
+        imageUrl: '$backendURL/api/${widget.type.name}/${widget.id}/image',
+        progressIndicatorBuilder: (context, url, downloadProgress) =>
+            CircularProgressIndicator(
+                value: downloadProgress.progress,
+                strokeWidth: widget.loadingCircleStrokeWidth ?? 4.0),
+        errorWidget: (context, url, error) {
+          if (widget.type == Type.user &&
+              widget.id == store.state.user?.id &&
+              store.state.profileImageAvailable) {
+            store.dispatch(redux.Action(
+              redux.ActionTypes.setProfileImageAvailable,
+              payload: false,
+            ));
+          }
 
-    // Return a CachedNetworkImage widget that displays the avatar picture.
-    return CachedNetworkImage(
-      width: 2 * (widget.radius ?? 10),
-      height: 2 * (widget.radius ?? 10),
-      fit: BoxFit.cover,
-      imageUrl: "$backendURL/api/${widget.type.name}/${widget.id}/image",
-      progressIndicatorBuilder: (context, url, downloadProgress) =>
-          CircularProgressIndicator(
-              value: downloadProgress.progress,
-              strokeWidth: widget.loadingCircleStrokeWidth ?? 4.0
-          ),
-      errorWidget: (context, url, error) {
-        // If the avatar type is user and the id matches the current user id, set the profile image unavailable in the store.
-        if (widget.type == Type.user && widget.id == store.state.user?.id) {
-          store.dispatch(redux.Action(
-            redux.ActionTypes.setProfileImageAvailable,
-            payload: false,
-          ));
-        }
-
-        // Return a CircleAvatar widget with an appropriate icon based on the avatar type.
-        return (widget.type == Type.user) ? CircleAvatar(
-          radius: widget.radius ?? 10,
-          backgroundColor: Colors.grey,
-          child: Icon(
-            Icons.person,
-            color: Colors.white,
-            size: widget.radius ?? 10,
-          ),
-        ) :
-        CircleAvatar(
-          radius: widget.radius ?? 10,
-          backgroundColor: Colors.grey,
-          child: Icon(
-          Icons.group,
-          color: Colors.white,
-          size: widget.radius ?? 10,
+          return (widget.type == Type.user)
+              ? CircleAvatar(
+            radius: widget.radius ?? 10,
+            backgroundColor: Colors.grey,
+            child: Icon(
+              Icons.person,
+              color: Colors.white,
+              size: widget.radius ?? 10,
+            ),
           )
-        );
-      },
+              : CircleAvatar(
+              radius: widget.radius ?? 10,
+              backgroundColor: Colors.grey,
+              child: Icon(
+                Icons.group,
+                color: Colors.white,
+                size: widget.radius ?? 10,
+              ));
+        },
+      ),
     );
   }
+}
+
+class _AvatarPictureClipper extends CustomClipper<Rect> {
+  @override
+  Rect getClip(Size size) {
+    return Rect.fromCircle(
+      center: Offset(size.width / 2, size.height / 2),
+      radius: size.width / 2,
+    );
+  }
+
+  @override
+  bool shouldReclip(_AvatarPictureClipper oldClipper) => false;
 }

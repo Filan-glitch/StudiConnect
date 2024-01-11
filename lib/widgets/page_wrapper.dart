@@ -14,6 +14,7 @@ import 'package:studiconnect/pages/no_connectivity_page.dart';
 import 'package:studiconnect/widgets/action_menu.dart';
 import 'package:studiconnect/models/redux/actions.dart' as redux;
 import 'package:studiconnect/models/redux/store.dart';
+import 'package:studiconnect/models/menu_action.dart';
 
 /// Enum representing the type of page.
 enum PageType {
@@ -60,6 +61,7 @@ class PageWrapper extends StatefulWidget {
       top: 20.0,
     ),
     this.overrideLoadingScreen = false,
+    this.showLoading = true,
     super.key,
   });
 
@@ -67,24 +69,24 @@ class PageWrapper extends StatefulWidget {
   final Widget? bottomNavigationBar;
   final List<Widget> headerControls;
   final String title;
-  final List<Widget> menuActions;
+  final List<MenuAction> menuActions;
   final PageType type;
   final EdgeInsets padding;
   final bool overrideLoadingScreen;
+  final bool showLoading;
 
   @override
   State<PageWrapper> createState() => _PageWrapperState();
 }
 
 class _PageWrapperState extends State<PageWrapper> {
-  late StreamSubscription<ConnectivityResult> subscription;
+  late final StreamSubscription<ConnectivityResult> subscription;
 
   void _onConnectivityChanged(ConnectivityResult result) {
     store.dispatch(
       redux.Action(
         redux.ActionTypes.setConnectionState,
-        payload: !(result == ConnectivityResult.none ||
-            result == ConnectivityResult.bluetooth),
+        payload: result != ConnectivityResult.none,
       ),
     );
   }
@@ -98,6 +100,12 @@ class _PageWrapperState extends State<PageWrapper> {
   }
 
   @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
@@ -108,7 +116,7 @@ class _PageWrapperState extends State<PageWrapper> {
 
         if (widget.type == PageType.empty) {
           return Scaffold(
-            body: OKToast(child: widget.body),
+            body: widget.body,
           );
         }
 
@@ -146,7 +154,9 @@ class _PageWrapperState extends State<PageWrapper> {
             bottomNavigationBar: widget.bottomNavigationBar,
             body: Container(
               padding: EdgeInsets.only(
-                top: MediaQuery.of(context).viewPadding.top - 5.0,
+                top: (MediaQuery.of(context).viewPadding.top - 5.0 >= 0)
+                    ? MediaQuery.of(context).viewPadding.top - 5.0
+                    : 0,
               ),
               color: Theme.of(context).colorScheme.primary,
               child: StoreConnector<AppState, AppState>(
@@ -234,14 +244,12 @@ class _PageWrapperState extends State<PageWrapper> {
           );
         }
 
-        return OKToast(
-          child: Stack(
-            children: [
-              mainContent,
-              if (state.loading && !widget.overrideLoadingScreen)
-                const LoadingPage(),
-            ],
-          ),
+        return Stack(
+          children: [
+            mainContent,
+            if (state.loading && !widget.overrideLoadingScreen && widget.showLoading)
+              const LoadingPage(),
+          ],
         );
       },
     );
@@ -252,7 +260,6 @@ class _PageWrapperState extends State<PageWrapper> {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      constraints: const BoxConstraints(maxWidth: 400.0),
       builder: (context) => ActionMenu(
         children: widget.menuActions,
       ),

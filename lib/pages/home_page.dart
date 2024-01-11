@@ -33,33 +33,29 @@ class HomePage extends StatefulWidget {
 /// This class contains the logic for handling the user's interactions with the navigation bar
 /// and switching between the three pages.
 class _HomePageState extends State<HomePage> {
+  late final StreamSubscription<ConnectivityResult> subscription;
+
   /// The index of the currently selected page.
   /// 0 corresponds to the Groups page, 1 to the Search page, and 2 to the Profile page.
   int _selectedPage = 0;
-  late StreamSubscription<ConnectivityResult> subscription;
+
+  void _onConnectivityChanged(ConnectivityResult result) {
+    store.dispatch(
+      redux.Action(
+        redux.ActionTypes.setConnectionState,
+        payload: result != ConnectivityResult.none,
+      ),
+    );
+  }
 
   @override
   void initState() {
     super.initState();
-    /// Sets the system UI overlay style to light.
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
-    Connectivity().onConnectivityChanged.last.then((ConnectivityResult result) {
-      store.dispatch(
-        redux.Action(
-          redux.ActionTypes.setConnectionState,
-          payload: result != ConnectivityResult.none,
-        ),
-      );
-    });
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      store.dispatch(
-        redux.Action(
-          redux.ActionTypes.setConnectionState,
-          payload: result != ConnectivityResult.none,
-        ),
-      );
-      setState(() {});
-    });
+    Connectivity().checkConnectivity().then(_onConnectivityChanged);
+    subscription =
+        Connectivity().onConnectivityChanged.listen(_onConnectivityChanged);
+    setState(() {});
   }
 
   @override
@@ -78,7 +74,7 @@ class _HomePageState extends State<HomePage> {
         }
         late Widget page;
 
-        if(_selectedPage == 0) {
+        if (_selectedPage == 0) {
           page = const GroupsPage();
         } else if (_selectedPage == 1) {
           page = const SearchPage();
@@ -88,20 +84,23 @@ class _HomePageState extends State<HomePage> {
 
         return Scaffold(
           extendBody: true,
-          bottomNavigationBar: CurvedNavigationBar(
-            backgroundColor: Colors.transparent,
-            color: Theme.of(context).colorScheme.primary,
-            items: const <Widget>[
-              Icon(Icons.group, size: 30, color: Colors.white),
-              Icon(Icons.search, size: 30, color: Colors.white),
-              Icon(Icons.person, size: 30, color: Colors.white),
-            ],
-            onTap: (index) {
-              setState(() {
-                _selectedPage = index;
-              });
-            },
-          ),
+          bottomNavigationBar: (!state.loading)
+              ? CurvedNavigationBar(
+                  backgroundColor: Colors.transparent,
+                  color: Theme.of(context).colorScheme.primary,
+                  index: _selectedPage,
+                  items: const <Widget>[
+                    Icon(Icons.group, size: 30, color: Colors.white),
+                    Icon(Icons.search, size: 30, color: Colors.white),
+                    Icon(Icons.person, size: 30, color: Colors.white),
+                  ],
+                  onTap: (index) {
+                    setState(() {
+                      _selectedPage = index;
+                    });
+                  },
+                )
+              : null,
           body: page,
         );
       },

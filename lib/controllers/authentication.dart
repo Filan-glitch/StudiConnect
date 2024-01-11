@@ -2,12 +2,16 @@
 ///
 /// {@category CONTROLLERS}
 library controllers.authentication;
+
 import 'package:oktoast/oktoast.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/redux/actions.dart';
 import 'package:studiconnect/models/redux/store.dart';
 import 'package:studiconnect/services/firebase/authentication.dart' as firebase;
 import 'package:studiconnect/services/graphql/authentication.dart' as service;
+import 'package:studiconnect/services/graphql/errors/api_exception.dart';
+import 'package:studiconnect/services/logger_provider.dart';
 import 'package:studiconnect/services/storage/credentials.dart' as storage;
 import 'package:studiconnect/controllers/api.dart';
 import 'package:studiconnect/controllers/user.dart';
@@ -18,13 +22,18 @@ import 'package:studiconnect/controllers/user.dart';
 /// If the credentials are found, the function dispatches an action to update the session ID in the store,
 /// loads the user's information, and navigates to the home page.
 Future<void> loadCredentials() async {
-  Map<String, String> credentials = await storage.loadCredentials();
+  log('Loading credentials from storage');
+  final Map<String, String> credentials = await storage.loadCredentials();
+  log('Loaded credentials from storage');
 
-  if (!credentials.containsKey("sessionID")) {
+  if (!credentials.containsKey('sessionID')) {
+    log('No credentials found');
+    FlutterNativeSplash.remove();
     return;
   }
 
-  String sessionID = credentials["sessionID"]!;
+  log('Session found');
+  final String sessionID = credentials['sessionID']!;
 
   store.dispatch(
     Action(
@@ -33,16 +42,22 @@ Future<void> loadCredentials() async {
     ),
   );
 
-  bool success = await loadUserInfo();
+  log('Loading user info');
+  final bool success = await loadUserInfo();
 
   if (!success) {
+    log('User info could not be loaded');
+    FlutterNativeSplash.remove();
     return;
   }
+  log('User info loaded');
 
+  log('Navigating to home screen');
   navigatorKey.currentState!.pushNamedAndRemoveUntil(
     '/home',
     (route) => false,
   );
+  FlutterNativeSplash.remove();
 }
 
 /// Signs in a user with Google.
@@ -50,26 +65,30 @@ Future<void> loadCredentials() async {
 /// If the sign in is successful, the function dispatches an action to update the session ID in the store,
 /// loads the user's information, navigates to the home page, and saves the user's credentials in shared preferences.
 /// If the sign in is not successful, the function shows a toast with an error message.
-Future<void> signInWithGoogle() async {
-  String? idToken = await firebase.signInWithGoogle();
+Future<bool?> signInWithGoogle() async {
+  final Map? result = await firebase.signInWithGoogle();
+  final String? idToken = result?['idToken'];
+  final bool? isNewUser = result?['newUser'];
 
   if (idToken == null) {
-    showToast("Anmeldung mit Google fehlgeschlagen");
-    return;
+    log('Google sign in failed');
+    return null;
   }
 
-  Map<String, dynamic>? session = await runApiService(
+  log('Calling API to sign in with Google');
+  final Map<String, dynamic>? session = await runApiService(
     apiCall: () => service.login(idToken),
-    parser: (result) => result["login"],
+    parser: (result) => result['login'],
   );
 
   if (session == null) {
-    showToast("Anmeldung mit Google fehlgeschlagen");
-    return;
+    log('API call failed');
+    return null;
   }
 
-  String sessionID = session["sessionID"];
-  String userID = session["user"];
+  log('API call successful');
+  final String sessionID = session['sessionID'];
+  final String userID = session['user'];
 
   store.dispatch(
     Action(
@@ -78,16 +97,20 @@ Future<void> signInWithGoogle() async {
     ),
   );
 
-  await storage.saveAuthProviderType("google");
+  log('Saving credentials');
+  await storage.saveAuthProviderType('google');
+  await storage.saveCredentials(userID, sessionID);
 
+  log('Loading user info');
   loadUserInfo();
 
+  log('Navigating to home screen');
   navigatorKey.currentState!.pushNamedAndRemoveUntil(
     '/home',
     (route) => false,
   );
 
-  storage.saveCredentials(userID, sessionID);
+  return isNewUser;
 }
 
 /// Signs in a user with email and password.
@@ -96,25 +119,28 @@ Future<void> signInWithGoogle() async {
 /// loads the user's information, navigates to the home page, and saves the user's credentials in shared preferences.
 /// If the sign in is not successful, the function shows a toast with an error message.
 Future<void> signInWithEmailAndPassword(String email, String password) async {
-  String? idToken = await firebase.signInWithEmailAndPassword(email, password);
+  log('Signing in with email and password');
+  final String? idToken = await firebase.signInWithEmailAndPassword(email, password);
 
   if (idToken == null) {
-    showToast("Anmeldung mit E-Mail fehlgeschlagen");
+    log('Email sign in failed');
     return;
   }
 
-  Map<String, dynamic>? session = await runApiService(
+  log('Calling API to sign in with email and password');
+  final Map<String, dynamic>? session = await runApiService(
     apiCall: () => service.login(idToken),
-    parser: (result) => result["login"],
+    parser: (result) => result['login'],
   );
 
   if (session == null) {
-    showToast("Anmeldung mit E-Mail fehlgeschlagen");
+    log('API call failed');
     return;
   }
 
-  String sessionID = session["sessionID"];
-  String userID = session["sessionID"];
+  log('API call successful');
+  final String sessionID = session['sessionID'];
+  final String userID = session['user'];
 
   store.dispatch(
     Action(
@@ -123,16 +149,18 @@ Future<void> signInWithEmailAndPassword(String email, String password) async {
     ),
   );
 
-  await storage.saveAuthProviderType("email");
+  log('Saving credentials');
+  await storage.saveAuthProviderType('email');
+  await storage.saveCredentials(userID, sessionID);
 
+  log('Loading user info');
   loadUserInfo();
 
+  log('Navigating to home screen');
   navigatorKey.currentState!.pushNamedAndRemoveUntil(
     '/home',
     (route) => false,
   );
-
-  storage.saveCredentials(userID, sessionID);
 }
 
 /// Signs up a user with email and password.
@@ -141,25 +169,28 @@ Future<void> signInWithEmailAndPassword(String email, String password) async {
 /// loads the user's information, navigates to the home page, and saves the user's credentials in shared preferences.
 /// If the sign up is not successful, the function shows a toast with an error message.
 Future<void> signUpWithEmailAndPassword(String email, String password) async {
-  String? idToken = await firebase.signUpWithEmailAndPassword(email, password);
+  log('Signing up with email and password');
+  final String? idToken = await firebase.signUpWithEmailAndPassword(email, password);
 
   if (idToken == null) {
-    showToast("Registrierung fehlgeschlagen");
+    logWarning('Email sign up failed');
     return;
   }
 
-  Map<String, dynamic>? session = await runApiService(
+  log('Calling API to sign up with email and password');
+  final Map<String, dynamic>? session = await runApiService(
     apiCall: () => service.login(idToken),
-    parser: (result) => result["login"],
+    parser: (result) => result['login'],
   );
 
   if (session == null) {
-    showToast("Registrierung fehlgeschlagen");
+    logWarning('API call failed');
     return;
   }
 
-  String sessionID = session["sessionID"];
-  String userID = session["sessionID"];
+  log('API call successful');
+  final String sessionID = session['sessionID'];
+  final String userID = session['user'];
 
   store.dispatch(
     Action(
@@ -168,16 +199,55 @@ Future<void> signUpWithEmailAndPassword(String email, String password) async {
     ),
   );
 
-  await storage.saveAuthProviderType("email");
+  log('Saving credentials');
+  await storage.saveAuthProviderType('email');
+  await storage.saveCredentials(userID, sessionID);
 
+  log('Loading user info');
   loadUserInfo();
 
+  log('Navigating to home screen');
   navigatorKey.currentState!.pushNamedAndRemoveUntil(
     '/home',
     (route) => false,
   );
+}
 
-  storage.saveCredentials(userID, sessionID);
+Future<void> signInAsGuest() async {
+  log('Signing in as guest');
+  final Map<String, dynamic>? session = await runApiService(
+    apiCall: () => service.loginAsGuest(),
+    parser: (result) => result['loginAsGuest'],
+  );
+
+  if (session == null) {
+    log('API call failed');
+    return;
+  }
+
+  log('API call successful');
+  final String sessionID = session['sessionID'];
+  final String userID = session['user'];
+
+  store.dispatch(
+    Action(
+      ActionTypes.updateSessionID,
+      payload: sessionID,
+    ),
+  );
+
+  log('Saving credentials');
+  await storage.saveAuthProviderType('guest');
+  await storage.saveCredentials(userID, sessionID);
+
+  log('Loading user info');
+  loadUserInfo();
+
+  log('Navigating to home screen');
+  navigatorKey.currentState!.pushNamedAndRemoveUntil(
+    '/home',
+    (route) => false,
+  );
 }
 
 /// Signs out the current user.
@@ -186,25 +256,38 @@ Future<void> signUpWithEmailAndPassword(String email, String password) async {
 /// dispatches an action to update the session ID in the store, navigates to the welcome page,
 /// and deletes the user's credentials from shared preferences.
 Future<void> signOut() async {
-  await firebase.signOut();
-  await runApiService(
-    apiCall: () => service.logout(),
-    parser: (result) => null,
-  );
+  log('Calling API to sign out');
+  try {
+    await runApiService(
+      apiCall: () => service.logout(),
+      shouldRethrow: true,
+    );
+  } on ApiException catch (e) {
+    //TODO: Ensure that the user is logged out even if the API call fails
+    showToast(e.message);
+    return;
+  } catch (e) {
+    //TODO: Same here
+    showToast(e.toString());
+    return;
+  }
 
+  log('Signing out');
+  await firebase.signOut();
+
+  log('Clearing credentials');
   store.dispatch(
     Action(
-      ActionTypes.updateSessionID,
-      payload: null,
+      ActionTypes.clear,
     ),
   );
+  storage.deleteCredentials();
 
+  log('Navigating to welcome screen');
   navigatorKey.currentState!.pushNamedAndRemoveUntil(
     '/welcome',
     (route) => false,
   );
-
-  storage.deleteCredentials();
 }
 
 /// Sends a password reset email to the user.
@@ -212,9 +295,9 @@ Future<void> signOut() async {
 /// The [email] parameter is required and represents the email of the user.
 /// The function sends a password reset email to the user and shows a toast with a success message.
 Future<void> triggerPasswordReset(String email) async {
+  log('Triggering password reset');
   await firebase.sendPasswordResetEmail(email);
-  showToast(
-      "Ein Link zum Zurücksetzen des Passworts wurde an Ihre E-Mail gesendet.");
+  showToast('Ein Link zum Zurücksetzen des Passworts wurde an Ihre E-Mail gesendet.');
 }
 
 /// Updates the password of the current user.
@@ -222,6 +305,7 @@ Future<void> triggerPasswordReset(String email) async {
 /// The [oldPassword] and [newPassword] parameters are required and represent the old and new passwords of the user.
 /// The function updates the user's password and shows a toast with a success message.
 Future<void> updatePassword(String oldPassword, String newPassword) async {
+  log('Updating password');
   await firebase.updatePassword(oldPassword, newPassword);
-  showToast("Passwort erfolgreich aktualisiert");
+  showToast('Passwort erfolgreich aktualisiert');
 }

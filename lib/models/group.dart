@@ -2,6 +2,8 @@
 ///
 /// {@category MODELS}
 library models.group;
+
+import 'package:studiconnect/models/message.dart';
 import 'package:studiconnect/models/user.dart';
 
 /// A class that represents a group.
@@ -40,6 +42,7 @@ class Group {
   final double? lat;
   final double? lon;
   final bool imageExists;
+  final List<Message>? messages;
 
   /// Constructor for the [Group] class.
   ///
@@ -56,6 +59,7 @@ class Group {
     this.lat,
     this.lon,
     this.imageExists = false,
+    this.messages,
   });
 
   /// A factory constructor that creates a new instance of the [Group] class from a map.
@@ -68,7 +72,7 @@ class Group {
       description: data['description'],
       module: data['module'],
       creator:
-          data.containsKey("creator") ? User.fromApi(data['creator']) : null,
+          data.containsKey('creator') ? User.fromApi(data['creator']) : null,
       members: ((data['members'] ?? []) as List<dynamic>)
           .map((e) => User.fromApi(e))
           .toList(),
@@ -76,12 +80,13 @@ class Group {
           .map((e) => User.fromApi(e))
           .toList(),
       // parse date
-      createdAt: data.containsKey("createdAt")
+      createdAt: data.containsKey('createdAt')
           ? DateTime.parse(data['createdAt'])
           : null,
       lat: data['lat'],
       lon: data['lon'],
       imageExists: data['imageExists'] ?? false,
+      messages: [],
     );
   }
 
@@ -102,6 +107,7 @@ class Group {
     double? lat,
     double? lon,
     bool? imageExists,
+    List<Message>? messages,
   }) {
     return Group(
       id: id ?? this.id,
@@ -115,6 +121,7 @@ class Group {
       lat: lat ?? this.lat,
       lon: lon ?? this.lon,
       imageExists: imageExists ?? this.imageExists,
+      messages: messages ?? this.messages,
     );
   }
 }
