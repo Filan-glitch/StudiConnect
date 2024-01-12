@@ -175,7 +175,7 @@ Future<void> deleteEmailAccount(String password) async {
     log('Deleted email account from Firebase');
   } catch (e) {
     logWarning(e.toString());
-    showToast('Bitte überprüfen Sie Ihr Passwort');
+    rethrow;
   }
 }
 

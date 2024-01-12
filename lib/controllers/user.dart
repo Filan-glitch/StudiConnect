@@ -176,12 +176,19 @@ Future<void> deleteAccount(String credential) async {
   // Update the session ID in the state and navigate to the welcome page
   store.dispatch(
     Action(
-      ActionTypes.clear,
-    ),
+      ActionTypes.startTask,
+    )
   );
+
   navigatorKey.currentState!.pushNamedAndRemoveUntil(
     '/welcome',
     (route) => false,
+  );
+
+  store.dispatch(
+    Action(
+      ActionTypes.clear,
+    ),
   );
 }
 

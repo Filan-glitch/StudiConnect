@@ -80,6 +80,17 @@ class DeleteAccountPage extends StatelessWidget {
                       ),
                     ),
                     onPressed: () async {
+                      if (passwordNeeded && _passwordController.text.isEmpty) {
+                        _errorMessageNotifier.value = 'Bitte geben Sie Ihr Passwort ein.';
+                        return;
+                      }
+
+                      final FocusScopeNode currentFocus = FocusScope.of(context);
+
+                      if (!currentFocus.hasPrimaryFocus) {
+                        currentFocus.unfocus();
+                      }
+
                       try {
                         await deleteAccount(_passwordController.text);
                       } on FirebaseAuthException catch (e) {
