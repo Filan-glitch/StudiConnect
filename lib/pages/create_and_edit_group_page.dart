@@ -40,7 +40,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
   late final TextEditingController _groupDescriptionController;
 
   LatLng? _selectedLocation;
-  GroupLookupParameters? groupParams;
+  late final GroupLookupParameters? groupParams;
 
   @override
   void initState() {
@@ -53,7 +53,14 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
       setState(() {
         groupParams = ModalRoute.of(context)!.settings.arguments
             as GroupLookupParameters?;
-        final Group? group = groupParams?.getGroup(context);
+        late final Group? group;
+        try {
+          group = groupParams?.getGroup(context);
+        } catch (e) {
+          showToast('Gruppe konnte nicht geladen werden.');
+          navigatorKey.currentState!.pop();
+          return;
+        }
         if (group != null) {
           _groupTitleController.text = group.title ?? '';
           _groupModuleController.text = group.module ?? '';
