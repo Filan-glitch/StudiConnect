@@ -1,3 +1,8 @@
+/// This library contains a logger instance with custom configuration.
+///
+/// {@category SERVICES}
+library services.logger_provider;
+
 import 'package:logger/logger.dart';
 
 /// Logger instance with custom configuration.

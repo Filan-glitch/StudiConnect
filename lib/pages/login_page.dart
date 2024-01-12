@@ -41,6 +41,9 @@ class _LoginPageState extends State<LoginPage> {
   /// Whether the email login button is currently loading.
   bool _emailButtonLoading = false;
 
+  /// Whether the guest login button is currently loading.
+  bool _guestButtonLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -66,121 +69,163 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              const Text(
-                'Willkommen zurück!',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 30),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: TextField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  autocorrect: false,
-                  textCapitalization: TextCapitalization.none,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'E-Mail',
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: TextField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Passwort',
-                  ),
-                ),
-              ),
-              // Error Label, invisible if no error
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5.0),
-                child: ErrorLabel(
-                  errorMessageNotifier: _errorMessageNotifier,
-                ),
-              ),
-              const SizedBox(height: 30),
-              EmailAuthButton(
-                onPressed: () async {
-                  if(_emailButtonLoading) return;
+              Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Willkommen zurück!',
+                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 30),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: TextField(
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          autocorrect: false,
+                          textCapitalization: TextCapitalization.none,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'E-Mail',
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: TextField(
+                          controller: _passwordController,
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Passwort',
+                          ),
+                        ),
+                      ),
+                      // Error Label, invisible if no error
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: ErrorLabel(
+                          errorMessageNotifier: _errorMessageNotifier,
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      EmailAuthButton(
+                        onPressed: () async {
+                          if(_emailButtonLoading) return;
 
-                  if(_emailController.text.isEmpty || _passwordController.text.isEmpty) {
-                    setState(() {
-                      _errorMessageNotifier.value = 'Bitte fülle alle Felder aus.';
-                    });
-                    return;
-                  }
+                          if(_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+                            setState(() {
+                              _errorMessageNotifier.value = 'Bitte fülle alle Felder aus.';
+                            });
+                            return;
+                          }
 
-                  setState(() {
-                    _emailButtonLoading = true;
-                  });
+                          setState(() {
+                            _emailButtonLoading = true;
+                          });
 
-                  try {
-                    await signInWithEmailAndPassword(
-                      _emailController.text,
-                      _passwordController.text,
-                    );
-                  } on FirebaseAuthException catch (e) {
-                    final errorMessages = {
-                      'user-not-found': 'Es existiert kein Nutzer mit dieser E-Mail.',
-                      'wrong-password': 'Das Passwort ist falsch.',
-                      'invalid-email': 'Die E-Mail ist ungültig.',
-                      'user-disabled': 'Dieser Nutzer wurde deaktiviert.',
-                      'too-many-requests': 'Zu viele Anfragen. Bitte versuche es später erneut.',
-                      'operation-not-allowed': 'Diese Anmeldung ist nicht erlaubt.',
-                      'network-request-failed': 'Keine Internetverbindung.',
-                      'invalid-credential': 'Die Anmeldeinformationen sind ungültig.',
-                      'account-exists-with-different-credential': 'Es existiert bereits ein Nutzer mit dieser E-Mail und einer anderen Anmeldemethode.',
-                      'invalid-verification-code': 'Der Verifizierungscode ist ungültig.',
-                      'invalid-verification-id': 'Die Verifizierungs-ID ist ungültig.',
-                      'invalid-action-code': 'Der Aktionscode ist ungültig.',
-                    };
+                          try {
+                            await signInWithEmailAndPassword(
+                              _emailController.text,
+                              _passwordController.text,
+                            );
+                          } on FirebaseAuthException catch (e) {
+                            final errorMessages = {
+                              'user-not-found': 'Es existiert kein Nutzer mit dieser E-Mail.',
+                              'wrong-password': 'Das Passwort ist falsch.',
+                              'invalid-email': 'Die E-Mail ist ungültig.',
+                              'user-disabled': 'Dieser Nutzer wurde deaktiviert.',
+                              'too-many-requests': 'Zu viele Anfragen. Bitte versuche es später erneut.',
+                              'operation-not-allowed': 'Diese Anmeldung ist nicht erlaubt.',
+                              'network-request-failed': 'Keine Internetverbindung.',
+                              'invalid-credential': 'Die Anmeldeinformationen sind ungültig.',
+                              'account-exists-with-different-credential': 'Es existiert bereits ein Nutzer mit dieser E-Mail und einer anderen Anmeldemethode.',
+                              'invalid-verification-code': 'Der Verifizierungscode ist ungültig.',
+                              'invalid-verification-id': 'Die Verifizierungs-ID ist ungültig.',
+                              'invalid-action-code': 'Der Aktionscode ist ungültig.',
+                            };
 
-                    setState(() {
-                      _errorMessageNotifier.value = errorMessages[e.code] ?? '${e.code}: ${e.message}';
-                      _emailButtonLoading = false;
-                    });
-                    return;
-                  } catch (e) {
-                    setState(() {
-                      _errorMessageNotifier.value = 'Ein unbekannter Fehler ist aufgetreten.';
-                      _emailButtonLoading = false;
-                    });
-                    return;
-                  }
+                            setState(() {
+                              _errorMessageNotifier.value = errorMessages[e.code] ?? '${e.code}: ${e.message}';
+                              _emailButtonLoading = false;
+                            });
+                            return;
+                          } catch (e) {
+                            setState(() {
+                              _errorMessageNotifier.value = 'Ein unbekannter Fehler ist aufgetreten.';
+                              _emailButtonLoading = false;
+                            });
+                            return;
+                          }
 
-                  setState(() {
-                    _emailButtonLoading = false;
-                  });
-                },
-                isLoading: _emailButtonLoading,
-                text: 'Mit E-Mail anmelden',
-                themeMode: Theme.of(context).brightness == Brightness.light
-                    ? ThemeMode.light
-                    : ThemeMode.dark,
-                style: AuthButtonStyle(
-                  textStyle: TextStyle(
-                    fontFamily: GoogleFonts.roboto().fontFamily,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 5),
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'Passwort vergessen?',
-                      style: const TextStyle(color: Colors.blue),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Navigator.pushNamed(context, '/login-help');
+                          setState(() {
+                            _emailButtonLoading = false;
+                          });
                         },
+                        isLoading: _emailButtonLoading,
+                        text: 'Mit E-Mail anmelden',
+                        themeMode: Theme.of(context).brightness == Brightness.light
+                            ? ThemeMode.light
+                            : ThemeMode.dark,
+                        style: AuthButtonStyle(
+                          textStyle: TextStyle(
+                            fontFamily: GoogleFonts.roboto().fontFamily,
+                            color: Theme.of(context).textTheme.labelSmall?.color
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Passwort vergessen?',
+                              style: const TextStyle(color: Colors.blue),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.pushNamed(context, '/login-help');
+                                },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Divider(),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: EmailAuthButton(
+                  key: const ValueKey('GuestButton'),
+                  onPressed: () async {
+                    if(_guestButtonLoading) return;
+
+                    setState(() {
+                      _guestButtonLoading = true;
+                    });
+
+                    await signInAsGuest();
+
+                    setState(() {
+                      _guestButtonLoading = false;
+                    });
+                  },
+                  isLoading: _guestButtonLoading,
+                  text: 'Als Gast anmelden',
+                  themeMode: Theme.of(context).brightness == Brightness.light
+                      ? ThemeMode.light
+                      : ThemeMode.dark,
+                  style: AuthButtonStyle(
+                    textStyle: TextStyle(
+                      fontFamily: GoogleFonts.roboto().fontFamily,
+                      color: Theme.of(context).textTheme.labelSmall?.color
                     ),
-                  ],
+                  ),
                 ),
               ),
             ],

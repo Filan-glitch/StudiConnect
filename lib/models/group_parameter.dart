@@ -1,3 +1,8 @@
+/// This library contains the [GroupLookupParameters] class.
+///
+/// {@category MODELS}
+library models.group_parameter;
+
 import 'package:flutter/material.dart';
 import 'package:studiconnect/models/group.dart';
 import 'package:flutter_redux/flutter_redux.dart';
