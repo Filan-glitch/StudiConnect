@@ -10,6 +10,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:oktoast/oktoast.dart';
 import 'package:studiconnect/controllers/groups.dart';
+import 'package:studiconnect/dialogs/delete_group_dialog.dart';
 import 'package:studiconnect/dialogs/select_location_dialog.dart';
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/group.dart';
@@ -40,7 +41,10 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
   late final TextEditingController _groupDescriptionController;
 
   LatLng? _selectedLocation;
-  late final GroupLookupParameters? groupParams;
+  late final GroupLookupParameters? _groupParams;
+  late final Group? _group;
+
+
 
   @override
   void initState() {
@@ -51,24 +55,23 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
 
     Future.delayed(Duration.zero, () {
       setState(() {
-        groupParams = ModalRoute.of(context)!.settings.arguments
+        _groupParams = ModalRoute.of(context)!.settings.arguments
             as GroupLookupParameters?;
-        late final Group? group;
         try {
-          group = groupParams?.getGroup(context);
+          _group = _groupParams?.getGroup(context);
         } catch (e) {
           showToast('Gruppe konnte nicht geladen werden. Bitte versuche es erneut.');
           navigatorKey.currentState!.pop();
           return;
         }
-        if (group != null) {
-          _groupTitleController.text = group.title ?? '';
-          _groupModuleController.text = group.module ?? '';
+        if (_group != null) {
+          _groupTitleController.text = _group.title ?? '';
+          _groupModuleController.text = _group.module ?? '';
           _groupDescriptionController.text =
-              group.description ?? '';
+              _group.description ?? '';
           _selectedLocation = LatLng(
-            group.lat ?? 0.0,
-            group.lon ?? 0.0,
+            _group.lat ?? 0.0,
+            _group.lon ?? 0.0,
           );
         }
       });
@@ -88,10 +91,9 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (context, state) {
-          final Group? group = groupParams?.getGroup(context);
           return PageWrapper(
             padding: const EdgeInsets.only(top: 20.0),
-            title: group?.id == null ? 'Gruppe erstellen' : 'Gruppe bearbeiten',
+            title: _group?.id == null ? 'Gruppe erstellen' : 'Gruppe bearbeiten',
             body: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -228,7 +230,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                     child: Column(
                       children: [
                         // save button
-                        if (group?.id != null)
+                        if (_group?.id != null)
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton.icon(
@@ -238,7 +240,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                                     .pickImage(source: ImageSource.gallery)
                                     .then((value) {
                                   if (value != null) {
-                                    uploadGroupImage(group?.id ?? '', value);
+                                    uploadGroupImage(_group?.id ?? '', value);
                                   }
                                 });
                               },
@@ -249,12 +251,12 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                               ),
                             ),
                           ),
-                        if (group?.imageExists ?? false)
+                        if (_group?.imageExists ?? false)
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton.icon(
                               onPressed: () {
-                                deleteGroupImage(group?.id ?? '');
+                                deleteGroupImage(_group?.id ?? '');
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
@@ -288,7 +290,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                                 return;
                               }
 
-                              if (group == null) {
+                              if (_group == null) {
                                 final bool successful = await createGroup(
                                   _groupTitleController.text,
                                   _groupDescriptionController.text,
@@ -300,7 +302,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                                 if (!successful) return;
                               } else {
                                 final bool successful = await updateGroup(
-                                  group.id,
+                                  _group.id,
                                   _groupTitleController.text,
                                   _groupDescriptionController.text,
                                   _groupModuleController.text,
@@ -310,7 +312,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
 
                                 if (!successful) return;
 
-                                group.update(
+                                _group.update(
                                   title: _groupTitleController.text,
                                   module: _groupModuleController.text,
                                   description: _groupDescriptionController.text,
@@ -330,19 +332,18 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                           ),
                         ),
                         const SizedBox(height: 50.0),
-                        if (group?.id != null)
+                        if (_group?.id != null)
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton.icon(
                               onPressed: () async {
-                                final bool successful = await deleteGroup(group!.id);
-
-                                if (!successful) return;
-
-                                navigatorKey.currentState!
-                                    .pushNamedAndRemoveUntil(
-                                  '/home',
-                                      (route) => false,
+                                if (_group?.id == null) return;
+                                showDialog(
+                                  context: context,
+                                  builder: (context) =>
+                                      DeleteGroupDialog(
+                                        groupID: _group!.id,
+                                      ),
                                 );
                               },
                               style: ElevatedButton.styleFrom(

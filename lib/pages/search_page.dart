@@ -103,6 +103,8 @@ class _SearchPageState extends State<SearchPage> {
           controller: _moduleInputController,
           cursorColor: Colors.white,
           onChanged: (value) {
+            if (value.isEmpty) return;
+
             //Only allow letters, numbers, and spaces in university
             if(!RegExp(r'^[a-zA-Z0-9 ]+$').hasMatch(value)) {
               showToast('Bitte entferne alle Sonderzeichen aus der Suche.');
