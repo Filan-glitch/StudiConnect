@@ -78,7 +78,7 @@ class _SearchPageState extends State<SearchPage> {
     store.dispatch(
       redux.Action(
         redux.ActionTypes.updateSearchResults,
-        payload: [] as List<Group>,
+        payload: <Group>[],
       ),
     );
   }
