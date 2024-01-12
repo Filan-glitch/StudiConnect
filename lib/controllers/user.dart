@@ -40,6 +40,7 @@ Future<bool> loadUserInfo() async {
       final User u = User.fromApi(
         result['user'],
       );
+
       return u;
     },
   );
@@ -92,6 +93,16 @@ Future<bool> loadUserInfo() async {
     ActionTypes.setProfileImageAvailable,
     payload: await rest_service.profileImageAvailable(),
   ));
+
+  //Checking if critical information is missing
+  if(result.username == null || result.username!.isEmpty || result.major == null || result.major!.isEmpty || result.university == null || result.university!.isEmpty){
+    navigatorKey.currentState!.pushNamedAndRemoveUntil(
+      '/edit-profile',
+      (route) => false,
+      arguments: true,
+    );
+    return false;
+  }
 
   return true;
 }

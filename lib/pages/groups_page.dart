@@ -48,13 +48,14 @@ class _GroupsPageState extends State<GroupsPage> {
           },
         ),
         MenuAction(
-            icon: Icons.share,
-            title: 'Studiconnect weiterempfehlen',
-            onTap: () {
-              navigatorKey.currentState!.pop();
-              Share.share(
-                  'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=$appID');
-            }),
+          icon: Icons.share,
+          title: 'Studiconnect weiterempfehlen',
+          onTap: () {
+            navigatorKey.currentState!.pop();
+            Share.share(
+              'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=$appID');
+          },
+        ),
         MenuAction(
           icon: Icons.settings,
           title: 'Einstellungen',

@@ -6,6 +6,7 @@ library pages.profile_page;
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:studiconnect/constants.dart';
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/menu_action.dart';
 import 'package:studiconnect/widgets/avatar_picture.dart';
@@ -40,13 +41,14 @@ class ProfilePage extends StatelessWidget {
               },
             ),
             MenuAction(
-                icon: Icons.share,
-                title: 'Studiconnect weiterempfehlen',
-                onTap: () {
-                  navigatorKey.currentState!.pop();
-                  Share.share(
-                      'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=de.studiconnect.app');
-                }),
+              icon: Icons.share,
+              title: 'Studiconnect weiterempfehlen',
+              onTap: () {
+                navigatorKey.currentState!.pop();
+                Share.share(
+                    'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=$appID');
+              },
+            ),
             MenuAction(
               icon: Icons.settings,
               title: 'Einstellungen',
@@ -138,18 +140,20 @@ class ProfilePage extends StatelessWidget {
                         fontSize: 15,
                       ),
                     ),
-                    Text(
-                      'Tel: ${state.user?.mobile ?? '-'}',
-                      style: const TextStyle(
-                        fontSize: 15,
+                    if (state.user?.mobile != null && state.user!.mobile!.isNotEmpty)
+                      Text(
+                        'Telefon: ${state.user?.mobile ?? '-'}',
+                        style: const TextStyle(
+                          fontSize: 15,
+                        ),
                       ),
-                    ),
-                    Text(
-                      'Discord: ${state.user?.discord ?? '-'}',
-                      style: const TextStyle(
-                        fontSize: 15,
+                    if (state.user?.discord != null && state.user!.discord!.isNotEmpty)
+                      Text(
+                        'Discord: ${state.user?.discord ?? '-'}',
+                        style: const TextStyle(
+                          fontSize: 15,
+                        ),
                       ),
-                    ),
                     Padding(
                       padding: const EdgeInsets.only(top: 20),
                       child: Text(

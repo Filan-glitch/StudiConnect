@@ -137,11 +137,13 @@ class _EditProfilePage extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final bool _firstTime = ModalRoute.of(context)!.settings.arguments as bool? ?? false;
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       builder: (context, state) {
         return PageWrapper(
           title: 'Profil bearbeiten',
+          type: (_firstTime) ? PageType.empty : PageType.simple,
           body: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.symmetric(
@@ -179,7 +181,7 @@ class _EditProfilePage extends State<EditProfilePage> {
 
                             //Only allow letters, numbers, and spaces in major
                             if(!RegExp(r'^[a-zA-Z0-9 ]+$').hasMatch(value)) {
-                              return 'Bitte entferne alle Sonderzeichen aus deinem Studiengang';
+                              return 'Bitte entferne alle Sonderzeichen';
                             }
 
                             return null;
@@ -197,7 +199,7 @@ class _EditProfilePage extends State<EditProfilePage> {
 
                             //Only allow letters, numbers, and spaces in university
                             if(!RegExp(r'^[a-zA-Z0-9 ]+$').hasMatch(value)) {
-                              return 'Bitte entferne alle Sonderzeichen aus dem Namen deiner Universität';
+                              return 'Bitte entferne alle Sonderzeichen';
                             }
 
                             return null;
@@ -212,12 +214,6 @@ class _EditProfilePage extends State<EditProfilePage> {
                             labelText: 'Über mich',
                             border: OutlineInputBorder(),
                           ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Bitte gib etwas über dich ein';
-                            }
-                            return null;
-                          },
                         ),
                         TextFormField(
                           controller: _mobileController,
@@ -313,7 +309,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                           child: ElevatedButton.icon(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                navigatorKey.currentState!.pop();
+                                navigatorKey.currentState!.pushNamedAndRemoveUntil('/home', (route) => false);
 
                                 updateProfile(
                                   _usernameController.text,
