@@ -23,7 +23,6 @@ import 'package:studiconnect/services/gps.dart';
 /// as well as a button to select the user's location.
 /// The fields are pre-filled with the user's current data.
 class EditProfilePage extends StatefulWidget {
-
   /// Creates an [EditProfilePage] widget.
   const EditProfilePage({super.key});
 
@@ -110,12 +109,11 @@ class _EditProfilePage extends State<EditProfilePage> {
           setState(() {
             _permission = LocationPermission.deniedForever;
           });
-        } else if(error.toString() == 'Location accuracy is not precise') {
+        } else if (error.toString() == 'Location accuracy is not precise') {
           setState(() {
             _accuracyStatus = LocationAccuracyStatus.reduced;
           });
-        }
-        else {
+        } else {
           setState(() {
             _permission = LocationPermission.unableToDetermine;
           });
@@ -137,7 +135,8 @@ class _EditProfilePage extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final bool _firstTime = ModalRoute.of(context)!.settings.arguments as bool? ?? false;
+    final bool _firstTime =
+        ModalRoute.of(context)!.settings.arguments as bool? ?? false;
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       builder: (context, state) {
@@ -146,9 +145,9 @@ class _EditProfilePage extends State<EditProfilePage> {
           type: (_firstTime) ? PageType.empty : PageType.simple,
           body: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 30,
-                vertical: 20,
+                vertical: (_firstTime) ? 50 : 30,
               ),
               child: Column(
                 children: [
@@ -180,7 +179,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                             }
 
                             //Only allow letters, numbers, and spaces in major
-                            if(!RegExp(r'^[a-zA-Z0-9 ]+$').hasMatch(value)) {
+                            if (!RegExp(r'^[a-zA-Z0-9 ]+$').hasMatch(value)) {
                               return 'Bitte entferne alle Sonderzeichen';
                             }
 
@@ -198,7 +197,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                             }
 
                             //Only allow letters, numbers, and spaces in university
-                            if(!RegExp(r'^[a-zA-Z0-9 ]+$').hasMatch(value)) {
+                            if (!RegExp(r'^[a-zA-Z0-9 ]+$').hasMatch(value)) {
                               return 'Bitte entferne alle Sonderzeichen';
                             }
 
@@ -292,7 +291,8 @@ class _EditProfilePage extends State<EditProfilePage> {
                                   width: 2.0,
                                 ),
                               ),
-                              icon: const Icon(Icons.delete_forever_outlined, color: Colors.red),
+                              icon: const Icon(Icons.delete_forever_outlined,
+                                  color: Colors.red),
                               label: const Padding(
                                 padding: EdgeInsets.symmetric(vertical: 5.0),
                                 child: Text(
@@ -309,7 +309,9 @@ class _EditProfilePage extends State<EditProfilePage> {
                           child: ElevatedButton.icon(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                navigatorKey.currentState!.pushNamedAndRemoveUntil('/home', (route) => false);
+                                navigatorKey.currentState!
+                                    .pushNamedAndRemoveUntil(
+                                        '/home', (route) => false);
 
                                 updateProfile(
                                   _usernameController.text,
@@ -349,34 +351,35 @@ class _EditProfilePage extends State<EditProfilePage> {
                         const SizedBox(
                           height: 50.0,
                         ),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.background,
-                              side: const BorderSide(
+                        if (!_firstTime)
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.background,
+                                side: const BorderSide(
+                                  color: Colors.red,
+                                  width: 2.0,
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pushNamed(
+                                  '/delete-account',
+                                );
+                              },
+                              label: const Text(
+                                'Konto löschen',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                ),
+                              ),
+                              icon: const Icon(
+                                Icons.warning_amber_rounded,
                                 color: Colors.red,
-                                width: 2.0,
                               ),
                             ),
-                            onPressed: () {
-                              Navigator.of(context).pushNamed(
-                                '/delete-account',
-                              );
-                            },
-                            label: const Text(
-                              'Konto löschen',
-                              style: TextStyle(
-                                color: Colors.red,
-                              ),
-                            ),
-                            icon: const Icon(
-                              Icons.warning_amber_rounded,
-                              color: Colors.red,
-                            ),
-                          ),
-                        )
+                          )
                       ],
                     ),
                   ),
