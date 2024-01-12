@@ -235,7 +235,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
 
                               return ListTile(
                                 onLongPress: () {
-                                  if (user.id == state.user?.id) return;
+                                  if (user.id == state.user?.id || user.id != group.creator) return;
 
                                   showDialog(
                                     context: context,
