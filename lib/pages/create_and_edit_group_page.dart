@@ -8,6 +8,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geocoding/geocoding.dart' as geo;
+import 'package:oktoast/oktoast.dart';
 import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/dialogs/select_location_dialog.dart';
 import 'package:studiconnect/main.dart';
@@ -275,6 +276,11 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                           width: double.infinity,
                           child: ElevatedButton.icon(
                             onPressed: () async {
+                              if(_groupTitleController.text.isEmpty || _groupModuleController.text.isEmpty || _groupDescriptionController.text.isEmpty || _selectedLocation == null) {
+                                showToast('Bitte fülle alle Felder aus.');
+                                return;
+                              }
+
                               if (group == null) {
                                 final bool successful = await createGroup(
                                   _groupTitleController.text,
