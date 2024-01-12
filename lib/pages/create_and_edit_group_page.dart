@@ -179,7 +179,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                                                 .width
                                                 - 150,
                                             child: Text(
-                                              '${location.street}\n${location
+                                              '${location.street}\n${location.postalCode} ${location
                                                   .locality}',
                                               style: TextStyle(
                                                 color: Theme

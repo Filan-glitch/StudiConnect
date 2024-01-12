@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:studiconnect/dialogs/dialog_wrapper.dart';
 
 /// A widget that represents a dialog for selecting a location on a map.
@@ -159,7 +160,13 @@ class _SelectLocationDialogState extends State<SelectLocationDialog> {
             ),
           ),
           onPressed: () {
-            widget.onLocationSelected(_selectedLocation!);
+            if(_selectedLocation != null) {
+              widget.onLocationSelected(_selectedLocation!);
+            } else if (_currentLocation != null) {
+              widget.onLocationSelected(_currentLocation!);
+            } else {
+              showToast('Keine Position ausgewählt');
+            }
           },
           child: Text(
             'Position verwenden',
