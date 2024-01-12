@@ -11,7 +11,6 @@ import 'package:studiconnect/models/user.dart';
 /// This class contains all the information about a group, including its ID, title, description,
 /// module, creator, members, join requests, creation date, and location.
 class Group {
-
   /// The group's ID.
   final String id;
 
@@ -87,8 +86,8 @@ class Group {
       createdAt: data.containsKey('createdAt')
           ? DateTime.parse(data['createdAt'])
           : null,
-      lat: data['lat'],
-      lon: data['lon'],
+      lat: data['lat']?.toDouble(),
+      lon: data['lon']?.toDouble(),
       imageExists: data['imageExists'] ?? false,
       messages: [],
     );
