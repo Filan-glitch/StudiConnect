@@ -103,6 +103,7 @@ class _SearchPageState extends State<SearchPage> {
       headerControls: [
         TextField(
           controller: _moduleInputController,
+          cursorColor: Colors.white,
           onChanged: (value) {
             _delayQueryTimer.cancel();
             _delayQueryTimer = Timer(

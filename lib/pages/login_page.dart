@@ -44,6 +44,9 @@ class _LoginPageState extends State<LoginPage> {
   /// Whether the guest login button is currently loading.
   bool _guestButtonLoading = false;
 
+  /// Whether the guest login button is currently visible.
+  bool _guestButtonVisible = true;
+
   @override
   void initState() {
     super.initState();
@@ -62,6 +65,18 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Hide guest login button, when keyboard is visible
+    final keyboardVisibility = MediaQuery.of(context).viewInsets.bottom;
+    if(keyboardVisibility > 0) {
+      setState(() {
+        _guestButtonVisible = false;
+      });
+    } else {
+      setState(() {
+        _guestButtonVisible = true;
+      });
+    }
+
     return PageWrapper(
         title: 'Anmelden',
         type: PageType.simple,
@@ -194,38 +209,46 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Divider(),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: EmailAuthButton(
-                  key: const ValueKey('GuestButton'),
-                  onPressed: () async {
-                    if(_guestButtonLoading) return;
+              Visibility(
+                visible: _guestButtonVisible,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 30),
+                        child: Divider(),
+                      ),
+                    Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: EmailAuthButton(
+                          key: const ValueKey('GuestButton'),
+                          onPressed: () async {
+                            if(_guestButtonLoading) return;
 
-                    setState(() {
-                      _guestButtonLoading = true;
-                    });
+                            setState(() {
+                              _guestButtonLoading = true;
+                            });
 
-                    await signInAsGuest();
+                            await signInAsGuest();
 
-                    setState(() {
-                      _guestButtonLoading = false;
-                    });
-                  },
-                  isLoading: _guestButtonLoading,
-                  text: 'Als Gast anmelden',
-                  themeMode: Theme.of(context).brightness == Brightness.light
-                      ? ThemeMode.light
-                      : ThemeMode.dark,
-                  style: AuthButtonStyle(
-                    textStyle: TextStyle(
-                      fontFamily: GoogleFonts.roboto().fontFamily,
-                      color: Theme.of(context).textTheme.labelSmall?.color
-                    ),
-                  ),
+                            setState(() {
+                              _guestButtonLoading = false;
+                            });
+                          },
+                          isLoading: _guestButtonLoading,
+                          text: 'Als Gast anmelden',
+                          themeMode: Theme.of(context).brightness == Brightness.light
+                              ? ThemeMode.light
+                              : ThemeMode.dark,
+                          style: AuthButtonStyle(
+                            textStyle: TextStyle(
+                                fontFamily: GoogleFonts.roboto().fontFamily,
+                                color: Theme.of(context).textTheme.labelSmall?.color
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ),
             ],
