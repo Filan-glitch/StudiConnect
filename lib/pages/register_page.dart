@@ -55,6 +55,9 @@ class _RegisterPageState extends State<RegisterPage> {
   /// Whether the guest registration button is currently loading.
   bool _guestButtonLoading = false;
 
+  /// Whether the guest registration button is currently visible.
+  bool _guestButtonVisible = true;
+
 
   @override
   void initState() {
@@ -76,6 +79,18 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Hide guest login button, when keyboard is visible
+    final keyboardVisibility = MediaQuery.of(context).viewInsets.bottom;
+    if(keyboardVisibility > 0) {
+      setState(() {
+        _guestButtonVisible = false;
+      });
+    } else {
+      setState(() {
+        _guestButtonVisible = true;
+      });
+    }
+
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (BuildContext context, AppState state) {
@@ -243,38 +258,46 @@ class _RegisterPageState extends State<RegisterPage> {
                       ],
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 30),
-                    child: Divider(),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: EmailAuthButton(
-                      key: const ValueKey('GuestButton'),
-                      onPressed: () async {
-                        if(_guestButtonLoading) return;
-
-                        setState(() {
-                          _guestButtonLoading = true;
-                        });
-
-                        await signInAsGuest();
-
-                        setState(() {
-                          _guestButtonLoading = false;
-                        });
-                      },
-                      isLoading: _guestButtonLoading,
-                      text: 'Als Gast anmelden',
-                      themeMode: Theme.of(context).brightness == Brightness.light
-                          ? ThemeMode.light
-                          : ThemeMode.dark,
-                      style: AuthButtonStyle(
-                        textStyle: TextStyle(
-                          fontFamily: GoogleFonts.roboto().fontFamily,
-                          color: Theme.of(context).textTheme.labelSmall?.color
+                  Visibility(
+                    visible: _guestButtonVisible,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 30),
+                          child: Divider(),
                         ),
-                      ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: EmailAuthButton(
+                            key: const ValueKey('GuestButton'),
+                            onPressed: () async {
+                              if(_guestButtonLoading) return;
+
+                              setState(() {
+                                _guestButtonLoading = true;
+                              });
+
+                              await signInAsGuest();
+
+                              setState(() {
+                                _guestButtonLoading = false;
+                              });
+                            },
+                            isLoading: _guestButtonLoading,
+                            text: 'Als Gast anmelden',
+                            themeMode: Theme.of(context).brightness == Brightness.light
+                                ? ThemeMode.light
+                                : ThemeMode.dark,
+                            style: AuthButtonStyle(
+                              textStyle: TextStyle(
+                                  fontFamily: GoogleFonts.roboto().fontFamily,
+                                  color: Theme.of(context).textTheme.labelSmall?.color
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

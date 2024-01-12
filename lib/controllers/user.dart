@@ -48,10 +48,12 @@ Future<bool> loadUserInfo() async {
   if (result == null) {
     store.dispatch(
       Action(
-        ActionTypes.updateSessionID,
+        ActionTypes.clear,
         payload: null,
       ),
     );
+
+    storage.deleteCredentials();
 
     navigatorKey.currentState!.pushNamedAndRemoveUntil(
       '/welcome',
@@ -125,10 +127,13 @@ Future<void> updateProfile(
   if (id == null) {
     store.dispatch(
       Action(
-        ActionTypes.updateSessionID,
+        ActionTypes.clear,
         payload: null,
       ),
     );
+
+    storage.deleteCredentials();
+
     navigatorKey.currentState!.pushNamedAndRemoveUntil(
       '/welcome',
       (route) => false,

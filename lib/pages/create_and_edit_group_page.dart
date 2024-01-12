@@ -8,6 +8,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geocoding/geocoding.dart' as geo;
+import 'package:oktoast/oktoast.dart';
 import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/dialogs/select_location_dialog.dart';
 import 'package:studiconnect/main.dart';
@@ -39,7 +40,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
   late final TextEditingController _groupDescriptionController;
 
   LatLng? _selectedLocation;
-  GroupLookupParameters? groupParams;
+  late final GroupLookupParameters? groupParams;
 
   @override
   void initState() {
@@ -52,7 +53,14 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
       setState(() {
         groupParams = ModalRoute.of(context)!.settings.arguments
             as GroupLookupParameters?;
-        final Group? group = groupParams?.getGroup(context);
+        late final Group? group;
+        try {
+          group = groupParams?.getGroup(context);
+        } catch (e) {
+          showToast('Gruppe konnte nicht geladen werden. Bitte versuche es erneut.');
+          navigatorKey.currentState!.pop();
+          return;
+        }
         if (group != null) {
           _groupTitleController.text = group.title ?? '';
           _groupModuleController.text = group.module ?? '';
@@ -178,7 +186,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                                                 .width
                                                 - 150,
                                             child: Text(
-                                              '${location.street}\n${location
+                                              '${location.street}\n${location.postalCode} ${location
                                                   .locality}',
                                               style: TextStyle(
                                                 color: Theme
@@ -275,6 +283,11 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
                           width: double.infinity,
                           child: ElevatedButton.icon(
                             onPressed: () async {
+                              if(_groupTitleController.text.isEmpty || _groupModuleController.text.isEmpty || _groupDescriptionController.text.isEmpty || _selectedLocation == null) {
+                                showToast('Bitte fülle alle Felder aus.');
+                                return;
+                              }
+
                               if (group == null) {
                                 final bool successful = await createGroup(
                                   _groupTitleController.text,
