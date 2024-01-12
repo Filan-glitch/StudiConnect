@@ -25,6 +25,10 @@ To run the StudiConnect app locally, follow these steps:
 
 Make sure you have Flutter installed on your machine before running the app.
 
+## Demo Video
+
+It exists a demo video of the usage of our application. You can find it [here](https://studiconnect.janbellenberg.de/demo.mp4)
+
 ## Important Notes
 
 - The app uses Firebase for authentication. To enable OAuth2 authentication with Google, you need to follow these steps (Step 1 and 2 are only required if you want to use the release version of the app):
