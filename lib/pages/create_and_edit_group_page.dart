@@ -57,7 +57,7 @@ class _CreateAndEditGroupPageState extends State<CreateAndEditGroupPage> {
         try {
           group = groupParams?.getGroup(context);
         } catch (e) {
-          showToast('Gruppe konnte nicht geladen werden.');
+          showToast('Gruppe konnte nicht geladen werden. Bitte versuche es erneut.');
           navigatorKey.currentState!.pop();
           return;
         }
