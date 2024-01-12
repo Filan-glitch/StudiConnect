@@ -163,6 +163,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                             if (value == null || value.isEmpty) {
                               return 'Bitte gib einen Namen ein';
                             }
+
                             return null;
                           },
                         ),
@@ -175,6 +176,12 @@ class _EditProfilePage extends State<EditProfilePage> {
                             if (value == null || value.isEmpty) {
                               return 'Bitte gib einen Studiengang ein';
                             }
+
+                            //Only allow letters, numbers, and spaces in major
+                            if(!RegExp(r'^[a-zA-Z0-9 ]+$').hasMatch(value)) {
+                              return 'Bitte entferne alle Sonderzeichen aus deinem Studiengang';
+                            }
+
                             return null;
                           },
                         ),
@@ -187,6 +194,12 @@ class _EditProfilePage extends State<EditProfilePage> {
                             if (value == null || value.isEmpty) {
                               return 'Bitte gib eine Universität ein';
                             }
+
+                            //Only allow letters, numbers, and spaces in university
+                            if(!RegExp(r'^[a-zA-Z0-9 ]+$').hasMatch(value)) {
+                              return 'Bitte entferne alle Sonderzeichen aus dem Namen deiner Universität';
+                            }
+
                             return null;
                           },
                         ),
