@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:studiconnect/constants.dart';
 import 'package:studiconnect/controllers/groups.dart';
 import 'package:studiconnect/main.dart';
 import 'package:studiconnect/models/group.dart';
@@ -182,13 +183,14 @@ class _SearchPageState extends State<SearchPage> {
       /// The menu actions include the option to navigate to the settings page.
       menuActions: [
         MenuAction(
-            icon: Icons.share,
-            title: 'Studiconnect weiterempfehlen',
-            onTap: () {
-              navigatorKey.currentState!.pop();
-              Share.share(
-                  'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=de.studiconnect.app');
-            }),
+          icon: Icons.share,
+          title: 'Studiconnect weiterempfehlen',
+          onTap: () {
+            navigatorKey.currentState!.pop();
+            Share.share(
+                'Schau dir StudiConnect an: https://play.google.com/store/apps/details?id=$appID');
+          },
+        ),
         MenuAction(
           icon: Icons.settings,
           title: 'Einstellungen',
