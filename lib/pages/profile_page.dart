@@ -140,18 +140,20 @@ class ProfilePage extends StatelessWidget {
                         fontSize: 15,
                       ),
                     ),
-                    Text(
-                      'Tel: ${state.user?.mobile ?? '-'}',
-                      style: const TextStyle(
-                        fontSize: 15,
+                    if (state.user?.mobile != null && state.user!.mobile!.isNotEmpty)
+                      Text(
+                        'Telefon: ${state.user?.mobile ?? '-'}',
+                        style: const TextStyle(
+                          fontSize: 15,
+                        ),
                       ),
-                    ),
-                    Text(
-                      'Discord: ${state.user?.discord ?? '-'}',
-                      style: const TextStyle(
-                        fontSize: 15,
+                    if (state.user?.discord != null && state.user!.discord!.isNotEmpty)
+                      Text(
+                        'Discord: ${state.user?.discord ?? '-'}',
+                        style: const TextStyle(
+                          fontSize: 15,
+                        ),
                       ),
-                    ),
                     Padding(
                       padding: const EdgeInsets.only(top: 20),
                       child: Text(
