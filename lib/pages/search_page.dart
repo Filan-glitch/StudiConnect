@@ -24,7 +24,6 @@ import 'package:studiconnect/models/redux/store.dart';
 /// and a slider to set the search radius.
 /// The search results are displayed as a list of groups.
 class SearchPage extends StatefulWidget {
-
   /// Creates a [SearchPage] widget.
   const SearchPage({super.key});
 
@@ -65,19 +64,16 @@ class _SearchPageState extends State<SearchPage> {
     super.initState();
     _radius = 10;
     _moduleInputController = TextEditingController();
-    _delayQueryTimer = Timer(
-      const Duration(seconds: 1),
-        () {
-          if (StoreProvider.of<AppState>(context).state.user?.lat == null ||
-            StoreProvider.of<AppState>(context).state.user?.lon == null) {
-            setState(() {
-              _error = 'Bitte bearbeite dein Profil und gib deinen Standort an.';
-            });
-            return;
-          }
-          _loadSearchResults;
-        }
-    );
+    _delayQueryTimer = Timer(const Duration(seconds: 1), () {
+      if (StoreProvider.of<AppState>(context).state.user?.lat == null ||
+          StoreProvider.of<AppState>(context).state.user?.lon == null) {
+        setState(() {
+          _error = 'Bitte bearbeite dein Profil und gib deinen Standort an.';
+        });
+        return;
+      }
+      _loadSearchResults;
+    });
 
     store.dispatch(
       redux.Action(
@@ -108,10 +104,13 @@ class _SearchPageState extends State<SearchPage> {
             _delayQueryTimer = Timer(
               const Duration(seconds: 1),
               () {
-                if (StoreProvider.of<AppState>(context).state.user?.lat == null ||
-                    StoreProvider.of<AppState>(context).state.user?.lon == null) {
+                if (StoreProvider.of<AppState>(context).state.user?.lat ==
+                        null ||
+                    StoreProvider.of<AppState>(context).state.user?.lon ==
+                        null) {
                   setState(() {
-                    _error = 'Bitte bearbeite dein Profil und gib deinen Standort an.';
+                    _error =
+                        'Bitte bearbeite dein Profil und gib deinen Standort an.';
                   });
                   return;
                 }
@@ -149,19 +148,19 @@ class _SearchPageState extends State<SearchPage> {
                     });
 
                     _delayQueryTimer.cancel();
-                    _delayQueryTimer = Timer(
-                      const Duration(seconds: 1),
-                        () {
-                          if (StoreProvider.of<AppState>(context).state.user?.lat == null ||
-                              StoreProvider.of<AppState>(context).state.user?.lon == null) {
-                            setState(() {
-                              _error = 'Bitte bearbeite dein Profil und gib deinen Standort an.';
-                            });
-                            return;
-                          }
-                          _loadSearchResults;
-                        }
-                    );
+                    _delayQueryTimer = Timer(const Duration(seconds: 1), () {
+                      if (StoreProvider.of<AppState>(context).state.user?.lat ==
+                              null ||
+                          StoreProvider.of<AppState>(context).state.user?.lon ==
+                              null) {
+                        setState(() {
+                          _error =
+                              'Bitte bearbeite dein Profil und gib deinen Standort an.';
+                        });
+                        return;
+                      }
+                      _loadSearchResults();
+                    });
                   },
                 ),
               ),
@@ -171,6 +170,7 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ),
       ],
+
       /// The menu actions include the option to navigate to the settings page.
       menuActions: [
         MenuAction(
@@ -228,7 +228,9 @@ class _SearchPageState extends State<SearchPage> {
               onRefresh: () async {
                 _loadSearchResults();
               },
-              backgroundColor: Theme.of(context).progressIndicatorTheme.refreshBackgroundColor,
+              backgroundColor: Theme.of(context)
+                  .progressIndicatorTheme
+                  .refreshBackgroundColor,
               child: ListView.builder(
                 itemCount: state.searchResults.length,
                 padding: EdgeInsets.zero,
