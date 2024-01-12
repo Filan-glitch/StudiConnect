@@ -150,7 +150,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       });
 
                       if (isNewUser == true) {
-                        navigatorKey.currentState!.pushNamed('/edit-profile');
+                        navigatorKey.currentState!.pushNamedAndRemoveUntil('/edit-profile', (route) => false, arguments: true);
                       }
                     },
                     isLoading: _googleButtonLoading,

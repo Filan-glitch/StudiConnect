@@ -131,8 +131,15 @@ class _PageWrapperState extends State<PageWrapper> {
         }
 
         if (widget.type == PageType.empty) {
-          return Scaffold(
-            body: widget.body,
+          return OKToast(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewPadding.bottom,
+                ),
+                child: Scaffold(
+                  body: widget.body,
+                ),
+              ),
           );
         }
 

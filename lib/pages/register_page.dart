@@ -244,7 +244,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               _emailButtonLoading = false;
                             });
 
-                            navigatorKey.currentState!.pushNamed('/edit-profile');
+                            navigatorKey.currentState!.pushNamedAndRemoveUntil('/edit-profile', (route) => false, arguments: true);
                           },
                           text: 'Konto erstellen',
                           isLoading: _emailButtonLoading,
